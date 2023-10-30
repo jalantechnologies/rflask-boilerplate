@@ -1,0 +1,121 @@
+{
+  "env": {
+    "browser": true,
+    "cypress/globals": true,
+    "es6": true,
+    "node": true
+  },
+  "plugins": [
+    "cypress"
+  ],
+  "overrides": [
+    {
+      "files": [
+        ".js"
+      ],
+      "extends": [
+        "airbnb-base",
+        "plugin:eslint-comments/recommended",
+        "plugin:import/recommended"
+      ],
+      "rules": {
+        "import/no-extraneous-dependencies": [
+          "error",
+          {
+            "devDependencies": true
+          }
+        ],
+        "import/order": [
+          "error",
+          {
+            "newlines-between": "always",
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            }
+          }
+        ],
+        "eslint-comments/disable-enable-pair": "off",
+        "no-underscore-dangle": "off"
+      }
+    },
+    {
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "airbnb-base",
+        "plugin:eslint-comments/recommended",
+        "plugin:import/recommended",
+        "airbnb-typescript/base",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:cypress/recommended",
+        "plugin:react-hooks/recommended"
+      ],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "rules": {
+        "import/no-extraneous-dependencies": [
+          "error",
+          {
+            "devDependencies": true
+          }
+        ],
+        "import/order": [
+          "error",
+          {
+            "newlines-between": "always",
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            }
+          }
+        ],
+        "eslint-comments/disable-enable-pair": "off",
+        "no-underscore-dangle": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/unbound-method": [
+          "error",
+          {
+            "ignoreStatic": true
+          }
+        ],
+        "@typescript-eslint/lines-between-class-members": [
+          "error",
+          "always",
+          {
+            "exceptAfterSingleLine": true
+          }
+        ],
+        "cypress/assertion-before-screenshot": "warn",
+        "cypress/no-assigning-return-values": "error",
+        "cypress/no-async-tests": "error",
+        "cypress/no-force": "warn",
+        "cypress/no-pause": "error",
+        "cypress/no-unnecessary-waiting": "error",
+        "import/extensions": "off"
+      }
+    },
+    {
+      "files": "src/apps/backend/**",
+      "parserOptions": {
+        "project": "./src/apps/backend/tsconfig.json"
+      }
+    },
+    {
+      "files": "src/apps/frontend/**",
+      "parserOptions": {
+        "project": "./src/apps/frontend/tsconfig.json"
+      }
+    },
+    {
+      "files": "cypress/**",
+      "parserOptions": {
+        "project": "./cypress/tsconfig.json"
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+node:
+  config:
+    env: 'NODE_CONFIG_ENV'
+
+rollbar:
+  env: 'ROLLBAR_ENV'
+  accessToken: 'ROLLBAR_ACCESS_TOKEN'
+
+jwt:
+  token: 'JWT_TOKEN'
+
+twilio:
+  verify:
+    accountSid: 'TWILIO_ACCOUNT_SID'
+    authToken: 'TWILIO_AUTH_TOKEN'
+  messaging:
+    messagingServiceSid: 'TWILIO_MESSAGING_SERVICE_SID'
+
+sendgridApiKey: 'SENDGRID_API_KEY'
+
+mongoDb:
+  uri: 'MONGODB_URI'
+
+server:
+  port: 'PORT'
+
+webAppHost: 'WEB_APP_HOST'
+
+grafana:
+  host: 'GRAFANA_HOST'
+  username: 'GRAFANA_USERNAME'
+  password: 'GRAFANA_PASSWORD'
+  labels:
+    app: 'GRAFANA_APP'
+    env: 'GRAFANA_ENV'
+
+inspectlet:
+  wid: 'INSPECTLET_KEY'
+
+papertrail:
+  host: 'PAPERTRAIL_HOST'
+  port: 'PAPERTRAIL_PORT'
+  program: 'PAPERTRAIL_PROGRAM'
