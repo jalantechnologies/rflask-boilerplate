@@ -1,23 +1,28 @@
-from modules.logger.internal.base_logger import BaseLogger
+from abc import ABC, abstractmethod
 
 
-class ConsoleLogger(BaseLogger):
+class BaseLogger(ABC):
   @staticmethod
+  @abstractmethod
   def critical(*, message: str) -> None:
-    print(message)
+    ...
 
   @staticmethod
+  @abstractmethod
   def debug(*, message: str) -> None:
-    print(message)
+    ...
 
   @staticmethod
+  @abstractmethod
   def error(*, message: str) -> None:
-    print(message)
+    ...
 
   @staticmethod
+  @abstractmethod
   def info(*, message: str) -> None:
-    print(message)
+    ...
 
   @staticmethod
+  @abstractmethod
   def warn(*, message: str) -> None:
-    print(message)
+    ...

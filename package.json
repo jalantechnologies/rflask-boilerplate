@@ -17,7 +17,7 @@
     "lint:fix": "eslint --fix .",
     "start": "node dist/bin/server.js",
     "serve:assets": "cpx \"src/assets/**/*.*\" dist/assets --watch",
-    "serve:backend": "concurrently \"cd src/apps/backend/ && cross-env pipenv install --dev && pipenv install && pipenv run gunicorn 'server:app' --bind 0.0.0.0:8080 --reload\"",
+    "serve:backend": "concurrently \"cd src/apps/backend/ && cross-env pipenv install --dev && pipenv install && pipenv run gunicorn 'server:app' --bind 0.0.0.0:8080 --workers=4 --log-level debug --reload\"",
     "serve:frontend": "webpack serve --output-path dist/public --config src/apps/frontend/webpack.dev.js --hot --progress",
     "backend:lint": "cross-env make run-lint",
     "backend:code-analyzer": "cross-env make run-vulture"

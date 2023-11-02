@@ -3,4 +3,3 @@ run-lint:
 
 run-vulture:
 	cd src/apps/backend && pipenv run vulture
-

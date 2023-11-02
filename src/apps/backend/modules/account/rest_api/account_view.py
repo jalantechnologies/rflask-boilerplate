@@ -11,10 +11,10 @@ class AccountView(MethodView):
     request_data = request.get_json()
     account_params = CreateAccountParams(**request_data)
     account = AccountService.create_account(params=account_params)
-    print(account)
-    return Response({
-      "username": account.username
-    }, status=201)
+    account_dict = asdict(account)
+    response = jsonify(account_dict)
+    response.status_code = 201
+    return response
 
   def get(self):
     return Response("ok", status=200)
