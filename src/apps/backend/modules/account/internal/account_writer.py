@@ -16,9 +16,10 @@ class AccountWriter:
     )
     del params_dict["password"]
     AccountReader.check_username_not_exist(params=params)
-    account_json = AccountModel(**params_dict)
-    query = AccountRepository.account_db.insert_one(params_dict)
+    account_bson = AccountModel(**params_dict).to_bson()
+    query = AccountRepository.account_db.insert_one(account_bson)
     account = AccountRepository.account_db.find_one({
       "_id": query.inserted_id
     })
+
     return AccountModel(**account)

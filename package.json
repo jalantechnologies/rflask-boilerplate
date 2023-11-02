@@ -7,20 +7,20 @@
     "node": "14.17.3"
   },
   "scripts": {
+    "app:start": "node dist/bin/server.js",
+    "app:serve": "cross-env APP_ENV=development concurrently --kill-others-on-fail npm:serve:*",
+    "backend:lint": "cross-env make run-lint",
+    "backend:code-analyzer": "cross-env make run-vulture",
     "build": "cross-env NODE_ENV=production concurrently --kill-others-on-fail npm:build:*",
     "build:assets": "cpx \"src/assets/**/*.*\" dist/assets",
-    "build:backend": "tsc -p src/apps/backend/tsconfig.json --outDir dist",
     "build:frontend": "webpack --output-path dist/public --config src/apps/frontend/webpack.prod.js",
-    "test": "cross-env NODE_ENV=production NODE_CONFIG_ENV=testing mocha --exit -r ts-node/register --project src/apps/backend/tsconfig.json test/**/*.spec.ts",
-    "lint": "eslint .",
+    "frontend:lint": "eslint .",
     "lint:md": "remark .",
-    "lint:fix": "eslint --fix .",
-    "start": "node dist/bin/server.js",
+    "frontend:lint:fix": "eslint --fix .",
     "serve:assets": "cpx \"src/assets/**/*.*\" dist/assets --watch",
-    "serve:backend": "concurrently \"cd src/apps/backend/ && cross-env pipenv install --dev && pipenv install && pipenv run gunicorn 'server:app' --bind 0.0.0.0:8080 --reload\"",
+    "serve:backend": "concurrently \"cd src/apps/backend/ && cross-env pipenv install --dev && pipenv install && pipenv run gunicorn 'server:app' --bind 0.0.0.0:8080 --workers=4 --log-level info --reload\"",
     "serve:frontend": "webpack serve --output-path dist/public --config src/apps/frontend/webpack.dev.js --hot --progress",
-    "backend:lint": "cross-env make run-lint",
-    "backend:code-analyzer": "cross-env make run-vulture"
+    "test": "cross-env APP_ENV=production NODE_CONFIG_ENV=testing mocha --exit -r ts-node/register --project src/apps/backend/tsconfig.json test/**/*.spec.ts"
   },
   "author": "jalantechnologies",
   "license": "MIT",

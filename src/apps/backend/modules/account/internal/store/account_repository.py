@@ -1,7 +1,8 @@
 from pymongo import MongoClient  # type: ignore
 from pymongo.collection import Collection  # type: ignore
 
-from .account_model import AccountModel
+from modules.account.internal.store.account_model import AccountModel
+from modules.config.config_service import ConfigService
 
 
 class AccountRepository:
@@ -10,9 +11,8 @@ class AccountRepository:
 
   @staticmethod
   def create_db_connection() -> Collection:
-    # todo get this from config
-    connection_uri = "mongodb+srv://aks97cs:5HCKHGcnIRquGJmd@cluster0.ddn1klz.mongodb.net/?retryWrites=true&w=majority"
-    db_name = "airbnd"
+    connection_uri = ConfigService.get_db_uri()
+    db_name = ConfigService.get_db_name()
     client = MongoClient(connection_uri)
     collection = client[db_name][AccountRepository.__collection_name__]
     # Create index if not exist
