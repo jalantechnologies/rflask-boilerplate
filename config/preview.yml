@@ -1,6 +1,2 @@
 logger:
   transports: [ 'papertrail' ]
-
-grafana:
-  labels:
-    env: 'preview'

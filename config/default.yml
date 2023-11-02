@@ -4,12 +4,5 @@ jwt:
 logger:
   transports: [ 'console' ]
 
-communication:
-  services: [ ]
-
 server:
   port: '8080'
-
-grafana:
-  labels:
-    app: 'boilerplate-mern'

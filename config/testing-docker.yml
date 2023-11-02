@@ -1,2 +1,2 @@
 mongoDb:
-  uri: 'mongodb://db:27017/boilerplate-mern-test'
+  uri: 'mongodb://db:27017/rflask-boilerplate-test'

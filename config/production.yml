@@ -1,9 +1,2 @@
 logger:
   transports: [ 'papertrail' ]
-
-rollbar:
-  env: 'production'
-
-grafana:
-  labels:
-    env: 'production'

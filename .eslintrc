@@ -1,13 +1,9 @@
 {
   "env": {
     "browser": true,
-    "cypress/globals": true,
     "es6": true,
     "node": true
   },
-  "plugins": [
-    "cypress"
-  ],
   "overrides": [
     {
       "files": [
@@ -51,7 +47,6 @@
         "airbnb-typescript/base",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:cypress/recommended",
         "plugin:react-hooks/recommended"
       ],
       "parserOptions": {
@@ -90,31 +85,13 @@
             "exceptAfterSingleLine": true
           }
         ],
-        "cypress/assertion-before-screenshot": "warn",
-        "cypress/no-assigning-return-values": "error",
-        "cypress/no-async-tests": "error",
-        "cypress/no-force": "warn",
-        "cypress/no-pause": "error",
-        "cypress/no-unnecessary-waiting": "error",
         "import/extensions": "off"
-      }
-    },
-    {
-      "files": "src/apps/backend/**",
-      "parserOptions": {
-        "project": "./src/apps/backend/tsconfig.json"
       }
     },
     {
       "files": "src/apps/frontend/**",
       "parserOptions": {
         "project": "./src/apps/frontend/tsconfig.json"
-      }
-    },
-    {
-      "files": "cypress/**",
-      "parserOptions": {
-        "project": "./cypress/tsconfig.json"
       }
     }
   ]

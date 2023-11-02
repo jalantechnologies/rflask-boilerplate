@@ -73,3 +73,9 @@ terraform/*.tfvars
 
 # asdf npm version manager
 .tool-versions
+
+# python cache
+*.pyc
+
+# mypy cache
+*.mypy_cache
