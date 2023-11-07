@@ -11,10 +11,10 @@ class Loggers:
   def initialize_loggers() -> None:
     logger_transports = ConfigService.get_logger_transports()
     for logger_transport in logger_transports:
-      match logger_transport:
-        case LoggerTransports.CONSOLE:
+      if logger_transport == LoggerTransports.CONSOLE:
           Loggers._loggers.append(Loggers.__get_console_logger())
-        case LoggerTransports.PAPERTRAIL:
+
+      if logger_transport == LoggerTransports.PAPERTRAIL:
           Loggers._loggers.append(Loggers.__get_papertrail_logger())
 
   @staticmethod
