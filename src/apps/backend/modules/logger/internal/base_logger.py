@@ -2,27 +2,22 @@ from abc import ABC, abstractmethod
 
 
 class BaseLogger(ABC):
-  @staticmethod
   @abstractmethod
-  def critical(*, message: str) -> None:
+  def critical(self, *, message: str) -> None:
     ...
 
-  @staticmethod
   @abstractmethod
-  def debug(*, message: str) -> None:
+  def debug(self, *, message: str) -> None:
     ...
 
-  @staticmethod
   @abstractmethod
-  def error(*, message: str) -> None:
+  def error(self, *, message: str) -> None:
     ...
 
-  @staticmethod
   @abstractmethod
-  def info(*, message: str) -> None:
+  def info(self, *, message: str) -> None:
     ...
 
-  @staticmethod
   @abstractmethod
-  def warn(*, message: str) -> None:
+  def warn(self, *, message: str) -> None:
     ...

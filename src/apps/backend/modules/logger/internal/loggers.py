@@ -1,3 +1,4 @@
+from typing import Any
 from modules.config.config_service import ConfigService
 from modules.logger.internal.console_logger import ConsoleLogger
 from modules.logger.internal.papertrail_logger import PapertrailLogger
@@ -5,7 +6,7 @@ from modules.logger.internal.types import LoggerTransports
 
 
 class Loggers:
-  _loggers = []
+  _loggers: list[Any] = []
 
   @staticmethod
   def initialize_loggers() -> None:
@@ -42,5 +43,5 @@ class Loggers:
     return ConsoleLogger()
 
   @staticmethod
-  def __get_papertrail_logger():
+  def __get_papertrail_logger() -> PapertrailLogger:
     return PapertrailLogger()

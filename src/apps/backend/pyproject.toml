@@ -13,7 +13,7 @@ py_version = "311"
 exclude = []
 ignore_decorators = []
 ignore_names = []
-min_confidence = 60
+min_confidence = 90
 paths = [
     "modules",
     "bin",

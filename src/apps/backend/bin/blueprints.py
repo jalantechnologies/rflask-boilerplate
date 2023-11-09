@@ -26,7 +26,7 @@ def serve_js_bundle() -> Response:
 
 # Server react static images
 react_img_assets_path: str = '../../../dist/assets/img'
-react_img_assets_dir: str = os.path.join(os.getcwd(), '../../../dist/assets/img')
+react_img_assets_dir: str = os.path.join(os.getcwd(), react_img_assets_path)
 img_assets_blueprint = Blueprint("image_assets", __name__, static_folder=react_img_assets_dir, url_prefix="/assets")
 
 

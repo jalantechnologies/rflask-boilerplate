@@ -22,7 +22,7 @@ class AccountService:
       params=params
     )
     return Account(
-      id=account.id,
+      id=str(account.id),
       hashed_password=account.hashed_password,
       username=account.username
     )

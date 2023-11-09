@@ -24,7 +24,7 @@ class AccountReader:
       password=params.password,
       hashed_password=account.hashed_password
     ):
-      raise Exception("")
+      raise Exception("User not found")
 
     return account
 

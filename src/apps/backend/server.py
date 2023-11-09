@@ -1,5 +1,7 @@
+from typing import Union
 from werkzeug.exceptions import HTTPException
 from flask import Flask, jsonify, Response
+from flask.typing import ResponseReturnValue
 from flask_cors import CORS
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
 from modules.config.config_manager import ConfigManager
@@ -24,10 +26,16 @@ app.register_blueprint(img_assets_blueprint)
 app.register_blueprint(react_blueprint)
 
 
-@app.errorhandler(Exception)
-def custom_error_handler(error) -> tuple[Response, int | None]:
-  if isinstance(error, AppError):
-    return jsonify(error.message), error.status_code
+# TODO mount error handler into modules 
+from modules.logger.logger import Logger
 
-  code = error.code if isinstance(error, HTTPException) else 500
-  return jsonify(error=str(error)), code
+@app.errorhandler(Exception)
+def custom_error_handler(error: Union[Exception, AppError]) -> ResponseReturnValue:
+  if isinstance(error, AppError):
+    return jsonify({"message": error.message}), error.status_code
+
+  code = 500
+  if isinstance(error, HTTPException) and error.code is not None:
+    code = error.code
+  Logger.error(message=str(error))
+  return jsonify({"message": str(error)}), code
