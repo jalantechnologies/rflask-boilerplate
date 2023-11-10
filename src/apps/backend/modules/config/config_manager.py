@@ -11,8 +11,8 @@ class ConfigManager:
 
   @staticmethod
   def mount_config() -> None:
-    ConfigManager.__load_secrets_map()
     ConfigManager.__load_default_config()
+    ConfigManager.__load_secrets_map()
     ConfigManager.__load_env_config()
 
   @staticmethod
@@ -28,7 +28,7 @@ class ConfigManager:
   @staticmethod
   def __load_env_config() -> None:
     try:
-      app_env = os.environ.get('APP_ENV')
+      app_env = os.environ.get('NODE_ENV')
       env_config_file = f"../../../config/{app_env}.yml"
       with FileManager(env_config_file, 'r') as file:
         env_config = yaml.safe_load(file)

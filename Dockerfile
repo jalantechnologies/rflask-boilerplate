@@ -1,26 +1,29 @@
-# Use the Ubuntu 20.04 base image
 FROM ubuntu:20.04
 
-# Set the NVM environment variable and create the working directory
-ENV NVM_DIR=/root/.nvm
-WORKDIR /app
+WORKDIR /root
+RUN mkdir app
 
-# Update and install necessary dependencies
-RUN apt-get update && \
-    apt-get install -y curl wget && \
-    apt-get clean
+WORKDIR /root/app
+COPY . .
 
-# Install NVM, configure it, and install Node.js 14.17.3
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
-    /bin/bash -c "source /root/.nvm/nvm.sh && nvm install 14.17.3 && nvm alias default 14.17.3"
+RUN apt-get update -y && \
+    apt-get install build-essential -y && \
+    apt-get install git -y && \
+    apt-get install curl -y
 
-RUN /bin/bash -c "source /root/.nvm/nvm.sh && npm install -g npm"
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
+RUN apt-get install software-properties-common -y
 
-# Install Pipenv, build your Node.js app, and set the default command
-RUN apt-get install -y python3-pip && \
-    pip install pipenv && \
-    npm install && \
-    npm run build
+RUN add-apt-repository ppa:deadsnakes/ppa -y && \
+    apt-get install python3.11 python3-pip -y && \
+    pip install pipenv
 
-# Set the default command to start your Node.js app
-CMD [ "npm", "run", "app:serve" ]
+RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    cat /etc/apt/sources.list.d/nodesource.list
+
+RUN apt-get install nodejs -y
+RUN node --version && npm --version
+RUN npm install && npm run build
+
+CMD [ "npm", "run", "serve" ]

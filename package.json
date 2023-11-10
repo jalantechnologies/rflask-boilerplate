@@ -7,8 +7,6 @@
     "node": "14.17.3"
   },
   "scripts": {
-    "app:start": "cross-env APP_ENV=production npm run serve:backend",
-    "app:serve": "cross-env APP_ENV=development concurrently --kill-others-on-fail npm:serve:*",
     "backend:lint": "cross-env make run-lint",
     "backend:code-analyzer": "cross-env make run-vulture",
     "build": "cross-env NODE_ENV=production concurrently --kill-others-on-fail npm:build:*",
@@ -17,10 +15,12 @@
     "frontend:lint": "eslint .",
     "lint:md": "remark .",
     "frontend:lint:fix": "eslint --fix .",
+    "serve": "cross-env NODE_ENV=development concurrently --kill-others-on-fail npm:serve:*",
     "serve:assets": "cpx \"src/assets/**/*.*\" dist/assets --watch",
     "serve:backend": "cross-env  make run-engine",
     "serve:frontend": "webpack serve --output-path dist/public --config src/apps/frontend/webpack.dev.js --hot --progress",
-    "test": "cross-env APP_ENV=production NODE_CONFIG_ENV=testing mocha --exit -r ts-node/register --project src/apps/backend/tsconfig.json test/**/*.spec.ts"
+    "start": "cross-env npm run serve:backend",
+    "test": "cross-env NODE_ENV=testing make test"
   },
   "author": "jalantechnologies",
   "license": "MIT",

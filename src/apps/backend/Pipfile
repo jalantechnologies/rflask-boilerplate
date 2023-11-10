@@ -8,6 +8,8 @@ pydantic = "==2.4"
 bcrypt = "==4.0.1"
 pyyaml = "==6.0.1"
 types-pyyaml = "==6.0.12.12"
+requests = "==2.31.0"
+pytest = "==7.4.3"
 
 [dev-packages]
 flask = "==3.0.0"

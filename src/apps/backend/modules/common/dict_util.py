@@ -1,5 +1,5 @@
 from typing import Any, TypeVar, Type
-from modules.error.error_handler import MissingKeyError, ValueTypeMismatchError
+from modules.error.custom_errors import MissingKeyError, ValueTypeMismatchError
 from modules.common.types import ErrorCode
 
 T = TypeVar("T")
