@@ -11,9 +11,7 @@ services:
     environment:
       NODE_APP_INSTANCE: 'docker'
     command: >
-      sh -c "mkdir .nyc_output && npx nyc npm test 
-      && npx nyc report --reporter=cobertura 
-      && cp coverage/cobertura-coverage.xml /app/output/coverage.xml"
+      sh -c "make run-lint && make run-vulture && make run-test"
     depends_on:
       - db
     volumes:
