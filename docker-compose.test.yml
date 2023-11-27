@@ -10,7 +10,7 @@ services:
         NODE_ENV: 'testing'
     environment:
       NODE_APP_INSTANCE: 'docker'
-    command: "make run-lint && make run-vulture && make run-test"
+    command: "make run-lint && make run-vulture && npm run test"
     depends_on:
       - db
     volumes:
