@@ -1,3 +1,7 @@
+from modules.account.errors import (
+    AccountWithUserNameExistsError,
+    AccountNotFoundError,
+)
 from modules.account.internal.account_util import AccountUtil
 from modules.account.internal.store.account_repository import AccountRepository
 from modules.account.internal.store.account_model import AccountModel
@@ -11,9 +15,9 @@ class AccountReader:
       "username": username
     })
     if account is None:
-      raise Exception("Username not found")
+      raise AccountNotFoundError(f"Account with username:: {username}, not found")
 
-    return account
+    return AccountModel(**account)
 
   @staticmethod
   def get_account_by_username_and_password(
@@ -24,7 +28,7 @@ class AccountReader:
       password=params.password,
       hashed_password=account.hashed_password
     ):
-      raise Exception("User not found")
+      raise AccountNotFoundError(f"Account with username:: {params.username}, not found")
 
     return account
 
@@ -36,4 +40,4 @@ class AccountReader:
     })
 
     if account:
-      raise Exception("User exist")
+      raise AccountWithUserNameExistsError(f"Account already exist for username:: {params.username}")

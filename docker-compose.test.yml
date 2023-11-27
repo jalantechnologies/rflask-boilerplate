@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  app:
+    image: 'frm-boilerplate'
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: 'testing'
+    environment:
+      NODE_APP_INSTANCE: 'docker'
+    command: >
+      sh -c "mkdir .nyc_output && npx nyc npm test 
+      && npx nyc report --reporter=cobertura 
+      && cp coverage/cobertura-coverage.xml /app/output/coverage.xml"
+    depends_on:
+      - db
+    volumes:
+      - ./output:/app/output
+
+  db:
+    image: mongo:5.0
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - '27017:27017'

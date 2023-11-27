@@ -19,5 +19,5 @@ class ConfigService:
     papertrail_dict = DictUtil.required_get_dict(input_dict=ConfigManager.config, key='papertrail')
     return PapertrailConfig(
       host=DictUtil.required_get_str(input_dict=papertrail_dict, key='host'),
-      port=DictUtil.required_get_int(input_dict=papertrail_dict, key='port')
+      port=int(DictUtil.required_get_str(input_dict=papertrail_dict, key='port'))
     )

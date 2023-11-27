@@ -6,7 +6,7 @@ jwt:
   token: 'test_auth_token'
 
 mongoDb:
-  uri: 'mongodb://localhost:27017/rflask-boilerplate-test'
+  uri: 'mongodb://localhost:27017/frm-boilerplate-test'
 
 server:
   port: '8080'

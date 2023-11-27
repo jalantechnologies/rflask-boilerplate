@@ -1,0 +1,20 @@
+name: clean_on_dispatch
+
+on: workflow_dispatch
+
+jobs:
+  clean:
+    uses: jalantechnologies/github-ci/.github/workflows/clean.yml@v1.4
+    concurrency:
+      group: ci-preview-${{ github.event.ref }}
+      cancel-in-progress: true
+    with:
+      app_name: frm-boilerplate
+      app_env: preview
+      branch: ${{ github.event.ref }}
+      docker_registry: ${{ vars.DOCKER_REGISTRY }}
+      docker_username: ${{ vars.DOCKER_USERNAME }}
+    secrets:
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
+      do_access_token: ${{ secrets.DO_ACCESS_TOKEN }}
+      do_cluster_id: ${{ secrets.DO_CLUSTER_ID }}

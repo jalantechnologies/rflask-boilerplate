@@ -17,10 +17,10 @@
     "frontend:lint:fix": "eslint --fix .",
     "serve": "cross-env NODE_ENV=development concurrently --kill-others-on-fail npm:serve:*",
     "serve:assets": "cpx \"src/assets/**/*.*\" dist/assets --watch",
-    "serve:backend": "cross-env  make run-engine",
+    "serve:backend": "cross-env make run-engine",
     "serve:frontend": "webpack serve --output-path dist/public --config src/apps/frontend/webpack.dev.js --hot --progress",
     "start": "cross-env npm run serve:backend",
-    "test": "cross-env NODE_ENV=testing make test"
+    "test": "cross-env NODE_ENV=testing make run-test"
   },
   "author": "jalantechnologies",
   "license": "MIT",

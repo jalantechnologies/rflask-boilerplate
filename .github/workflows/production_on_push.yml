@@ -1,0 +1,28 @@
+name: production_on_push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  production:
+    uses: jalantechnologies/github-ci/.github/workflows/ci.yml@v1.4
+    concurrency:
+      group: ci-production-${{ github.event.ref }}
+      cancel-in-progress: true
+    with:
+      app_name: frm-boilerplate
+      app_env: production
+      app_hostname: frm-boilerplate.platform.jalantechnologies.com
+      branch: ${{ github.event.ref }}
+      checks: "['npm:lint', 'compose:test']"
+      docker_registry: ${{ vars.DOCKER_REGISTRY }}
+      docker_username: ${{ vars.DOCKER_USERNAME }}
+      sonar_host_url: ${{ vars.SONAR_HOST_URL }}
+    secrets:
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
+      doppler_token: ${{ secrets.DOPPLER_PRODUCTION_TOKEN }}
+      do_access_token: ${{ secrets.DO_ACCESS_TOKEN }}
+      do_cluster_id: ${{ secrets.DO_CLUSTER_ID }}
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
