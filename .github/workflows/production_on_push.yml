@@ -16,7 +16,7 @@ jobs:
       app_env: production
       app_hostname: frm-boilerplate.platform.jalantechnologies.com
       branch: ${{ github.event.ref }}
-      checks: "['npm:lint', 'compose:test']"
+      checks: "['npm:backend:lint', 'npm:frontend:lint']"
       docker_registry: ${{ vars.DOCKER_REGISTRY }}
       docker_username: ${{ vars.DOCKER_USERNAME }}
       sonar_host_url: ${{ vars.SONAR_HOST_URL }}

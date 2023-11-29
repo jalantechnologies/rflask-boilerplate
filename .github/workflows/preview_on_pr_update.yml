@@ -20,7 +20,7 @@ jobs:
       branch: ${{ github.event.pull_request.head.ref }}
       build_args: |
         NODE_CONFIG_ENV=preview
-      checks: "['npm:lint', 'compose:test']"
+      checks: "['npm:backend:lint', 'npm:frontend:lint']"
       docker_registry: ${{ vars.DOCKER_REGISTRY }}
       docker_username: ${{ vars.DOCKER_USERNAME }}
       pull_request_number: ${{ github.event.number }}
