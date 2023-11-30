@@ -1,7 +1,0 @@
-webAppHost: 'http://localhost:3000'
-
-jwt:
-  token: 'dev_auth_token'
-
-mongoDb:
-  uri: 'mongodb://db:27017/frm-boilerplate-dev'

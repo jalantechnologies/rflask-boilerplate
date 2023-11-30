@@ -8,10 +8,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NODE_ENV: 'development-docker'
+        APP_ENV: 'docker-dev'
     environment:
-      NODE_ENV: 'development'
-      NODE_APP_INSTANCE: 'docker'
+      APP_ENV: 'docker-dev'
     command: 'npm run serve'
     depends_on:
       - db

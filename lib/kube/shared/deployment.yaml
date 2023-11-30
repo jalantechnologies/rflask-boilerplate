@@ -32,10 +32,8 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: NODE_ENV
+            - name: APP_ENV
               value: 'production'
-            - name: NODE_CONFIG_ENV
-              value: $KUBE_ENV
             - name: WEB_APP_HOST
               value: $KUBE_INGRESS_HOSTNAME
           envFrom:

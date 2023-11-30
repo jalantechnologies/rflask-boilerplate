@@ -7,20 +7,18 @@
     "node": "14.17.3"
   },
   "scripts": {
-    "backend:lint": "cross-env make run-lint",
-    "backend:code-analyzer": "cross-env make run-vulture",
-    "build": "cross-env NODE_ENV=production concurrently --kill-others-on-fail npm:build:*",
+    "build": "cross-env APP_ENV=production concurrently --kill-others-on-fail npm:build:*",
     "build:assets": "cpx \"src/assets/**/*.*\" dist/assets",
     "build:frontend": "webpack --output-path dist/public --config src/apps/frontend/webpack.prod.js",
-    "frontend:lint": "eslint .",
+    "lint": "eslint .",
     "lint:md": "remark .",
-    "frontend:lint:fix": "eslint --fix .",
-    "serve": "cross-env NODE_ENV=development concurrently --kill-others-on-fail npm:serve:*",
+    "lint:fix": "eslint --fix .",
+    "serve": "cross-env concurrently --kill-others-on-fail npm:serve:*",
     "serve:assets": "cpx \"src/assets/**/*.*\" dist/assets --watch",
-    "serve:backend": "cross-env make run-engine",
+    "serve:backend": "cross-env make run-engine-winx86",
     "serve:frontend": "webpack serve --output-path dist/public --config src/apps/frontend/webpack.dev.js --hot --progress",
     "start": "cross-env npm run serve:backend",
-    "test": "cross-env NODE_ENV=testing make run-test"
+    "test": "cross-env APP_ENV=testing make run-test"
   },
   "author": "jalantechnologies",
   "license": "MIT",

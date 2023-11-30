@@ -15,6 +15,10 @@ class DictUtil:
     return DictUtil._required_get(input_dict=input_dict, key=key, value_type=list)
 
   @staticmethod
+  def required_get_tuple(*, input_dict: dict[str, Any], key: str) -> list:
+    return DictUtil._required_get(input_dict=input_dict, key=key, value_type=tuple)
+
+  @staticmethod
   def required_get_dict(*, input_dict: dict[str, Any], key: str) -> dict:
     return DictUtil._required_get(input_dict=input_dict, key=key, value_type=dict)
 

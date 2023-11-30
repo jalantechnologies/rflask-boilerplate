@@ -9,8 +9,7 @@ from modules.logger.logger_manager import LoggerManager
 app = Flask(__name__)
 cors = CORS(app)
 print('www - attempting to start server...')
-print(f'www - node env - {os.environ.get("NODE_ENV")}')
-print(f'www - config env - {os.environ.get("NODE_CONFIG_ENV")}')
+print(f'www - app env - {os.environ.get("APP_ENV")}')
 
 # Mount deps
 ConfigManager.mount_config()

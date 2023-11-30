@@ -7,10 +7,10 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NODE_ENV: 'testing'
+        APP_ENV: 'docker-test'
     environment:
-      NODE_APP_INSTANCE: 'docker'
-    command: "make run-lint && make run-vulture && npm run test"
+      APP_ENV: 'docker-test'
+    command: "npm run test"
     depends_on:
       - db
     volumes:

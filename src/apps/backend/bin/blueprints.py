@@ -5,9 +5,11 @@ from werkzeug.wrappers import Response
 from typing import Union
 from flask import Blueprint, send_from_directory
 
+
+satic_root = "../../../"
+
 # Serve react
-react_public_dir_path: str = "../../../dist/public/"
-react_public_dir: str = os.path.join(os.getcwd(), react_public_dir_path)
+react_public_dir: str = os.path.join(os.getcwd(), f"{satic_root}/dist/public/")
 react_blueprint = Blueprint('react', __name__, static_folder=react_public_dir, url_prefix="/")
 
 
@@ -25,8 +27,7 @@ def serve_js_bundle() -> Response:
 
 
 # Server react static images
-react_img_assets_path: str = '../../../dist/assets/img'
-react_img_assets_dir: str = os.path.join(os.getcwd(), react_img_assets_path)
+react_img_assets_dir: str = os.path.join(os.getcwd(), f"{satic_root}/dist/assets/img")
 img_assets_blueprint = Blueprint("image_assets", __name__, static_folder=react_img_assets_dir, url_prefix="/assets")
 
 
