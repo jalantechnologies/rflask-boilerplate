@@ -19,7 +19,7 @@ jobs:
       app_hostname: '{1}.preview.platform.jalantechnologies.com'
       branch: ${{ github.event.pull_request.head.ref }}
       build_args: |
-        NODE_CONFIG_ENV=preview
+        APP_ENV=preview
       checks: "['npm:lint']"
       docker_registry: ${{ vars.DOCKER_REGISTRY }}
       docker_username: ${{ vars.DOCKER_USERNAME }}

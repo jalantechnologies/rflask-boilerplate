@@ -22,9 +22,10 @@ class ConfigManager:
   @staticmethod
   def mount_config() -> None:
     ConfigManager.config = {**ConfigManager.config, **asdict(DefaultSettings())}
-    ConfigManager.config = {**ConfigManager.config, **asdict(ConfigManager._load_app_env_settings())}
+    ConfigManager.config = {**ConfigManager.config, **ConfigManager._load_app_env_settings()}
     not_nullable_os_envs = {k:v for k, v in asdict(OSSettings()).items() if v is not None}
     ConfigManager.config = {**ConfigManager.config, **not_nullable_os_envs}
+    print("Config is ==", ConfigManager.config)
 
   @staticmethod
   def _load_app_env_settings() -> dict[str, Any]:
@@ -38,4 +39,4 @@ class ConfigManager:
       AppEnv.TESTING: TestingSettings,
     }
 
-    return settings_mp.get(app_env)()
+    return asdict(settings_mp.get(app_env, DevelopmentSettings)())

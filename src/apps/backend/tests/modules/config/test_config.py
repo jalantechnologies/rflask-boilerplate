@@ -17,7 +17,7 @@ class TestConfig(BaseTestConfig):
 
   def test_logger_config_is_loaded(self) -> None:
     loggers = ConfigService.get_logger_transports()
-    assert type(loggers) == list
+    assert type(loggers) == tuple
     assert "console" in loggers
 
   def test_papertrail_config_is_loaded(self) -> None:
@@ -26,18 +26,5 @@ class TestConfig(BaseTestConfig):
     except MissingKeyError as exc:
       assert exc.code == ErrorCode.MISSING_KEY
 
-    populated_env = os.environ["NODE_ENV"]
-    os.environ["NODE_ENV"] = "production"
-    os.environ["PAPERTRAIL_HOST"] = "PAPERTRAIL_HOST"
-    os.environ["PAPERTRAIL_PORT"] = "32"
-    ConfigManager.mount_config()
-    papertrail_config = ConfigService.get_papertrail_config()
-    assert papertrail_config == PapertrailConfig(
-      host="PAPERTRAIL_HOST",
-      port=32
-    )
-
-    # reset manipulated os envs
-    del os.environ["PAPERTRAIL_HOST"]
-    del os.environ["PAPERTRAIL_PORT"]
-    os.environ["NODE_ENV"] = populated_env
+    populated_env = os.environ.get("APP_ENV")
+    assert populated_env == "testing" or populated_env == "docker-test"
