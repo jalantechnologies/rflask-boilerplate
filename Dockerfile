@@ -26,4 +26,4 @@ RUN apt-get install nodejs -y
 RUN node --version && npm --version
 RUN npm install && npm run build
 
-CMD [ "npm", "run", "serve" ]
+CMD [ "npm", "run", "start" ]
