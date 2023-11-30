@@ -12,6 +12,7 @@ class AccountRepository:
   @staticmethod
   def create_db_connection() -> Collection:
     connection_uri = ConfigService.get_db_uri()
+    print(f"connection_uri ====> {connection_uri}")
     client = MongoClient(connection_uri)
     database = client.get_database()
     collection = database[AccountRepository.__collection_name__]
