@@ -1,5 +1,3 @@
-import certifi
-
 from pymongo import MongoClient  # type: ignore
 from pymongo.collection import Collection  # type: ignore
 from pymongo.server_api import ServerApi # type: ignore
