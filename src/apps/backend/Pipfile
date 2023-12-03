@@ -18,11 +18,10 @@ flask = "==3.0.0"
 flask-cors = "==4.0.0"
 gunicorn = "==21.2.0"
 mypy = "==1.6.1"
-pymongo= "==3.11"
+pymongo = {extras = ["srv"], version = "3.12"}
 types-flask-cors = "==4.0.0.1"
 vulture = "==2.10"
-dnspython = "==2.4.2"
 types-requests = "==2.31.0.10"
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"
