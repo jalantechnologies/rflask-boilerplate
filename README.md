@@ -44,7 +44,7 @@ Boilerplate project for Flask, React & MongoDB based projects. This README docum
 
 ## Configuration
 
-In the `src/bacend/settings` directory:
+In the `src/apps/backend/settings/` directory:
 
 We are keeping config as an schema environment specific
 
