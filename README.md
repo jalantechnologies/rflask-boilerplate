@@ -38,31 +38,28 @@ Boilerplate project for Flask, React & MongoDB based projects. This README docum
 - Start Application (without HotReload) - `npm start`
 - Start Application (with HotReload enabled) - `npm run serve`
   - To disable opening up browser automatically, set `WEBPACK_DEV_DISABLE_OPEN` to `true`.
-- Run Lint (JavaScript and TypeScript) - `npm run lint`
+- Run Lint (JavaScript and TypeScript) - `npm run lint:ts`
+- Run Lint (Python and MyPy) - `npm run lint:py`
 - Run Lint (Markdown) - `npm run lint:md`
 
 ## Configuration
 
-In the `config` directory:
+In the `src/bacend/settings` directory:
 
-- Consult/update `custom-environment-variables.yml` for loading values via environment. This overrides any value set in files defined below.
-- Create `local.yml` for local config.
-- Consult/update `development.yml` for values at development. (The default env)
-- Consult/update `testing.yml` for values at testing. `NODE_CONFIG_ENV` must be set to `testing` for this.
-- Consult/update `staging.yml` for values at staging. `NODE_CONFIG_ENV` must be set to `staging` for this.
-- Consult/update `production.yml` for values at production. `NODE_CONFIG_ENV` must be set to `production` for this.
-- Consult/update `default.yml` for **constant values only**. Define entries here which will remain same across deployments.
+We are keeping config as an schema environment specific
+
+Example -
+- For development - we have `development.py` and so for other environment
+
+Based on environment which will be passed during spawning th server as an argument with
+`APP_ENV=<environment_name>`, this further load the schema accordingly
+
+Note -
+- `default.py` This file will be using to keep all our **constant value**
+- If no enviroment name is passed the default environment would be considered as `development`
 
 **UI Config:**
-
-Config module can be also used to inject configuration values into frontend build. `public` accepts key value pairs which will all get injected
-into frontend builds.
-
-- Define the config entry in appropriate config file under `public`, example - `public.myServiceKey`. Note that deployment does not supports injecting config
-values using environment variables so avoid using `custom-environment-variables.yml` here.
-- Use the config value via `Config.getConfigValue('myServiceKey')`
-- For scripts directly using the config from `window`, can use the config directly via `window.Config.myServiceKey`. For type safety for the same, can add the entry in
-`src/apps/frontend/types/globals.d.ts`.
+In case of need of config values at client side, this will make internal request to backend server to get the desired config schema in the form of json
 
 ## Deployment
 
