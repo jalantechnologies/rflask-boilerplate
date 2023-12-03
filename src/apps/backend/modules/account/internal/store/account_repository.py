@@ -1,3 +1,5 @@
+import certifi
+
 from pymongo import MongoClient  # type: ignore
 from pymongo.collection import Collection  # type: ignore
 
@@ -13,7 +15,7 @@ class AccountRepository:
   def create_db_connection() -> Collection:
     connection_uri = ConfigService.get_db_uri()
     print(f"Connecting to db:: {connection_uri}")
-    client = MongoClient(connection_uri)
+    client = MongoClient(connection_uri, tlsCAFile=certifi.where())
     database = client.get_database()
     collection = database[AccountRepository.__collection_name__]
     # Create index if not exist

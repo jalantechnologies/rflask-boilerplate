@@ -11,6 +11,7 @@ types-pyyaml = "==6.0.12.12"
 requests = "==2.31.0"
 pytest = "==7.4.3"
 waitress = "==2.1.2"
+certifi = "==2023.11.17"
 
 [dev-packages]
 flask = "==3.0.0"
