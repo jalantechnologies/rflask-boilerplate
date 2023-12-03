@@ -51,11 +51,10 @@ We are keeping config as an schema environment specific
 Example -
 - For development - we have `development.py` and so for other environment
 
-Based on environment which will be passed during spawning th server as an argument with
-`APP_ENV=<environment_name>`, this further load the schema accordingly
+Based on environment which will be passed during spawning the server as an argument with `APP_ENV=<environment_name>`, this will further load the schema accordingly
 
 Note -
-- `default.py` This file will be using to keep all our **constant value**
+- `default.py`, This file will be using to keep all our **constant value**
 - If no enviroment name is passed the default environment would be considered as `development`
 
 **UI Config:**
