@@ -1,4 +1,3 @@
-import os
 from flask import Flask
 from flask_cors import CORS
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
