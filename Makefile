@@ -11,7 +11,7 @@ run-vulture:
 run-engine:
 	cd src/apps/backend \
 	&& pipenv install --dev \
-	&& pipenv run gunicorn server:app --bind 127.0.0.1:8080 --log-level info
+	&& pipenv run gunicorn server:app --bind 0.0.0.0:8080 --log-level info
 
 run-test:
 	cd src/apps/backend \
