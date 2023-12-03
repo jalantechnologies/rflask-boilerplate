@@ -12,14 +12,14 @@ class TestDictUtil:
     try:
       DictUtil.required_get_str(input_dict=TestDictUtil.fixture, key="int_value")
       assert False, "Swallow exception on false entity type"
-    except ValueTypeMismatchError as exc:
+    except ValueTypeMismatchError:
       assert True
 
   def test_throw_error_on_missing_key(self) -> None:
     try:
       DictUtil.required_get_int(input_dict=TestDictUtil.fixture, key="invalid_key")
       assert False, "Swallow exception on invalid dict key"
-    except MissingKeyError as exc:
+    except MissingKeyError:
       assert True
 
   def test_dict_key_is_loaded(self) -> None:

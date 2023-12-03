@@ -12,17 +12,18 @@ satic_root = "../../../"
 react_public_dir: str = os.path.join(os.getcwd(), f"{satic_root}/dist/public/")
 react_blueprint = Blueprint('react', __name__, static_folder=react_public_dir, url_prefix="/")
 
+MISSING_STATIC_ROOT_ERR_MESSAGE = "Unable to resolve react root path"
 
 @react_blueprint.route('/', defaults={'path': ''})
 @react_blueprint.route('/<path:path>')
 def serve_react_home(path: Union[os.PathLike, str]) -> Response:
-  assert react_blueprint.static_folder, "Unable to resolve react root path"
+  assert react_blueprint.static_folder, MISSING_STATIC_ROOT_ERR_MESSAGE
   return send_from_directory(react_blueprint.static_folder, 'index.html')
 
 
 @react_blueprint.route('/index.bundle.js')
 def serve_js_bundle() -> Response:
-  assert react_blueprint.static_folder, "Unable to resolve react root path"
+  assert react_blueprint.static_folder, MISSING_STATIC_ROOT_ERR_MESSAGE
   return send_from_directory(react_blueprint.static_folder, 'index.bundle.js')
 
 
@@ -33,7 +34,7 @@ img_assets_blueprint = Blueprint("image_assets", __name__, static_folder=react_i
 
 @img_assets_blueprint.route('/assets/img/<path:filename>')
 def serve_static_images(filename: Union[os.PathLike, str]) -> Response:
-  assert img_assets_blueprint.static_folder, "Unable to resolve react root path"
+  assert img_assets_blueprint.static_folder, MISSING_STATIC_ROOT_ERR_MESSAGE
   return send_from_directory(img_assets_blueprint.static_folder, filename)
 
 
