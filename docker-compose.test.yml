@@ -10,7 +10,7 @@ services:
         APP_ENV: 'docker-test'
     environment:
       APP_ENV: 'docker-test'
-    command: "npm run test"
+    command: "npm run test:docker"
     depends_on:
       - db
     volumes:
