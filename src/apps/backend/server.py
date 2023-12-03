@@ -16,9 +16,9 @@ ConfigManager.mount_config()
 LoggerManager.mount_logger()
 
 # Register accounts apis
-account_blueprint = AccountServiceManager.create_rest_api_server()
-api_blueprint.register_blueprint(account_blueprint)
-app.register_blueprint(api_blueprint)
+# account_blueprint = AccountServiceManager.create_rest_api_server()
+# api_blueprint.register_blueprint(account_blueprint)
+# app.register_blueprint(api_blueprint)
 
 # Register frontend elements
 app.register_blueprint(img_assets_blueprint)
