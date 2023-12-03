@@ -7,9 +7,7 @@ from modules.account.account_service_manager import AccountServiceManager
 from modules.logger.logger_manager import LoggerManager
 
 app = Flask(__name__)
-cors = CORS(app)
-print('www - attempting to start server...')
-print(f'www - app env - {os.environ.get("APP_ENV")}')
+cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Mount deps
 ConfigManager.mount_config()
