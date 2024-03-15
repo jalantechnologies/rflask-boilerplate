@@ -1,6 +1,6 @@
-import { DepsProvider, useDeps } from './deps.provider';
+import { AccountProvider, useAccountContext } from './account.provider';
+import { useAuthContext } from './auth.provider';
 
 export {
-  DepsProvider,
-  useDeps,
+  AccountProvider, useAccountContext, useAuthContext
 };

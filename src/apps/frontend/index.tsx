@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import './satoshi.css';
+import './style.css';
+
 import App from './app.component';
 
 document.addEventListener('DOMContentLoaded', () => {

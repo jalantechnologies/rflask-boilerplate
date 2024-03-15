@@ -2,6 +2,7 @@ const config = require('config');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const webpackBuildConfig = JSON.stringify(config.util.toObject(
   config.has('public') ? config.get('public') : {}
@@ -15,6 +16,10 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'index.html'),
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'style.css',
+      chunkFilename: 'style.css',
     }),
     new webpack.DefinePlugin({
       'window.Config': webpackBuildConfig,
@@ -34,26 +39,35 @@ module.exports = {
           'style-loader',
           // Translates CSS into CommonJS
           'css-loader',
-          // Compiles Sass to CSS
-          'sass-loader',
         ],
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.ts(x)?$/,
         loader: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.css$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('autoprefixer')({
+                    overrideBrowserslist: ['last 2 versions'],
+                  }),
+                ],
+              },
+            },
+          },
+        ],
+      },
     ],
   },
   resolve: {
-    extensions: [
-      '.tsx',
-      '.ts',
-      '.js',
-    ],
+    extensions: ['.tsx', '.ts', '.js'],
   },
 };

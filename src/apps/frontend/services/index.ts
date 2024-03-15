@@ -1,7 +1,9 @@
-import AccessService from './access.service';
+import AccountService from './account.service';
 import APIService from './api.service';
+import AuthService from './auth.service';
 
 export {
-  AccessService,
   APIService,
+  AccountService,
+  AuthService,
 };

@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
-import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import { Header, Footer } from './components';
-import { DepsProvider } from './contexts';
+import { AccountProvider } from './contexts';
 import { Config } from './helpers';
-import { About, Login, NotFound } from './pages';
-import { AccessService } from './services';
+import { AppRoutes } from './routes';
 import InspectLet from './vendor/inspectlet';
-
-import './app.global.scss';
+import { AuthProvider } from './contexts/auth.provider';
 
 export default function App(): React.ReactElement {
   useEffect(() => {
@@ -20,20 +18,13 @@ export default function App(): React.ReactElement {
   }, []);
 
   return (
-    <DepsProvider deps={{
-      accessService: new AccessService(),
-    }}>
-      <Router>
-        <div className='container'>
-          <Header />
-          <Routes>
-            <Route path='/about' element={<About />} />
-            <Route path='/' element={<Login />} />
-            <Route path='*' element={<NotFound />} />
-          </Routes>
-          <Footer />
-        </div>
-      </Router>
-    </DepsProvider>
+    <AuthProvider>
+      <AccountProvider>
+        <Toaster />
+        <Router>
+          <AppRoutes />
+        </Router>
+      </AccountProvider>
+    </AuthProvider>
   );
 }
