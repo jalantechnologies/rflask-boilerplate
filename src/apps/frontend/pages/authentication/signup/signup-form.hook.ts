@@ -6,13 +6,11 @@ import { useAuthContext } from '../../../contexts';
 import { AsyncError } from '../../../types';
 
 interface SignupFormProps {
-  onSuccess: () => void;
   onError: (err: AsyncError) => void;
+  onSuccess: () => void;
 }
 const useSignupForm = ({ onError, onSuccess }: SignupFormProps) => {
-  const {
-    isSignupLoading, signupError, signup,
-  } = useAuthContext();
+  const { isSignupLoading, signupError, signup } = useAuthContext();
 
   const formik = useFormik({
     initialValues: {
@@ -24,7 +22,10 @@ const useSignupForm = ({ onError, onSuccess }: SignupFormProps) => {
     },
     validationSchema: Yup.object({
       firstName: Yup.string()
-        .min(constant.FIRST_NAME_MIN_LENGTH, constant.FIRST_NAME_VALIDATION_ERROR)
+        .min(
+          constant.FIRST_NAME_MIN_LENGTH,
+          constant.FIRST_NAME_VALIDATION_ERROR,
+        )
         .required(constant.FIRST_NAME_VALIDATION_ERROR),
       lastName: Yup.string()
         .min(constant.LAST_NAME_MIN_LENGTH, constant.LAST_NAME_VALIDATION_ERROR)
@@ -56,9 +57,9 @@ const useSignupForm = ({ onError, onSuccess }: SignupFormProps) => {
   });
 
   return {
+    formik,
     isSignupLoading,
     signupError,
-    formik,
   };
 };
 

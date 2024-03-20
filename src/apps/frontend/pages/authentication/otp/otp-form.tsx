@@ -30,7 +30,11 @@ const OTPForm: React.FC<OTPFormProps> = ({
   timerRemainingSeconds,
 }) => {
   const {
-    countryCode, formik, phoneNumber, isVerifyOTPLoading, handleResendOTP,
+    countryCode,
+    formik,
+    phoneNumber,
+    isVerifyOTPLoading,
+    handleResendOTP,
   } = useOTPForm({
     onError,
     onResendOTPSuccess,
@@ -46,7 +50,12 @@ const OTPForm: React.FC<OTPFormProps> = ({
   }, [phoneNumber, countryCode, navigate]);
 
   const handleChange = (value: string[]) => {
-    formik.setFieldValue('otp', value).then().catch((error) => { onError(error as AsyncError); });
+    formik
+      .setFieldValue('otp', value)
+      .then()
+      .catch((error) => {
+        onError(error as AsyncError);
+      });
   };
 
   return (
@@ -54,10 +63,10 @@ const OTPForm: React.FC<OTPFormProps> = ({
       <VerticalStackLayout gap={5}>
         <FormControl
           label={`Enter the 4 digit code sent to the mobile number ${countryCode} ${phoneNumber}`}
-          error={formik.touched.otp && formik.errors.otp as string}
+          error={formik.touched.otp && (formik.errors.otp as string)}
         >
           <OTP
-            error={formik.touched.otp && formik.errors.otp as string}
+            error={formik.touched.otp && (formik.errors.otp as string)}
             isLoading={isVerifyOTPLoading}
             onError={onError}
             onBlur={formik.handleBlur}
@@ -66,19 +75,23 @@ const OTPForm: React.FC<OTPFormProps> = ({
         </FormControl>
 
         <Flex gap={2}>
-          <p className="text-lg text-black">
-            Did not receive a code?
-          </p>
+          <p className="text-lg text-black">Did not receive a code?</p>
           <Button
             disabled={!isResendEnabled}
             kind={ButtonKind.TERTIARY}
             onClick={handleResendOTP}
           >
-            { isResendEnabled ? 'Resend' : `Resend OTP in 00: ${timerRemainingSeconds}` }
+            {isResendEnabled
+              ? 'Resend'
+              : `Resend OTP in 00: ${timerRemainingSeconds}`}
           </Button>
         </Flex>
 
-        <Button type={ButtonType.SUBMIT} isLoading={isVerifyOTPLoading} kind={ButtonKind.PRIMARY}>
+        <Button
+          type={ButtonType.SUBMIT}
+          isLoading={isVerifyOTPLoading}
+          kind={ButtonKind.PRIMARY}
+        >
           Verify
         </Button>
       </VerticalStackLayout>

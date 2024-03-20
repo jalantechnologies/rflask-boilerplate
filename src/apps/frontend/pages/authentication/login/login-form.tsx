@@ -17,8 +17,8 @@ import LoginFormCheckbox from './login-form-checkbox';
 import useLoginForm from './login-form.hook';
 
 interface LoginFormProps {
-  onSuccess: () => void;
   onError: (error: AsyncError) => void;
+  onSuccess: () => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onError, onSuccess }) => {
@@ -63,13 +63,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onError, onSuccess }) => {
           />
         </FormControl>
 
-        <Flex alignItems='center' justifyContent='between'>
+        <Flex alignItems="center" justifyContent="between">
           <label htmlFor="formCheckbox" className="flex cursor-pointer">
             <LoginFormCheckbox />
             <p>Remember me</p>
           </label>
 
-          <Link to={routes.FORGOT_PASSWORD} className="text-sm text-primary hover:underline">
+          <Link
+            to={routes.FORGOT_PASSWORD}
+            className="text-sm text-primary hover:underline"
+          >
             Forget password?
           </Link>
         </Flex>

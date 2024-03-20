@@ -6,13 +6,11 @@ import { useAuthContext } from '../../../contexts';
 import { AsyncError } from '../../../types';
 
 interface LoginFormProps {
-  onSuccess: () => void;
   onError: (error: AsyncError) => void;
+  onSuccess: () => void;
 }
 const useLoginForm = ({ onError, onSuccess }: LoginFormProps) => {
-  const {
-    isLoginLoading, login, loginError, loginResult,
-  } = useAuthContext();
+  const { isLoginLoading, login, loginError, loginResult } = useAuthContext();
 
   const formik = useFormik({
     initialValues: {
@@ -39,10 +37,10 @@ const useLoginForm = ({ onError, onSuccess }: LoginFormProps) => {
   });
 
   return {
+    formik,
     isLoginLoading,
     loginError,
     loginResult,
-    formik,
   };
 };
 

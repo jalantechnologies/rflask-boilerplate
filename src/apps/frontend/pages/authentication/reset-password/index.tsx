@@ -15,7 +15,9 @@ export const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
 
   const onSuccess = () => {
-    toast.success('Your password has been successfully updated. Please login to continue.');
+    toast.success(
+      'Your password has been successfully updated. Please login to continue.',
+    );
     navigate(routes.LOGIN);
   };
 

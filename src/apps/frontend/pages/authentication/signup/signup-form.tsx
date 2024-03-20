@@ -16,8 +16,8 @@ import { ButtonKind, ButtonType } from '../../../types/button';
 import useSignupForm from './signup-form.hook';
 
 interface SignupFormProps {
-  onSuccess: () => void;
   onError: (error: AsyncError) => void;
+  onSuccess: () => void;
 }
 
 const SignupForm: React.FC<SignupFormProps> = ({ onError, onSuccess }) => {
@@ -28,39 +28,39 @@ const SignupForm: React.FC<SignupFormProps> = ({ onError, onSuccess }) => {
       <VerticalStackLayout gap={5}>
         <Flex gap={6}>
           <div className="w-full">
-          <FormControl
-            label={'First name'}
-            error={formik.touched.firstName && formik.errors.firstName}
-          >
-            <Input
+            <FormControl
+              label={'First name'}
               error={formik.touched.firstName && formik.errors.firstName}
-              data-testid="firstName"
-              disabled={isSignupLoading}
-              name="firstName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              placeholder="Enter your first name"
-              value={formik.values.firstName}
-            />
-          </FormControl>
-        </div>
-        <div className="w-full">
-          <FormControl
-            label={'Last name'}
-            error={formik.touched.lastName && formik.errors.lastName}
-          >
-            <Input
+            >
+              <Input
+                error={formik.touched.firstName && formik.errors.firstName}
+                data-testid="firstName"
+                disabled={isSignupLoading}
+                name="firstName"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                placeholder="Enter your first name"
+                value={formik.values.firstName}
+              />
+            </FormControl>
+          </div>
+          <div className="w-full">
+            <FormControl
+              label={'Last name'}
               error={formik.touched.lastName && formik.errors.lastName}
-              data-testid="lastName"
-              disabled={isSignupLoading}
-              name="lastName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              placeholder="Enter your last name"
-              value={formik.values.lastName}
-            />
-          </FormControl>
-        </div>
+            >
+              <Input
+                error={formik.touched.lastName && formik.errors.lastName}
+                data-testid="lastName"
+                disabled={isSignupLoading}
+                name="lastName"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                placeholder="Enter your last name"
+                value={formik.values.lastName}
+              />
+            </FormControl>
+          </div>
         </Flex>
         <FormControl
           label={'Email'}

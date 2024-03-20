@@ -10,7 +10,9 @@ import PhoneLoginForm from './phone-login-form';
 
 export const PhoneLogin: React.FC = () => {
   const onSendOTPSuccess = () => {
-    toast.success('OTP has been sent successfully. Please check your messages.');
+    toast.success(
+      'OTP has been sent successfully. Please check your messages.',
+    );
   };
 
   const onError = (error: AsyncError) => {
@@ -22,7 +24,10 @@ export const PhoneLogin: React.FC = () => {
       <AuthenticationFormLayout>
         <VerticalStackLayout gap={8}>
           <H2>Log In</H2>
-          <PhoneLoginForm onError={onError} onSendOTPSuccess={onSendOTPSuccess} />
+          <PhoneLoginForm
+            onError={onError}
+            onSendOTPSuccess={onSendOTPSuccess}
+          />
         </VerticalStackLayout>
       </AuthenticationFormLayout>
     </AuthenticationPageLayout>

@@ -21,7 +21,8 @@ const ForgotPasswordResendEmail: React.FC<ForgotPasswordResendEmailProps> = ({
   timerRemainingSeconds,
   username,
 }) => {
-  const { isSendForgotPasswordEmailLoading, sendForgotPasswordEmail } = useResetPasswordContext();
+  const { isSendForgotPasswordEmailLoading, sendForgotPasswordEmail } =
+    useResetPasswordContext();
 
   const handleResendPasswordResetEmail = (e: React.FormEvent<EventTarget>) => {
     e.preventDefault();
@@ -37,10 +38,10 @@ const ForgotPasswordResendEmail: React.FC<ForgotPasswordResendEmailProps> = ({
   return (
     <VerticalStackLayout gap={4}>
       <ParagraphMedium>
-        A password reset link has been sent to {username}.
-        Please check your inbox and follow the instructions.
+        A password reset link has been sent to {username}. Please check your
+        inbox and follow the instructions.
       </ParagraphMedium>
-      <Flex justifyContent='end'>
+      <Flex justifyContent="end">
         <p>Resend email in 00: {timerRemainingSeconds}</p>
       </Flex>
       <form onSubmit={handleResendPasswordResetEmail}>

@@ -1,13 +1,7 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-} from 'react';
+import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 import { AuthService } from '../services';
-import {
-  AccessToken, ApiResponse, AsyncError, PhoneNumber,
-} from '../types';
+import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from '../types';
 
 import useAsync from './async.hook';
 
@@ -21,21 +15,16 @@ type AuthContextType = {
   loginError: AsyncError;
   loginResult: AccessToken;
   logout: () => void;
-  sendOTP: (
-    phoneNumber: PhoneNumber,
-  ) => Promise<void>;
+  sendOTP: (phoneNumber: PhoneNumber) => Promise<void>;
   sendOTPError: AsyncError;
   signup: (
     firstName: string,
     lastName: string,
     username: string,
-    password: string
+    password: string,
   ) => Promise<void>;
   signupError: AsyncError;
-  verifyOTP: (
-    phoneNumber: PhoneNumber,
-    otp: string,
-  ) => Promise<AccessToken>;
+  verifyOTP: (phoneNumber: PhoneNumber, otp: string) => Promise<AccessToken>;
   verifyOTPError: AsyncError;
   verifyOTPResult: AccessToken;
 };
@@ -62,16 +51,13 @@ const signupFn = async (
   lastName: string,
   username: string,
   password: string,
-): Promise<ApiResponse<void>> => authService.signup(
-  firstName,
-  lastName,
-  username,
-  password,
-);
+): Promise<ApiResponse<void>> =>
+  authService.signup(firstName, lastName, username, password);
 
 const logoutFn = (): void => localStorage.removeItem('access-token');
 
-const getAccessToken = (): AccessToken => JSON.parse(localStorage.getItem('access-token')) as AccessToken;
+const getAccessToken = (): AccessToken =>
+  JSON.parse(localStorage.getItem('access-token')) as AccessToken;
 
 const isUserAuthenticated = () => !!getAccessToken();
 
@@ -92,29 +78,29 @@ const verifyOTPFn = async (
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const {
-    isLoading: isLoginLoading,
-    error: loginError,
-    result: loginResult,
     asyncCallback: login,
+    error: loginError,
+    isLoading: isLoginLoading,
+    result: loginResult,
   } = useAsync(loginFn);
 
   const {
-    isLoading: isSignupLoading,
-    error: signupError,
     asyncCallback: signup,
+    error: signupError,
+    isLoading: isSignupLoading,
   } = useAsync(signupFn);
 
   const {
-    isLoading: isSendOTPLoading,
-    error: sendOTPError,
     asyncCallback: sendOTP,
+    error: sendOTPError,
+    isLoading: isSendOTPLoading,
   } = useAsync(sendOTPFn);
 
   const {
-    isLoading: isVerifyOTPLoading,
-    error: verifyOTPError,
-    result: verifyOTPResult,
     asyncCallback: verifyOTP,
+    error: verifyOTPError,
+    isLoading: isVerifyOTPLoading,
+    result: verifyOTPResult,
   } = useAsync(verifyOTPFn);
 
   return (

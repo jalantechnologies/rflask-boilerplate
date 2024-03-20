@@ -49,10 +49,12 @@ const useTimer = ({ delayInMilliseconds }: UseTimerProps): UseTimerType => {
     }
   };
 
-  const isResendEnabled = timerEnd || (remainingTime <= millisecondsInSecond && !started);
+  const isResendEnabled =
+    timerEnd || (remainingTime <= millisecondsInSecond && !started);
 
   const remaininingSeconds = remainingTime / millisecondsInSecond - 1;
-  const remaininingSecondsStr = remaininingSeconds > 9 ? `${remaininingSeconds}` : `0${remaininingSeconds}`;
+  const remaininingSecondsStr =
+    remaininingSeconds > 9 ? `${remaininingSeconds}` : `0${remaininingSeconds}`;
 
   return {
     isResendEnabled,

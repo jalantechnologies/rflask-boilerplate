@@ -27,7 +27,9 @@ export const OTPPage: React.FC = () => {
 
   const onResendOTPSuccess = () => {
     startTimer();
-    toast.success('OTP has been successfully re-sent. Please check your messages.');
+    toast.success(
+      'OTP has been successfully re-sent. Please check your messages.',
+    );
   };
 
   const onError = (error: AsyncError) => {
@@ -42,7 +44,9 @@ export const OTPPage: React.FC = () => {
     <AuthenticationPageLayout>
       <AuthenticationFormLayout>
         <VerticalStackLayout gap={8}>
-          <Button kind={ButtonKind.SECONDARY} onClick={handleBackButtonClick}>Back</Button>
+          <Button kind={ButtonKind.SECONDARY} onClick={handleBackButtonClick}>
+            Back
+          </Button>
           <H2>Verify Your Account</H2>
           <OTPForm
             isResendEnabled={isResendEnabled}

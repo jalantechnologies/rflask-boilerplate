@@ -6,8 +6,8 @@ import { useResetPasswordContext } from '../../../contexts';
 import { AsyncError } from '../../../types';
 
 interface UseForgotPasswordFormProps {
-  onSuccess: (newUsername: string) => void;
   onError: (err: AsyncError) => void;
+  onSuccess: (newUsername: string) => void;
 }
 
 const useForgotPasswordForm = ({
@@ -41,9 +41,9 @@ const useForgotPasswordForm = ({
   });
 
   return {
+    formik,
     isSendForgotPasswordEmailLoading,
     sendForgotPasswordEmailError,
-    formik,
   };
 };
 
