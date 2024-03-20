@@ -1,6 +1,9 @@
 import { AccountProvider, useAccountContext } from './account.provider';
-import { useAuthContext } from './auth.provider';
+import { AuthProvider, useAuthContext } from './auth.provider';
+import { ResetPasswordProvider, useResetPasswordContext } from './reset-password.provider';
 
 export {
-  AccountProvider, useAccountContext, useAuthContext
+  AuthProvider, useAuthContext,
+  AccountProvider, useAccountContext,
+  ResetPasswordProvider, useResetPasswordContext,
 };

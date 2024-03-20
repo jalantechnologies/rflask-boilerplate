@@ -7,4 +7,5 @@ export enum ButtonType {
 export enum ButtonKind {
   PRIMARY = 'primary',
   SECONDARY = 'secondary',
+  TERTIARY = 'tertiary',
 }
