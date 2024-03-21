@@ -1,17 +1,16 @@
 import Button from './button';
-import Flex from './flex/flex.component';
 import FlexItem from './flex/flex-item.component';
+import Flex from './flex/flex.component';
 import FormControl from './form-control';
-import H2 from './typography/h2';
 import Header from './header';
-import HorizontalStackLayout from './layouts/horizontal-stack-layout';
 import Input from './input';
-import OTP from './otp';
-import ParagraphMedium from './typography/paragraph-medium';
 import PasswordInput from './input/password-input';
-import Select from './select';
-import Sidebar from './sidebar';
+import HorizontalStackLayout from './layouts/horizontal-stack-layout';
 import VerticalStackLayout from './layouts/vertical-stack-layout';
+import OTP from './otp';
+import Select from './select';
+import H2 from './typography/h2';
+import ParagraphMedium from './typography/paragraph-medium';
 
 export {
   Button,
@@ -26,6 +25,5 @@ export {
   ParagraphMedium,
   PasswordInput,
   Select,
-  Sidebar,
   VerticalStackLayout,
 };
