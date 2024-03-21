@@ -6,8 +6,12 @@ import { AccessToken, ApiResponse, AsyncError } from '../types';
 import useAsync from './async.hook';
 
 type AuthContextType = {
+  isLoginLoading: boolean;
   isSignupLoading: boolean;
   isUserAuthenticated: () => boolean;
+  login: (username: string, password: string) => Promise<AccessToken>;
+  loginError: AsyncError;
+  loginResult: AccessToken;
   logout: () => void;
   signup: (
     firstName: string,
@@ -32,6 +36,17 @@ const signupFn = async (
 ): Promise<ApiResponse<void>> =>
   authService.signup(firstName, lastName, username, password);
 
+const loginFn = async (
+  username: string,
+  password: string,
+): Promise<ApiResponse<AccessToken>> => {
+  const result = await authService.login(username, password);
+  if (result.data) {
+    localStorage.setItem('access-token', JSON.stringify(result.data));
+  }
+  return result;
+};
+
 const logoutFn = (): void => localStorage.removeItem('access-token');
 
 const getAccessToken = (): AccessToken =>
@@ -46,11 +61,22 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     isLoading: isSignupLoading,
   } = useAsync(signupFn);
 
+  const {
+    isLoading: isLoginLoading,
+    error: loginError,
+    result: loginResult,
+    asyncCallback: login,
+  } = useAsync(loginFn);
+
   return (
     <AuthContext.Provider
       value={{
+        isLoginLoading,
         isSignupLoading,
         isUserAuthenticated,
+        login,
+        loginError,
+        loginResult,
         logout: logoutFn,
         signup,
         signupError,
