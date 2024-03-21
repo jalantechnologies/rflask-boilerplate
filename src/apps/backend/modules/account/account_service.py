@@ -13,8 +13,10 @@ class AccountService:
     account_dict = json.loads(account.to_json())
     return Account(
       id=account_dict.get("id"),
+      first_name=account_dict.get("first_name"),
       hashed_password=account_dict.get("hashed_password"),
-      username=account_dict.get("username")
+      last_name=account_dict.get("last_name"),
+      username=account_dict.get("username"),
     )
 
   @staticmethod
@@ -24,6 +26,8 @@ class AccountService:
     )
     return Account(
       id=str(account.id),
+      first_name=account.first_name,
       hashed_password=account.hashed_password,
-      username=account.username
+      last_name=account.last_name,
+      username=account.username,
     )

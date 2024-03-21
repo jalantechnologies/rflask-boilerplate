@@ -10,8 +10,10 @@ from tests.modules.account.base_test_account import BaseTestAccount
 class TestAccountApi(BaseTestAccount):
   def test_create_account(self) -> None:
     payload = json.dumps({
+      "first_name": "first_name",
+      "last_name": "last_name",
+      "password": "password",
       "username": "username",
-      "password": "password"
     })
 
     with app.test_client() as client:
@@ -26,16 +28,20 @@ class TestAccountApi(BaseTestAccount):
 
   def test_create_account_with_existing_user(self) -> None:
     account = AccountService.create_account(params = CreateAccountParams(
-      username="username",
+      first_name="first_name",
+      last_name="last_name",
       password="password",
+      username="username",
     ))
     with app.test_client() as client:
       response = client.post(
         "http://127.0.0.1:8080/api/account",
         headers={'Content-Type': 'application/json'},
         data=json.dumps({
-          "username": account.username,
+          "first_name": "first_name",
+          "last_name": "last_name",
           "password": "password",
+          "username": account.username,
         }),
       )
     assert response.status_code == 400

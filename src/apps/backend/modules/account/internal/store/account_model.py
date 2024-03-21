@@ -20,8 +20,10 @@ class AccountModel(BaseModel):
 
   id: Optional[PyObjectId] = Field(None, alias="_id")
   active: bool = True
-  username: str
+  first_name: str
   hashed_password: str
+  last_name: str
+  username: str
   created_at: Optional[datetime] = datetime.now()
   updated_at: Optional[datetime] = datetime.now()
 

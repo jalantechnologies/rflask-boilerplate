@@ -9,6 +9,8 @@ class AccountSearchParams:
 
 @dataclass(frozen=True)
 class CreateAccountParams:
+  first_name: str
+  last_name: str
   password: str
   username: str
 
@@ -22,7 +24,9 @@ class AccountInfo:
 @dataclass(frozen=True)
 class Account:
   id: str
+  first_name: str
   hashed_password: str
+  last_name: str
   username: str
 
 

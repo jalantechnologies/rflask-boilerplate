@@ -9,6 +9,8 @@ class TestAccountService(BaseTestAccount):
     account = AccountService.create_account(params = CreateAccountParams(
       password="password",
       username="username",
+      first_name="first_name",
+      last_name="last_name",
     ))
 
     assert account.username == "username"
@@ -18,6 +20,8 @@ class TestAccountService(BaseTestAccount):
 
   def test_get_account_by_username_password(self) -> None:
     account = AccountService.create_account(params = CreateAccountParams(
+      first_name="first_name",
+      last_name="last_name",
       password="password",
       username="username",
     ))
