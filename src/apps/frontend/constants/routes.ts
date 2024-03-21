@@ -5,7 +5,7 @@ const routes = {
   LOGIN: '/login',
   OTP: '/login?auth_mode=otp',
   PHONE_LOGIN: '/signup?auth_mode=otp',
-  RESET_PASSWORD: '/accounts/:accountId/reset_password',
+  RESET_PASSWORD: '/account/:accountId/reset_password',
   SIGNUP: '/signup',
   TASKS: '/tasks',
 };

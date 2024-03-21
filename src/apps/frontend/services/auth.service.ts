@@ -18,15 +18,15 @@ export default class AuthService extends APIService {
     username: string,
     password: string,
   ): Promise<ApiResponse<void>> =>
-    this.apiClient.post('/accounts', {
-      firstName,
-      lastName,
-      username,
-      password,
+    this.apiClient.post('/account', {
+      first_name: firstName,
+      last_name: lastName,
+      username: username,
+      password: password,
     });
 
   sendOTP = async (phoneNumber: PhoneNumber): Promise<ApiResponse<void>> =>
-    this.apiClient.post('/accounts', {
+    this.apiClient.post('/account', {
       phoneNumber,
     });
 

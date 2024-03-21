@@ -15,7 +15,7 @@ export default class ResetPasswordService extends APIService {
     params: ResetPasswordParams,
   ): Promise<ApiResponse<void>> => {
     const { accountId, newPassword, token } = params;
-    return this.apiClient.patch(`/accounts/${accountId}`, {
+    return this.apiClient.patch(`/account/${accountId}`, {
       newPassword,
       token,
     });
