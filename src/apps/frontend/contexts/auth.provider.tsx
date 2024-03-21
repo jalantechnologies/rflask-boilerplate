@@ -1,22 +1,14 @@
 import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 import { AuthService } from '../services';
-import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from '../types';
+import { AccessToken, ApiResponse, AsyncError } from '../types';
 
 import useAsync from './async.hook';
 
 type AuthContextType = {
-  isLoginLoading: boolean;
-  isSendOTPLoading: boolean;
   isSignupLoading: boolean;
   isUserAuthenticated: () => boolean;
-  isVerifyOTPLoading: boolean;
-  login: (username: string, password: string) => Promise<AccessToken>;
-  loginError: AsyncError;
-  loginResult: AccessToken;
   logout: () => void;
-  sendOTP: (phoneNumber: PhoneNumber) => Promise<void>;
-  sendOTPError: AsyncError;
   signup: (
     firstName: string,
     lastName: string,
@@ -24,9 +16,6 @@ type AuthContextType = {
     password: string,
   ) => Promise<void>;
   signupError: AsyncError;
-  verifyOTP: (phoneNumber: PhoneNumber, otp: string) => Promise<AccessToken>;
-  verifyOTPError: AsyncError;
-  verifyOTPResult: AccessToken;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -34,17 +23,6 @@ const AuthContext = createContext<AuthContextType | null>(null);
 const authService = new AuthService();
 
 export const useAuthContext = (): AuthContextType => useContext(AuthContext);
-
-const loginFn = async (
-  username: string,
-  password: string,
-): Promise<ApiResponse<AccessToken>> => {
-  const result = await authService.login(username, password);
-  if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
-  }
-  return result;
-};
 
 const signupFn = async (
   firstName: string,
@@ -61,67 +39,21 @@ const getAccessToken = (): AccessToken =>
 
 const isUserAuthenticated = () => !!getAccessToken();
 
-const sendOTPFn = async (
-  phoneNumber: PhoneNumber,
-): Promise<ApiResponse<void>> => authService.sendOTP(phoneNumber);
-
-const verifyOTPFn = async (
-  phoneNumber: PhoneNumber,
-  otp: string,
-): Promise<ApiResponse<AccessToken>> => {
-  const result = await authService.verifyOTP(phoneNumber, otp);
-  if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
-  }
-  return result;
-};
-
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const {
-    asyncCallback: login,
-    error: loginError,
-    isLoading: isLoginLoading,
-    result: loginResult,
-  } = useAsync(loginFn);
-
   const {
     asyncCallback: signup,
     error: signupError,
     isLoading: isSignupLoading,
   } = useAsync(signupFn);
 
-  const {
-    asyncCallback: sendOTP,
-    error: sendOTPError,
-    isLoading: isSendOTPLoading,
-  } = useAsync(sendOTPFn);
-
-  const {
-    asyncCallback: verifyOTP,
-    error: verifyOTPError,
-    isLoading: isVerifyOTPLoading,
-    result: verifyOTPResult,
-  } = useAsync(verifyOTPFn);
-
   return (
     <AuthContext.Provider
       value={{
-        isLoginLoading,
-        isSendOTPLoading,
         isSignupLoading,
         isUserAuthenticated,
-        isVerifyOTPLoading,
-        login,
-        loginError,
-        loginResult,
         logout: logoutFn,
-        sendOTP,
-        sendOTPError,
         signup,
         signupError,
-        verifyOTP,
-        verifyOTPError,
-        verifyOTPResult,
       }}
     >
       {children}
