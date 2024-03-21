@@ -29,7 +29,7 @@ const useTimer = ({ delayInMilliseconds }: UseTimerProps): UseTimerType => {
 
   const stopTimer = () => {
     started = false;
-    clearInterval(intervalId as NodeJS.Timeout);
+    clearInterval(intervalId);
     clearTimeout(timeoutId);
   };
 
