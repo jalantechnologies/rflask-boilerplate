@@ -28,7 +28,7 @@ Boilerplate project for Flask, React & MongoDB based projects. This README docum
 
 **Pre Requirements:**
 - Python (v3.11)
-- Node (v14.17) - [Download](https://nodejs.org/en/download/)
+- Node (v20.11.1) - [Download](https://nodejs.org/download/release/v20.11.1/)
 - MongoDb (v5) - [Download](https://www.mongodb.com/docs/manual/installation/)
 
 **Scripts:**
