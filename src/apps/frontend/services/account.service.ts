@@ -9,7 +9,7 @@ export default class AccountService extends APIService {
       localStorage.getItem('access-token'),
     ) as AccessToken;
 
-    return this.apiClient.get(`/account/${userAccessToken.accountId}`, {
+    return this.apiClient.get(`/accounts/${userAccessToken.accountId}`, {
       headers: {
         Authorization: `Bearer ${userAccessToken.token}`,
       },

@@ -9,7 +9,7 @@ export default class AuthService extends APIService {
     username: string,
     password: string,
   ): Promise<ApiResponse<void>> =>
-    this.apiClient.post('/account', {
+    this.apiClient.post('/accounts', {
       first_name: firstName,
       last_name: lastName,
       username: username,

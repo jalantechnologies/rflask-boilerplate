@@ -18,7 +18,7 @@ class TestAccountApi(BaseTestAccount):
 
     with app.test_client() as client:
       response = client.post(
-        "http://127.0.0.1:8080/api/account",
+        "http://127.0.0.1:8080/api/accounts",
         headers={'Content-Type': 'application/json'},
         data=payload,
       )
@@ -35,7 +35,7 @@ class TestAccountApi(BaseTestAccount):
     ))
     with app.test_client() as client:
       response = client.post(
-        "http://127.0.0.1:8080/api/account",
+        "http://127.0.0.1:8080/api/accounts",
         headers={'Content-Type': 'application/json'},
         data=json.dumps({
           "first_name": "first_name",
