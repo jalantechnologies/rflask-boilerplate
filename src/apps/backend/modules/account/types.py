@@ -25,7 +25,6 @@ class AccountInfo:
 class Account:
   id: str
   first_name: str
-  hashed_password: str
   last_name: str
   username: str
 

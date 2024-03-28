@@ -14,7 +14,6 @@ class AccountService:
     return Account(
       id=account_dict.get("id"),
       first_name=account_dict.get("first_name"),
-      hashed_password=account_dict.get("hashed_password"),
       last_name=account_dict.get("last_name"),
       username=account_dict.get("username"),
     )
@@ -27,7 +26,6 @@ class AccountService:
     return Account(
       id=str(account.id),
       first_name=account.first_name,
-      hashed_password=account.hashed_password,
       last_name=account.last_name,
       username=account.username,
     )
