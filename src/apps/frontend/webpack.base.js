@@ -3,11 +3,11 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+ 
 const webpackBuildConfig = JSON.stringify(config.util.toObject(
   config.has('public') ? config.get('public') : {}
 ));
-
+ 
 module.exports = {
   target: 'web',
   entry: {
@@ -39,6 +39,8 @@ module.exports = {
           'style-loader',
           // Translates CSS into CommonJS
           'css-loader',
+          // Compiles Sass to CSS
+          'sass-loader',
         ],
       },
       {
