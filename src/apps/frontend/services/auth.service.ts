@@ -1,4 +1,4 @@
-import { AccessToken, ApiResponse } from '../types';
+import { AccessToken, ApiError, ApiResponse } from '../types';
 
 import APIService from './api.service';
 
@@ -19,9 +19,16 @@ export default class AuthService extends APIService {
   login = async (
     username: string,
     password: string,
-  ): Promise<ApiResponse<AccessToken>> =>
-    this.apiClient.post('/access-tokens', {
-      username,
-      password,
-    });
+  ): Promise<ApiResponse<AccessToken>> => {
+    try {
+      const response = await this.apiClient.post('/access-tokens', {
+        username: username,
+        password: password,
+      });
+
+      return new ApiResponse(new AccessToken(response.data), undefined);
+    } catch (error) {
+      return new ApiResponse(undefined, new ApiError(error.response.data));
+    }
+  };
 }
