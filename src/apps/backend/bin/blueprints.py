@@ -27,6 +27,12 @@ def serve_js_bundle() -> Response:
   return send_from_directory(react_blueprint.static_folder, 'index.bundle.js')
 
 
+@react_blueprint.route('/style.css')
+def serve_css() -> Response:
+  assert react_blueprint.static_folder, MISSING_STATIC_ROOT_ERR_MESSAGE
+  return send_from_directory(react_blueprint.static_folder, 'style.css')
+
+
 # Server react static images
 react_img_assets_dir: str = os.path.join(os.getcwd(), f"{satic_root}/dist/assets/img")
 img_assets_blueprint = Blueprint("image_assets", __name__, static_folder=react_img_assets_dir, url_prefix="/assets")
