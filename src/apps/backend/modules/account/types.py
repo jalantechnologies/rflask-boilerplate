@@ -6,6 +6,9 @@ class AccountSearchParams:
   password: str
   username: str
 
+@dataclass(frozen=True)
+class AccountSearchByIdParams:
+  id: str
 
 @dataclass(frozen=True)
 class CreateAccountParams:

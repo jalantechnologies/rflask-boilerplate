@@ -4,8 +4,9 @@ from modules.account.errors import (
 )
 from modules.account.internal.account_util import AccountUtil
 from modules.account.internal.store.account_repository import AccountRepository
-from modules.account.internal.store.account_model import AccountModel
-from modules.account.types import AccountSearchParams, CreateAccountParams
+from modules.account.internal.store.account_model import AccountModel, PyObjectId
+from modules.account.types import AccountSearchByIdParams, AccountSearchParams, CreateAccountParams
+from bson.objectid import ObjectId
 
 
 class AccountReader:
@@ -31,6 +32,17 @@ class AccountReader:
       raise AccountNotFoundError(f"Account with username:: {params.username}, not found")
 
     return account
+  
+  @staticmethod
+  def get_account_by_id(*, params: AccountSearchByIdParams) -> AccountModel:
+    account = AccountRepository.account_db.find_one({
+      "_id": ObjectId(params.id),
+      "active": True,
+    })
+    if account is None:
+      raise AccountNotFoundError(f"Account with id:: {params.id}, not found")
+
+    return AccountModel(**account)
 
   @staticmethod
   def check_username_not_exist(*, params: CreateAccountParams) -> None:

@@ -1,6 +1,7 @@
 import json
 
-from modules.account.types import CreateAccountParams, AccountSearchParams
+from modules.access_token.rest_api.access_auth_middleware import access_auth_middleware
+from modules.account.types import AccountSearchByIdParams, CreateAccountParams
 from modules.account.internal.account_writer import AccountWriter
 from modules.account.internal.account_reader import AccountReader
 from modules.account.types import Account
@@ -18,9 +19,10 @@ class AccountService:
       username=account_dict.get("username"),
     )
 
+  @access_auth_middleware
   @staticmethod
-  def get_account_by_username_password(*, params: AccountSearchParams) -> Account:
-    account = AccountReader.get_account_by_username_and_password(
+  def get_account_by_id(*, params: AccountSearchByIdParams) -> Account:
+    account = AccountReader.get_account_by_id(
       params=params
     )
     return Account(
