@@ -8,8 +8,8 @@ export class Account {
 
   constructor(json: JsonObject) {
     this.id = json.id as string;
-    this.firstName = json.firstName as string;
-    this.lastName = json.lastName as string;
+    this.firstName = json.first_name as string;
+    this.lastName = json.last_name as string;
     this.username = json.username as string;
   }
 
