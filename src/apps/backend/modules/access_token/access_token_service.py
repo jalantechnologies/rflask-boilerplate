@@ -49,6 +49,6 @@ class AccessTokenService:
         if verified_token.get('exp') * 1000 < datetime.now().timestamp() * 1000:
             raise AccessTokenExpiredError()
 
-        return {
-            "account_id": verified_token.get('account_id')
-        }
+        return AccessTokenPayload(
+            account_id=verified_token.get('account_id')
+        )

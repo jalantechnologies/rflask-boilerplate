@@ -19,10 +19,10 @@ def access_auth_middleware(next_func):
         except AccessTokenInvalidError:
             raise InvalidAuthorizationHeaderError()
 
-        if 'account_id' in kwargs and auth_payload.get('account_id') != kwargs['account_id']:
+        if 'account_id' in kwargs and auth_payload.account_id != kwargs['account_id']:
             raise UnauthorizedAccessError()
 
-        request.account_id = auth_payload.get('account_id')
+        request.account_id = auth_payload.account_id
         return next_func(*args, **kwargs)
 
     return wrapper
