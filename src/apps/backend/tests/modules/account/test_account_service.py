@@ -1,7 +1,12 @@
+import json
+from unittest.mock import patch
+from modules.access_token.types import AccessTokenPayload
 from modules.account.account_service import AccountService
 from modules.account.errors import AccountNotFoundError
-from modules.account.types import AccountErrorCode, AccountSearchParams, CreateAccountParams 
+from modules.account.types import AccountErrorCode, AccountSearchByIdParams, CreateAccountParams 
 from tests.modules.account.base_test_account import BaseTestAccount
+from server import app
+from flask import request
 
 
 class TestAccountService(BaseTestAccount):
@@ -17,31 +22,42 @@ class TestAccountService(BaseTestAccount):
     assert account.first_name == "first_name"
     assert account.last_name == "last_name"
 
-
-  def test_get_account_by_username_password(self) -> None:
+  @patch('modules.access_token.access_token_service.AccessTokenService.verify_access_token')
+  def test_get_account_by_id(self, mock_verify_access_token) -> None:
     account = AccountService.create_account(params = CreateAccountParams(
       first_name="first_name",
       last_name="last_name",
       password="password",
       username="username",
     ))
-
-    fetched_account = AccountService.get_account_by_username_password(
-      params = AccountSearchParams(
-        password="password",
-        username=account.username,
-      )
+    
+    mock_verify_access_token.return_value = AccessTokenPayload(
+      account_id=account.id,
     )
 
-    assert fetched_account.username == account.username
-    assert fetched_account.first_name == account.first_name
-    assert fetched_account.last_name == account.last_name
+    with app.test_request_context():
+      request.headers = {'Authorization': 'Bearer your_test_token'}
+      get_account_by_id = AccountService.get_account_by_id(
+          params=AccountSearchByIdParams(
+              id=account.id,
+          )
+      )
+    
+    assert get_account_by_id.username == "username"
+    assert get_account_by_id.first_name == "first_name"
 
-  def test_throw_exception_when_usernot_exist(self) -> None:
+  @patch('modules.access_token.access_token_service.AccessTokenService.verify_access_token')
+  def test_throw_exception_when_usernot_exist(self, mock_verify_access_token) -> None:
     try:
-      AccountService.get_account_by_username_password(params=AccountSearchParams(
-        password="password",
-        username="username",
-      ))
+      mock_verify_access_token.return_value = AccessTokenPayload(
+        account_id="5f7b1b7b4f3b9b1b3f3b9b1b",
+      )
+      with app.test_request_context():
+        request.headers = {'Authorization': 'Bearer your_test_token'}
+        AccountService.get_account_by_id(
+            params=AccountSearchByIdParams(
+                id="5f7b1b7b4f3b9b1b3f3b9b1b",
+            )
+        )
     except AccountNotFoundError as exc:
       assert exc.code == AccountErrorCode.NOT_FOUND
