@@ -1,8 +1,8 @@
-from datetime import datetime, timedelta
-import json
-from modules.access_token.errors import AccessTokenExpiredError, AccessTokenInvalidError
 import jwt 
 
+from datetime import datetime, timedelta
+from modules.config.config_service import ConfigService
+from modules.access_token.errors import AccessTokenExpiredError, AccessTokenInvalidError
 from modules.access_token.types import AccessToken, AccessTokenPayload, CreateAccessTokenParams, VerifyAccessTokenParams
 from modules.account.internal.account_reader import AccountReader
 from modules.account.types import Account, AccountSearchParams
@@ -21,8 +21,8 @@ class AccessTokenService:
     
     @staticmethod
     def __generate_access_token(*, account: Account) -> AccessToken:
-        jwt_signing_key = "secret"
-        jwt_expiry = timedelta(days=1)
+        jwt_signing_key = ConfigService.get_token_signing_key()
+        jwt_expiry = timedelta(days=ConfigService.get_token_expiry_days())
         payload = {
             "account_id": account.id,
             "exp": (datetime.now() + jwt_expiry).timestamp()
@@ -39,7 +39,7 @@ class AccessTokenService:
     @staticmethod
     def verify_access_token(*, token: VerifyAccessTokenParams) -> AccessTokenPayload:
 
-        jwt_signing_key = "secret"
+        jwt_signing_key = ConfigService.get_token_signing_key()
 
         try:
             verified_token = jwt.decode(token, jwt_signing_key, algorithms=["HS256"])

@@ -20,3 +20,15 @@ class ConfigService:
       host=DictUtil.required_get_str(input_dict=ConfigManager.config, key='PAPERTRAIL_HOST'),
       port=int(DictUtil.required_get_str(input_dict=ConfigManager.config, key='PAPERTRAIL_PORT'))
     )
+    
+  @staticmethod
+  def get_accounts_config() -> dict:
+    return DictUtil.required_get_dict(input_dict=ConfigManager.config, key='ACCOUNTS')
+
+  @staticmethod
+  def get_token_signing_key() -> str:
+    return DictUtil.required_get_str(input_dict=ConfigService.get_accounts_config(), key='token_signing_key')
+
+  @staticmethod
+  def get_token_expiry_days() -> int:
+    return DictUtil.required_get_int(input_dict=ConfigService.get_accounts_config(), key='token_expiry_days')
