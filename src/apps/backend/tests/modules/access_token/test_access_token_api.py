@@ -4,6 +4,9 @@ from modules.account.types import CreateAccountParams
 from modules.account.account_service import AccountService
 from server import app
 
+API_URL = "http://127.0.0.1:8080/api/access-tokens"
+HEADERS = {'Content-Type': 'application/json'}
+
 class TestAccessTokenApi(BaseTestAccessToken):
     def test_get_access_token(self) -> None:
         account = AccountService.create_account(params=CreateAccountParams(
@@ -15,8 +18,8 @@ class TestAccessTokenApi(BaseTestAccessToken):
         
         with app.test_client() as client:
             response = client.post(
-                "http://127.0.0.1:8080/api/access-tokens",
-                headers={'Content-Type': 'application/json'},
+                API_URL,
+                headers=HEADERS,
                 data=json.dumps({
                     "username": account.username,
                     "password": "password",
@@ -38,8 +41,8 @@ class TestAccessTokenApi(BaseTestAccessToken):
         
         with app.test_client() as client:
             response = client.post(
-                "http://127.0.0.1:8080/api/access-tokens",
-                headers={'Content-Type': 'application/json'},
+                API_URL,
+                headers=HEADERS,
                 data=json.dumps({
                     "username": account.username,
                     "password": "invalid_password",
@@ -52,8 +55,8 @@ class TestAccessTokenApi(BaseTestAccessToken):
     def test_get_access_token_with_invalid_username(self) -> None:
         with app.test_client() as client:
             response = client.post(
-                "http://127.0.0.1:8080/api/access-tokens",
-                headers={'Content-Type': 'application/json'},
+                API_URL,
+                headers=HEADERS,
                 data=json.dumps({
                     "username": "invalid_username",
                     "password": "password",
@@ -66,8 +69,8 @@ class TestAccessTokenApi(BaseTestAccessToken):
     def test_get_access_token_with_invalid_username_and_password(self) -> None:
         with app.test_client() as client:
             response = client.post(
-                "http://127.0.0.1:8080/api/access-tokens",
-                headers={'Content-Type': 'application/json'},
+                API_URL,
+                headers=HEADERS,
                 data=json.dumps({
                     "username": "invalid_username",
                     "password": "invalid_password",
@@ -76,4 +79,3 @@ class TestAccessTokenApi(BaseTestAccessToken):
             assert response.status_code == 400
             assert response.json
             assert response.json.get("code") == "ACCOUNT_ERR_02"
-    
