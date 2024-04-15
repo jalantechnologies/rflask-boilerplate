@@ -44,7 +44,7 @@ class AccessTokenService:
         try:
             verified_token = jwt.decode(token, jwt_signing_key, algorithms=["HS256"])
         except jwt.exceptions.DecodeError:
-            raise AccessTokenInvalidError()
+            raise AccessTokenInvalidError("Invalid access token")
 
         if verified_token.get('exp') * 1000 < datetime.now().timestamp() * 1000:
             raise AccessTokenExpiredError()
