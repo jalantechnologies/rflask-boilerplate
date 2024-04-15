@@ -15,5 +15,5 @@ export const publicRoutes = [
     element: <Signup />,
   },
   { path: routes.ABOUT, element: <About /> },
-  { path: '*', element: <Navigate to={routes.SIGNUP} /> },
+  { path: '*', element: <Navigate to={routes.LOGIN} /> },
 ];
