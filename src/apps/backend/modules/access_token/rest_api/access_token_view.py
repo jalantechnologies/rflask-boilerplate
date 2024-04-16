@@ -2,7 +2,7 @@ from dataclasses import asdict
 
 from modules.access_token.access_token_service import AccessTokenService
 from modules.access_token.types import CreateAccessTokenParams
-from modules.account.errors import AccountNotFoundError
+from modules.account.errors import AccountInvalidPasswordError, AccountNotFoundError
 from flask import request, jsonify
 from flask.views import MethodView
 from flask.typing import ResponseReturnValue
@@ -20,3 +20,9 @@ class AccessTokenView(MethodView):
                 "message": exc.message,
                 "code": exc.code,
             }), 400
+            
+        except AccountInvalidPasswordError as exc:
+            return jsonify({
+                "message": exc.message,
+                "code": exc.code,
+            }), 401

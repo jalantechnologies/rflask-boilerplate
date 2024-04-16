@@ -24,3 +24,14 @@ class AccountNotFoundError(AppError):
       message=message,
 
     )
+
+class AccountInvalidPasswordError(AppError):
+  def __init__(
+    self,
+    message: str,
+  ) -> None:
+    super().__init__(
+      code=AccountErrorCode.INVALID_CREDENTIALS,
+      https_status_code=401,
+      message=message,
+    )

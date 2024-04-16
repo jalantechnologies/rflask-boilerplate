@@ -1,6 +1,6 @@
 import json
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
-from modules.account.types import CreateAccountParams
+from modules.account.types import AccountErrorCode, CreateAccountParams
 from modules.account.account_service import AccountService
 from server import app
 
@@ -48,9 +48,9 @@ class TestAccessTokenApi(BaseTestAccessToken):
                     "password": "invalid_password",
                 }),   
             )
-            assert response.status_code == 400
+            assert response.status_code == 401
             assert response.json
-            assert response.json.get("code") == "ACCOUNT_ERR_02"
+            assert response.json.get("code") == AccountErrorCode.INVALID_CREDENTIALS
             
     def test_get_access_token_with_invalid_username(self) -> None:
         with app.test_client() as client:
@@ -64,7 +64,7 @@ class TestAccessTokenApi(BaseTestAccessToken):
             )
             assert response.status_code == 400
             assert response.json
-            assert response.json.get("code") == "ACCOUNT_ERR_02"
+            assert response.json.get("code") == AccountErrorCode.NOT_FOUND
     
     def test_get_access_token_with_invalid_username_and_password(self) -> None:
         with app.test_client() as client:
@@ -78,4 +78,4 @@ class TestAccessTokenApi(BaseTestAccessToken):
             )
             assert response.status_code == 400
             assert response.json
-            assert response.json.get("code") == "ACCOUNT_ERR_02"
+            assert response.json.get("code") == AccountErrorCode.NOT_FOUND

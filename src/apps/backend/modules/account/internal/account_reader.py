@@ -1,4 +1,5 @@
 from modules.account.errors import (
+    AccountInvalidPasswordError,
     AccountWithUserNameExistsError,
     AccountNotFoundError,
 )
@@ -29,7 +30,7 @@ class AccountReader:
       password=params.password,
       hashed_password=account.hashed_password
     ):
-      raise AccountNotFoundError(f"Account with username:: {params.username}, not found")
+      raise AccountInvalidPasswordError("Invalid password")
 
     return account
   
