@@ -43,8 +43,9 @@ class TestAccountService(BaseTestAccount):
           )
       )
     
-    assert get_account_by_id.username == "username"
-    assert get_account_by_id.first_name == "first_name"
+    assert get_account_by_id.username == account.username
+    assert get_account_by_id.first_name == account.first_name
+    assert get_account_by_id.last_name == account.last_name
 
   @patch('modules.access_token.access_token_service.AccessTokenService.verify_access_token')
   def test_throw_exception_when_usernot_exist(self, mock_verify_access_token) -> None:
