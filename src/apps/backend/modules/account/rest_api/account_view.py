@@ -4,9 +4,10 @@ from flask import request, jsonify
 from flask.views import MethodView
 from flask.typing import ResponseReturnValue
 
+from modules.password_reset_token.errors import PasswordResetTokenNotFoundError
 from modules.account.types import AccountSearchByIdParams, CreateAccountParams, ResetPasswordParams
 from modules.account.account_service import AccountService
-from modules.account.errors import AccountNotFoundError, AccountWithUserNameExistsError
+from modules.account.errors import AccountBadRequestError, AccountNotFoundError, AccountWithUserNameExistsError
 
 class AccountView(MethodView):
   def post(self) -> ResponseReturnValue:
@@ -28,6 +29,7 @@ class AccountView(MethodView):
       account = AccountService.get_account_by_id(params=account_params)
       account_dict = asdict(account)
       return jsonify(account_dict), 200
+
     except AccountNotFoundError as exc:
       return jsonify({
         "message": exc.message,
@@ -43,6 +45,18 @@ class AccountView(MethodView):
       return jsonify(account_dict), 200
     
     except AccountNotFoundError as exc:
+      return jsonify({
+        "message": exc.message,
+        "code": exc.code,
+      }), 400
+      
+    except AccountBadRequestError as exc:
+      return jsonify({
+        "message": exc.message,
+        "code": exc.code,
+      }), 400
+      
+    except PasswordResetTokenNotFoundError as exc:
       return jsonify({
         "message": exc.message,
         "code": exc.code,

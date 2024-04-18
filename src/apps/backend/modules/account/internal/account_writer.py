@@ -3,6 +3,7 @@ from bson.objectid import ObjectId
 
 from dataclasses import asdict
 
+from modules.account.errors import AccountNotFoundError
 from modules.account.internal.store.account_model import AccountModel
 from modules.account.internal.store.account_repository import AccountRepository
 from modules.account.internal.account_reader import AccountReader
@@ -38,6 +39,6 @@ class AccountWriter:
       return_document=ReturnDocument.AFTER
     )
     if updated_account is None:
-      raise ValueError(f"Account not found: {account_id}")
+      raise AccountNotFoundError(f"Account not found: {account_id}")
 
     return AccountModel(**updated_account)

@@ -15,7 +15,7 @@ class PasswordResetTokenReader:
         try:
             token_data = next(cursor)
         except StopIteration:
-            raise PasswordResetTokenNotFoundError(account_id)
+            raise PasswordResetTokenNotFoundError()
 
         return PasswordResetToken(
             id=str(token_data.get("_id")),

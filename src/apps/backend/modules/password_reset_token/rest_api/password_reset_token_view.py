@@ -17,12 +17,6 @@ class PasswordResetTokenView(MethodView):
             password_reset_token = PasswordResetTokenService.create_password_reset_token(params=password_reset_token_params)
             password_reset_token_dict = asdict(password_reset_token)
             return jsonify(password_reset_token_dict), 201
-
-        except PasswordResetTokenNotFoundError as exc:
-            return jsonify({
-                "message": exc.message,
-                "code": exc.code,
-            }), 400
             
         except PasswordResetTokenEmailNotEnabledForTheEnvironmentError as exc:
             return jsonify({

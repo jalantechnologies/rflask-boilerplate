@@ -1,6 +1,7 @@
 from bson.objectid import ObjectId
 from pymongo import ReturnDocument
 
+from modules.password_reset_token.errors import PasswordResetTokenNotFoundError
 from modules.password_reset_token.internal.store.password_reset_token_model import PasswordResetTokenModel
 from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
 from modules.password_reset_token.internal.store.password_reset_token_repository import PasswordResetTokenRepository
@@ -33,6 +34,6 @@ class PasswordResetTokenWriter:
             return_document=ReturnDocument.AFTER  # Return the updated document
         )
         if updated_token is None:
-            raise ValueError(f"Password reset token not found: {password_reset_token_id}")
+            raise PasswordResetTokenNotFoundError(f"Password reset token not found.")
 
         return PasswordResetTokenModel(**updated_token)
