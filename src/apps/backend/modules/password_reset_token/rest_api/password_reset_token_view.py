@@ -4,6 +4,7 @@ from flask.typing import ResponseReturnValue
 
 from dataclasses import asdict
 
+from modules.communication.errors import ServiceError, ValidationError
 from modules.password_reset_token.errors import PasswordResetTokenEmailNotEnabledForTheEnvironmentError, PasswordResetTokenNotFoundError
 from modules.password_reset_token.types import CreatePasswordResetTokenParams
 from modules.account.errors import AccountNotFoundError
@@ -29,3 +30,15 @@ class PasswordResetTokenView(MethodView):
                 "message": exc.message,
                 "code": exc.code,
             }), 400
+            
+        except ValidationError as exc:
+            return jsonify({
+                "message": exc.message,
+                "code": exc.code,
+            }), 400
+            
+        except ServiceError as exc:
+            return jsonify({
+                "message": exc.message,
+                "code": exc.code,
+            }), 500
