@@ -69,8 +69,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onError, onSuccess }) => {
           </label>
 
           <Link
-            // Reset password flow to be added
-            to={'#'}
+            to={routes.FORGOT_PASSWORD}
             className="text-sm text-primary hover:underline"
           >
             Forget password?
