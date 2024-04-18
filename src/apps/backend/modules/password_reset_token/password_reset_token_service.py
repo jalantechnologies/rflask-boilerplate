@@ -85,7 +85,7 @@ class PasswordResetTokenService:
         web_app_host = ConfigService.get_web_app_host()
         default_email = ConfigService.get_mailer_config("default_email")
         default_email_name = ConfigService.get_mailer_config("default_email_name")
-        forget_password_mail_template_id = ConfigService.get_mailer_config("forget_password_mail_template_id")
+        forgot_password_mail_template_id = ConfigService.get_mailer_config("forgot_password_mail_template_id")
 
         template_data = {
             "first_name": first_name,
@@ -94,7 +94,7 @@ class PasswordResetTokenService:
         }
 
         password_reset_email_params = SendEmailParams(
-            template_id=forget_password_mail_template_id,
+            template_id=forgot_password_mail_template_id,
             recipient=EmailRecipient(email=username),
             sender=EmailSender(email=default_email, name=default_email_name),
             template_data=template_data,

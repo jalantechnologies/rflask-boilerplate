@@ -15,6 +15,6 @@ class OSSettings:
   MAILER: Optional[dict[str, str]] = field(default_factory=lambda:{
     "default_email": os.environ.get("DEFAULT_EMAIL"),
     "default_email_name": os.environ.get("DEFAULT_EMAIL_NAME"),
-    "forgot_password_template_id": os.environ.get("FORGOT_PASSWORD_MAIL_TEMPLATE_ID"),
+    "forgot_password_mail_template_id": os.environ.get("FORGOT_PASSWORD_MAIL_TEMPLATE_ID"),
   })
   WEB_APP_HOST: Optional[str] = os.environ.get("WEB_APP_HOST")
