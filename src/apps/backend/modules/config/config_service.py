@@ -32,3 +32,11 @@ class ConfigService:
   @staticmethod
   def get_token_expiry_days() -> int:
     return DictUtil.required_get_int(input_dict=ConfigService.get_accounts_config(), key='token_expiry_days')
+  
+  @staticmethod
+  def get_web_app_host() -> str:
+    return DictUtil.required_get_str(input_dict=ConfigManager.config, key='WEB_APP_HOST')
+
+  @staticmethod
+  def get_sendgrid_api_key() -> str:
+    return DictUtil.required_get_dict(input_dict=ConfigManager.config, key='SENDGRID')['api_key']

@@ -13,6 +13,7 @@ pytest = "==7.4.3"
 waitress = "==2.1.2"
 certifi = "==2023.11.17"
 pyjwt = "==2.8.0"
+sendgrid = "==6.11.0"
 
 [dev-packages]
 flask = "==3.0.0"
