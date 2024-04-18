@@ -35,3 +35,14 @@ class AccountInvalidPasswordError(AppError):
       https_status_code=401,
       message=message,
     )
+
+class AccountBadRequestError(AppError):
+  def __init__(
+    self,
+    message: str,
+  ) -> None:
+    super().__init__(
+      code=AccountErrorCode.BAD_REQUEST,
+      https_status_code=400,
+      message=message,
+    )
