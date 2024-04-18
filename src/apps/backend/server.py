@@ -1,3 +1,4 @@
+from modules.password_reset_token.password_reset_token_service_manager import PasswordResetTokenServiceManager
 from flask import Flask
 from flask_cors import CORS
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
@@ -16,6 +17,10 @@ LoggerManager.mount_logger()
 # Register access token apis
 access_token_blueprint = AccessTokenServiceManager.create_rest_api_server()
 api_blueprint.register_blueprint(access_token_blueprint)
+
+# Register password reset token apis
+password_reset_token_blueprint = PasswordResetTokenServiceManager.create_rest_api_server()
+api_blueprint.register_blueprint(password_reset_token_blueprint)
 
 # Register accounts apis
 account_blueprint = AccountServiceManager.create_rest_api_server()
