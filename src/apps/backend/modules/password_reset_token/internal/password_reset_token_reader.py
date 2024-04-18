@@ -10,7 +10,7 @@ class PasswordResetTokenReader:
     def get_password_reset_token_by_account_id(account_id: str) -> PasswordResetToken:
         cursor = PasswordResetTokenRepository.password_reset_token_db.find(
             {"account": ObjectId(account_id)}
-        ).sort("created_at", -1)
+        ).sort("expires_at", -1)
 
         try:
             token_data = next(cursor)
