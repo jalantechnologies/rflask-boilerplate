@@ -3,5 +3,5 @@ from modules.communication.types import SendEmailParams
 
 
 class EmailService:
-    def send_email(params: SendEmailParams) -> None:
+    def send_email(*, params: SendEmailParams) -> None:
         return SendGridService.send_email(params)

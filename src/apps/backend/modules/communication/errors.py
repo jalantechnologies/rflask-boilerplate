@@ -6,7 +6,9 @@ class ValidationError(AppError):
     code: CommunicationErrorCode
     failures: list[ValidationFailure]
     
-    def __init__(self, msg: str, failures: list[ValidationFailure] = []) -> None:
+    def __init__(self, msg: str, failures: list[ValidationFailure] = None) -> None:
+        if failures is None:
+            failures = []
         self.code = CommunicationErrorCode.VALIDATION_ERROR
         super().__init__(
             message=msg,

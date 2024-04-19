@@ -24,7 +24,7 @@ class PasswordResetTokenModel(BaseModel):
 
     # Ensure expires_at is in the future
     @validator('expires_at')
-    def expires_at_must_be_in_future(cls, v):
+    def expires_at_must_be_in_future(v):
         if v < datetime.now():
             raise ValueError('expires_at must be in the future')
         return v

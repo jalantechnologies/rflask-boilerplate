@@ -16,7 +16,7 @@ class SendEmailParams:
     recipient: EmailRecipient
     sender: EmailSender
     template_id: str
-    template_data: Dict[str, Any] = None 
+    template_data: Dict[str, Any] | None = None 
     
 @dataclass(frozen=True)
 class CommunicationErrorCode:
