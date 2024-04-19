@@ -22,13 +22,6 @@ class PasswordResetTokenModel(BaseModel):
     token: str
     is_used: bool = False
 
-    # Ensure expires_at is in the future
-    @validator('expires_at')
-    def expires_at_must_be_in_future(self, v):
-        if v < datetime.now():
-            raise ValueError('expires_at must be in the future')
-        return v
-
     @staticmethod
     def get_collection_name() -> str:
         return "password_reset_tokens"
