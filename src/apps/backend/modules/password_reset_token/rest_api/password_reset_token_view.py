@@ -29,7 +29,7 @@ class PasswordResetTokenView(MethodView):
             return jsonify({
                 "message": exc.message,
                 "code": exc.code,
-            }), 400
+            }), 404
             
         except ValidationError as exc:
             return jsonify({
@@ -41,4 +41,4 @@ class PasswordResetTokenView(MethodView):
             return jsonify({
                 "message": exc.message,
                 "code": exc.code,
-            }), 500
+            }), 503

@@ -34,8 +34,10 @@ class AccountService:
   def reset_account_password(*, params: ResetPasswordParams):
     from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
     
+    account = AccountReader.get_account_by_id(params=AccountSearchByIdParams(id=params.account_id))
+    
     password_reset_token = PasswordResetTokenService.verify_password_reset_token(
-      account_id=params.account_id,
+      account_id=account.id,
       token=params.token,
     )
     

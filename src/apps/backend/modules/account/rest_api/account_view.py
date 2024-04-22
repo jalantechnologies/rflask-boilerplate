@@ -48,7 +48,7 @@ class AccountView(MethodView):
       return jsonify({
         "message": exc.message,
         "code": exc.code,
-      }), 400
+      }), 404
       
     except AccountBadRequestError as exc:
       return jsonify({
@@ -60,4 +60,4 @@ class AccountView(MethodView):
       return jsonify({
         "message": exc.message,
         "code": exc.code,
-      }), 400
+      }), 404
