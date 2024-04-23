@@ -15,7 +15,7 @@ class ValidationError(AppError):
             code=self.code,
         )
         self.failures = failures
-        self.https_code = 400
+        self.http_status_code = 400
     
 class ServiceError(AppError):
     code: CommunicationErrorCode
