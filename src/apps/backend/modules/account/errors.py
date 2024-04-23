@@ -9,7 +9,7 @@ class AccountWithUserNameExistsError(AppError):
   ) -> None:
     super().__init__(
       code=AccountErrorCode.USERNAME_ALREADY_EXISTS,
-      https_status_code=409,
+      http_status_code=409,
       message=message,
     )
 
@@ -20,7 +20,7 @@ class AccountNotFoundError(AppError):
   ) -> None:
     super().__init__(
       code=AccountErrorCode.NOT_FOUND,
-      https_status_code=409,
+      http_status_code=409,
       message=message,
 
     )
@@ -32,7 +32,7 @@ class AccountInvalidPasswordError(AppError):
   ) -> None:
     super().__init__(
       code=AccountErrorCode.INVALID_CREDENTIALS,
-      https_status_code=401,
+      http_status_code=401,
       message=message,
     )
 
@@ -43,6 +43,6 @@ class AccountBadRequestError(AppError):
   ) -> None:
     super().__init__(
       code=AccountErrorCode.BAD_REQUEST,
-      https_status_code=400,
+      http_status_code=400,
       message=message,
     )

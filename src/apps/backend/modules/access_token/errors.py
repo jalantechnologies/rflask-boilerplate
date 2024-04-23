@@ -8,7 +8,7 @@ class AccessTokenInvalidError(AppError):
     ) -> None:
         super().__init__(
             code=AccessTokenErrorCode.ACCESS_TOKEN_INVALID,
-            https_status_code=401,
+            http_status_code=401,
             message=message,
         )
 
@@ -19,7 +19,7 @@ class AccessTokenExpiredError(AppError):
     ) -> None:
         super().__init__(
             code=AccessTokenErrorCode.ACCESS_TOKEN_EXPIRED,
-            https_status_code=401,
+            http_status_code=401,
             message=message,
         )
         
@@ -30,7 +30,7 @@ class UnauthorizedAccessError(AppError):
     ) -> None:
         super().__init__(
             code=AccessTokenErrorCode.UNAUTHORIZED_ACCESS,
-            https_status_code=401,
+            http_status_code=401,
             message=message,
         )
 
@@ -41,7 +41,7 @@ class AuthorizationHeaderNotFoundError(AppError):
     ) -> None:
         super().__init__(
             code=AccessTokenErrorCode.AUTHORIZATION_HEADER_NOT_FOUND,
-            https_status_code=401,
+            http_status_code=401,
             message=message,
         )
 
@@ -52,6 +52,6 @@ class InvalidAuthorizationHeaderError(AppError):
     ) -> None:
         super().__init__(
             code=AccessTokenErrorCode.INVALID_AUTHORIZATION_HEADER,
-            https_status_code=401,
+            http_status_code=401,
             message=message,
         )

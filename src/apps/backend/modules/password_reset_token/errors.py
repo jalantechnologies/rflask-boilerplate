@@ -10,7 +10,7 @@ class PasswordResetTokenEmailNotEnabledForTheEnvironmentError(AppError):
     ) -> None:
         super().__init__(
             code=PasswordResetTokenErrorCode.PASSWORD_RESET_EMAIL_NOT_ENABLED_FOR_THE_ENVIRONMENT,
-            https_status_code=409,
+            http_status_code=409,
             message="Password reset token is not enabled for the environment.",
         )
         
@@ -22,6 +22,6 @@ class PasswordResetTokenNotFoundError(AppError):
     ) -> None:
         super().__init__(
             code=PasswordResetTokenErrorCode.PASSWORD_RESET_TOKEN_NOT_FOUND,
-            https_status_code=404,
+            http_status_code=404,
             message=f"System is unable to find a token with this account",
         )
