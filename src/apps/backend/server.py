@@ -1,9 +1,9 @@
-from modules.password_reset_token.password_reset_token_service_manager import PasswordResetTokenServiceManager
 from flask import Flask
 from flask_cors import CORS
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
 from modules.config.config_manager import ConfigManager
 from modules.access_token.access_token_service_manager import AccessTokenServiceManager
+from modules.password_reset_token.password_reset_token_service_manager import PasswordResetTokenServiceManager
 from modules.account.account_service_manager import AccountServiceManager
 from modules.logger.logger_manager import LoggerManager
 
