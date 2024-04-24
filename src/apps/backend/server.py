@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
 from modules.config.config_manager import ConfigManager
@@ -6,6 +6,7 @@ from modules.access_token.access_token_service_manager import AccessTokenService
 from modules.password_reset_token.password_reset_token_service_manager import PasswordResetTokenServiceManager
 from modules.account.account_service_manager import AccountServiceManager
 from modules.logger.logger_manager import LoggerManager
+from modules.error.custom_errors import AppError
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
@@ -30,3 +31,10 @@ app.register_blueprint(api_blueprint)
 # Register frontend elements
 app.register_blueprint(img_assets_blueprint)
 app.register_blueprint(react_blueprint)
+
+@app.errorhandler(AppError)
+def handle_error(exc):
+    return jsonify({
+        "message": exc.message,
+        "code": exc.code,
+    }), exc.https_code
