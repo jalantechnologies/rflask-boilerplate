@@ -26,7 +26,7 @@ class PasswordResetTokenService:
             "account": account.id,
             "token": token,
             "is_used": password_reset_token.is_used,
-            "is_expired": PasswordResetTokenUtil.is_token_expired(password_reset_token),
+            "is_expired": PasswordResetTokenUtil.is_token_expired(password_reset_token.expires_at),
             "expires_at": password_reset_token.expires_at,
         }
 

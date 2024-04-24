@@ -41,4 +41,6 @@ class AccountWriter:
     if updated_account is None:
       raise AccountNotFoundError(f"Account not found: {account_id}")
 
-    return AccountModel(**updated_account)
+    return AccountUtil.convert_account_model_to_account(
+      AccountModel(**updated_account)
+      )

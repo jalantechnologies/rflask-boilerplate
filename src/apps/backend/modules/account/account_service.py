@@ -24,7 +24,7 @@ class AccountService:
     return AccountReader.get_account_by_username(username=username)
     
   @staticmethod
-  def reset_account_password(*, params: ResetPasswordParams):
+  def reset_account_password(*, params: ResetPasswordParams) -> Account:
     from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
     
     account = AccountReader.get_account_by_id(params=AccountSearchByIdParams(id=params.account_id))
