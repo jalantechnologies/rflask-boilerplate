@@ -26,5 +26,4 @@ class ServiceError(AppError):
         )
         self.code = CommunicationErrorCode.SERVICE_ERROR
         self.stack = err.stack
-        self.code = CommunicationErrorCode.SERVICE_ERROR
         self.http_status_code = 503
