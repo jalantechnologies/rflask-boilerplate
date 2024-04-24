@@ -9,7 +9,6 @@ class DefaultSettings:
   ACCOUNTS: dict = field(default_factory=lambda: {
       "token_signing_key": "JWT_TOKEN",
       "token_expiry_days": 1,
-      "password_reset_token_email_enabled": True
   })
   PASSWORD_RESET_TOKEN: dict = field(default_factory=lambda: {
     "expires_in_seconds": 3600

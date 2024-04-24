@@ -2,7 +2,6 @@ import urllib.parse
 
 from modules.communication.email_service import EmailService
 from modules.communication.types import EmailRecipient, EmailSender, SendEmailParams
-from modules.password_reset_token.errors import PasswordResetTokenEmailNotEnabledForTheEnvironmentError
 from modules.account.account_service import AccountService
 from modules.account.errors import AccountBadRequestError
 from modules.config.config_service import ConfigService
@@ -78,9 +77,6 @@ class PasswordResetTokenService:
         username: str, 
         password_reset_token: str
     ) -> None:
-
-        if not ConfigService.get_accounts_config().get("password_reset_token_email_enabled"):
-            raise PasswordResetTokenEmailNotEnabledForTheEnvironmentError()
 
         web_app_host = ConfigService.get_web_app_host()
         default_email = ConfigService.get_mailer_config("default_email")

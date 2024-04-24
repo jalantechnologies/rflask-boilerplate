@@ -17,4 +17,3 @@ class CreatePasswordResetTokenParams:
 @dataclass(frozen=True)
 class PasswordResetTokenErrorCode:
     PASSWORD_RESET_TOKEN_NOT_FOUND: str = 'PASSWORD_RESET_TOKEN_ERR_01'
-    PASSWORD_RESET_EMAIL_NOT_ENABLED_FOR_THE_ENVIRONMENT: str = 'PASSWORD_RESET_TOKEN_ERR_02'
