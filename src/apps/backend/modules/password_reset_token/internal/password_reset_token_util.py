@@ -3,6 +3,7 @@ import os
 import bcrypt
 from datetime import datetime, timedelta
 
+from modules.password_reset_token.internal.store.password_reset_token_model import PasswordResetTokenModel
 from modules.config.config_service import ConfigService
 
 class PasswordResetTokenUtil:
@@ -32,5 +33,5 @@ class PasswordResetTokenUtil:
         return datetime.now() + timedelta(seconds=default_token_expire_time_in_seconds)
 
     @staticmethod
-    def is_token_expired(expires_at: datetime) -> bool:
-        return datetime.now() > expires_at
+    def is_token_expired(password_reset_token: PasswordResetTokenModel) -> bool:
+        return datetime.now() > password_reset_token.expires_at

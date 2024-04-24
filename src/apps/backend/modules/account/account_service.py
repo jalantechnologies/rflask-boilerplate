@@ -21,14 +21,7 @@ class AccountService:
     
   @staticmethod
   def get_account_by_username(*, username: str) -> Account:
-    account = AccountReader.get_account_by_username(username=username)
-    account_dict = json.loads(account.to_json())
-    return Account(
-      id=account_dict.get("id"),
-      first_name=account_dict.get("first_name"),
-      last_name=account_dict.get("last_name"),
-      username=account_dict.get("username"),
-    )
+    return AccountReader.get_account_by_username(username=username)
     
   @staticmethod
   def reset_account_password(*, params: ResetPasswordParams):
@@ -50,12 +43,7 @@ class AccountService:
       password_reset_token_id=password_reset_token.id,
     )
     
-    return Account(
-      id=str(updated_account.id),
-      first_name=updated_account.first_name,
-      last_name=updated_account.last_name,
-      username=updated_account.username,
-    )
+    return updated_account
 
   @access_auth_middleware
   @staticmethod

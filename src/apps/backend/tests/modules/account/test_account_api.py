@@ -44,6 +44,6 @@ class TestAccountApi(BaseTestAccount):
           "username": account.username,
         }),
       )
-    assert response.status_code == 400
+    assert response.status_code == 409
     assert response.json
     assert response.json.get("code") == AccountErrorCode.USERNAME_ALREADY_EXISTS

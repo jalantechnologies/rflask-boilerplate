@@ -20,7 +20,7 @@ class AccountNotFoundError(AppError):
   ) -> None:
     super().__init__(
       code=AccountErrorCode.NOT_FOUND,
-      https_status_code=409,
+      https_status_code=404,
       message=message,
 
     )

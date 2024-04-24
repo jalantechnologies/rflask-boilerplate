@@ -62,7 +62,7 @@ class TestAccessTokenApi(BaseTestAccessToken):
                     "password": "password",
                 }),
             )
-            assert response.status_code == 400
+            assert response.status_code == 404
             assert response.json
             assert response.json.get("code") == AccountErrorCode.NOT_FOUND
     
@@ -76,6 +76,6 @@ class TestAccessTokenApi(BaseTestAccessToken):
                     "password": "invalid_password",
                 }),
             )
-            assert response.status_code == 400
+            assert response.status_code == 404
             assert response.json
             assert response.json.get("code") == AccountErrorCode.NOT_FOUND
