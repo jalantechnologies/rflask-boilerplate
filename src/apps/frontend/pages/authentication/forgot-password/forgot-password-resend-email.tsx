@@ -40,9 +40,9 @@ const ForgotPasswordResendEmail: React.FC<ForgotPasswordResendEmailProps> = ({
         A password reset link has been sent to {username}.
         Please check your inbox and follow the instructions.
       </ParagraphMedium>
-      <Flex justifyContent='end'>
+      {!isResendEnabled && <Flex justifyContent='end'>
         <p>Resend email in 00: {timerRemainingSeconds}</p>
-      </Flex>
+      </Flex>}
       <form onSubmit={handleResendPasswordResetEmail}>
         <Button
           disabled={!isResendEnabled}
