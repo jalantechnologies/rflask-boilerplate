@@ -26,7 +26,7 @@ class AccountWriter:
       "_id": query.inserted_id
     })
 
-    return AccountModel(**account)
+    return AccountUtil.convert_account_model_to_account(AccountModel(**account))
   
   @staticmethod
   def update_password_by_account_id(account_id: str, password: str) -> AccountModel:
