@@ -21,23 +21,9 @@ class PasswordResetTokenService:
         PasswordResetTokenService.send_password_reset_email(
             account.id, account.first_name, account.username, token
         )
-        password_reset_token_dict = {
-            "id": str(password_reset_token.id),
-            "account": account.id,
-            "token": token,
-            "is_used": password_reset_token.is_used,
-            "is_expired": PasswordResetTokenUtil.is_token_expired(password_reset_token.expires_at),
-            "expires_at": password_reset_token.expires_at,
-        }
+        
+        return password_reset_token
 
-        return PasswordResetToken(
-            id=password_reset_token_dict.get("id"),
-            account=password_reset_token_dict.get("account"),
-            token=password_reset_token_dict.get("token"),
-            is_used=password_reset_token_dict.get("is_used"),
-            is_expired=password_reset_token_dict.get("is_expired"),
-            expires_at=password_reset_token_dict.get("expires_at"),
-        )
     @staticmethod
     def get_password_reset_token_by_account_id(account_id: str) -> PasswordResetToken:
         return PasswordResetTokenReader.get_password_reset_token_by_account_id(account_id)

@@ -10,7 +10,7 @@ from modules.password_reset_token.types import PasswordResetToken
 
 class PasswordResetTokenWriter:
     @staticmethod
-    def create_password_reset_token(account_id: str, token: str) -> PasswordResetTokenModel:
+    def create_password_reset_token(account_id: str, token: str) -> PasswordResetToken:
         token_hash = PasswordResetTokenUtil.hash_password_reset_token(token)
         expires_at = PasswordResetTokenUtil.get_token_expires_at()
 
@@ -24,7 +24,9 @@ class PasswordResetTokenWriter:
         password_reset_token = PasswordResetTokenRepository.password_reset_token_db.find_one(
             {"_id": created_token.inserted_id
              })
-        return PasswordResetTokenModel(**password_reset_token)
+        return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
+            PasswordResetTokenModel(**password_reset_token)
+            )
 
     @staticmethod
     def set_password_reset_token_as_used(password_reset_token_id: str) -> PasswordResetToken:
@@ -36,4 +38,6 @@ class PasswordResetTokenWriter:
         if updated_token is None:
             raise PasswordResetTokenNotFoundError(f"Password reset token not found.")
 
-        return PasswordResetTokenModel(**updated_token)
+        return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
+            PasswordResetTokenModel(**updated_token)
+            )

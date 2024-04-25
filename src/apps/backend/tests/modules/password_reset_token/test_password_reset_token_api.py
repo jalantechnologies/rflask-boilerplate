@@ -1,5 +1,6 @@
 import json
 
+from modules.password_reset_token.internal.password_reset_token_writer import PasswordResetTokenWriter
 from modules.password_reset_token.errors import PasswordResetTokenNotFoundError
 from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
 from modules.account.account_service import AccountService
@@ -82,15 +83,20 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
             username="username",
         ))
 
-        password_reset_token = PasswordResetTokenService.create_password_reset_token(params=CreatePasswordResetTokenParams(
-            username=account.username,
-        ))
+        token = PasswordResetTokenUtil.generate_password_reset_token()
+        PasswordResetTokenWriter.create_password_reset_token(
+            account.id, token
+        )
+        PasswordResetTokenService.send_password_reset_email(
+            account.id, account.first_name, account.username, token
+        )
+        
         
         new_password = "new_password"
 
         reset_password_params = {
             "new_password": new_password,
-            "token": password_reset_token.token,
+            "token": token,
         }
 
         with app.test_client() as client:
