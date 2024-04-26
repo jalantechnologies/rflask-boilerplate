@@ -10,7 +10,7 @@ from tests.modules.config.base_test_config import BaseTestConfig
 
 class TestConfig(BaseTestConfig):
   def test_db_config_is_loaded(self) -> None:
-    uri = ConfigService.get_value("uri", "MONGODB")
+    uri = ConfigService.get_value("URI", "MONGODB")
     assert uri.split(":")[0] == "mongodb"
     assert uri.split("/")[-1] == "frm-boilerplate-test"
 
