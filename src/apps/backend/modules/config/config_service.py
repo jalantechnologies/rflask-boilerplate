@@ -22,7 +22,7 @@ class ConfigService:
         env_config_path = ConfigService.config_path / f"{app_env}.ini"
 
         config.read([default_config_path, env_config_path])
-        ConfigService.__load_environment_variables(config)
+        ConfigService.__load_environment_variables(config=config)
 
         ConfigService._config = config
     
