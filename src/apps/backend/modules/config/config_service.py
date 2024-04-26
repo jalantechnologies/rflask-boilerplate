@@ -1,34 +1,49 @@
+import configparser
+import os
 from typing import Any
-
-from modules.config.types import PapertrailConfig
-from modules.common.dict_util import DictUtil
-from modules.config.config_manager import ConfigManager
-
+from modules.config.errors import ConfigMissingError
+from pathlib import Path
+  
+def get_parent_directory(directory: str, levels: int) -> Path:
+    parent_dir = Path(directory)
+    for _ in range(levels):
+        parent_dir = parent_dir.parent
+    return parent_dir
 
 class ConfigService:
-  @staticmethod
-  def get_db_uri() -> str:
-    return DictUtil.required_get_str(input_dict=ConfigManager.config, key='MONGODB_URI')
+    _config = None
+    config_path = get_parent_directory(__file__, 6) / "config"
 
-  @staticmethod
-  def get_logger_transports() -> tuple:
-    return DictUtil.required_get_tuple(input_dict=ConfigManager.config, key='LOGGER_TRANSPORTS')
+    @staticmethod
+    def load_config():
+        config = configparser.ConfigParser()
+        default_config_path = ConfigService.config_path / "default.ini"
+        app_env = os.environ.get('APP_ENV', "development")
+        env_config_path = ConfigService.config_path / f"{app_env}.ini"
 
-  @staticmethod
-  def get_papertrail_config() -> PapertrailConfig:
-    return PapertrailConfig(
-      host=DictUtil.required_get_str(input_dict=ConfigManager.config, key='PAPERTRAIL_HOST'),
-      port=int(DictUtil.required_get_str(input_dict=ConfigManager.config, key='PAPERTRAIL_PORT'))
-    )
+        config.read([default_config_path, env_config_path])
+        ConfigService.__load_environment_variables(config)
+
+        ConfigService._config = config
     
-  @staticmethod
-  def get_accounts_config() -> dict:
-    return DictUtil.required_get_dict(input_dict=ConfigManager.config, key='ACCOUNTS')
-
-  @staticmethod
-  def get_token_signing_key() -> str:
-    return DictUtil.required_get_str(input_dict=ConfigService.get_accounts_config(), key='token_signing_key')
-
-  @staticmethod
-  def get_token_expiry_days() -> int:
-    return DictUtil.required_get_int(input_dict=ConfigService.get_accounts_config(), key='token_expiry_days')
+    def __load_environment_variables(config: configparser.ConfigParser):
+        env_config = configparser.ConfigParser()
+        env_config.read(ConfigService.config_path / "custom-environment-variables.ini")
+        for section in env_config.sections():
+            for key, value in env_config[section].items():
+                env_var = os.environ.get(value)
+                if env_var is not None:
+                    if section not in config:
+                        config[section] = {}
+                    config[section][key] = env_var
+                
+    @staticmethod
+    def get_value(key: str, section: str = 'DEFAULT') -> Any:
+        try:
+            return ConfigService._config.get(section, key)
+        except (configparser.NoOptionError, configparser.NoSectionError):
+            raise ConfigMissingError(key)
+          
+    @staticmethod
+    def has_value(key: str, section: str = 'DEFAULT') -> bool:
+        return ConfigService._config.has_option(section, key)
