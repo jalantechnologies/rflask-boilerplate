@@ -26,6 +26,7 @@ class ConfigService:
 
         ConfigService._config = config
     
+    @staticmethod
     def __load_environment_variables(config: configparser.ConfigParser):
         env_config = configparser.ConfigParser()
         env_config.read(ConfigService.config_path / "custom-environment-variables.ini")
