@@ -13,7 +13,7 @@ class AccountRepository:
 
   @staticmethod
   def create_db_connection() -> Collection:
-    connection_uri = ConfigService.get_db_uri()
+    connection_uri = ConfigService.get_value("URI", "MONGODB")
     Logger.info(message=f"Connecting to db:: {connection_uri}")
     client = MongoClient(connection_uri, server_api=ServerApi('1'))
     database = client.get_database()
