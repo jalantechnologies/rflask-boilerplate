@@ -10,6 +10,8 @@ import VerticalStackLayout from './layouts/vertical-stack-layout';
 import OTP from './otp';
 import Select from './select';
 import H2 from './typography/h2';
+import H3 from './typography/h3';
+import H4 from './typography/h4';
 import ParagraphMedium from './typography/paragraph-medium';
 
 export {
@@ -18,6 +20,8 @@ export {
   FlexItem,
   FormControl,
   H2,
+  H3,
+  H4,
   Header,
   HorizontalStackLayout,
   Input,

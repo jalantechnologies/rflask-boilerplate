@@ -13,13 +13,16 @@ const styles = {
         rounded-lg
         text-white
         transition
-        w-full
       `,
       disableState: 'cursor-not-allowed bg-primary/80',
       enableState: 'hover:bg-primary/90 cursor-pointer',
     },
     secondary: {
       base: `
+        p-2
+        rounded
+        hover:bg-slate-200
+        bg-white
         inset-y-0
         flex
         items-center
