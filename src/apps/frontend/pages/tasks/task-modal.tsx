@@ -64,7 +64,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
               />
               <Button
                 kind={ButtonKind.SECONDARY}
-                startIcon={
+                icon={
                   <img
                     className="opacity-50"
                     src="/assets/img/icon/plus.svg"

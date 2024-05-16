@@ -25,7 +25,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({ groupTitle, tasksCount }) => {
         <div className="absolute right-4 top-4">
           <Button
             fullWidth
-            startIcon={
+            icon={
               <img
                 className="fill-current opacity-50"
                 src="/assets/img/icon/menu.svg"
@@ -41,7 +41,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({ groupTitle, tasksCount }) => {
               <Button
                 fullWidth
                 kind={ButtonKind.SECONDARY}
-                startIcon={
+                icon={
                   <img
                     className="fill-current"
                     src="/assets/img/icon/edit.svg"
@@ -55,7 +55,7 @@ const TaskGroup: React.FC<TaskGroupProps> = ({ groupTitle, tasksCount }) => {
               <Button
                 fullWidth
                 kind={ButtonKind.SECONDARY}
-                startIcon={
+                icon={
                   <img
                     className="fill-current"
                     src="/assets/img/icon/delete.svg"

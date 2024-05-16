@@ -10,10 +10,10 @@ import HorizontalStackLayout from '../layouts/horizontal-stack-layout';
 interface ButtonProps {
   disabled?: boolean;
   fullWidth?: boolean;
+  icon?: React.ReactElement | string;
   isLoading?: boolean;
   onBlur?: (e) => void;
   onClick?: (e) => void;
-  startIcon?: React.ReactElement | string;
   type?: ButtonType;
   kind?: ButtonKind;
 }
@@ -22,10 +22,10 @@ const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   children,
   disabled,
   fullWidth,
+  icon,
   isLoading,
   onBlur,
   onClick,
-  startIcon,
   type = ButtonType.BUTTON,
   kind = ButtonKind.PRIMARY,
 }) => {
@@ -47,7 +47,7 @@ const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
       onClick={onClick}
     >
       <HorizontalStackLayout gap={2}>
-        {startIcon}
+        {icon}
         {content}
       </HorizontalStackLayout>
     </button>
