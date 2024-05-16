@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface TextAreaProps {
+interface TextareaProps {
   disabled: boolean;
   error: string;
   name: string;
@@ -8,7 +8,7 @@ interface TextAreaProps {
   rows: number;
 }
 
-const TextArea: React.FC<TextAreaProps> = ({
+const Textarea: React.FC<TextareaProps> = ({
   disabled,
   error,
   name,
@@ -26,4 +26,4 @@ const TextArea: React.FC<TextAreaProps> = ({
   />
 );
 
-export default TextArea;
+export default Textarea;

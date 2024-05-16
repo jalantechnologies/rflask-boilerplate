@@ -8,7 +8,7 @@ import {
 } from '../../components';
 import Modal from '../../components/modal';
 import { ButtonKind, ButtonType } from '../../types/button';
-import TextArea from '../../components/textarea/textarea';
+import Textarea from '../../components/textarea/textarea';
 
 interface TaskModalProps {
   buttonText: string;
@@ -46,7 +46,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
             />
           </FormControl>
           <FormControl error={null} label={'Add task description'}>
-            <TextArea
+            <Textarea
               disabled={false}
               error={null}
               name={'description'}
