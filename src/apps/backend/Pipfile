@@ -14,13 +14,14 @@ waitress = "==2.1.2"
 certifi = "==2023.11.17"
 pyjwt = "==2.8.0"
 sendgrid = "==6.11.0"
+tomli = "==2.0.1"
 
 [dev-packages]
 flask = "==3.0.0"
 flask-cors = "==4.0.0"
 gunicorn = "==21.2.0"
 mypy = "==1.6.1"
-pymongo = {extras = ["srv"], version = "3.12"}
+pymongo = { extras = ["srv"], version = "3.12" }
 types-flask-cors = "==4.0.0.1"
 vulture = "==2.10"
 types-requests = "==2.31.0.10"
