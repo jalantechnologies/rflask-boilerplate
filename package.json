@@ -15,6 +15,7 @@
     "lint:md": "remark .",
     "lint:fix": "eslint --fix .",
     "lint:py": "make run-lint",
+    "script": "make run-script file=$npm_config_file",
     "serve": "cross-env concurrently --kill-others-on-fail npm:serve:*",
     "serve:assets": "cpx \"src/assets/**/*.*\" dist/assets --watch",
     "serve:backend": "cross-env make run-engine",

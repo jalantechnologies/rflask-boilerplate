@@ -79,3 +79,6 @@ terraform/*.tfvars
 
 # mypy cache
 *.mypy_cache
+
+# environment file
+.env

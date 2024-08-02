@@ -25,3 +25,8 @@ run-engine-winx86:
 	cd src/apps/backend \
 	&& pipenv install --dev && pipenv install \
 	&& pipenv run waitress-serve --listen 127.0.0.1:8080 server:app
+
+run-script:
+	cd src/apps/backend && \
+	pipenv install --dev && \
+	pipenv run python scripts/$(file).py
