@@ -20,7 +20,7 @@ jobs:
       branch: ${{ github.event.pull_request.head.ref }}
       build_args: |
         APP_ENV=preview
-      checks: "['npm:coverage', 'npm:lint:ts', 'npm:lint:py', 'compose:test']"
+      checks: "['npm:coverage', 'npm:lint', 'compose:test']"
       docker_registry: ${{ vars.DOCKER_REGISTRY }}
       docker_username: ${{ vars.DOCKER_USERNAME }}
       pull_request_number: ${{ github.event.number }}
