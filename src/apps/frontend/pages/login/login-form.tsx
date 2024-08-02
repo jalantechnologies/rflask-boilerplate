@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import LoginFormCheckbox from './login-form-checkbox';
-import useLoginForm from './login-form.hook';
 import {
   VerticalStackLayout,
   FormControl,
@@ -14,6 +12,9 @@ import {
 import routes from '../../constants/routes';
 import { AsyncError } from '../../types';
 import { ButtonType, ButtonKind } from '../../types/button';
+
+import LoginFormCheckbox from './login-form-checkbox';
+import useLoginForm from './login-form.hook';
 
 interface LoginFormProps {
   onSuccess: () => void;

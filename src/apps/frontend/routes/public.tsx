@@ -2,9 +2,11 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 import routes from '../constants/routes';
-import { About, ForgotPassword, ResetPassword, Signup } from '../pages';
-import Login from '../pages/login';
 import { ResetPasswordProvider } from '../contexts';
+import {
+  About, ForgotPassword, ResetPassword, Signup,
+} from '../pages';
+import Login from '../pages/login';
 
 export const publicRoutes = [
   {
