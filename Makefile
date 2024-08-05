@@ -12,7 +12,7 @@ run-engine:
 	cd src/apps/backend \
 	&& pipenv install --dev \
 	&& pipenv run python --version \
-	&& pipenv run gunicorn server:app --bind 0.0.0.0:8080 --log-level info
+	&& pipenv run gunicorn -c gunicorn_config.py server:app
 
 run-test:
 	cd src/apps/backend \

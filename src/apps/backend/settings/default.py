@@ -13,3 +13,4 @@ class DefaultSettings:
   PASSWORD_RESET_TOKEN: dict = field(default_factory=lambda: {
     "expires_in_seconds": 3600
   })
+  MONGODB_CONNECTION_CACHING: bool = True
