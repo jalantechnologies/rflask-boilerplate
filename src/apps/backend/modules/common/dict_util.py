@@ -27,6 +27,10 @@ class DictUtil:
     return DictUtil._required_get(input_dict=input_dict, key=key, value_type=int)
 
   @staticmethod
+  def required_get_bool(*, input_dict: dict[str, Any], key: str) -> bool:
+    return DictUtil._required_get(input_dict=input_dict, key=key, value_type=bool)
+
+  @staticmethod
   def _required_get(*, input_dict: dict[str, Any], key: str, value_type: Type[T]) -> T:
     value = input_dict.get(key)
 
