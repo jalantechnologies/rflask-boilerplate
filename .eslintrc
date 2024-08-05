@@ -8,6 +8,9 @@
   "plugins": [
     "tailwindcss"
   ],
+  "parserOptions": {
+    "ecmaVersion": 9
+  },
   "overrides": [
     {
       "files": [
