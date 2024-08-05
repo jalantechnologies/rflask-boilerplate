@@ -12,8 +12,8 @@ class BaseTestPasswordResetToken(unittest.TestCase):
         print(f"Executing:: {method.__name__}")
         ConfigManager.mount_config()
         PasswordResetTokenRestApiServer.create()
-    
+
     def teardown_method(self, method: Callable) -> None:
         print(f"Executed:: {method.__name__}")
-        AccountRepository.account_db.delete_many({})
-        PasswordResetTokenRepository.password_reset_token_db.delete_many({})
+        AccountRepository.collection().delete_many({})
+        PasswordResetTokenRepository.collection().delete_many({})

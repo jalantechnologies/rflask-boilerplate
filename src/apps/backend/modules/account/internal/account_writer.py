@@ -21,19 +21,19 @@ class AccountWriter:
     del params_dict["password"]
     AccountReader.check_username_not_exist(params=params)
     account_bson = AccountModel(**params_dict).to_bson()
-    query = AccountRepository.account_db.insert_one(account_bson)
-    account = AccountRepository.account_db.find_one({
+    query = AccountRepository.collection().insert_one(account_bson)
+    account = AccountRepository.collection().find_one({
       "_id": query.inserted_id
     })
 
     return AccountUtil.convert_account_model_to_account(AccountModel(**account))
-  
+
   @staticmethod
   def update_password_by_account_id(account_id: str, password: str) -> AccountModel:
     hashed_password = AccountUtil.hash_password(
       password=password
     )
-    updated_account = AccountRepository.account_db.find_one_and_update(
+    updated_account = AccountRepository.collection().find_one_and_update(
       {"_id": ObjectId(account_id)},
       {"$set": {"hashed_password": hashed_password}},
       return_document=ReturnDocument.AFTER

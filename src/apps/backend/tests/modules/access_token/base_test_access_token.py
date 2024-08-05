@@ -12,4 +12,4 @@ class BaseTestAccessToken(unittest.TestCase):
 
     def teardown_method(self, method: Callable) -> None:
         print(f"Executed:: {method.__name__}")
-        AccountRepository.account_db.delete_many({})
+        AccountRepository.collection().delete_many({})

@@ -13,7 +13,7 @@ from bson.objectid import ObjectId
 class AccountReader:
   @staticmethod
   def get_account_by_username(*, username: str) -> AccountModel:
-    account = AccountRepository.account_db.find_one({
+    account = AccountRepository.collection().find_one({
       "username": username
     })
     if account is None:
@@ -33,10 +33,10 @@ class AccountReader:
       raise AccountInvalidPasswordError("Invalid password")
 
     return account
-  
+
   @staticmethod
   def get_account_by_id(*, params: AccountSearchByIdParams) -> Account:
-    account = AccountRepository.account_db.find_one({
+    account = AccountRepository.collection().find_one({
       "_id": ObjectId(params.id),
       "active": True,
     })
@@ -47,7 +47,7 @@ class AccountReader:
 
   @staticmethod
   def check_username_not_exist(*, params: CreateAccountParams) -> None:
-    account = AccountRepository.account_db.find_one({
+    account = AccountRepository.collection().find_one({
       "username": params.username,
       "active": True
     })
