@@ -12,7 +12,7 @@ run-engine:
 	cd src/apps/backend \
 	&& pipenv install --dev \
 	&& pipenv run python --version \
-	&& pipenv run gunicorn server:app --bind 0.0.0.0:8080 --log-level info
+	&& pipenv run gunicorn -c gunicorn_config.py server:app
 
 run-test:
 	cd src/apps/backend \
@@ -25,3 +25,8 @@ run-engine-winx86:
 	cd src/apps/backend \
 	&& pipenv install --dev && pipenv install \
 	&& pipenv run waitress-serve --listen 127.0.0.1:8080 server:app
+
+run-script:
+	cd src/apps/backend && \
+	pipenv install --dev && \
+	pipenv run python scripts/$(file).py

@@ -20,8 +20,8 @@ class PasswordResetTokenWriter:
             "token": token_hash,
             "is_used": False
         }
-        created_token = PasswordResetTokenRepository.password_reset_token_db.insert_one(new_token_data)
-        password_reset_token = PasswordResetTokenRepository.password_reset_token_db.find_one(
+        created_token = PasswordResetTokenRepository.collection().insert_one(new_token_data)
+        password_reset_token = PasswordResetTokenRepository.collection().find_one(
             {"_id": created_token.inserted_id
              })
         return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
@@ -30,13 +30,13 @@ class PasswordResetTokenWriter:
 
     @staticmethod
     def set_password_reset_token_as_used(password_reset_token_id: str) -> PasswordResetToken:
-        updated_token = PasswordResetTokenRepository.password_reset_token_db.find_one_and_update(
-            {"_id": ObjectId(password_reset_token_id)}, 
-            {"$set": {"is_used": True}}, 
+        updated_token = PasswordResetTokenRepository.collection().find_one_and_update(
+            {"_id": ObjectId(password_reset_token_id)},
+            {"$set": {"is_used": True}},
             return_document=ReturnDocument.AFTER  # Return the updated document
         )
         if updated_token is None:
-            raise PasswordResetTokenNotFoundError(f"Password reset token not found.")
+            raise PasswordResetTokenNotFoundError()
 
         return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
             PasswordResetTokenModel(**updated_token)

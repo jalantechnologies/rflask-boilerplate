@@ -1,6 +1,6 @@
 const InspectLet = (): void => {
   window.__insp = window.__insp || [];
-  window.__insp.push(['wid', window.Config.inspectletKey]);
+  window.__insp.push(['wid', window.Config.inspectletKey as string]);
   const ldinsp = (): void => {
     if (typeof window.__inspld !== 'undefined') return;
     window.__inspld = 1;

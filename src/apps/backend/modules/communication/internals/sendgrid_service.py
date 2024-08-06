@@ -1,3 +1,4 @@
+from typing import Optional
 from modules.communication.errors import ServiceError
 from modules.communication.internals.sendgrid_email_params import EmailParams
 from modules.communication.types import SendEmailParams
@@ -7,7 +8,7 @@ from sendgrid.helpers.mail import Mail, To, From, TemplateId
 from modules.config.config_service import ConfigService
 
 class SendGridService:
-    __client: sendgrid.SendGridAPIClient = None
+    __client: Optional[sendgrid.SendGridAPIClient] = None
 
     @staticmethod
     def send_email(params: SendEmailParams) -> None:
@@ -24,7 +25,7 @@ class SendGridService:
             client = SendGridService.get_client()
             client.send(message)  
             
-        except sendgrid.exceptions.SendGridException as err:
+        except sendgrid.SendGridException as err:
             raise ServiceError(err)
 
     @staticmethod

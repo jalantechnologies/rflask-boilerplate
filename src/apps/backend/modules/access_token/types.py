@@ -25,11 +25,6 @@ class CreateAccessTokenParams:
 
 
 @dataclass(frozen=True)
-class VerifyAccessTokenParams:
-    token: str
-
-
-@dataclass(frozen=True)
 class AccessTokenErrorCode:
     UNAUTHORIZED_ACCESS: str = 'ACCESS_TOKEN_ERR_01'
     ACCESS_TOKEN_EXPIRED: str = 'ACCESS_TOKEN_ERR_02'

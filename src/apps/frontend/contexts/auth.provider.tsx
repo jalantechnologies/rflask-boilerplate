@@ -33,8 +33,7 @@ const signupFn = async (
   lastName: string,
   username: string,
   password: string,
-): Promise<ApiResponse<void>> =>
-  authService.signup(firstName, lastName, username, password);
+): Promise<ApiResponse<void>> => authService.signup(firstName, lastName, username, password);
 
 const loginFn = async (
   username: string,
@@ -49,8 +48,7 @@ const loginFn = async (
 
 const logoutFn = (): void => localStorage.removeItem('access-token');
 
-const getAccessToken = (): AccessToken =>
-  JSON.parse(localStorage.getItem('access-token')) as AccessToken;
+const getAccessToken = (): AccessToken => JSON.parse(localStorage.getItem('access-token')) as AccessToken;
 
 const isUserAuthenticated = () => !!getAccessToken();
 
