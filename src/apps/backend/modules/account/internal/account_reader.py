@@ -5,7 +5,7 @@ from modules.account.errors import (
 )
 from modules.account.internal.account_util import AccountUtil
 from modules.account.internal.store.account_repository import AccountRepository
-from modules.account.internal.store.account_model import AccountModel, PyObjectId
+from modules.account.internal.store.account_model import AccountModel
 from modules.account.types import AccountSearchByIdParams, AccountSearchParams, CreateAccountParams, Account
 from bson.objectid import ObjectId
 
@@ -24,7 +24,7 @@ class AccountReader:
   @staticmethod
   def get_account_by_username_and_password(
     *, params: AccountSearchParams
-  ) -> AccountModel:
+  ) -> Account:
     account = AccountReader.get_account_by_username(username=params.username)
     if not AccountUtil.compare_password(
       password=params.password,
@@ -32,7 +32,7 @@ class AccountReader:
     ):
       raise AccountInvalidPasswordError("Invalid password")
 
-    return account
+    return AccountUtil.convert_account_model_to_account(account_model=account)
 
   @staticmethod
   def get_account_by_id(*, params: AccountSearchByIdParams) -> Account:

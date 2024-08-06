@@ -21,7 +21,7 @@ class PasswordResetTokenUtil:
         )
 
     @staticmethod
-    def generate_password_reset_token():
+    def generate_password_reset_token() -> str:
         return hashlib.sha256(os.urandom(60)).hexdigest()  
 
     @staticmethod
@@ -30,7 +30,7 @@ class PasswordResetTokenUtil:
 
     @staticmethod
     def get_token_expires_at() -> datetime:
-        default_token_expire_time_in_seconds = int(ConfigService.get_password_reset_token().get("expires_in_seconds"))
+        default_token_expire_time_in_seconds = int(str(ConfigService.get_password_reset_token().get("expires_in_seconds")))
         return datetime.now() + timedelta(seconds=default_token_expire_time_in_seconds)
 
     @staticmethod
@@ -38,12 +38,12 @@ class PasswordResetTokenUtil:
         return datetime.now() > expires_at
     
     @staticmethod
-    def convert_password_reset_token_model_to_password_reset_token(password_reset_token_model: PasswordResetTokenModel):
+    def convert_password_reset_token_model_to_password_reset_token(password_reset_token_model: PasswordResetTokenModel) -> PasswordResetToken:
         return PasswordResetToken(
             id=str(password_reset_token_model.id),
             account=str(password_reset_token_model.account),
             token=password_reset_token_model.token,
             is_used=password_reset_token_model.is_used,
             is_expired=PasswordResetTokenUtil.is_token_expired(password_reset_token_model.expires_at),
-            expires_at=password_reset_token_model.expires_at
+            expires_at=str(password_reset_token_model.expires_at),
         )

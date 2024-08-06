@@ -8,12 +8,12 @@ from modules.account.internal.store.account_model import AccountModel
 from modules.account.internal.store.account_repository import AccountRepository
 from modules.account.internal.account_reader import AccountReader
 from modules.account.internal.account_util import AccountUtil
-from modules.account.types import CreateAccountParams
+from modules.account.types import Account, CreateAccountParams
 
 
 class AccountWriter:
   @staticmethod
-  def create_account(*, params: CreateAccountParams) -> AccountModel:
+  def create_account(*, params: CreateAccountParams) -> Account:
     params_dict = asdict(params)
     params_dict["hashed_password"] = AccountUtil.hash_password(
       password=params.password
@@ -29,7 +29,7 @@ class AccountWriter:
     return AccountUtil.convert_account_model_to_account(AccountModel(**account))
 
   @staticmethod
-  def update_password_by_account_id(account_id: str, password: str) -> AccountModel:
+  def update_password_by_account_id(account_id: str, password: str) -> Account:
     hashed_password = AccountUtil.hash_password(
       password=password
     )

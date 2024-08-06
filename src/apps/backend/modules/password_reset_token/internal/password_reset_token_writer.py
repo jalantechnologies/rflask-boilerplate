@@ -36,7 +36,7 @@ class PasswordResetTokenWriter:
             return_document=ReturnDocument.AFTER  # Return the updated document
         )
         if updated_token is None:
-            raise PasswordResetTokenNotFoundError(f"Password reset token not found.")
+            raise PasswordResetTokenNotFoundError()
 
         return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
             PasswordResetTokenModel(**updated_token)
