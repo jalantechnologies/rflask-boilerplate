@@ -3,7 +3,6 @@ from modules.error.custom_errors import AppError
 
         
 class PasswordResetTokenNotFoundError(AppError):
-    code: PasswordResetTokenErrorCode;
     
     def __init__(
         self,

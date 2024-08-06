@@ -3,7 +3,7 @@ import jwt
 from datetime import datetime, timedelta
 from modules.config.config_service import ConfigService
 from modules.access_token.errors import AccessTokenExpiredError, AccessTokenInvalidError
-from modules.access_token.types import AccessToken, AccessTokenPayload, CreateAccessTokenParams, VerifyAccessTokenParams
+from modules.access_token.types import AccessToken, AccessTokenPayload, CreateAccessTokenParams
 from modules.account.internal.account_reader import AccountReader
 from modules.account.types import Account, AccountSearchParams
 
@@ -31,13 +31,13 @@ class AccessTokenService:
         access_token = AccessToken(
             token=jwt_token,
             account_id=account.id,
-            expires_at=payload["exp"]
+            expires_at=str(payload["exp"])
         )
         
         return access_token
     
     @staticmethod
-    def verify_access_token(*, token: VerifyAccessTokenParams) -> AccessTokenPayload:
+    def verify_access_token(*, token: str) -> AccessTokenPayload:
 
         jwt_signing_key = ConfigService.get_token_signing_key()
 
@@ -47,7 +47,7 @@ class AccessTokenService:
             raise AccessTokenInvalidError("Invalid access token")
 
         if verified_token.get('exp') * 1000 < datetime.now().timestamp() * 1000:
-            raise AccessTokenExpiredError()
+            raise AccessTokenExpiredError(message="Access token has expired. Please login again.")
 
         return AccessTokenPayload(
             account_id=verified_token.get('account_id')

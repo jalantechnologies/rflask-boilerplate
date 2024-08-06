@@ -47,11 +47,11 @@ class ConfigService:
 
   @staticmethod
   def get_sendgrid_api_key() -> str:
-    return DictUtil.required_get_dict(input_dict=ConfigManager.config, key='SENDGRID')['api_key']
+    return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key='SENDGRID')['api_key'])
 
   @staticmethod
   def get_mailer_config(key: str) -> str:
-    return DictUtil.required_get_dict(input_dict=ConfigManager.config, key='MAILER')[key]
+    return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key='MAILER')[key])
 
   @staticmethod
   def get_password_reset_token() -> dict:

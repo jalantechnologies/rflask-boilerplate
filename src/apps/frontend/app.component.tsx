@@ -3,10 +3,10 @@ import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { AccountProvider } from './contexts';
+import { AuthProvider } from './contexts/auth.provider';
 import { Config } from './helpers';
 import { AppRoutes } from './routes';
 import InspectLet from './vendor/inspectlet';
-import { AuthProvider } from './contexts/auth.provider';
 
 export default function App(): React.ReactElement {
   useEffect(() => {

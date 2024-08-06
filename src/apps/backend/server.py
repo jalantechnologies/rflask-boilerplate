@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+from flask.typing import ResponseReturnValue
 from dotenv import load_dotenv
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
 from modules.config.config_manager import ConfigManager
@@ -36,8 +37,8 @@ app.register_blueprint(img_assets_blueprint)
 app.register_blueprint(react_blueprint)
 
 @app.errorhandler(AppError)
-def handle_error(exc):
+def handle_error(exc: AppError) -> ResponseReturnValue:
     return jsonify({
         "message": exc.message,
         "code": exc.code,
-    }), exc.https_code
+    }), exc.https_code or 500

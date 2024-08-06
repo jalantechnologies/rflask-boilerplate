@@ -15,6 +15,7 @@ certifi = "==2023.11.17"
 pyjwt = "==2.8.0"
 sendgrid = "==6.11.0"
 python-dotenv = "==1.0.1"
+tomli = "==2.0.1"
 
 [dev-packages]
 flask = "==3.0.0"
