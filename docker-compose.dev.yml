@@ -20,7 +20,7 @@ services:
     volumes:
       - './:/app:delegated'
       - '/app/node_modules/'
-    working_dir: /app
+    working_dir: /root/app
 
   db:
     image: mongo:5.0
