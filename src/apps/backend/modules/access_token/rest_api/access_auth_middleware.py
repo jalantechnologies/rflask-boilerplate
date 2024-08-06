@@ -1,7 +1,7 @@
 from typing import Callable, Any
 from modules.access_token.access_token_service import AccessTokenService
 from modules.access_token.errors import AccessTokenInvalidError, AuthorizationHeaderNotFoundError, InvalidAuthorizationHeaderError, UnauthorizedAccessError
-from flask import request, Request
+from flask import request
 from functools import wraps
 
 def access_auth_middleware(next_func: Callable) -> Callable:
