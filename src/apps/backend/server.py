@@ -13,6 +13,7 @@ from modules.error.custom_errors import AppError
 load_dotenv()
 
 app = Flask(__name__)
+app.config['PREFERRED_URL_SCHEME'] = 'https'
 cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Mount deps
