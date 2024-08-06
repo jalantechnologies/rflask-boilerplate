@@ -1,18 +1,11 @@
+from modules.object_id.utils import object_id_validate
 from bson import ObjectId
 from datetime import datetime
 from typing import Annotated, Any, Optional
-from pydantic import BaseModel, Field, validator, ConfigDict
-
-def object_id_validate(v: ObjectId | str) -> ObjectId:
-    if isinstance(v, str):
-        if not ObjectId.is_valid(v):
-            raise ValueError(f'{v} is not a valid ObjectId')
-        return ObjectId(v)
-    elif isinstance(v, ObjectId):
-        return v
+from pydantic import AfterValidator, BaseModel, Field, ConfigDict
 
 
-PyObjectId = Annotated[ObjectId | str, validator('object_id_validate')]
+PyObjectId = Annotated[ObjectId | str, AfterValidator(object_id_validate)]
 
 
 class PasswordResetTokenModel(BaseModel):
