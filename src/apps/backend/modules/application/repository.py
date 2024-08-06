@@ -1,3 +1,4 @@
+from typing import Optional
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.server_api import ServerApi
@@ -8,7 +9,7 @@ from modules.logger.logger import Logger
 
 
 class ApplicationRepositoryClient:
-  _client: MongoClient = None
+  _client: Optional[MongoClient] = None
 
   @classmethod
   def get_client(cls) -> MongoClient:
@@ -34,7 +35,7 @@ class ApplicationRepositoryClient:
 
 
 class ApplicationRepository(ABC):
-  _collection: Collection = None
+  _collection: Optional[Collection] = None
 
   @property
   @abstractmethod
