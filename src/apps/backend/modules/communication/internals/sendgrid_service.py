@@ -7,7 +7,7 @@ from sendgrid.helpers.mail import Mail, To, From, TemplateId
 from modules.config.config_service import ConfigService
 
 class SendGridService:
-    __client: sendgrid.SendGridAPIClient = None
+    __client: sendgrid.SendGridAPIClient
 
     @staticmethod
     def send_email(params: SendEmailParams) -> None:
@@ -24,7 +24,7 @@ class SendGridService:
             client = SendGridService.get_client()
             client.send(message)  
             
-        except sendgrid.exceptions.SendGridException as err:
+        except sendgrid.SendGridException as err:
             raise ServiceError(err)
 
     @staticmethod

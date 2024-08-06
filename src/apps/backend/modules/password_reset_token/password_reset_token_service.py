@@ -1,5 +1,6 @@
 import urllib.parse 
 
+from modules.account.types import Account
 from modules.communication.email_service import EmailService
 from modules.communication.types import EmailRecipient, EmailSender, SendEmailParams
 from modules.account.internal.account_reader import AccountReader
@@ -14,12 +15,13 @@ class PasswordResetTokenService:
     @staticmethod
     def create_password_reset_token(params: CreatePasswordResetTokenParams) -> PasswordResetToken:
         account = AccountReader.get_account_by_username(username=params.username)
+        account_obj = Account(first_name=account.first_name, last_name=account.last_name, username=account.username, id=str(account.id))
         token = PasswordResetTokenUtil.generate_password_reset_token()
         password_reset_token = PasswordResetTokenWriter.create_password_reset_token(
-            account.id, token
+            account_obj.id, token
         )
         PasswordResetTokenService.send_password_reset_email(
-            account.id, account.first_name, account.username, token
+            account_obj.id, account.first_name, account.username, token
         )
         
         return password_reset_token

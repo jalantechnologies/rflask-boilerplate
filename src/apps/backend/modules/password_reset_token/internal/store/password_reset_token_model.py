@@ -3,11 +3,13 @@ from datetime import datetime
 from typing import Annotated, Any, Optional
 from pydantic import BaseModel, Field, validator, ConfigDict
 
-def object_id_validate(v: ObjectId | str) -> ObjectId | str:
-  assert ObjectId.is_valid(v), f'{v} is not a valid ObjectId'
-  if isinstance(v, str):
-    return ObjectId(v)
-  return str(v)
+def object_id_validate(v: ObjectId | str) -> ObjectId:
+    if isinstance(v, str):
+        if not ObjectId.is_valid(v):
+            raise ValueError(f'{v} is not a valid ObjectId')
+        return ObjectId(v)
+    elif isinstance(v, ObjectId):
+        return v
 
 
 PyObjectId = Annotated[ObjectId | str, validator('object_id_validate')]

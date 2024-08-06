@@ -38,7 +38,7 @@ class ApplicationRepository(ABC):
 
   @property
   @abstractmethod
-  def collection_name(self):
+  def collection_name(self) -> str:
     """Return collection name of the Repository"""
     pass
 
@@ -57,5 +57,5 @@ class ApplicationRepository(ABC):
     return cls._collection
 
   @classmethod
-  def on_init_collection(cls, collection) -> bool:
+  def on_init_collection(cls, collection: Collection) -> bool:
     return False
