@@ -36,9 +36,7 @@ app.register_blueprint(api_blueprint)
 app.register_blueprint(img_assets_blueprint)
 app.register_blueprint(react_blueprint)
 
+
 @app.errorhandler(AppError)
 def handle_error(exc: AppError) -> ResponseReturnValue:
-    return jsonify({
-        "message": exc.message,
-        "code": exc.code,
-    }), exc.https_code or 500
+    return jsonify({"message": exc.message, "code": exc.code}), exc.https_code or 500

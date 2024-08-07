@@ -9,11 +9,13 @@ class PasswordResetToken:
     is_expired: bool
     is_used: bool
     token: str
-    
+
+
 @dataclass(frozen=True)
 class CreatePasswordResetTokenParams:
     username: str
 
+
 @dataclass(frozen=True)
 class PasswordResetTokenErrorCode:
-    PASSWORD_RESET_TOKEN_NOT_FOUND: str = 'PASSWORD_RESET_TOKEN_ERR_01'
+    PASSWORD_RESET_TOKEN_NOT_FOUND: str = "PASSWORD_RESET_TOKEN_ERR_01"

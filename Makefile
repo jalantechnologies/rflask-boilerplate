@@ -3,6 +3,11 @@ run-lint:
 	&& pipenv install --dev \
 	&& pipenv run mypy --config-file mypy.ini .
 
+run-format:
+	cd src/apps/backend \
+	&& pipenv install --dev \
+	&& pipenv run black .
+
 run-vulture:
 	cd src/apps/backend \
 	&& pipenv install --dev \

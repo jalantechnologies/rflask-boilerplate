@@ -11,7 +11,7 @@ threads = 2 * multiprocessing.cpu_count()
 # Logging
 loglevel = "info"
 accesslog = "-"
-access_log_format = 'app - request - %(h)s - %(s)s - %(m)s - %(M)sms - %(U)s - %({user-agent}i)s'
+access_log_format = "app - request - %(h)s - %(s)s - %(m)s - %(M)sms - %(U)s - %({user-agent}i)s"
 errorlog = "-"
 
 # Timeout

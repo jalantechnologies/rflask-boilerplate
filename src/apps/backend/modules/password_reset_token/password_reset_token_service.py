@@ -1,4 +1,4 @@
-import urllib.parse 
+import urllib.parse
 
 from modules.account.types import Account
 from modules.communication.email_service import EmailService
@@ -11,19 +11,18 @@ from modules.password_reset_token.internal.password_reset_token_util import Pass
 from modules.password_reset_token.internal.password_reset_token_writer import PasswordResetTokenWriter
 from modules.password_reset_token.types import CreatePasswordResetTokenParams, PasswordResetToken
 
+
 class PasswordResetTokenService:
     @staticmethod
     def create_password_reset_token(params: CreatePasswordResetTokenParams) -> PasswordResetToken:
         account = AccountReader.get_account_by_username(username=params.username)
-        account_obj = Account(first_name=account.first_name, last_name=account.last_name, username=account.username, id=str(account.id))
+        account_obj = Account(
+            first_name=account.first_name, last_name=account.last_name, username=account.username, id=str(account.id)
+        )
         token = PasswordResetTokenUtil.generate_password_reset_token()
-        password_reset_token = PasswordResetTokenWriter.create_password_reset_token(
-            account_obj.id, token
-        )
-        PasswordResetTokenService.send_password_reset_email(
-            account_obj.id, account.first_name, account.username, token
-        )
-        
+        password_reset_token = PasswordResetTokenWriter.create_password_reset_token(account_obj.id, token)
+        PasswordResetTokenService.send_password_reset_email(account_obj.id, account.first_name, account.username, token)
+
         return password_reset_token
 
     @staticmethod
@@ -48,8 +47,7 @@ class PasswordResetTokenService:
             )
 
         is_token_valid = PasswordResetTokenUtil.compare_password(
-            password=token,
-            hashed_password=password_reset_token.token
+            password=token, hashed_password=password_reset_token.token
         )
         if not is_token_valid:
             raise AccountBadRequestError(
@@ -59,12 +57,7 @@ class PasswordResetTokenService:
         return password_reset_token
 
     @staticmethod
-    def send_password_reset_email(
-        account_id: str, 
-        first_name: str, 
-        username: str, 
-        password_reset_token: str
-    ) -> None:
+    def send_password_reset_email(account_id: str, first_name: str, username: str, password_reset_token: str) -> None:
 
         web_app_host = ConfigService.get_web_app_host()
         default_email = ConfigService.get_mailer_config("default_email")
@@ -74,7 +67,7 @@ class PasswordResetTokenService:
         template_data = {
             "first_name": first_name,
             "password_reset_link": f"{web_app_host}/accounts/{account_id}/reset_password?token={urllib.parse.quote(password_reset_token)}",
-            "username": username
+            "username": username,
         }
 
         password_reset_email_params = SendEmailParams(
@@ -84,4 +77,4 @@ class PasswordResetTokenService:
             template_data=template_data,
         )
 
-        EmailService.send_email(params=password_reset_email_params) 
+        EmailService.send_email(params=password_reset_email_params)

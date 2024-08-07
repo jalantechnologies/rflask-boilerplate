@@ -4,28 +4,29 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pydantic = "==2.4"
 bcrypt = "==4.0.1"
-pyyaml = "==6.0.1"
-types-pyyaml = "==6.0.12.12"
-requests = "==2.31.0"
-pytest = "==7.4.3"
-waitress = "==2.1.2"
 certifi = "==2023.11.17"
-pyjwt = "==2.8.0"
-sendgrid = "==6.11.0"
-python-dotenv = "==1.0.1"
-tomli = "==2.0.1"
-
-[dev-packages]
 flask = "==3.0.0"
 flask-cors = "==4.0.0"
 gunicorn = "==21.2.0"
+pyjwt = "==2.8.0"
+pydantic = "==2.4"
+pymongo = {extras = ["srv"], version = "==3.12"}
+pyyaml = "==6.0.1"
+python-dotenv = "==1.0.1"
+requests = "==2.31.0"
+sendgrid = "==6.11.0"
+tomli = "==2.0.1"
+waitress = "==2.1.2"
+
+[dev-packages]
+black = "==24.8.0"
 mypy = "==1.6.1"
-pymongo = { extras = ["srv"], version = "3.12" }
+pytest = "==7.4.3"
 types-flask-cors = "==4.0.0.1"
-vulture = "==2.10"
+types-pyyaml = "==6.0.12.12"
 types-requests = "==2.31.0.10"
+vulture = "==2.10"
 
 [requires]
 python_version = "3.12"

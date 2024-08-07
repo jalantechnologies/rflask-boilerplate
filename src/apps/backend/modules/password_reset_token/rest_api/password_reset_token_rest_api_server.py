@@ -2,6 +2,7 @@ from flask import Blueprint
 
 from modules.password_reset_token.rest_api.password_reset_token_router import PasswordResetTokenRouter
 
+
 class PasswordResetTokenRestApiServer:
     @staticmethod
     def create() -> Blueprint:

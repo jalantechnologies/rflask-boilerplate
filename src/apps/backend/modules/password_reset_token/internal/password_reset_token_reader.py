@@ -5,12 +5,13 @@ from modules.password_reset_token.internal.store.password_reset_token_repository
 from modules.password_reset_token.types import PasswordResetToken
 from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
 
+
 class PasswordResetTokenReader:
     @staticmethod
     def get_password_reset_token_by_account_id(account_id: str) -> PasswordResetToken:
-        cursor = PasswordResetTokenRepository.collection().find(
-            {"account": ObjectId(account_id)}
-        ).sort("expires_at", -1)
+        cursor = (
+            PasswordResetTokenRepository.collection().find({"account": ObjectId(account_id)}).sort("expires_at", -1)
+        )
 
         try:
             token_data = next(cursor)

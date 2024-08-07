@@ -13,7 +13,7 @@ class PasswordResetTokenModel(BaseModel):
 
     id: Optional[PyObjectId] = Field(None, alias="_id")
     account: PyObjectId
-    expires_at: datetime 
+    expires_at: datetime
     token: str
     is_used: bool = False
 

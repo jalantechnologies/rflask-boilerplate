@@ -18,26 +18,24 @@ class PasswordResetTokenWriter:
             "account": ObjectId(account_id),
             "expires_at": expires_at,
             "token": token_hash,
-            "is_used": False
+            "is_used": False,
         }
         created_token = PasswordResetTokenRepository.collection().insert_one(new_token_data)
-        password_reset_token = PasswordResetTokenRepository.collection().find_one(
-            {"_id": created_token.inserted_id
-             })
+        password_reset_token = PasswordResetTokenRepository.collection().find_one({"_id": created_token.inserted_id})
         return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
             PasswordResetTokenModel(**password_reset_token)
-            )
+        )
 
     @staticmethod
     def set_password_reset_token_as_used(password_reset_token_id: str) -> PasswordResetToken:
         updated_token = PasswordResetTokenRepository.collection().find_one_and_update(
             {"_id": ObjectId(password_reset_token_id)},
             {"$set": {"is_used": True}},
-            return_document=ReturnDocument.AFTER  # Return the updated document
+            return_document=ReturnDocument.AFTER,  # Return the updated document
         )
         if updated_token is None:
             raise PasswordResetTokenNotFoundError()
 
         return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
             PasswordResetTokenModel(**updated_token)
-            )
+        )

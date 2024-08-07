@@ -7,6 +7,7 @@ from dataclasses import asdict
 from modules.password_reset_token.types import CreatePasswordResetTokenParams
 from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
 
+
 class PasswordResetTokenView(MethodView):
     def post(self) -> ResponseReturnValue:
         request_data = request.get_json()

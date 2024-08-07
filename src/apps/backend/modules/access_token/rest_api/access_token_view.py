@@ -6,6 +6,7 @@ from flask import request, jsonify
 from flask.views import MethodView
 from flask.typing import ResponseReturnValue
 
+
 class AccessTokenView(MethodView):
     def post(self) -> ResponseReturnValue:
         request_data = request.get_json()

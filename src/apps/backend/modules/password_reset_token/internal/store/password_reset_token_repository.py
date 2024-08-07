@@ -5,9 +5,9 @@ from modules.password_reset_token.internal.store.password_reset_token_model impo
 
 
 class PasswordResetTokenRepository(ApplicationRepository):
-  collection_name = PasswordResetTokenModel.get_collection_name()
+    collection_name = PasswordResetTokenModel.get_collection_name()
 
-  @classmethod
-  def on_init_collection(cls, collection: Collection) -> bool:
-    collection.create_index("token")
-    return True
+    @classmethod
+    def on_init_collection(cls, collection: Collection) -> bool:
+        collection.create_index("token")
+        return True

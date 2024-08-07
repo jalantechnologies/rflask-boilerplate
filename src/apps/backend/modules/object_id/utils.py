@@ -1,5 +1,6 @@
 from bson import ObjectId
 
+
 def object_id_validate(v: ObjectId | str) -> ObjectId:
     if isinstance(v, str):
         if not ObjectId.is_valid(v):
