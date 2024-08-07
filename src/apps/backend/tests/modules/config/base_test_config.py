@@ -1,5 +1,4 @@
 import unittest
-
 from typing import Callable
 
 from modules.config.config_manager import ConfigManager

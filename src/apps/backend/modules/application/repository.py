@@ -1,8 +1,9 @@
+from abc import ABC, abstractmethod
 from typing import Optional
+
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.server_api import ServerApi
-from abc import ABC, abstractmethod
 
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger

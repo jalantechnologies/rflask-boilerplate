@@ -1,4 +1,5 @@
 from typing import Any
+
 from modules.config.config_service import ConfigService
 from modules.logger.internal.console_logger import ConsoleLogger
 from modules.logger.internal.papertrail_logger import PapertrailLogger

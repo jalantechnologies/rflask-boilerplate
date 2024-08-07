@@ -1,11 +1,11 @@
 from dataclasses import asdict
 
-from flask import request, jsonify
-from flask.views import MethodView
+from flask import jsonify, request
 from flask.typing import ResponseReturnValue
+from flask.views import MethodView
 
-from modules.account.types import AccountSearchByIdParams, CreateAccountParams, ResetPasswordParams
 from modules.account.account_service import AccountService
+from modules.account.types import AccountSearchByIdParams, CreateAccountParams, ResetPasswordParams
 
 
 class AccountView(MethodView):

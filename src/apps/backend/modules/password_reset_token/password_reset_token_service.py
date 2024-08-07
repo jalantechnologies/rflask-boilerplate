@@ -1,10 +1,10 @@
 import urllib.parse
 
+from modules.account.errors import AccountBadRequestError
+from modules.account.internal.account_reader import AccountReader
 from modules.account.types import Account
 from modules.communication.email_service import EmailService
 from modules.communication.types import EmailRecipient, EmailSender, SendEmailParams
-from modules.account.internal.account_reader import AccountReader
-from modules.account.errors import AccountBadRequestError
 from modules.config.config_service import ConfigService
 from modules.password_reset_token.internal.password_reset_token_reader import PasswordResetTokenReader
 from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil

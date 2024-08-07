@@ -1,8 +1,8 @@
-from typing import Callable
 import unittest
+from typing import Callable
 
-from modules.account.internal.store.account_repository import AccountRepository
 from modules.access_token.rest_api.access_token_rest_api_server import AccessTokenRestApiServer
+from modules.account.internal.store.account_repository import AccountRepository
 
 
 class BaseTestAccessToken(unittest.TestCase):

@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 from logging.handlers import SysLogHandler
 
 from modules.config.config_service import ConfigService

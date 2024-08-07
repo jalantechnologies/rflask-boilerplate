@@ -1,9 +1,9 @@
 from bson.objectid import ObjectId
 
 from modules.password_reset_token.errors import PasswordResetTokenNotFoundError
+from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
 from modules.password_reset_token.internal.store.password_reset_token_repository import PasswordResetTokenRepository
 from modules.password_reset_token.types import PasswordResetToken
-from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
 
 
 class PasswordResetTokenReader:

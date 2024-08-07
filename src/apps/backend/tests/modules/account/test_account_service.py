@@ -1,12 +1,14 @@
 import json
 from unittest.mock import patch
+
+from flask import request
+
 from modules.access_token.types import AccessTokenPayload
 from modules.account.account_service import AccountService
 from modules.account.errors import AccountNotFoundError
 from modules.account.types import AccountErrorCode, AccountSearchByIdParams, CreateAccountParams
-from tests.modules.account.base_test_account import BaseTestAccount
 from server import app
-from flask import request
+from tests.modules.account.base_test_account import BaseTestAccount
 
 
 class TestAccountService(BaseTestAccount):

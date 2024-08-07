@@ -1,11 +1,12 @@
 import hashlib
 import os
-import bcrypt
 from datetime import datetime, timedelta
 
+import bcrypt
+
 from modules.config.config_service import ConfigService
-from modules.password_reset_token.types import PasswordResetToken
 from modules.password_reset_token.internal.store.password_reset_token_model import PasswordResetTokenModel
+from modules.password_reset_token.types import PasswordResetToken
 
 
 class PasswordResetTokenUtil:

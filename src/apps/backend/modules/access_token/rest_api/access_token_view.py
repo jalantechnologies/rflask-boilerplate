@@ -1,10 +1,11 @@
 from dataclasses import asdict
 
+from flask import jsonify, request
+from flask.typing import ResponseReturnValue
+from flask.views import MethodView
+
 from modules.access_token.access_token_service import AccessTokenService
 from modules.access_token.types import CreateAccessTokenParams
-from flask import request, jsonify
-from flask.views import MethodView
-from flask.typing import ResponseReturnValue
 
 
 class AccessTokenView(MethodView):

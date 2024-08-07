@@ -1,3 +1,8 @@
+import unittest
+from unittest.mock import MagicMock, patch
+
+from flask import request
+
 from modules.access_token.access_token_service import AccessTokenService
 from modules.access_token.errors import (
     AccessTokenInvalidError,
@@ -5,12 +10,8 @@ from modules.access_token.errors import (
     InvalidAuthorizationHeaderError,
     UnauthorizedAccessError,
 )
-from flask import request
-import unittest
-from unittest.mock import MagicMock, patch
-from server import app
-
 from modules.access_token.rest_api.access_auth_middleware import access_auth_middleware
+from server import app
 
 
 class TestAccessAuthMiddleware(unittest.TestCase):

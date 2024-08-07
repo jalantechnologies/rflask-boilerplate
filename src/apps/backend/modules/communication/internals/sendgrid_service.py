@@ -1,10 +1,11 @@
 from typing import Optional
+
+import sendgrid
+from sendgrid.helpers.mail import From, Mail, TemplateId, To
+
 from modules.communication.errors import ServiceError
 from modules.communication.internals.sendgrid_email_params import EmailParams
 from modules.communication.types import SendEmailParams
-import sendgrid
-from sendgrid.helpers.mail import Mail, To, From, TemplateId
-
 from modules.config.config_service import ConfigService
 
 

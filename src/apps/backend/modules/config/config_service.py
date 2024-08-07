@@ -1,8 +1,8 @@
 from typing import Any
 
-from modules.config.types import PapertrailConfig
 from modules.common.dict_util import DictUtil
 from modules.config.config_manager import ConfigManager
+from modules.config.types import PapertrailConfig
 
 
 class ConfigService:

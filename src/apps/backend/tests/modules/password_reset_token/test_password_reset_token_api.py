@@ -1,18 +1,17 @@
 import json
-
-from modules.password_reset_token.internal.password_reset_token_writer import PasswordResetTokenWriter
-from modules.password_reset_token.errors import PasswordResetTokenNotFoundError
-from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
-from modules.account.account_service import AccountService
-from modules.account.types import CreateAccountParams
-from modules.account.errors import AccountNotFoundError, AccountBadRequestError
-from modules.password_reset_token.types import CreatePasswordResetTokenParams
-from tests.modules.password_reset_token.base_test_password_reset_token import BaseTestPasswordResetToken
-from modules.communication.email_service import EmailService
-from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
 from unittest import mock
 
+from modules.account.account_service import AccountService
+from modules.account.errors import AccountBadRequestError, AccountNotFoundError
+from modules.account.types import CreateAccountParams
+from modules.communication.email_service import EmailService
+from modules.password_reset_token.errors import PasswordResetTokenNotFoundError
+from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
+from modules.password_reset_token.internal.password_reset_token_writer import PasswordResetTokenWriter
+from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
+from modules.password_reset_token.types import CreatePasswordResetTokenParams
 from server import app
+from tests.modules.password_reset_token.base_test_password_reset_token import BaseTestPasswordResetToken
 
 ACCOUNT_API_URL = "http://127.0.0.1:8080/api/accounts"
 PASSWORD_RESET_TOKEN_URL = "http://127.0.0.1:8080/api/password-reset-tokens"

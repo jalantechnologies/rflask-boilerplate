@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, Response
+from flask import Flask, Response, jsonify
 
 from modules.error.custom_errors import AppError, MissingKeyError, ValueTypeMismatchError
 

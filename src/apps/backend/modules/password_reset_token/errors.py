@@ -1,5 +1,5 @@
-from modules.password_reset_token.types import PasswordResetTokenErrorCode
 from modules.error.custom_errors import AppError
+from modules.password_reset_token.types import PasswordResetTokenErrorCode
 
 
 class PasswordResetTokenNotFoundError(AppError):

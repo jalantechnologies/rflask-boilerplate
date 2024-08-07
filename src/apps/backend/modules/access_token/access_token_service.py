@@ -1,11 +1,12 @@
+from datetime import datetime, timedelta
+
 import jwt
 
-from datetime import datetime, timedelta
-from modules.config.config_service import ConfigService
 from modules.access_token.errors import AccessTokenExpiredError, AccessTokenInvalidError
 from modules.access_token.types import AccessToken, AccessTokenPayload, CreateAccessTokenParams
 from modules.account.internal.account_reader import AccountReader
 from modules.account.types import Account, AccountSearchParams
+from modules.config.config_service import ConfigService
 
 
 class AccessTokenService:

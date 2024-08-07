@@ -1,7 +1,7 @@
-from modules.access_token.types import CreateAccessTokenParams
 from modules.access_token.access_token_service import AccessTokenService
-from modules.account.types import CreateAccountParams
+from modules.access_token.types import CreateAccessTokenParams
 from modules.account.account_service import AccountService
+from modules.account.types import CreateAccountParams
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
 

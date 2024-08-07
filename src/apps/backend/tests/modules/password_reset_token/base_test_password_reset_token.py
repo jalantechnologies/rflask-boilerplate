@@ -1,5 +1,5 @@
-from typing import Callable
 import unittest
+from typing import Callable
 
 from modules.account.internal.store.account_repository import AccountRepository
 from modules.config.config_manager import ConfigManager

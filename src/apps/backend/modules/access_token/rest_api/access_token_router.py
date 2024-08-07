@@ -1,5 +1,6 @@
-from modules.access_token.rest_api.access_token_view import AccessTokenView
 from flask import Blueprint
+
+from modules.access_token.rest_api.access_token_view import AccessTokenView
 
 
 class AccessTokenRouter:

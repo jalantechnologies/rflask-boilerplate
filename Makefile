@@ -6,7 +6,8 @@ run-lint:
 run-format:
 	cd src/apps/backend \
 	&& pipenv install --dev \
-	&& pipenv run black .
+	&& pipenv run black . \
+	&& pipenv run isort .
 
 run-vulture:
 	cd src/apps/backend \

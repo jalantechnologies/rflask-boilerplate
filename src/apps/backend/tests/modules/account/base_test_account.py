@@ -1,9 +1,8 @@
 import unittest
-
 from typing import Callable
 
-from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
 from modules.account.internal.store.account_repository import AccountRepository
+from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
 from modules.config.config_manager import ConfigManager
 from modules.logger.logger_manager import LoggerManager
 

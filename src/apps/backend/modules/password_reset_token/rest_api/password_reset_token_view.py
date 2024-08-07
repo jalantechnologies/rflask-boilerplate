@@ -1,11 +1,11 @@
-from flask import request, jsonify
-from flask.views import MethodView
-from flask.typing import ResponseReturnValue
-
 from dataclasses import asdict
 
-from modules.password_reset_token.types import CreatePasswordResetTokenParams
+from flask import jsonify, request
+from flask.typing import ResponseReturnValue
+from flask.views import MethodView
+
 from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
+from modules.password_reset_token.types import CreatePasswordResetTokenParams
 
 
 class PasswordResetTokenView(MethodView):

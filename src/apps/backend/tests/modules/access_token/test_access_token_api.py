@@ -1,8 +1,9 @@
 import json
-from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
-from modules.account.types import AccountErrorCode, CreateAccountParams
+
 from modules.account.account_service import AccountService
+from modules.account.types import AccountErrorCode, CreateAccountParams
 from server import app
+from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
 API_URL = "http://127.0.0.1:8080/api/access-tokens"
 HEADERS = {"Content-Type": "application/json"}

@@ -5,7 +5,6 @@ from modules.config.config_manager import ConfigManager
 from modules.config.config_service import ConfigService
 from modules.config.types import PapertrailConfig
 from modules.error.custom_errors import MissingKeyError
-
 from tests.modules.config.base_test_config import BaseTestConfig
 
 

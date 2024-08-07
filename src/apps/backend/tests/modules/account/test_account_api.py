@@ -1,9 +1,8 @@
 import json
 
 from modules.account.account_service import AccountService
-from modules.account.types import CreateAccountParams, AccountErrorCode
+from modules.account.types import AccountErrorCode, CreateAccountParams
 from server import app
-
 from tests.modules.account.base_test_account import BaseTestAccount
 
 

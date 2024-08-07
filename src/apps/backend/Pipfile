@@ -11,7 +11,7 @@ flask-cors = "==4.0.0"
 gunicorn = "==21.2.0"
 pyjwt = "==2.8.0"
 pydantic = "==2.4"
-pymongo = {extras = ["srv"], version = "==3.12"}
+pymongo = { extras = ["srv"], version = "==3.12" }
 pyyaml = "==6.0.1"
 python-dotenv = "==1.0.1"
 requests = "==2.31.0"
@@ -21,6 +21,7 @@ waitress = "==2.1.2"
 
 [dev-packages]
 black = "==24.8.0"
+isort = "==5.13.2"
 mypy = "==1.6.1"
 pytest = "==7.4.3"
 types-flask-cors = "==4.0.0.1"

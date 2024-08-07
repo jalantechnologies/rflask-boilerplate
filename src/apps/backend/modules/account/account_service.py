@@ -1,10 +1,9 @@
 import json
 
 from modules.access_token.rest_api.access_auth_middleware import access_auth_middleware
-from modules.account.types import AccountSearchByIdParams, CreateAccountParams, ResetPasswordParams
-from modules.account.internal.account_writer import AccountWriter
 from modules.account.internal.account_reader import AccountReader
-from modules.account.types import Account
+from modules.account.internal.account_writer import AccountWriter
+from modules.account.types import Account, AccountSearchByIdParams, CreateAccountParams, ResetPasswordParams
 from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
 
 

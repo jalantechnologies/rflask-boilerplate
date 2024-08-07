@@ -1,4 +1,8 @@
-from typing import Callable, Any
+from functools import wraps
+from typing import Any, Callable
+
+from flask import request
+
 from modules.access_token.access_token_service import AccessTokenService
 from modules.access_token.errors import (
     AccessTokenInvalidError,
@@ -6,8 +10,6 @@ from modules.access_token.errors import (
     InvalidAuthorizationHeaderError,
     UnauthorizedAccessError,
 )
-from flask import request
-from functools import wraps
 
 
 def access_auth_middleware(next_func: Callable) -> Callable:

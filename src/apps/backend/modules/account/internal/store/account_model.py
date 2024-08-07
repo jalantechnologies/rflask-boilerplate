@@ -1,10 +1,11 @@
-from modules.object_id.utils import object_id_validate
-from bson import ObjectId
 from datetime import datetime
 from typing import Annotated, Any, Optional
-from pydantic import BaseModel, Field, ConfigDict
+
+from bson import ObjectId
+from pydantic import BaseModel, ConfigDict, Field
 from pydantic.functional_validators import AfterValidator
 
+from modules.object_id.utils import object_id_validate
 
 PyObjectId = Annotated[ObjectId | str, AfterValidator(object_id_validate)]
 

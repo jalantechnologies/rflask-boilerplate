@@ -1,4 +1,5 @@
-from typing import Optional, List
+from typing import List, Optional
+
 from modules.communication.types import CommunicationErrorCode, ValidationFailure
 from modules.error.custom_errors import AppError
 

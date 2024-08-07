@@ -1,5 +1,4 @@
 import os
-
 from dataclasses import asdict
 from typing import Any
 
@@ -13,7 +12,6 @@ from settings import (
     ProductionSettings,
     TestingSettings,
 )
-
 from settings.types import AppEnv
 
 
