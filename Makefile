@@ -7,8 +7,8 @@ run-format:
 	cd src/apps/backend \
 	&& pipenv install --dev \
 	&& pipenv run autoflake . -i \
-	&& pipenv run black . \
-	&& pipenv run isort .
+	&& pipenv run isort . \
+	&& pipenv run black .
 
 run-vulture:
 	cd src/apps/backend \
