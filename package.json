@@ -25,7 +25,8 @@
     "serve:frontend": "webpack serve --output-path dist/public --config src/apps/frontend/webpack.dev.js --hot --progress",
     "start": "npm run serve:backend",
     "test": "cross-env APP_ENV=testing make run-test",
-    "test:docker": "cross-env APP_ENV=docker-test make run-test"
+    "test:docker": "cross-env APP_ENV=docker-test make run-test",
+    "prepare": "husky"
   },
   "author": "jalantechnologies",
   "license": "MIT",
@@ -70,6 +71,7 @@
     "eslint-plugin-tailwindcss": "^3.14.2",
     "forever": "^4.0.3",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^9.1.4",
     "js-yaml": "^4.1.0",
     "nyc": "^15.1.0",
     "remark-cli": "^10.0.0",

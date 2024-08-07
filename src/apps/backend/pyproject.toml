@@ -3,7 +3,7 @@ name = '*.py'
 recursive = true
 remove-all-unused-imports = true
 remove-unused-variables = true
-ignore-pass-statements = true
+ignore-pass-after-docstring = true
 
 [tool.black]
 line-length = 120
