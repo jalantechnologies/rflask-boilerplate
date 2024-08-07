@@ -1,6 +1,5 @@
 from flask import Blueprint
 
-from modules.account.internal.store.account_repository import AccountRepository
 from modules.account.rest_api.account_router import AccountRouter
 
 

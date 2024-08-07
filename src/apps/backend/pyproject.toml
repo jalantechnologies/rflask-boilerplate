@@ -1,3 +1,10 @@
+[tool.autoflake]
+name = '*.py'
+recursive = true
+remove-all-unused-imports = true
+remove-unused-variables = true
+ignore-pass-statements = true
+
 [tool.black]
 line-length = 120
 skip-magic-trailing-comma = true
@@ -15,8 +22,8 @@ ignore_decorators = []
 ignore_names = []
 min_confidence = 90
 paths = [
-    "modules",
-    "bin",
-    "./server.py",
+  "modules",
+  "bin",
+  "./server.py",
 ]
 sort_by_size = true

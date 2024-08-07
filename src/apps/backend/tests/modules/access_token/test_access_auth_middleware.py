@@ -3,7 +3,6 @@ from unittest.mock import MagicMock, patch
 
 from flask import request
 
-from modules.access_token.access_token_service import AccessTokenService
 from modules.access_token.errors import (
     AccessTokenInvalidError,
     AuthorizationHeaderNotFoundError,

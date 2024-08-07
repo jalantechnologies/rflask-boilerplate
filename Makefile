@@ -6,6 +6,7 @@ run-lint:
 run-format:
 	cd src/apps/backend \
 	&& pipenv install --dev \
+	&& pipenv run autoflake . -i \
 	&& pipenv run black . \
 	&& pipenv run isort .
 

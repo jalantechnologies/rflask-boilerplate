@@ -1,5 +1,3 @@
-from typing import Optional
-
 from modules.account.types import AccountErrorCode
 from modules.error.custom_errors import AppError
 

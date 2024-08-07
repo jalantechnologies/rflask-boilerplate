@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, Any, Optional
+from typing import Annotated, Optional
 
 from bson import ObjectId
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field
