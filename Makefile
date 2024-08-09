@@ -36,4 +36,4 @@ run-engine-winx86:
 run-script:
 	cd src/apps/backend && \
 	pipenv install --dev && \
-	pipenv run python scripts/$(file).py
+	PYTHONPATH=./ pipenv run python scripts/$(file).py
