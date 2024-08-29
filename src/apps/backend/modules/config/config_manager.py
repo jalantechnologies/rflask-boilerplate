@@ -22,8 +22,9 @@ class ConfigManager:
     def mount_config() -> None:
         ConfigManager.config = {**ConfigManager.config, **asdict(DefaultSettings())}
         ConfigManager.config = {**ConfigManager.config, **ConfigManager._load_app_env_settings()}
-        not_nullable_os_envs = {k: v for k, v in asdict(OSSettings()).items() if v is not None}
-        ConfigManager.config = {**ConfigManager.config, **not_nullable_os_envs}
+        if os.environ.get("APP_ENV") not in {AppEnv.TESTING, AppEnv.DOCKER_INSTANCE_TEST}:
+            not_nullable_os_envs = {k: v for k, v in asdict(OSSettings()).items() if v is not None}
+            ConfigManager.config = {**ConfigManager.config, **not_nullable_os_envs}
         print("Config is ==", ConfigManager.config)
 
     @staticmethod
