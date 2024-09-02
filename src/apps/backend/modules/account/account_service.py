@@ -15,8 +15,8 @@ from modules.password_reset_token.password_reset_token_service import PasswordRe
 
 class AccountService:
     @staticmethod
-    def create_account(*, params: CreateAccountByUsernameAndPasswordParams) -> Account:
-        return AccountWriter.create_account(params=params)
+    def create_account_by_username_and_password(*, params: CreateAccountByUsernameAndPasswordParams) -> Account:
+        return AccountWriter.create_account_by_username_and_password(params=params)
 
     @staticmethod
     def get_account_by_phone_number(*, phone_number: PhoneNumber) -> Account:

@@ -20,7 +20,7 @@ from modules.otp.errors import OtpRequestFailedError
 
 class AccountWriter:
     @staticmethod
-    def create_account(*, params: CreateAccountByUsernameAndPasswordParams) -> Account:
+    def create_account_by_username_and_password(*, params: CreateAccountByUsernameAndPasswordParams) -> Account:
         params_dict = asdict(params)
         params_dict["hashed_password"] = AccountUtil.hash_password(password=params.password)
         del params_dict["password"]
