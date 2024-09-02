@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import StrEnum
 from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -15,7 +16,7 @@ class OtpModel(BaseModel):
     active: bool = True
     otp_code: str
     phone_number: PhoneNumber
-    status: OtpStatus
+    status: str
     created_at: Optional[datetime] = datetime.now()
     updated_at: Optional[datetime] = datetime.now()
 

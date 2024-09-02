@@ -16,7 +16,4 @@ class SMSService:
             Logger.warn(message=f"SMS is disabled. Could not send message - {params.message_body}")
             return
 
-        send_sms_params = SendSMSParams(
-            message_body=params.message_body, recipient_phone=PhoneNumber(**asdict(params)["recipient_phone"])
-        )
-        TwilioService.send_sms(params=send_sms_params)
+        TwilioService.send_sms(params=params)

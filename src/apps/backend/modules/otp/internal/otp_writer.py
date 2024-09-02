@@ -1,4 +1,6 @@
-from pymongo import ReturnDocument
+from dataclasses import asdict
+from datetime import datetime
+from pymongo import ReturnDocument, DESCENDING
 
 from modules.account.types import PhoneNumber
 from modules.otp.errors import OtpExpiredError, OtpIncorrectError
@@ -20,13 +22,11 @@ class OtpWriter:
     @staticmethod
     def create_new_otp(*, params: CreateOtpParams) -> Otp:
         OtpWriter.expire_previous_otps(phone_number=params.phone_number)
-        otp_code = OtpUtil.generate_otp(length=4)
-        otp_bson = {
-            "active": True,
-            "otp_code": otp_code,
-            "phone_number": params.phone_number,
-            "status": OtpStatus.PENDING,
-        }
+        phone_number = PhoneNumber(**asdict(params)["phone_number"])
+        otp_code = OtpUtil.generate_otp(length=4, phone_number=phone_number.phone_number)
+        otp_dict = asdict(params)
+        otp_dict.update({"otp_code": otp_code, "status": str(OtpStatus.PENDING), "active": True})
+        otp_bson = OtpModel(**otp_dict).to_bson()
         query = OtpRepository.collection().insert_one(otp_bson)
         otp = OtpRepository.collection().find_one({"_id": query.inserted_id})
 
@@ -34,7 +34,13 @@ class OtpWriter:
 
     @staticmethod
     def verify_otp(*, params: VerifyOtpParams) -> Otp:
-        otp = OtpRepository.collection().find_one({"phone_number": params.phone_number, "otp_code": params.otp_code})
+        otp = OtpRepository.collection().find_one(
+            {   
+                "phone_number": params.phone_number,
+                "otp_code": params.otp_code,
+            },
+            sort=[("created_at", DESCENDING)],
+        )
         if otp is None:
             raise OtpIncorrectError()
 
