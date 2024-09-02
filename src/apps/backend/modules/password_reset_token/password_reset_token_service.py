@@ -17,7 +17,11 @@ class PasswordResetTokenService:
     def create_password_reset_token(params: CreatePasswordResetTokenParams) -> PasswordResetToken:
         account = AccountReader.get_account_by_username(username=params.username)
         account_obj = Account(
-            first_name=account.first_name, last_name=account.last_name, username=account.username, id=str(account.id)
+            id=str(account.id),
+            username=account.username,
+            first_name=account.first_name,
+            last_name=account.last_name,
+            phone_number=account.phone_number,
         )
         token = PasswordResetTokenUtil.generate_password_reset_token()
         password_reset_token = PasswordResetTokenWriter.create_password_reset_token(account_obj.id, token)
