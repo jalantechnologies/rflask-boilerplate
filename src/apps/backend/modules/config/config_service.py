@@ -58,3 +58,7 @@ class ConfigService:
     @staticmethod
     def get_twilio_config(key: str) -> str:
         return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="TWILIO")[key])
+
+    @staticmethod
+    def get_otp_config(key: str) -> str:
+        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="OTP")[key])

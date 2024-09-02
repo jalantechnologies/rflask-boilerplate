@@ -19,6 +19,12 @@ class OSSettings:
             "forgot_password_mail_template_id": os.environ.get("FORGOT_PASSWORD_MAIL_TEMPLATE_ID"),
         }
     )
+    OTP: Optional[dict[str, Optional[str]]] = field(
+        default_factory=lambda: {
+            "default_phone_number": os.environ.get("DEFAULT_PHONE_NUMBER"),
+            "default_otp": os.environ.get("DEFAULT_OTP"),
+        }
+    )
     TWILIO: Optional[dict[str, Optional[str]]] = field(
         default_factory=lambda: {
             "account_sid": os.environ.get("TWILIO_ACCOUNT_SID"),
