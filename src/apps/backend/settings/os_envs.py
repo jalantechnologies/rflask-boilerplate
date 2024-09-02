@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Dict, Optional
 
 
 @dataclass(frozen=True)
@@ -17,6 +17,13 @@ class OSSettings:
             "default_email": os.environ.get("DEFAULT_EMAIL"),
             "default_email_name": os.environ.get("DEFAULT_EMAIL_NAME"),
             "forgot_password_mail_template_id": os.environ.get("FORGOT_PASSWORD_MAIL_TEMPLATE_ID"),
+        }
+    )
+    TWILIO: Optional[Dict[str, Optional[str]]] = field(
+        default_factory=lambda: {
+            "account_sid": os.environ.get("TWILIO_ACCOUNT_SID"),
+            "auth_token": os.environ.get("TWILIO_AUTH_TOKEN"),
+            "messaging_service_sid": os.environ.get("TWILIO_MESSAGING_SERVICE_SID"),
         }
     )
     WEB_APP_HOST: Optional[str] = os.environ.get("WEB_APP_HOST")
