@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from typing import Union
+
+from modules.account.types import PhoneNumber
 
 
 @dataclass(frozen=True)
@@ -20,9 +23,12 @@ class EmailBasedAuthAccessTokenRequestParams:
 
 
 @dataclass(frozen=True)
-class CreateAccessTokenParams:
-    password: str
-    username: str
+class OTPBasedAuthAccessTokenRequestParams:
+    otp_code: str
+    phone_number: PhoneNumber
+
+
+CreateAccessTokenParams = Union[EmailBasedAuthAccessTokenRequestParams, OTPBasedAuthAccessTokenRequestParams]
 
 
 @dataclass(frozen=True)
