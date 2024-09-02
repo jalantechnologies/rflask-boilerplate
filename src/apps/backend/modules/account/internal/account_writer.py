@@ -1,19 +1,21 @@
 from dataclasses import asdict
 
 from bson.objectid import ObjectId
+from phonenumbers import is_valid_number, parse
 from pymongo import ReturnDocument
 
+from modules.otp.errors import OtpRequestFailedError
 from modules.account.errors import AccountNotFoundError
 from modules.account.internal.account_reader import AccountReader
 from modules.account.internal.account_util import AccountUtil
 from modules.account.internal.store.account_model import AccountModel
 from modules.account.internal.store.account_repository import AccountRepository
-from modules.account.types import Account, CreateAccountParams
+from modules.account.types import Account, CreateAccountByPhoneNumberParams, CreateAccountByUsernameAndPasswordParams, PhoneNumber
 
 
 class AccountWriter:
     @staticmethod
-    def create_account(*, params: CreateAccountParams) -> Account:
+    def create_account(*, params: CreateAccountByUsernameAndPasswordParams) -> Account:
         params_dict = asdict(params)
         params_dict["hashed_password"] = AccountUtil.hash_password(password=params.password)
         del params_dict["password"]
@@ -23,7 +25,23 @@ class AccountWriter:
         account = AccountRepository.collection().find_one({"_id": query.inserted_id})
 
         return AccountUtil.convert_account_model_to_account(AccountModel(**account))
-
+    
+    @staticmethod
+    def create_account_by_phone_number(*, params: CreateAccountByPhoneNumberParams) -> Account:
+        params_dict = asdict(params)
+        phone_number = PhoneNumber(**params_dict["phone_number"])
+        is_valid_phone_number = is_valid_number(parse(str(phone_number)))
+        
+        if not is_valid_phone_number:
+            raise OtpRequestFailedError()
+        
+        AccountReader.check_phone_number_not_exist(phone_number=params.phone_number)
+        account_bson = AccountModel(**params_dict).to_bson()
+        query = AccountRepository.collection().insert_one(account_bson)
+        account = AccountRepository.collection().find_one({"_id": query.inserted_id})
+        
+        return AccountUtil.convert_account_model_to_account(AccountModel(**account))
+        
     @staticmethod
     def update_password_by_account_id(account_id: str, password: str) -> Account:
         hashed_password = AccountUtil.hash_password(password=password)

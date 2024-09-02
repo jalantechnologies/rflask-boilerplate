@@ -20,3 +20,8 @@ class AccountInvalidPasswordError(AppError):
 class AccountBadRequestError(AppError):
     def __init__(self, message: str) -> None:
         super().__init__(code=AccountErrorCode.BAD_REQUEST, https_status_code=400, message=message)
+
+
+class AccountWithPhoneNumberExistsError(AppError):
+    def __init__(self, message: str) -> None:
+        super().__init__(code=AccountErrorCode.PHONE_NUMBER_ALREADY_EXISTS, https_status_code=409, message=message)
