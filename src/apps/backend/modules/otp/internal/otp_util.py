@@ -9,7 +9,7 @@ class OtpUtil:
     @staticmethod
     def generate_otp(length: int) -> str:
         return "".join(random.choices(string.digits, k=length))
-    
+
     @staticmethod
     def convert_otp_model_to_otp(otp_model: OtpModel) -> Otp:
         return Otp(

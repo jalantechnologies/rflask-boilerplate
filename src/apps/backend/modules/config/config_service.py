@@ -54,7 +54,7 @@ class ConfigService:
     @staticmethod
     def get_password_reset_token() -> dict:
         return DictUtil.required_get_dict(input_dict=ConfigManager.config, key="PASSWORD_RESET_TOKEN")
-    
+
     @staticmethod
     def get_twilio_config(key: str) -> str:
         return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="TWILIO")[key])

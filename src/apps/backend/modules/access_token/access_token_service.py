@@ -2,15 +2,20 @@ from datetime import datetime, timedelta
 
 import jwt
 
-from modules.account.account_service import AccountService
-from modules.otp.errors import OtpIncorrectError
-from modules.otp.otp_service import OtpService
-from modules.otp.types import OtpStatus, VerifyOtpParams
 from modules.access_token.errors import AccessTokenExpiredError, AccessTokenInvalidError
-from modules.access_token.types import AccessToken, AccessTokenPayload, CreateAccessTokenParams, EmailBasedAuthAccessTokenRequestParams, OTPBasedAuthAccessTokenRequestParams
+from modules.access_token.types import (
+    AccessToken,
+    AccessTokenPayload,
+    EmailBasedAuthAccessTokenRequestParams,
+    OTPBasedAuthAccessTokenRequestParams,
+)
+from modules.account.account_service import AccountService
 from modules.account.internal.account_reader import AccountReader
 from modules.account.types import Account, AccountSearchParams
 from modules.config.config_service import ConfigService
+from modules.otp.errors import OtpIncorrectError
+from modules.otp.otp_service import OtpService
+from modules.otp.types import OtpStatus, VerifyOtpParams
 
 
 class AccessTokenService:
@@ -25,12 +30,12 @@ class AccessTokenService:
     @staticmethod
     def create_access_token_by_phone_number(*, params: OTPBasedAuthAccessTokenRequestParams) -> AccessToken:
         account = AccountService.get_account_by_phone_number(phone_number=params.phone_number)
-        
+
         otp = OtpService.verify_otp(params=VerifyOtpParams(phone_number=params.phone_number, otp_code=params.otp_code))
-        
-        if (otp.status != OtpStatus.SUCCESS):
+
+        if otp.status != OtpStatus.SUCCESS:
             raise OtpIncorrectError()
-        
+
         return AccessTokenService.__generate_access_token(account=account)
 
     @staticmethod

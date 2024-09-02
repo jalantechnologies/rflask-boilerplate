@@ -6,7 +6,13 @@ from flask.views import MethodView
 
 from modules.access_token.rest_api.access_auth_middleware import access_auth_middleware
 from modules.account.account_service import AccountService
-from modules.account.types import AccountSearchByIdParams, CreateAccountParams, ResetPasswordParams, CreateAccountByUsernameAndPasswordParams, CreateAccountByPhoneNumberParams
+from modules.account.types import (
+    AccountSearchByIdParams,
+    CreateAccountByPhoneNumberParams,
+    CreateAccountByUsernameAndPasswordParams,
+    CreateAccountParams,
+    ResetPasswordParams,
+)
 
 
 class AccountView(MethodView):

@@ -5,23 +5,21 @@ from modules.otp.types import OtpErrorCode
 class OtpIncorrectError(AppError):
     def __init__(self) -> None:
         super().__init__(
-            code=OtpErrorCode.INCORRECT_OTP, 
-            https_status_code=400, 
-            message="Please provide the correct OTP to login.",
+            code=OtpErrorCode.INCORRECT_OTP, https_status_code=400, message="Please provide the correct OTP to login."
         )
-        
+
+
 class OtpExpiredError(AppError):
     def __init__(self) -> None:
         super().__init__(
-            code=OtpErrorCode.OTP_EXPIRED, 
-            https_status_code=400, 
+            code=OtpErrorCode.OTP_EXPIRED,
+            https_status_code=400,
             message="The OTP has expired. Please request a new OTP.",
         )
-        
+
+
 class OtpRequestFailedError(AppError):
     def __init__(self) -> None:
         super().__init__(
-            code=OtpErrorCode.REQUEST_FAILED, 
-            https_status_code=400, 
-            message="Please provide a valid phone number.",
+            code=OtpErrorCode.REQUEST_FAILED, https_status_code=400, message="Please provide a valid phone number."
         )

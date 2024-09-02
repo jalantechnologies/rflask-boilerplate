@@ -25,7 +25,7 @@ class CreateAccountByUsernameAndPasswordParams:
 class PhoneNumber:
     country_code: str
     phone_number: str
-    
+
     def __str__(self) -> str:
         return f"{self.country_code} {self.phone_number}"
 

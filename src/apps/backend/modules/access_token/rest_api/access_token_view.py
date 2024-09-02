@@ -5,7 +5,11 @@ from flask.typing import ResponseReturnValue
 from flask.views import MethodView
 
 from modules.access_token.access_token_service import AccessTokenService
-from modules.access_token.types import CreateAccessTokenParams, EmailBasedAuthAccessTokenRequestParams, OTPBasedAuthAccessTokenRequestParams
+from modules.access_token.types import (
+    CreateAccessTokenParams,
+    EmailBasedAuthAccessTokenRequestParams,
+    OTPBasedAuthAccessTokenRequestParams,
+)
 
 
 class AccessTokenView(MethodView):

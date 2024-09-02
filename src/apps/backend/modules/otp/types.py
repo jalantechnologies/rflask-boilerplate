@@ -9,7 +9,7 @@ class OtpStatus(StrEnum):
     EXPIRED: str = "EXPIRED"
     PENDING: str = "PENDING"
     SUCCESS: str = "SUCCESS"
-    
+
 
 @dataclass(frozen=True)
 class Otp:
@@ -17,19 +17,19 @@ class Otp:
     otp_code: str
     phone_number: PhoneNumber
     status: OtpStatus
-    
+
 
 @dataclass(frozen=True)
 class OtpErrorCode:
     INCORRECT_OTP: str = "OTP_ERR_01"
     OTP_EXPIRED: str = "OTP_ERR_02"
     REQUEST_FAILED: str = "OTP_ERR_03"
-    
-    
+
+
 @dataclass(frozen=True)
 class CreateOtpParams:
     phone_number: PhoneNumber
-    
+
 
 @dataclass(frozen=True)
 class VerifyOtpParams:

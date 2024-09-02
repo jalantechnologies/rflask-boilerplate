@@ -16,11 +16,11 @@ class AccountModel(BaseModel):
 
     id: Optional[PyObjectId] = Field(None, alias="_id")
     active: bool = True
-    first_name: str = ''
-    hashed_password: str = ''
+    first_name: str = ""
+    hashed_password: str = ""
     phone_number: Optional[PhoneNumber] = None
-    last_name: str = ''
-    username: str = ''
+    last_name: str = ""
+    username: str = ""
     created_at: Optional[datetime] = datetime.now()
     updated_at: Optional[datetime] = datetime.now()
 
