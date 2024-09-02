@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Any, Dict
 
+from modules.account.types import PhoneNumber
+
 
 @dataclass(frozen=True)
 class EmailSender:
@@ -19,6 +21,12 @@ class SendEmailParams:
     sender: EmailSender
     template_id: str
     template_data: Dict[str, Any] | None = None
+
+
+@dataclass(frozen=True)
+class SendSMSParams:
+    message_body: str
+    recipient_phone: PhoneNumber
 
 
 @dataclass(frozen=True)
