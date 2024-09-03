@@ -3,7 +3,7 @@ from unittest import mock
 
 from modules.account.account_service import AccountService
 from modules.account.errors import AccountBadRequestError, AccountNotFoundError
-from modules.account.types import CreateAccountParams
+from modules.account.types import CreateAccountByUsernameAndPasswordParams
 from modules.communication.email_service import EmailService
 from modules.password_reset_token.errors import PasswordResetTokenNotFoundError
 from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
@@ -23,8 +23,8 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
     # POST /password-reset-tokens tests
     @mock.patch.object(EmailService, "send_email")
     def test_create_password_reset_token(self, mock_send_email) -> None:
-        account = AccountService.create_account(
-            params=CreateAccountParams(
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
                 first_name="first_name", last_name="last_name", password="password", username="username"
             )
         )
@@ -62,8 +62,8 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
     # PATCH /account/:account_id tests
     @mock.patch.object(EmailService, "send_email")
     def test_reset_account_password(self, mock_send_email):
-        account = AccountService.create_account(
-            params=CreateAccountParams(
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
                 first_name="first_name", last_name="last_name", password="password", username="username"
             )
         )
@@ -105,8 +105,6 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
                 f"{ACCOUNT_API_URL}/{account_id}", headers=HEADERS, data=json.dumps(reset_password_params)
             )
 
-            print(response.json)
-
             self.assertEqual(response.status_code, 404)
             self.assertIn("message", response.json)
             self.assertEqual(
@@ -116,8 +114,8 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
 
     @mock.patch.object(EmailService, "send_email")
     def test_reset_account_password_token_not_found(self, mock_send_email):
-        account = AccountService.create_account(
-            params=CreateAccountParams(
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
                 first_name="first_name", last_name="last_name", password="password", username="username"
             )
         )
@@ -139,8 +137,8 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
 
     @mock.patch.object(EmailService, "send_email")
     def test_reset_account_password_token_already_used(self, mock_send_email):
-        account = AccountService.create_account(
-            params=CreateAccountParams(
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
                 first_name="first_name", last_name="last_name", password="password", username="username"
             )
         )
@@ -172,8 +170,8 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
 
     @mock.patch.object(EmailService, "send_email")
     def test_reset_account_password_invalid_token(self, mock_send_email):
-        account = AccountService.create_account(
-            params=CreateAccountParams(
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
                 first_name="first_name", last_name="last_name", password="password", username="username"
             )
         )
@@ -204,8 +202,8 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
     @mock.patch.object(EmailService, "send_email")
     @mock.patch.object(PasswordResetTokenUtil, "is_token_expired")
     def test_reset_account_password_expired_token(self, mock_is_token_expired, mock_send_email):
-        account = AccountService.create_account(
-            params=CreateAccountParams(
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
                 first_name="first_name", last_name="last_name", password="password", username="username"
             )
         )

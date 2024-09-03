@@ -1,7 +1,7 @@
 import json
 
 from modules.account.account_service import AccountService
-from modules.account.types import AccountErrorCode, CreateAccountParams
+from modules.account.types import AccountErrorCode, CreateAccountByUsernameAndPasswordParams
 from server import app
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
@@ -11,8 +11,8 @@ HEADERS = {"Content-Type": "application/json"}
 
 class TestAccessTokenApi(BaseTestAccessToken):
     def test_get_access_token(self) -> None:
-        account = AccountService.create_account(
-            params=CreateAccountParams(
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
                 first_name="first_name", last_name="last_name", password="password", username="username"
             )
         )
@@ -28,8 +28,8 @@ class TestAccessTokenApi(BaseTestAccessToken):
             assert response.json.get("expires_at")
 
     def test_get_access_token_with_invalid_password(self) -> None:
-        account = AccountService.create_account(
-            params=CreateAccountParams(
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
                 first_name="first_name", last_name="last_name", password="password", username="username"
             )
         )

@@ -1,13 +1,13 @@
 import json
 
 from modules.account.account_service import AccountService
-from modules.account.types import AccountErrorCode, CreateAccountParams
+from modules.account.types import AccountErrorCode, CreateAccountByUsernameAndPasswordParams
 from server import app
 from tests.modules.account.base_test_account import BaseTestAccount
 
 
 class TestAccountApi(BaseTestAccount):
-    def test_create_account(self) -> None:
+    def test_create_account_by_username_and_password(self) -> None:
         payload = json.dumps(
             {"first_name": "first_name", "last_name": "last_name", "password": "password", "username": "username"}
         )
@@ -21,8 +21,8 @@ class TestAccountApi(BaseTestAccount):
             assert response.json.get("username") == "username"
 
     def test_create_account_with_existing_user(self) -> None:
-        account = AccountService.create_account(
-            params=CreateAccountParams(
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
                 first_name="first_name", last_name="last_name", password="password", username="username"
             )
         )
