@@ -1,11 +1,15 @@
 from unittest.mock import patch
 
-from flask import request
-
 from modules.access_token.types import AccessTokenPayload
 from modules.account.account_service import AccountService
 from modules.account.errors import AccountNotFoundError
-from modules.account.types import AccountErrorCode, AccountSearchByIdParams, CreateAccountByPhoneNumberParams, CreateAccountByUsernameAndPasswordParams, PhoneNumber
+from modules.account.types import (
+    AccountErrorCode,
+    AccountSearchByIdParams,
+    CreateAccountByPhoneNumberParams,
+    CreateAccountByUsernameAndPasswordParams,
+    PhoneNumber,
+)
 from server import app
 from tests.modules.account.base_test_account import BaseTestAccount
 
@@ -47,14 +51,14 @@ class TestAccountService(BaseTestAccount):
                 AccountService.get_account_by_id(params=AccountSearchByIdParams(id="5f7b1b7b4f3b9b1b3f3b9b1b"))
         except AccountNotFoundError as exc:
             assert exc.code == AccountErrorCode.NOT_FOUND
-            
+
     def test_get_or_create_account_by_phone_number(self) -> None:
         account = AccountService.get_or_create_account_by_phone_number(
             params=CreateAccountByPhoneNumberParams(phone_number={"country_code": "+91", "phone_number": "9999999999"})
         )
 
         assert account.phone_number == PhoneNumber(country_code="+91", phone_number="9999999999")
-        
+
     def test_throw_exception_when_phone_number_not_exist(self) -> None:
         phone_number = {"country_code": "+91", "phone_number": "9999999999"}
         try:

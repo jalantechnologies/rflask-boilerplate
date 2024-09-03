@@ -1,10 +1,14 @@
 import json
 
+from modules.account.account_service import AccountService
 from modules.account.internal.account_writer import AccountWriter
+from modules.account.types import (
+    AccountErrorCode,
+    CreateAccountByPhoneNumberParams,
+    CreateAccountByUsernameAndPasswordParams,
+)
 from modules.otp.otp_service import OtpService
 from modules.otp.types import CreateOtpParams, OtpErrorCode, VerifyOtpParams
-from modules.account.account_service import AccountService
-from modules.account.types import AccountErrorCode, CreateAccountByPhoneNumberParams, CreateAccountByUsernameAndPasswordParams
 from server import app
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
@@ -70,23 +74,14 @@ class TestAccessTokenApi(BaseTestAccessToken):
     def test_get_access_token_by_phone_number_and_otp(self) -> None:
         phone_number = {"country_code": "+91", "phone_number": "9999999999"}
         account = AccountWriter.create_account_by_phone_number(
-            params=CreateAccountByPhoneNumberParams(
-                phone_number=phone_number,
-            )
+            params=CreateAccountByPhoneNumberParams(phone_number=phone_number)
         )
-        
+
         otp = OtpService.create_otp(params=CreateOtpParams(phone_number=phone_number))
 
         with app.test_client() as client:
             response = client.post(
-                API_URL,
-                headers=HEADERS,
-                data=json.dumps(
-                    {
-                        "phone_number": phone_number,
-                        "otp_code": otp.otp_code,
-                    }
-                ),
+                API_URL, headers=HEADERS, data=json.dumps({"phone_number": phone_number, "otp_code": otp.otp_code})
             )
             assert response.status_code == 201
             assert response.json
@@ -96,38 +91,24 @@ class TestAccessTokenApi(BaseTestAccessToken):
 
     def test_get_access_token_with_invalid_otp(self) -> None:
         phone_number = {"country_code": "+91", "phone_number": "9999999999"}
-        AccountWriter.create_account_by_phone_number(
-            params=CreateAccountByPhoneNumberParams(
-                phone_number=phone_number,
-            )
-        )
+        AccountWriter.create_account_by_phone_number(params=CreateAccountByPhoneNumberParams(phone_number=phone_number))
 
         with app.test_client() as client:
             response = client.post(
-                API_URL,
-                headers=HEADERS,
-                data=json.dumps(
-                    {
-                        "phone_number": phone_number,
-                        "otp_code": "invalid_otp",
-                    }
-                ),
+                API_URL, headers=HEADERS, data=json.dumps({"phone_number": phone_number, "otp_code": "invalid_otp"})
             )
             assert response.status_code == 400
             assert response.json
             assert response.json.get("code") == OtpErrorCode.INCORRECT_OTP
         assert response.json.get("message") == "Please provide the correct OTP to login."
-            
+
     def test_get_access_token_with_invalid_phone_number(self) -> None:
         with app.test_client() as client:
             response = client.post(
                 API_URL,
                 headers=HEADERS,
                 data=json.dumps(
-                    {
-                        "phone_number": {"country_code": "+91", "phone_number": "999999999"},
-                        "otp_code": 1111,
-                    }
+                    {"phone_number": {"country_code": "+91", "phone_number": "999999999"}, "otp_code": 1111}
                 ),
             )
             assert response.status_code == 404
@@ -136,26 +117,15 @@ class TestAccessTokenApi(BaseTestAccessToken):
 
     def test_get_access_token_with_expired_otp(self) -> None:
         phone_number = {"country_code": "+91", "phone_number": "9999999999"}
-        AccountWriter.create_account_by_phone_number(
-            params=CreateAccountByPhoneNumberParams(
-                phone_number=phone_number,
-            )
-        )
+        AccountWriter.create_account_by_phone_number(params=CreateAccountByPhoneNumberParams(phone_number=phone_number))
 
         otp = OtpService.create_otp(params=CreateOtpParams(phone_number=phone_number))
-        
+
         OtpService.verify_otp(params=VerifyOtpParams(phone_number=phone_number, otp_code=otp.otp_code))
 
         with app.test_client() as client:
             response = client.post(
-                API_URL,
-                headers=HEADERS,
-                data=json.dumps(
-                    {
-                        "phone_number": phone_number,
-                        "otp_code": otp.otp_code,
-                    }
-                ),
+                API_URL, headers=HEADERS, data=json.dumps({"phone_number": phone_number, "otp_code": otp.otp_code})
             )
             assert response.status_code == 400
             assert response.json

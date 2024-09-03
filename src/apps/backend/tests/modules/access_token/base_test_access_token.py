@@ -1,9 +1,9 @@
 import unittest
 from typing import Callable
 
-from modules.otp.internal.store.otp_repository import OtpRepository
 from modules.access_token.rest_api.access_token_rest_api_server import AccessTokenRestApiServer
 from modules.account.internal.store.account_repository import AccountRepository
+from modules.otp.internal.store.otp_repository import OtpRepository
 
 
 class BaseTestAccessToken(unittest.TestCase):
