@@ -16,7 +16,7 @@ class Otp:
     id: str
     otp_code: str
     phone_number: PhoneNumber
-    status: OtpStatus
+    status: str
 
 
 @dataclass(frozen=True)

@@ -9,9 +9,11 @@ from modules.otp.types import Otp
 class OtpUtil:
     @staticmethod
     def is_default_phone_number(phone_number: str) -> bool:
-        default_phone_number = ConfigService.get_otp_config("default_phone_number")
-        if default_phone_number and phone_number == default_phone_number:
-            return True
+        default_phone_number = None
+        if ConfigService.has_key("DEFAULT_PHONE_NUMBER"):
+            default_phone_number = ConfigService.get_otp_config("default_phone_number")
+            if default_phone_number and phone_number == default_phone_number:
+                return True
         return False
     
     @staticmethod
