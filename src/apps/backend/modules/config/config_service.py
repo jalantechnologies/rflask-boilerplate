@@ -62,7 +62,7 @@ class ConfigService:
     @staticmethod
     def get_otp_config(key: str) -> str:
         return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="OTP")[key])
-    
+
     @staticmethod
     def has_key(key: str) -> bool:
         return key in ConfigManager.config

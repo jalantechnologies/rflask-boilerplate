@@ -1,6 +1,3 @@
-from dataclasses import asdict
-
-from modules.account.types import PhoneNumber
 from modules.communication.internals.twilio_service import TwilioService
 from modules.communication.types import SendSMSParams
 from modules.config.config_service import ConfigService

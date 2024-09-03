@@ -15,7 +15,7 @@ class OtpUtil:
             if default_phone_number and phone_number == default_phone_number:
                 return True
         return False
-    
+
     @staticmethod
     def generate_otp(length: int, phone_number: str) -> str:
         if OtpUtil.is_default_phone_number(phone_number):

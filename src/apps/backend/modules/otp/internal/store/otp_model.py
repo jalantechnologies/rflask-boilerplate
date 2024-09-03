@@ -1,12 +1,10 @@
 from datetime import datetime
-from enum import StrEnum
 from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from modules.account.internal.store.account_model import PyObjectId
 from modules.account.types import PhoneNumber
-from modules.otp.types import OtpStatus
 
 
 class OtpModel(BaseModel):
