@@ -1,18 +1,24 @@
 import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 import { AuthService } from '../services';
-import { AccessToken, ApiResponse, AsyncError } from '../types';
+import {
+  AccessToken, ApiResponse, AsyncError, PhoneNumber,
+} from '../types';
 
 import useAsync from './async.hook';
 
 type AuthContextType = {
   isLoginLoading: boolean;
+  isSendOTPLoading: boolean;
   isSignupLoading: boolean;
   isUserAuthenticated: () => boolean;
+  isVerifyOTPLoading: boolean;
   login: (username: string, password: string) => Promise<AccessToken>;
   loginError: AsyncError;
   loginResult: AccessToken;
   logout: () => void;
+  sendOTP: (phoneNumber: PhoneNumber) => Promise<void>;
+  sendOTPError: AsyncError;
   signup: (
     firstName: string,
     lastName: string,
@@ -20,6 +26,9 @@ type AuthContextType = {
     password: string,
   ) => Promise<void>;
   signupError: AsyncError;
+  verifyOTP: (phoneNumber: PhoneNumber, otp: string) => Promise<AccessToken>;
+  verifyOTPError: AsyncError;
+  verifyOTPResult: AccessToken;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -52,6 +61,21 @@ const getAccessToken = (): AccessToken => JSON.parse(localStorage.getItem('acces
 
 const isUserAuthenticated = () => !!getAccessToken();
 
+const sendOTPFn = async (
+  phoneNumber: PhoneNumber,
+): Promise<ApiResponse<void>> => authService.sendOTP(phoneNumber);
+
+const verifyOTPFn = async (
+  phoneNumber: PhoneNumber,
+  otp: string,
+): Promise<ApiResponse<AccessToken>> => {
+  const result = await authService.verifyOTP(phoneNumber, otp);
+  if (result.data) {
+    localStorage.setItem('access-token', JSON.stringify(result.data));
+  }
+  return result;
+};
+
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const {
     asyncCallback: signup,
@@ -66,18 +90,38 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     asyncCallback: login,
   } = useAsync(loginFn);
 
+  const {
+    isLoading: isSendOTPLoading,
+    error: sendOTPError,
+    asyncCallback: sendOTP,
+  } = useAsync(sendOTPFn);
+
+  const {
+    isLoading: isVerifyOTPLoading,
+    error: verifyOTPError,
+    result: verifyOTPResult,
+    asyncCallback: verifyOTP,
+  } = useAsync(verifyOTPFn);
+
   return (
     <AuthContext.Provider
       value={{
         isLoginLoading,
+        isSendOTPLoading,
         isSignupLoading,
         isUserAuthenticated,
+        isVerifyOTPLoading,
         login,
         loginError,
         loginResult,
         logout: logoutFn,
+        sendOTP,
+        sendOTPError,
         signup,
         signupError,
+        verifyOTP,
+        verifyOTPError,
+        verifyOTPResult,
       }}
     >
       {children}
