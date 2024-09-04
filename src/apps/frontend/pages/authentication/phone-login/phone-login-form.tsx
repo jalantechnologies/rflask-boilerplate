@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   Button,
@@ -9,6 +10,7 @@ import {
   VerticalStackLayout,
 } from '../../../components';
 import COUNTRY_SELECT_OPTIONS from '../../../constants/countries';
+import routes from '../../../constants/routes';
 import { AsyncError } from '../../../types';
 import { ButtonKind, ButtonType } from '../../../types/button';
 
@@ -75,6 +77,11 @@ const PhoneLoginForm: React.FC<PhoneLoginFormProps> = ({ onError, onSendOTPSucce
               </FormControl>
             </div>
           </Flex>
+          <p className="font-medium">
+          <Link to={routes.LOGIN} className="text-primary">
+            Login with email
+          </Link>
+        </p>
           <Button type={ButtonType.SUBMIT} isLoading={isSendOTPLoading} kind={ButtonKind.PRIMARY}>
             Get OTP
           </Button>
