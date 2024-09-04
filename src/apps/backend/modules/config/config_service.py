@@ -64,5 +64,11 @@ class ConfigService:
         return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="OTP")[key])
 
     @staticmethod
+    def has_key(key: str) -> bool:
+        return key in ConfigManager.config
+
+    @staticmethod
     def has_default_phone_number() -> bool:
-        return "default_phone_number" in ConfigManager.config["OTP"]
+        if ConfigService.has_key("OTP") and "default_phone_number" in ConfigManager.config["OTP"]:
+            return True
+        return False
