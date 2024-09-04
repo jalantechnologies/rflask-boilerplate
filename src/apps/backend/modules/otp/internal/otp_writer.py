@@ -1,6 +1,6 @@
 from dataclasses import asdict
 
-from pymongo import DESCENDING, ReturnDocument
+from pymongo import ReturnDocument
 
 from modules.account.types import PhoneNumber
 from modules.otp.errors import OtpExpiredError, OtpIncorrectError
@@ -35,7 +35,7 @@ class OtpWriter:
     @staticmethod
     def verify_otp(*, params: VerifyOtpParams) -> Otp:
         otp = OtpRepository.collection().find_one(
-            {"phone_number": params.phone_number, "otp_code": params.otp_code}, sort=[("created_at", DESCENDING)]
+            {"phone_number": params.phone_number, "otp_code": params.otp_code, "status": OtpStatus.PENDING}
         )
         if otp is None:
             raise OtpIncorrectError()
