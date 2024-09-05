@@ -35,7 +35,7 @@ class OtpWriter:
     @staticmethod
     def verify_otp(*, params: VerifyOtpParams) -> Otp:
         otp = OtpRepository.collection().find_one(
-            {"phone_number": params.phone_number, "otp_code": params.otp_code, "status": OtpStatus.PENDING}
+            {"phone_number": params.phone_number, "otp_code": params.otp_code}, sort=[("_id", -1)]
         )
         if otp is None:
             raise OtpIncorrectError()
