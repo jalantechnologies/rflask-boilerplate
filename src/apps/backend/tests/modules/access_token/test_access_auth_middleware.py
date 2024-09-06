@@ -4,6 +4,7 @@ from unittest.mock import MagicMock, patch
 from flask import request
 
 from modules.access_token.errors import (
+    AccessTokenExpiredError,
     AccessTokenInvalidError,
     AuthorizationHeaderNotFoundError,
     InvalidAuthorizationHeaderError,
@@ -42,7 +43,7 @@ class TestAccessAuthMiddleware(unittest.TestCase):
 
         with app.test_request_context():
             request.headers = {"Authorization": "Bearer your_test_token"}
-            with self.assertRaises(InvalidAuthorizationHeaderError):
+            with self.assertRaises(AccessTokenInvalidError):
                 access_auth_middleware(mock_next_func)()
 
         mock_next_func.assert_not_called()
@@ -58,3 +59,14 @@ class TestAccessAuthMiddleware(unittest.TestCase):
         with app.test_request_context(headers={"Authorization": "Bearer your_test_token"}):
             with self.assertRaises(UnauthorizedAccessError):
                 test_view_func(account_id="67890")
+
+    @patch("modules.access_token.access_token_service.AccessTokenService.verify_access_token")
+    def test_expired_access_token(self, mock_verify_access_token):
+        mock_next_func = MagicMock()
+        mock_verify_access_token.side_effect = AccessTokenExpiredError("Access token has expired. Please login again.")
+
+        with app.test_request_context(headers={"Authorization": "Bearer your_test_token"}):
+            with self.assertRaises(AccessTokenExpiredError):
+                access_auth_middleware(mock_next_func)()
+
+        mock_next_func.assert_not_called()
