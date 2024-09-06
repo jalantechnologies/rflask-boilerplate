@@ -10,6 +10,8 @@ from modules.config.config_service import ConfigService
 from server import app
 from tests.modules.account.base_test_account import BaseTestAccount
 
+HEADERS = {"Content-Type": "application/json"}
+
 
 class TestAccountApi(BaseTestAccount):
     def test_create_account(self) -> None:
@@ -18,9 +20,7 @@ class TestAccountApi(BaseTestAccount):
         )
 
         with app.test_client() as client:
-            response = client.post(
-                "http://127.0.0.1:8080/api/accounts", headers={"Content-Type": "application/json"}, data=payload
-            )
+            response = client.post("http://127.0.0.1:8080/api/accounts", headers=HEADERS, data=payload)
             assert response.status_code == 201
             assert response.json, f"No response from API with status code:: {response.status}"
             assert response.json.get("username") == "username"
@@ -34,7 +34,7 @@ class TestAccountApi(BaseTestAccount):
         with app.test_client() as client:
             response = client.post(
                 "http://127.0.0.1:8080/api/accounts",
-                headers={"Content-Type": "application/json"},
+                headers=HEADERS,
                 data=json.dumps(
                     {
                         "first_name": "first_name",
@@ -58,7 +58,7 @@ class TestAccountApi(BaseTestAccount):
         with app.test_client() as client:
             access_token = client.post(
                 "http://127.0.0.1:8080/api/access-tokens",
-                headers={"Content-Type": "application/json"},
+                headers=HEADERS,
                 data=json.dumps({"username": account.username, "password": "password"}),
             )
             response = client.get(
@@ -80,9 +80,9 @@ class TestAccountApi(BaseTestAccount):
         )
 
         with app.test_client() as client:
-            access_token = client.post(
+            client.post(
                 "http://127.0.0.1:8080/api/access-tokens",
-                headers={"Content-Type": "application/json"},
+                headers=HEADERS,
                 data=json.dumps({"username": account.username, "password": "password"}),
             )
             response = client.get(
