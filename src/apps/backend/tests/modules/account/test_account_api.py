@@ -114,3 +114,4 @@ class TestAccountApi(BaseTestAccount):
 
             assert response.status_code == 401
             assert "Access token has expired. Please login again." in response.json.get("message", "")
+            assert response.json.get("code") == AccessTokenErrorCode.ACCESS_TOKEN_EXPIRED
