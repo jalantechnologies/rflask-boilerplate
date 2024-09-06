@@ -4,6 +4,7 @@ from unittest.mock import MagicMock, patch
 from flask import request
 
 from modules.access_token.errors import (
+    AccessTokenExpiredError,
     AccessTokenInvalidError,
     AuthorizationHeaderNotFoundError,
     InvalidAuthorizationHeaderError,
@@ -11,6 +12,8 @@ from modules.access_token.errors import (
 )
 from modules.access_token.rest_api.access_auth_middleware import access_auth_middleware
 from server import app
+
+TEST_TOKEN = "your_test_token"
 
 
 class TestAccessAuthMiddleware(unittest.TestCase):
@@ -29,7 +32,7 @@ class TestAccessAuthMiddleware(unittest.TestCase):
         mock_next_func = MagicMock()
 
         with app.test_request_context():
-            request.headers = {"Authorization": "JWT your_test_token"}
+            request.headers = {"Authorization": f"JWT {TEST_TOKEN}"}
             with self.assertRaises(InvalidAuthorizationHeaderError):
                 access_auth_middleware(mock_next_func)()
 
@@ -41,8 +44,8 @@ class TestAccessAuthMiddleware(unittest.TestCase):
         mock_verify_access_token.side_effect = AccessTokenInvalidError("Invalid access token.")
 
         with app.test_request_context():
-            request.headers = {"Authorization": "Bearer your_test_token"}
-            with self.assertRaises(InvalidAuthorizationHeaderError):
+            request.headers = {"Authorization": f"Bearer {TEST_TOKEN}"}
+            with self.assertRaises(AccessTokenInvalidError):
                 access_auth_middleware(mock_next_func)()
 
         mock_next_func.assert_not_called()
@@ -55,6 +58,17 @@ class TestAccessAuthMiddleware(unittest.TestCase):
         def test_view_func(account_id):
             return account_id
 
-        with app.test_request_context(headers={"Authorization": "Bearer your_test_token"}):
+        with app.test_request_context(headers={"Authorization": f"Bearer {TEST_TOKEN}"}):
             with self.assertRaises(UnauthorizedAccessError):
                 test_view_func(account_id="67890")
+
+    @patch("modules.access_token.access_token_service.AccessTokenService.verify_access_token")
+    def test_expired_access_token(self, mock_verify_access_token):
+        mock_next_func = MagicMock()
+        mock_verify_access_token.side_effect = AccessTokenExpiredError("Access token has expired. Please login again.")
+
+        with app.test_request_context(headers={"Authorization": f"Bearer {TEST_TOKEN}"}):
+            with self.assertRaises(AccessTokenExpiredError):
+                access_auth_middleware(mock_next_func)()
+
+        mock_next_func.assert_not_called()

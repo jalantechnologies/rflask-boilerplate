@@ -5,7 +5,6 @@ from flask import request
 
 from modules.access_token.access_token_service import AccessTokenService
 from modules.access_token.errors import (
-    AccessTokenInvalidError,
     AuthorizationHeaderNotFoundError,
     InvalidAuthorizationHeaderError,
     UnauthorizedAccessError,
@@ -23,10 +22,7 @@ def access_auth_middleware(next_func: Callable) -> Callable:
         if auth_scheme != "Bearer" or not auth_token:
             raise InvalidAuthorizationHeaderError("Invalid authorization header.")
 
-        try:
-            auth_payload = AccessTokenService.verify_access_token(token=auth_token)
-        except AccessTokenInvalidError:
-            raise InvalidAuthorizationHeaderError("Invalid authorization header.")
+        auth_payload = AccessTokenService.verify_access_token(token=auth_token)
 
         if "account_id" in kwargs and auth_payload.account_id != kwargs["account_id"]:
             raise UnauthorizedAccessError("Unauthorized access.")
