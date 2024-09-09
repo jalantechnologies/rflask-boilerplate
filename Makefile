@@ -19,7 +19,7 @@ run-engine:
 	cd src/apps/backend \
 	&& pipenv install --dev \
 	&& pipenv run python --version \
-	&& pipenv run gunicorn -c gunicorn_config.py server:app
+	&& pipenv run gunicorn -c gunicorn_config.py --reload server:app
 
 run-test:
 	cd src/apps/backend \
