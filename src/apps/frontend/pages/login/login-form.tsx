@@ -77,6 +77,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onError, onSuccess }) => {
           </Link>
         </Flex>
 
+        <Flex justifyContent='end'>
+          <Link
+            to={routes.PHONE_LOGIN}
+            className="text-sm text-primary hover:underline"
+          >
+            Login with phone number
+          </Link>
+        </Flex>
+
         <Button
           type={ButtonType.SUBMIT}
           kind={ButtonKind.PRIMARY}
@@ -88,11 +97,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onError, onSuccess }) => {
           Don’t have any account?{' '}
           <Link to={routes.SIGNUP} className="text-primary">
             Sign Up
-          </Link>
-        </p>
-        <p className="self-center font-medium">
-          <Link to={routes.PHONE_LOGIN} className="text-primary">
-            Login with phone number instead
           </Link>
         </p>
       </VerticalStackLayout>

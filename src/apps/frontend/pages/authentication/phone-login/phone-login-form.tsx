@@ -76,11 +76,9 @@ const PhoneLoginForm: React.FC<PhoneLoginFormProps> = ({ onError, onSendOTPSucce
             </FormControl>
           </div>
         </Flex>
-        <p className="font-medium">
-        <Link to={routes.LOGIN} className="text-primary">
+        <Link to={routes.LOGIN} className="text-sm text-primary hover:underline">
           Login with email
         </Link>
-      </p>
         <Button type={ButtonType.SUBMIT} isLoading={isSendOTPLoading} kind={ButtonKind.PRIMARY}>
           Get OTP
         </Button>
