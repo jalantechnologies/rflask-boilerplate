@@ -21,7 +21,6 @@ jobs:
       build_args: |
         APP_ENV=preview
       checks: "['npm:coverage', 'npm:lint', 'compose:test']"
-      commit_sha: ${{ github.event.pull_request.head.sha }}
       docker_registry: ${{ vars.DOCKER_REGISTRY }}
       docker_username: ${{ vars.DOCKER_USERNAME }}
       pull_request_number: ${{ github.event.number }}
