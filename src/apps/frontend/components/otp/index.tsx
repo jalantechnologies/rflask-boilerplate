@@ -1,8 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  FocusEventHandler,
-} from 'react';
+import React, { useRef, useState, FocusEventHandler } from 'react';
 
 import constant from '../../constants';
 import { AsyncError, KeyboardKeys } from '../../types';
@@ -19,23 +15,16 @@ interface OTPProps {
   onError: (error: AsyncError) => void;
 }
 
-const OTP: React.FC<OTPProps> = ({
-  error, isLoading, onBlur, onChange,
-}) => {
+const OTP: React.FC<OTPProps> = ({ error, isLoading, onBlur, onChange }) => {
   const [otp, setOtp] = useState<string[]>(Array(constant.OTP_LENGTH).fill(''));
 
   const inputRef = useRef<HTMLInputElement[]>([]);
 
-  const handleInputRef = (
-    ref: HTMLInputElement,
-  ) => {
+  const handleInputRef = (ref: HTMLInputElement) => {
     inputRef.current.push(ref);
   };
 
-  const handleOTPChange = (
-    inputValue: string,
-    index: number,
-  ): void => {
+  const handleOTPChange = (inputValue: string, index: number): void => {
     const otpInputs = [...otp];
 
     if (inputValue.length >= constant.OTP_INPUT_MAX_LENGTH) return;
@@ -66,7 +55,7 @@ const OTP: React.FC<OTPProps> = ({
   return (
     <Flex gap={6}>
       {otp.map((_, index) => (
-        <FlexItem flex='flex1' key={index}>
+        <FlexItem flex="flex1" key={index}>
           <OTPInput
             disabled={isLoading}
             index={index}
@@ -74,7 +63,9 @@ const OTP: React.FC<OTPProps> = ({
             error={error}
             onChange={(e) => handleOTPChange(e.target.value, index)}
             onBlur={onBlur}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => handleOnKeyDown(e, index + 1)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+              handleOnKeyDown(e, index + 1)
+            }
             handleInputRef={handleInputRef}
             value={otp[index]}
           />

@@ -1,7 +1,10 @@
 import React from 'react';
 
 import {
-  Button, FormControl, Input, VerticalStackLayout,
+  Button,
+  FormControl,
+  Input,
+  VerticalStackLayout,
 } from '../../../components';
 import ParagraphMedium from '../../../components/typography/paragraph-medium';
 import { AsyncError } from '../../../types';
@@ -18,10 +21,10 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   onError,
   onSuccess,
 }) => {
-  const {
-    formik,
-    isSendForgotPasswordEmailLoading,
-  } = useForgotPasswordForm({ onError, onSuccess });
+  const { formik, isSendForgotPasswordEmailLoading } = useForgotPasswordForm({
+    onError,
+    onSuccess,
+  });
 
   return (
     <VerticalStackLayout gap={5}>

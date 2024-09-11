@@ -28,10 +28,11 @@ const UserProfileSnippet: React.FC<DropdownUserProps> = ({
       const targetNode = event.target as Node;
       if (!dropdown.current) return;
       if (
-        !dropdownOpen
-        || dropdown.current.contains(targetNode)
-        || trigger.current.contains(targetNode)
-      ) return;
+        !dropdownOpen ||
+        dropdown.current.contains(targetNode) ||
+        trigger.current.contains(targetNode)
+      )
+        return;
       setDropdownOpen(false);
     };
     document.addEventListener('click', clickHandler);

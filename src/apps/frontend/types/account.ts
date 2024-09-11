@@ -14,6 +14,6 @@ export class Account {
   }
 
   displayName(): string {
-    return (`${this.firstName} ${this.lastName}`).trim();
+    return `${this.firstName} ${this.lastName}`.trim();
   }
 }

@@ -1,13 +1,7 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-} from 'react';
+import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 import { AccountService } from '../services';
-import {
-  Account, ApiResponse, AsyncError,
-} from '../types';
+import { Account, ApiResponse, AsyncError } from '../types';
 
 import useAsync from './async.hook';
 
@@ -22,10 +16,11 @@ const AccountContext = createContext<AccountContextType | null>(null);
 
 const accountService = new AccountService();
 
-export const useAccountContext = (): AccountContextType => useContext(AccountContext);
+export const useAccountContext = (): AccountContextType =>
+  useContext(AccountContext);
 
-const getAccountDetailsFn = async (): Promise<ApiResponse<Account>> => accountService
-  .getAccountDetails();
+const getAccountDetailsFn = async (): Promise<ApiResponse<Account>> =>
+  accountService.getAccountDetails();
 
 export const AccountProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const {
@@ -38,8 +33,7 @@ export const AccountProvider: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <AccountContext.Provider
       value={{
-        accountDetails:
-          new Account({ ...accountDetails }), // creating an instance to access its methods
+        accountDetails: new Account({ ...accountDetails }), // creating an instance to access its methods
         accountError,
         getAccountDetails,
         isAccountLoading,

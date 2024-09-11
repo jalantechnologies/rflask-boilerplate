@@ -8,18 +8,20 @@ export default class AuthService extends APIService {
     lastName: string,
     username: string,
     password: string,
-  ): Promise<ApiResponse<void>> => this.apiClient.post('/accounts', {
-    first_name: firstName,
-    last_name: lastName,
-    username,
-    password,
-  });
+  ): Promise<ApiResponse<void>> =>
+    this.apiClient.post('/accounts', {
+      first_name: firstName,
+      last_name: lastName,
+      username,
+      password,
+    });
 
   login = async (
     username: string,
     password: string,
-  ): Promise<ApiResponse<AccessToken>> => this.apiClient.post('/access-tokens', {
-    username,
-    password,
-  });
+  ): Promise<ApiResponse<AccessToken>> =>
+    this.apiClient.post('/access-tokens', {
+      username,
+      password,
+    });
 }

@@ -1,7 +1,10 @@
 import React from 'react';
 
 import {
-  Button, FormControl, PasswordInput, VerticalStackLayout,
+  Button,
+  FormControl,
+  PasswordInput,
+  VerticalStackLayout,
 } from '../../../components';
 import { AsyncError } from '../../../types';
 import { ButtonType } from '../../../types/button';
@@ -17,7 +20,10 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   onSuccess,
   onError,
 }) => {
-  const { formik, isResetPasswordLoading } = useResetPasswordForm({ onSuccess, onError });
+  const { formik, isResetPasswordLoading } = useResetPasswordForm({
+    onSuccess,
+    onError,
+  });
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -39,13 +45,17 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
         </FormControl>
 
         <FormControl
-          error={formik.touched.confirmPassword && formik.errors.confirmPassword}
+          error={
+            formik.touched.confirmPassword && formik.errors.confirmPassword
+          }
           label={'Re-type Password'}
         >
           <PasswordInput
             data-testid="confirmPassword"
             disabled={isResetPasswordLoading}
-            error={formik.touched.confirmPassword && formik.errors.confirmPassword}
+            error={
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+            }
             name="confirmPassword"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
@@ -54,10 +64,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
           />
         </FormControl>
 
-        <Button
-          isLoading={isResetPasswordLoading}
-          type={ButtonType.SUBMIT}
-        >
+        <Button isLoading={isResetPasswordLoading} type={ButtonType.SUBMIT}>
           Reset Password
         </Button>
       </VerticalStackLayout>

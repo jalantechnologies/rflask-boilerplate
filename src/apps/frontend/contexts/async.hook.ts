@@ -1,10 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import {
-  UseAsyncResponse,
-  AsyncResult,
-  AsyncError,
-} from '../types';
+import { UseAsyncResponse, AsyncResult, AsyncError } from '../types';
 import { AsyncOperationError } from '../types/async-operation';
 
 const useAsync = <T>(

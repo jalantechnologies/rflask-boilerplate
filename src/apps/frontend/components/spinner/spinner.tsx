@@ -14,8 +14,7 @@ const Spinner: React.FC = () => (
       align-[-0.125em]
       motion-reduce:animate-[spin_1.5s_linear_infinite]
     "
-  >
-  </div>
+  ></div>
 );
 
 export default Spinner;

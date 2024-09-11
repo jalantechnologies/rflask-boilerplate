@@ -26,9 +26,7 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
         }`}
         onClick={() => setIsSidebarOpen(false)}
       >
-        <img
-          src={iconPath}
-        />
+        <img src={iconPath} />
         {title}
       </NavLink>
     </li>

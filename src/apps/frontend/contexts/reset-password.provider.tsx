@@ -1,14 +1,8 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-} from 'react';
+import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 import { ResetPasswordParams } from '../pages/authentication/reset-password/reset-password-form.hook';
 import { ResetPasswordService } from '../services';
-import {
-  ApiResponse, AsyncError,
-} from '../types';
+import { ApiResponse, AsyncError } from '../types';
 
 import useAsync from './async.hook';
 
@@ -21,13 +15,14 @@ type ResetPasswordContextType = {
   sendForgotPasswordEmailError: AsyncError;
 };
 
-const ResetPasswordContext = createContext<ResetPasswordContextType | null>(null);
+const ResetPasswordContext = createContext<ResetPasswordContextType | null>(
+  null,
+);
 
 const resetPasswordService = new ResetPasswordService();
 
-export const useResetPasswordContext = (): ResetPasswordContextType => useContext(
-  ResetPasswordContext,
-);
+export const useResetPasswordContext = (): ResetPasswordContextType =>
+  useContext(ResetPasswordContext);
 
 const resetPasswordFn = async (
   params: ResetPasswordParams,
@@ -35,9 +30,12 @@ const resetPasswordFn = async (
 
 const sendForgotPasswordEmailFn = async (
   username: string,
-): Promise<ApiResponse<void>> => resetPasswordService.sendForgotPasswordEmail(username);
+): Promise<ApiResponse<void>> =>
+  resetPasswordService.sendForgotPasswordEmail(username);
 
-export const ResetPasswordProvider: React.FC<PropsWithChildren> = ({ children }) => {
+export const ResetPasswordProvider: React.FC<PropsWithChildren> = ({
+  children,
+}) => {
   const {
     isLoading: isSendForgotPasswordEmailLoading,
     error: sendForgotPasswordEmailError,

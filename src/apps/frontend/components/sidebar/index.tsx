@@ -32,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           aria-expanded={isSidebarOpen}
           className="block lg:hidden"
         >
-          <img src='/assets/img/icon/sidebar-arrow-icon.svg' alt="arrow icon" />
+          <img src="/assets/img/icon/sidebar-arrow-icon.svg" alt="arrow icon" />
         </button>
       </div>
 
@@ -44,16 +44,16 @@ const Sidebar: React.FC<SidebarProps> = ({
           </h3>
           <ul className="mb-6 flex flex-col gap-1.5">
             <SidebarMenuItem
-              iconPath='/assets/img/icon/dashboard-sidebar-icon.svg'
+              iconPath="/assets/img/icon/dashboard-sidebar-icon.svg"
               path={routes.DASHBOARD}
               setIsSidebarOpen={setIsSidebarOpen}
-              title='Dashboard'
+              title="Dashboard"
             />
             <SidebarMenuItem
-              iconPath='/assets/img/icon/tasks-sidebar-icon.svg'
+              iconPath="/assets/img/icon/tasks-sidebar-icon.svg"
               path={routes.TASKS}
               setIsSidebarOpen={setIsSidebarOpen}
-              title='Tasks'
+              title="Tasks"
             />
           </ul>
         </nav>

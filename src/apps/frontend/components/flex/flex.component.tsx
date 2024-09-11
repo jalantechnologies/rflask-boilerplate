@@ -19,18 +19,18 @@ const Flex: React.FC<PropsWithChildren<FlexProps>> = ({
   gap = '0',
   justifyContent = 'start',
 }) => (
-    <div
-      className={clsx([
-        styles.flex,
-        styles.direction[direction],
-        styles.justifyContent[justifyContent],
-        styles.alignItems[alignItems],
-        styles.flexWrap[flexWrap],
-        styles.gap[gap],
-      ])}
-    >
-      {children}
-    </div>
+  <div
+    className={clsx([
+      styles.flex,
+      styles.direction[direction],
+      styles.justifyContent[justifyContent],
+      styles.alignItems[alignItems],
+      styles.flexWrap[flexWrap],
+      styles.gap[gap],
+    ])}
+  >
+    {children}
+  </div>
 );
 
 export default Flex;

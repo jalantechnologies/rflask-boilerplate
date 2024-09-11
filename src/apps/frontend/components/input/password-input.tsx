@@ -5,7 +5,8 @@ import Button from '../button';
 
 import Input from '.';
 
-interface PasswordInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface PasswordInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   error: string;
   name: string;
   placeholder: string;
@@ -21,7 +22,9 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const togglePasswordVisibility = (e : React.ChangeEvent<HTMLSelectElement>) => {
+  const togglePasswordVisibility = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     e.preventDefault();
     setIsPasswordVisible((prevState) => !prevState);
   };

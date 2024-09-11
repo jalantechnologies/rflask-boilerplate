@@ -33,7 +33,9 @@ export const ForgotPassword: React.FC = () => {
 
   const onResendEmailSuccess = () => {
     startTimer();
-    toast.success('A password reset link has been re-sent. Please check your inbox');
+    toast.success(
+      'A password reset link has been re-sent. Please check your inbox',
+    );
   };
 
   const onError = (error: AsyncError) => {
@@ -52,26 +54,24 @@ export const ForgotPassword: React.FC = () => {
     <AuthenticationPageLayout>
       <AuthenticationFormLayout>
         <VerticalStackLayout gap={6}>
-          <Button
-            kind={ButtonKind.SECONDARY}
-            onClick={handleBackButtonClick}
-          >
+          <Button kind={ButtonKind.SECONDARY} onClick={handleBackButtonClick}>
             Back
           </Button>
           <H2>Forgot Password?</H2>
-        {
-          isResendEmailPage
-            ? <ForgotPasswordResendEmail
+          {isResendEmailPage ? (
+            <ForgotPasswordResendEmail
               isResendEnabled={isResendEnabled}
               onSuccess={onResendEmailSuccess}
               onError={onError}
               username={username}
               timerRemainingSeconds={remaininingSecondsStr}
-            /> : <ForgotPasswordForm
+            />
+          ) : (
+            <ForgotPasswordForm
               onSuccess={onSendEmailSuccess}
               onError={onError}
             />
-        }
+          )}
         </VerticalStackLayout>
       </AuthenticationFormLayout>
     </AuthenticationPageLayout>

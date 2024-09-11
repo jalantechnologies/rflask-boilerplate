@@ -10,9 +10,7 @@ interface LoginFormProps {
   onError: (error: AsyncError) => void;
 }
 const useLoginForm = ({ onError, onSuccess }: LoginFormProps) => {
-  const {
-    isLoginLoading, login, loginError, loginResult,
-  } = useAuthContext();
+  const { isLoginLoading, login, loginError, loginResult } = useAuthContext();
 
   const formik = useFormik({
     initialValues: {

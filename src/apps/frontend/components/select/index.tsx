@@ -21,7 +21,7 @@ const Select: React.FC<SelectProps> = ({
   value,
 }) => (
   <select
-    className='
+    className="
       items-center
       justify-center
       rounded-lg
@@ -34,7 +34,7 @@ const Select: React.FC<SelectProps> = ({
       outline-none
       focus:border-primary
       focus-visible:shadow-none
-    '
+    "
     disabled={isLoading}
     multiple={multiple}
     onChange={handleChange}

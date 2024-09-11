@@ -3,8 +3,8 @@ import React, { PropsWithChildren } from 'react';
 import VerticalStackLayout from '../layouts/vertical-stack-layout';
 
 interface FormControlProps {
-  error: string,
-  label: string,
+  error: string;
+  label: string;
 }
 
 const FormControl: React.FC<PropsWithChildren<FormControlProps>> = ({

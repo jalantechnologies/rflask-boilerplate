@@ -18,10 +18,7 @@ type HeaderProps = {
   setIsSidebarOpen: (open: boolean) => void;
 };
 
-const Header: React.FC<HeaderProps> = ({
-  isSidebarOpen,
-  setIsSidebarOpen,
-}) => {
+const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
   const { logout } = useAuthContext();
   const { accountDetails } = useAccountContext();

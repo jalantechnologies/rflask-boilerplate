@@ -10,9 +10,10 @@ interface UseForgotPasswordFormProps {
   onError: (err: AsyncError) => void;
 }
 
-const useForgotPasswordForm = (
-  { onError, onSuccess }: UseForgotPasswordFormProps,
-) => {
+const useForgotPasswordForm = ({
+  onError,
+  onSuccess,
+}: UseForgotPasswordFormProps) => {
   const {
     isSendForgotPasswordEmailLoading,
     sendForgotPasswordEmail,

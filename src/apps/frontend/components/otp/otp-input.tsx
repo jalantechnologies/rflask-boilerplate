@@ -5,9 +5,7 @@ import Input from '../input';
 type OTPInputProps = {
   disabled: boolean;
   error: string;
-  handleInputRef: (
-    ref: HTMLInputElement,
-  ) => void;
+  handleInputRef: (ref: HTMLInputElement) => void;
   index: number;
   name: string;
   onBlur?: FocusEventHandler<HTMLInputElement>;
@@ -36,7 +34,7 @@ const OTPInput: React.FC<OTPInputProps> = ({
     onBlur={onBlur}
     onChange={onChange}
     onKeyDown={onKeyDown}
-    textAlign='center'
+    textAlign="center"
     type={'number'}
     value={value}
   />

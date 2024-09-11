@@ -22,13 +22,16 @@ const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   type = ButtonType.BUTTON,
   kind = ButtonKind.PRIMARY,
 }) => {
-  const content = isLoading && kind === ButtonKind.PRIMARY ? <Spinner /> : children;
+  const content =
+    isLoading && kind === ButtonKind.PRIMARY ? <Spinner /> : children;
 
   return (
     <button
       className={clsx([
         styles.kind[kind].base,
-        (disabled || isLoading) ? styles.kind[kind].disableState : styles.kind[kind].enableState,
+        disabled || isLoading
+          ? styles.kind[kind].disableState
+          : styles.kind[kind].enableState,
       ])}
       disabled={disabled || isLoading}
       type={type}

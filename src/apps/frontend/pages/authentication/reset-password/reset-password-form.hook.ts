@@ -17,15 +17,17 @@ interface ResetPasswordFormProps {
   onError: (err: AsyncError) => void;
 }
 
-const useResetPasswordForm = ({ onError, onSuccess }: ResetPasswordFormProps) => {
+const useResetPasswordForm = ({
+  onError,
+  onSuccess,
+}: ResetPasswordFormProps) => {
   const { accountId } = useParams();
 
   const { search } = useLocation();
   const token = new URLSearchParams(search).get('token');
 
-  const {
-    isResetPasswordLoading, resetPasswordError, resetPassword,
-  } = useResetPasswordContext();
+  const { isResetPasswordLoading, resetPasswordError, resetPassword } =
+    useResetPasswordContext();
 
   const formik = useFormik({
     initialValues: {
