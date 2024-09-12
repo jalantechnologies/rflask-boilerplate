@@ -26,7 +26,6 @@ jobs:
       pull_request_number: ${{ github.event.number }}
       sonar_host_url: ${{ vars.SONAR_HOST_URL }}
       do_cluster_id: ${{ vars.DO_CLUSTER_ID }}
-      workflow_run_number: ${{ github.run_number }}
     secrets:
       docker_password: ${{ secrets.DOCKER_PASSWORD }}
       doppler_token: ${{ secrets.DOPPLER_PREVIEW_TOKEN }}
