@@ -1,17 +1,26 @@
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { Outlet, useNavigate } from 'react-router-dom';
 
-import { useAccountContext } from '../contexts';
+import routes from '../constants/routes';
+import { useAccountContext, useAuthContext } from '../contexts';
 import { Dashboard, NotFound } from '../pages';
 import AppLayout from '../pages/app-layout/app-layout';
+import { AsyncError } from '../types';
 
 const App = () => {
   const { getAccountDetails } = useAccountContext();
+  const { logout } = useAuthContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    getAccountDetails();
-  }, [getAccountDetails]);
+    getAccountDetails()
+      .catch((err: AsyncError) => {
+        toast.error(err.message);
+        logout();
+        navigate(routes.LOGIN);
+      });
+  }, [getAccountDetails, logout, navigate]);
 
   return (
     <AppLayout>
