@@ -1,14 +1,38 @@
-from modules.access_token.rest_api.access_auth_middleware import access_auth_middleware
 from modules.account.internal.account_reader import AccountReader
 from modules.account.internal.account_writer import AccountWriter
-from modules.account.types import Account, AccountSearchByIdParams, CreateAccountParams, ResetPasswordParams
+from modules.account.types import (
+    Account,
+    AccountSearchByIdParams,
+    CreateAccountByPhoneNumberParams,
+    CreateAccountByUsernameAndPasswordParams,
+    PhoneNumber,
+    ResetPasswordParams,
+)
+from modules.otp.otp_service import OtpService
+from modules.otp.types import CreateOtpParams
 from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
 
 
 class AccountService:
     @staticmethod
-    def create_account(*, params: CreateAccountParams) -> Account:
-        return AccountWriter.create_account(params=params)
+    def create_account_by_username_and_password(*, params: CreateAccountByUsernameAndPasswordParams) -> Account:
+        return AccountWriter.create_account_by_username_and_password(params=params)
+
+    @staticmethod
+    def get_account_by_phone_number(*, phone_number: PhoneNumber) -> Account:
+        return AccountReader.get_account_by_phone_number(phone_number=phone_number)
+
+    @staticmethod
+    def get_or_create_account_by_phone_number(*, params: CreateAccountByPhoneNumberParams) -> Account:
+        account = AccountReader.get_account_by_phone_number_optional(phone_number=params.phone_number)
+
+        if account is None:
+            account = AccountWriter.create_account_by_phone_number(params=params)
+
+        create_otp_params = CreateOtpParams(phone_number=params.phone_number)
+        OtpService.create_otp(params=create_otp_params)
+
+        return account
 
     @staticmethod
     def reset_account_password(*, params: ResetPasswordParams) -> Account:
@@ -29,7 +53,6 @@ class AccountService:
 
         return updated_account
 
-    @access_auth_middleware
     @staticmethod
     def get_account_by_id(*, params: AccountSearchByIdParams) -> Account:
         return AccountReader.get_account_by_id(params=params)

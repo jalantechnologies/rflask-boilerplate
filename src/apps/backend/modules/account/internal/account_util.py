@@ -19,5 +19,6 @@ class AccountUtil:
             id=str(account_model.id),
             first_name=account_model.first_name,
             last_name=account_model.last_name,
+            phone_number=account_model.phone_number,
             username=account_model.username,
         )

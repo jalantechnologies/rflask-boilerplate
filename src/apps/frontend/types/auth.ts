@@ -13,7 +13,16 @@ export enum KeyboardKeys {
   BACKSPACE = 'Backspace',
 }
 
-export type PhoneNumber = {
+export class PhoneNumber {
   countryCode: string;
   phoneNumber: string;
-};
+
+  constructor(json: JsonObject) {
+    this.countryCode = json.country_code as string;
+    this.phoneNumber = json.phone_number as string;
+  }
+
+  displayPhoneNumber(): string {
+    return `${this.countryCode} ${this.phoneNumber}`;
+  }
+}

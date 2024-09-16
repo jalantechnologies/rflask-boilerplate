@@ -11,6 +11,7 @@ class TestingSettings:
             "forgot_password_mail_template_id": "FORGOT_PASSWORD_MAIL_TEMPLATE_ID",
         }
     )
+    SMS_ENABLED: bool = False
 
 
 @dataclass(frozen=True)
@@ -23,3 +24,4 @@ class DockerInstanceTestingSettings:
             "forgot_password_mail_template_id": "FORGOT_PASSWORD_MAIL_TEMPLATE_ID",
         }
     )
+    SMS_ENABLED: bool = False

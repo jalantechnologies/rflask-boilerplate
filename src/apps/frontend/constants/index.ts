@@ -11,6 +11,8 @@ const constant = {
     "The confirmed password doesn't match the chosen password.",
   PASSWORD_MIN_LENGTH: 8,
   PASSWORD_VALIDATION_ERROR: 'Please enter at least 8 characters long password',
+  PHONE_VALIDATION_ERROR: 'Please enter a valid phone number',
+  SEND_OTP_DELAY_IN_MS: 60_000,
   TOASTER_AUTO_HIDE_DURATION: 3000,
 };
 

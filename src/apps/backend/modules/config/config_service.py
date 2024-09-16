@@ -54,3 +54,21 @@ class ConfigService:
     @staticmethod
     def get_password_reset_token() -> dict:
         return DictUtil.required_get_dict(input_dict=ConfigManager.config, key="PASSWORD_RESET_TOKEN")
+
+    @staticmethod
+    def get_twilio_config(key: str) -> str:
+        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="TWILIO")[key])
+
+    @staticmethod
+    def get_otp_config(key: str) -> str:
+        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="OTP")[key])
+
+    @staticmethod
+    def has_key(key: str) -> bool:
+        return key in ConfigManager.config
+
+    @staticmethod
+    def has_default_phone_number() -> bool:
+        if ConfigService.has_key("OTP") and "default_phone_number" in ConfigManager.config["OTP"]:
+            return True
+        return False

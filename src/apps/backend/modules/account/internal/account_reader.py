@@ -1,10 +1,23 @@
+from typing import Optional
+
 from bson.objectid import ObjectId
 
-from modules.account.errors import AccountInvalidPasswordError, AccountNotFoundError, AccountWithUserNameExistsError
+from modules.account.errors import (
+    AccountInvalidPasswordError,
+    AccountNotFoundError,
+    AccountWithPhoneNumberExistsError,
+    AccountWithUserNameExistsError,
+)
 from modules.account.internal.account_util import AccountUtil
 from modules.account.internal.store.account_model import AccountModel
 from modules.account.internal.store.account_repository import AccountRepository
-from modules.account.types import Account, AccountSearchByIdParams, AccountSearchParams, CreateAccountParams
+from modules.account.types import (
+    Account,
+    AccountSearchByIdParams,
+    AccountSearchParams,
+    CreateAccountByUsernameAndPasswordParams,
+    PhoneNumber,
+)
 
 
 class AccountReader:
@@ -33,8 +46,31 @@ class AccountReader:
         return AccountUtil.convert_account_model_to_account(AccountModel(**account))
 
     @staticmethod
-    def check_username_not_exist(*, params: CreateAccountParams) -> None:
+    def check_username_not_exist(*, params: CreateAccountByUsernameAndPasswordParams) -> None:
         account = AccountRepository.collection().find_one({"username": params.username, "active": True})
 
         if account:
             raise AccountWithUserNameExistsError(f"Account already exist for username:: {params.username}")
+
+    @staticmethod
+    def get_account_by_phone_number_optional(*, phone_number: PhoneNumber) -> Optional[Account]:
+        account = AccountRepository.collection().find_one({"phone_number": phone_number})
+        if account is None:
+            return None
+
+        return AccountUtil.convert_account_model_to_account(AccountModel(**account))
+
+    @staticmethod
+    def get_account_by_phone_number(*, phone_number: PhoneNumber) -> Account:
+        account = AccountReader.get_account_by_phone_number_optional(phone_number=phone_number)
+        if account is None:
+            raise AccountNotFoundError(f"Account with phone number:: {phone_number}, not found")
+
+        return account
+
+    @staticmethod
+    def check_phone_number_not_exist(*, phone_number: PhoneNumber) -> None:
+        account = AccountRepository.collection().find_one({"phone_number": phone_number, "active": True})
+
+        if account:
+            raise AccountWithPhoneNumberExistsError(f"Account already exist for phone number:: {phone_number}")

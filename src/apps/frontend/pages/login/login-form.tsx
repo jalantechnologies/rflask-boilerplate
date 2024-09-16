@@ -77,6 +77,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onError, onSuccess }) => {
           </Link>
         </Flex>
 
+        <Flex justifyContent="end">
+          <Link
+            to={routes.PHONE_LOGIN}
+            className="text-sm text-primary hover:underline"
+          >
+            Login with phone number
+          </Link>
+        </Flex>
+
         <Button
           type={ButtonType.SUBMIT}
           kind={ButtonKind.PRIMARY}
