@@ -14,11 +14,12 @@ const App = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAccountDetails().catch((err: AsyncError) => {
-      toast.error(err.message);
-      logout();
-      navigate(routes.LOGIN);
-    });
+    getAccountDetails()
+      .catch((err: AsyncError) => {
+        toast.error(err.message);
+        logout();
+        navigate(routes.LOGIN);
+      });
   }, [getAccountDetails, logout, navigate]);
 
   return (
