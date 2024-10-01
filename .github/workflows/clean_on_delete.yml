@@ -6,7 +6,7 @@ jobs:
   clean:
     # only run when deleting a branch
     if: github.event.ref_type == 'branch'
-    uses: jalantechnologies/github-ci/.github/workflows/clean.yml@v2.4
+    uses: jalantechnologies/github-ci/.github/workflows/clean.yml@v2.5
     concurrency:
       group: ci-preview-${{ github.event.ref }}
       cancel-in-progress: true
