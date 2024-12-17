@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { AccountProvider } from './contexts';
+import { AccountProvider, TaskProvider } from './contexts';
 import { AuthProvider } from './contexts/auth.provider';
 import { Config } from './helpers';
 import { AppRoutes } from './routes';
@@ -18,6 +18,7 @@ export default function App(): React.ReactElement {
   }, []);
 
   return (
+    <TaskProvider>
     <AuthProvider>
       <AccountProvider>
         <Toaster />
@@ -26,5 +27,6 @@ export default function App(): React.ReactElement {
         </Router>
       </AccountProvider>
     </AuthProvider>
+    </TaskProvider>
   );
 }

@@ -4,9 +4,10 @@ import { Outlet, useNavigate } from 'react-router-dom';
 
 import routes from '../constants/routes';
 import { useAccountContext, useAuthContext } from '../contexts';
-import { Dashboard, NotFound } from '../pages';
+import { Dashboard, NotFound, } from '../pages';
 import AppLayout from '../pages/app-layout/app-layout';
 import { AsyncError } from '../types';
+import AddTask from '../pages/task/add-task';
 
 const App = () => {
   const { getAccountDetails } = useAccountContext();
@@ -34,6 +35,7 @@ export const protectedRoutes = [
     element: <App />,
     children: [
       { path: '', element: <Dashboard /> },
+      { path: 'add-task', element: <AddTask /> },
       { path: '*', element: <NotFound /> },
     ],
   },

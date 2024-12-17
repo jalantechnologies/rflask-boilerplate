@@ -1,4 +1,11 @@
 const constant = {
+  TITLE_MIN_LENGTH: 5,
+  TITLE_VALIDATION_ERROR: 'Title must be at least 5 characters long.',
+  DESCRIPTION_MIN_LENGTH: 10,
+  DESCRIPTION_VALIDATION_ERROR: 'Description must be at least 10 characters long.',
+  TYPE_VALIDATION_ERROR: 'Type must be one of: Official, Personal, or Hobby.',
+  DUE_DATE_VALIDATION_ERROR: 'Due date must be in the future.',
+
   DEFAULT_ERROR_HTTP_STATUS_CODE: 500,
   EMAIL_VALIDATION_ERROR: 'Please enter a valid email',
   FIRST_NAME_MIN_LENGTH: 1,
