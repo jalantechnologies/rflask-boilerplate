@@ -16,7 +16,7 @@ type TaskContextType = {
   getTasksError: AsyncError;
   deleteTask: (taskId: string) => Promise<void>;
   deleteTaskError: AsyncError;
-  updateTask: (taskId: string, task: Partial<TaskPayload>) => Promise<void>;
+  updateTask: (task: Partial<TaskPayload>) => Promise<void>;
   updateTaskError: AsyncError;
 };
 

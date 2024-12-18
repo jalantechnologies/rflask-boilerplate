@@ -23,8 +23,39 @@ export default class TaskService extends APIService {
             due_date: task.dueDate,
         });
 
-    getTasks = async (): Promise<ApiResponse<TaskPayload[]>> =>
-        this.apiClient.get('/tasks');
+        getTasks = async (): Promise<ApiResponse<TaskPayload[]>> => {
+        
+            const mockTasks: TaskPayload[] = [
+                {
+                    taskId: '1',
+                    title: 'Complete React Project',
+                    description: 'Finalize the frontend for the application.',
+                    type: 'Official',
+                    dueDate: new Date().toISOString().split('T')[0],
+                },
+                {
+                    taskId: '2',
+                    title: 'Morning Run',
+                    description: 'Run 5km in the park.',
+                    type: 'Personal',
+                    dueDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0], // Tomorrow
+                },
+                {
+                    taskId: '3',
+                    title: 'Guitar Practice',
+                    description: 'Practice chords and scales for 30 minutes.',
+                    type: 'Hobby',
+                    dueDate: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString().split('T')[0], // Day after tomorrow
+                },
+            ];
+        
+            return Promise.resolve({
+                data: mockTasks,
+                message: 'Mock tasks retrieved successfully.',
+                success: true,
+            });
+        };
+        
 
     deleteTask = async (task: Partial<TaskPayload>): Promise<ApiResponse<void>> =>
         this.apiClient.delete(`/tasks/${task.taskId}`);

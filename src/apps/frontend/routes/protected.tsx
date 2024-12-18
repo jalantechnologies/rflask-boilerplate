@@ -8,6 +8,8 @@ import { Dashboard, NotFound, } from '../pages';
 import AppLayout from '../pages/app-layout/app-layout';
 import { AsyncError } from '../types';
 import AddTask from '../pages/task/add-task';
+import TaskList from '../pages/task/get-task';
+import EditTask from '../pages/task/edit-task';
 
 const App = () => {
   const { getAccountDetails } = useAccountContext();
@@ -36,6 +38,8 @@ export const protectedRoutes = [
     children: [
       { path: '', element: <Dashboard /> },
       { path: 'add-task', element: <AddTask /> },
+      { path: 'tasks', element: <TaskList /> },
+      { path: 'edit-task/:taskId', element: <EditTask /> },
       { path: '*', element: <NotFound /> },
     ],
   },
