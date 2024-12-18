@@ -9,7 +9,7 @@ const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const onSuccess = () => {
         toast.success(
-            'Your account has been successfully created. Please login to continue.',
+            'Add Task Here',
         );
         navigate(routes.ADDTASK);
     };

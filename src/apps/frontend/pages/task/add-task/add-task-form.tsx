@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import {
     Button,
@@ -9,10 +8,10 @@ import {
 
     Select,
     VerticalStackLayout,
-} from '../../components';
-import routes from '../../constants/routes';
-import { AsyncError } from '../../types';
-import { ButtonKind, ButtonType } from '../../types/button';
+} from '../../../components';
+
+import { AsyncError } from '../../../types';
+import { ButtonKind, ButtonType } from '../../../types/button';
 
 import useAddTaskForm from './add-task-form.hook'; // The hook you provided
 
@@ -99,13 +98,6 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onError, onSuccess }) => {
                 >
                     Add Task
                 </Button>
-
-                <p className="self-center font-medium">
-                    Want to go back?{' '}
-                    <Link to={routes.DASHBOARD} className="text-primary">
-                        Dashboard
-                    </Link>
-                </p>
             </VerticalStackLayout>
         </form>
     );

@@ -2,9 +2,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import React from 'react';
 
-import constant from '../../constants';
-import { useTaskContext } from '../../contexts';
-import { AsyncError, TaskPayload } from '../../types';
+import constant from '../../../constants';
+import { useTaskContext } from '../../../contexts';
+import { AsyncError, TaskPayload } from '../../../types';
 
 interface AddTaskFormProps {
   onError: (err: AsyncError) => void;
