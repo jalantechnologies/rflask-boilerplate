@@ -36,7 +36,7 @@ const useAddTaskForm = ({ onError, onSuccess }: AddTaskFormProps) => {
         .required(constant.DUE_DATE_VALIDATION_ERROR),
     }),
     onSubmit: (values) => {
-      const taskPayload: TaskPayload = {
+      const taskPayload: Partial<TaskPayload> = {
         title: values.title,
         description: values.description,
         type: values.type as 'Official' | 'Personal' | 'Hobby', // Narrow type to match TaskPayload

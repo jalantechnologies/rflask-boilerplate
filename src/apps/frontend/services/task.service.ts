@@ -1,10 +1,11 @@
 import APIService from './api.service';
 
 export interface TaskPayload {
+    taskId: string,
     title: string;
     description: string;
     type: 'Official' | 'Personal' | 'Hobby';
-    dueDate: string; // ISO 8601 format
+    dueDate: string;
 }
 
 export interface ApiResponse<T> {
@@ -14,7 +15,7 @@ export interface ApiResponse<T> {
 }
 
 export default class TaskService extends APIService {
-    addTask = async (task: TaskPayload): Promise<ApiResponse<void>> =>
+    addTask = async (task: Partial<TaskPayload>,): Promise<ApiResponse<void>> =>
         this.apiClient.post('/tasks', {
             title: task.title,
             description: task.description,
@@ -25,12 +26,11 @@ export default class TaskService extends APIService {
     getTasks = async (): Promise<ApiResponse<TaskPayload[]>> =>
         this.apiClient.get('/tasks');
 
-    deleteTask = async (taskId: string): Promise<ApiResponse<void>> =>
-        this.apiClient.delete(`/tasks/${taskId}`);
+    deleteTask = async (task: Partial<TaskPayload>): Promise<ApiResponse<void>> =>
+        this.apiClient.delete(`/tasks/${task.taskId}`);
 
     updateTask = async (
-        taskId: string,
         task: Partial<TaskPayload>,
     ): Promise<ApiResponse<void>> =>
-        this.apiClient.put(`/tasks/${taskId}`, task);
+        this.apiClient.put(`/tasks/${task.taskId}`, task);
 }

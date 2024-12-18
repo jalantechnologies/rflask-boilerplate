@@ -10,7 +10,7 @@ type TaskContextType = {
   isGetTasksLoading: boolean;
   isUpdateTaskLoading: boolean;
   isDeleteTaskLoading: boolean;
-  addTask: (task: TaskPayload) => Promise<void>;
+  addTask: (task: Partial<TaskPayload>) => Promise<void>;
   addTaskError: AsyncError;
   getTasks: () => Promise<TaskPayload[]>;
   getTasksError: AsyncError;
@@ -29,19 +29,18 @@ const taskService = new TaskService();
 export const useTaskContext = (): TaskContextType => useContext(TaskContext);
 
 // Task operations
-const addTaskFn = async (task: TaskPayload): Promise<ApiResponse<void>> =>
+const addTaskFn = async (task: Partial<TaskPayload>): Promise<ApiResponse<void>> =>
   taskService.addTask(task);
 
 const getTasksFn = async (): Promise<ApiResponse<TaskPayload[]>> =>
   taskService.getTasks();
 
-const deleteTaskFn = async (taskId: string): Promise<ApiResponse<void>> =>
-  taskService.deleteTask(taskId);
+const deleteTaskFn = async (task: Partial<TaskPayload>): Promise<ApiResponse<void>> =>
+  taskService.deleteTask(task);
 
 const updateTaskFn = async (
-  taskId: string,
   task: Partial<TaskPayload>,
-): Promise<ApiResponse<void>> => taskService.updateTask(taskId, task);
+): Promise<ApiResponse<void>> => taskService.updateTask(task);
 
 // TaskProvider component
 export const TaskProvider: React.FC<PropsWithChildren> = ({ children }) => {
