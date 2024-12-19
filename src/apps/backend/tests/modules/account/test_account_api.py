@@ -177,3 +177,85 @@ class TestAccountApi(BaseTestAccount):
             assert response.status_code == 401
             assert "Access token has expired. Please login again." in response.json.get("message", "")
             assert response.json.get("code") == AccessTokenErrorCode.ACCESS_TOKEN_EXPIRED
+
+    # Automated test for the delete account API
+    def test_delete_account(self) -> None:
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
+                first_name="first_name", last_name="last_name", password="password", username="username"
+            )
+        )
+
+        with app.test_client() as client:
+            access_token = client.post(
+                "http://127.0.0.1:8080/api/access-tokens",
+                headers=HEADERS,
+                data=json.dumps({"username": account.username, "password": "password"}),
+            )
+            response = client.delete(
+                f"http://127.0.0.1:8080/api/accounts/{account.id}", headers={"Authorization": f"Bearer {access_token.json.get('token')}"}
+            )
+            
+            assert response.status_code == 204
+            assert not response.data
+            
+    def test_delete_account_with_invalid_access_token(self) -> None:
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
+                first_name="first_name", last_name="last_name", password="password", username="username"
+            )
+        )
+
+        with app.test_client() as client:
+            response = client.delete(
+                f"http://127.0.0.1:8080/api/accounts/{account.id}", headers={"Authorization": f"Bearer invalid_token"}
+            )
+            
+            assert response.status_code == 401
+            assert response.json
+            assert response.json.get("code") == AccessTokenErrorCode.ACCESS_TOKEN_INVALID
+            
+    def test_delete_account_with_expired_access_token(self) -> None:
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
+                first_name="first_name", last_name="last_name", password="password", username="username"
+            )
+        )
+
+        # Create an expired token by setting the expiry to a date in the past using same method as in the
+        # access token service
+        jwt_signing_key = ConfigService.get_token_signing_key()
+        jwt_expiry = timedelta(days=ConfigService.get_token_expiry_days() - 1)
+        payload = {"account_id": account.id, "exp": (datetime.now() - jwt_expiry).timestamp()}
+        expired_token = jwt.encode(payload, jwt_signing_key, algorithm="HS256")
+
+        with app.test_client() as client:
+            response = client.delete(
+                f"http://127.0.0.1:8080/api/accounts/{account.id}", headers={"Authorization": f"Bearer {expired_token}"}
+            )
+            
+            assert response.status_code == 401
+            assert "Access token has expired. Please login again." in response.json.get("message", "")
+            assert response.json.get("code") == AccessTokenErrorCode.ACCESS_TOKEN_EXPIRED
+
+    def test_delete_account_with_valid_access_token_but_invalid_account_id(self) -> None:
+        account = AccountService.create_account_by_username_and_password(
+            params=CreateAccountByUsernameAndPasswordParams(
+                first_name="first_name", last_name="last_name", password="password", username="username"
+            )
+        )
+        invalid_account_id = "5f7b1b7b4f3b9b1b3f3b9b1b"
+        with app.test_client() as client:
+            access_token = client.post(
+                "http://127.0.0.1:8080/api/access-tokens",
+                headers=HEADERS,
+                data=json.dumps({"username": account.username, "password": "password"}),
+            )
+            response = client.delete(
+                f"http://127.0.0.1:8080/api/accounts/{invalid_account_id}", headers={"Authorization": f"Bearer {access_token.json.get('token')}"}
+            )
+            
+            assert response.status_code == 404
+            assert response.json
+            assert response.json.get("code") == AccountErrorCode.NOT_FOUND
+            assert response.json.get("message") == f"Account with id:: {invalid_account_id}, not found"
