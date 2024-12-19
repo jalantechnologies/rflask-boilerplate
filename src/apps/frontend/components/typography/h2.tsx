@@ -1,7 +1,19 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, CSSProperties } from 'react';
+import clsx from 'clsx'; 
 
-const H2: React.FC<PropsWithChildren> = ({ children }) => (
-  <h2 className="text-2xl font-bold text-black sm:text-title-xl2">
+interface H2Props extends PropsWithChildren {
+  style?: CSSProperties;
+  className?: string; 
+}
+
+const H2: React.FC<H2Props> = ({ children, style, className }) => (
+  <h2
+    className={clsx(
+      'text-2xl font-bold text-black sm:text-title-xl2', 
+      className
+    )}
+    style={style}
+  >
     {children}
   </h2>
 );

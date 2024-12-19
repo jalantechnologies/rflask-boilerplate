@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
-
-import { useTaskContext } from '../../../contexts';
-import { TaskPayload } from '../../../types';
+import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
+
+import { TaskPayload } from '../../../types';
+import { useTaskContext } from '../../../contexts';
+import { FlexItem, H2 } from '../../../components';
+import TaskItem from '../../../components/tasks/task-item';
 
 const TaskList: React.FC = () => {
   const { getTasks, isGetTasksLoading, getTasksError } = useTaskContext();
   const [tasks, setTasks] = useState<TaskPayload[]>([]);
   const navigate = useNavigate();
-  // Fetch tasks when the component mounts
+
+  
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         const response = await getTasks();
         if (response) {
-          setTasks(response); // Populate tasks in state
+          setTasks(response); 
         } else {
           console.error('Failed to fetch tasks:', response);
         }
@@ -35,30 +39,47 @@ const TaskList: React.FC = () => {
   }
 
   const handleEditTask = (task: TaskPayload) => {
-    navigate(`/edit-task/${task.taskId}`, { state: { task } }); // Pass TaskPayload to EditTask component
+    navigate(`/edit-task/${task.taskId}`, { state: { task } }); 
+  };
+
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case 'Official':
+        return 'red';
+      case 'Personal':
+        return 'dodgerblue';
+      case 'Hobby':
+        return 'green';
+      default:
+        return 'black';
+    }
   };
 
   return (
-    <div>
-      <h1>Task List</h1>
+    <div className={clsx(['flex flex-col rounded-lg px-4 py-2 m-1'])} style={{ margin: '20px' }}>
+      <div className={clsx(['inline-flex rounded-lg px-4 py-2 m-1'])}>
+        <H2 className="mr-10">Task List</H2>
+        <H2 className="justify-self-end" style={{ fontStyle: 'italic', marginLeft: '10px', marginRight: '10px' }}>
+          {tasks.length}
+        </H2>
+      </div>
+      
       {tasks.length === 0 ? (
         <p>No tasks found.</p>
       ) : (
-        <ul>
+        <FlexItem>
           {tasks.map((task) => (
-            <li key={task.taskId}>
-              <h3>{task.title}</h3>
-              <p>{task.description}</p>
-              <p>Type: {task.type}</p>
-              <p>Due Date: {task.dueDate}</p>
-              <button onClick={() => handleEditTask(task)}>Edit Task</button> {/* Edit button */}
-            </li>
+            <TaskItem
+              key={task.taskId}
+              task={task}
+              handleEditTask={handleEditTask}
+              getTypeColor={getTypeColor}
+            />
           ))}
-        </ul>
+        </FlexItem>
       )}
     </div>
   );
-  
 };
 
 export default TaskList;

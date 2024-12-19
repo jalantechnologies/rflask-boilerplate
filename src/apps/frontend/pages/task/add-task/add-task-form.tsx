@@ -5,7 +5,6 @@ import {
     DateInput,
     FormControl,
     Input,
-
     Select,
     VerticalStackLayout,
 } from '../../../components';
@@ -13,7 +12,7 @@ import {
 import { AsyncError } from '../../../types';
 import { ButtonKind, ButtonType } from '../../../types/button';
 
-import useAddTaskForm from './add-task-form.hook'; // The hook you provided
+import useAddTaskForm from './add-task-form.hook'; 
 
 interface AddTaskFormProps {
     onError: (error: AsyncError) => void;
@@ -71,7 +70,7 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onError, onSuccess }) => {
                             { value: 'Personal', label: 'Personal' },
                             { value: 'Hobby', label: 'Hobby' },
                         ]}
-                        value={formik.values.type} // Make sure Formik's value is correctly passed
+                        value={formik.values.type} 
                     />
                 </FormControl>
 

@@ -24,7 +24,6 @@ export default class TaskService extends APIService {
         });
 
         getTasks = async (): Promise<ApiResponse<TaskPayload[]>> => {
-        
             const mockTasks: TaskPayload[] = [
                 {
                     taskId: '1',

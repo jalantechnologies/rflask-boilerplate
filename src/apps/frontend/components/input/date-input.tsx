@@ -1,5 +1,5 @@
 import React from 'react';
-import Input from '.'; // Assuming Input is a custom component
+import Input from '.';
 
 interface DateInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -24,7 +24,7 @@ const DateInput: React.FC<DateInputProps> = ({
         error={error}
         name={name}
         placeholder={placeholder}
-        type="date" // The native date picker
+        type="date"
       />
     </div>
   );
