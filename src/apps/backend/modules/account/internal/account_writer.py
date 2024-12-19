@@ -11,6 +11,7 @@ from modules.account.internal.store.account_model import AccountModel
 from modules.account.internal.store.account_repository import AccountRepository
 from modules.account.types import (
     Account,
+    AccountSearchByIdParams,
     CreateAccountByPhoneNumberParams,
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
@@ -59,3 +60,7 @@ class AccountWriter:
             raise AccountNotFoundError(f"Account not found: {account_id}")
 
         return AccountUtil.convert_account_model_to_account(AccountModel(**updated_account))
+
+    @staticmethod
+    def delete_account_by_id(*, params: AccountSearchByIdParams) -> None:
+        AccountRepository.collection().delete_one({"_id": ObjectId(params.id)})
