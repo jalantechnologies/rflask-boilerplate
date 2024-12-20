@@ -2,6 +2,12 @@ import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 import { AuthService } from '../services';
 import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from '../types';
+import { JsonObject } from '../types/common-types';
+import {
+  getAccessTokenFromStorage,
+  removeAccessTokenFromStorage,
+  setAccessTokenToStorage,
+} from '../utils/storage-util';
 
 import useAsync from './async.hook';
 
@@ -49,15 +55,16 @@ const loginFn = async (
 ): Promise<ApiResponse<AccessToken>> => {
   const result = await authService.login(username, password);
   if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
+    setAccessTokenToStorage(
+      new AccessToken(result.data as unknown as JsonObject),
+    );
   }
   return result;
 };
 
-const logoutFn = (): void => localStorage.removeItem('access-token');
+const logoutFn = (): void => removeAccessTokenFromStorage();
 
-const getAccessToken = (): AccessToken =>
-  JSON.parse(localStorage.getItem('access-token')) as AccessToken;
+const getAccessToken = (): AccessToken => getAccessTokenFromStorage();
 
 const isUserAuthenticated = () => !!getAccessToken();
 
@@ -71,7 +78,9 @@ const verifyOTPFn = async (
 ): Promise<ApiResponse<AccessToken>> => {
   const result = await authService.verifyOTP(phoneNumber, otp);
   if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
+    setAccessTokenToStorage(
+      new AccessToken(result.data as unknown as JsonObject),
+    );
   }
   return result;
 };
