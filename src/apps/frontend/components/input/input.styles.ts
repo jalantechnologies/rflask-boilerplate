@@ -26,6 +26,10 @@ const styles = {
     left: 'text-left',
     right: 'text-right',
   },
+  disabled: `
+  cursor-not-allowed
+  text-slate-500
+`,
 };
 
 export default styles;

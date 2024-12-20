@@ -6,6 +6,7 @@ import HorizontalStackLayout from '../layouts/horizontal-stack-layout';
 import styles from './input.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  disabled?: boolean;
   endEnhancer?: React.ReactElement | string;
   error: string;
   handleInputRef?: (ref: HTMLInputElement) => void;
@@ -17,6 +18,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input: React.FC<InputProps> = ({
+  disabled,
   endEnhancer,
   error,
   handleInputRef,
@@ -44,6 +46,7 @@ const Input: React.FC<InputProps> = ({
         autoComplete="off"
         className={clsx([
           styles.input,
+          disabled ? styles.disabled : '',
           textAlign ? styles.textAlign[textAlign] : '',
         ])}
         data-testid={testId}
