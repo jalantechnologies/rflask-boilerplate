@@ -18,15 +18,17 @@ export default function App(): React.ReactElement {
   }, []);
 
   return (
-    <TaskProvider>
+
     <AuthProvider>
       <AccountProvider>
         <Toaster />
         <Router>
-          <AppRoutes />
+          <TaskProvider>
+            <AppRoutes />
+          </TaskProvider>
         </Router>
       </AccountProvider>
     </AuthProvider>
-    </TaskProvider>
+
   );
 }

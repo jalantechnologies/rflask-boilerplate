@@ -23,7 +23,7 @@ export const AppLayout: React.FC<PropsWithChildren> = ({ children }) => {
           />
 
           {/* Main Content */}
-          <main>{children}</main>
+          <main  className="overflow-y-auto">{children}</main>
         </div>
       </div>
     </div>
