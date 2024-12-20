@@ -8,7 +8,7 @@ import useAsync from './async.hook';
 type TaskContextType = {
   isAddTaskLoading: boolean;
   isGetTasksLoading: boolean;
-  isUpdateTaskLoading: boolean;
+  isEditTaskLoading: boolean;
   isDeleteTaskLoading: boolean;
   addTask: (task: Partial<TaskPayload>) => Promise<void>;
   addTaskError: AsyncError;
@@ -16,8 +16,8 @@ type TaskContextType = {
   getTasksError: AsyncError;
   deleteTask: (taskId: string) => Promise<void>;
   deleteTaskError: AsyncError;
-  updateTask: (task: Partial<TaskPayload>) => Promise<void>;
-  updateTaskError: AsyncError;
+  editTask: (task: Partial<TaskPayload>) => Promise<void>;
+  editTaskError: AsyncError;
 };
 
 // Create TaskContext
@@ -38,9 +38,9 @@ const getTasksFn = async (): Promise<ApiResponse<TaskPayload[]>> =>
 const deleteTaskFn = async (task: Partial<TaskPayload>): Promise<ApiResponse<void>> =>
   taskService.deleteTask(task);
 
-const updateTaskFn = async (
+const editTaskFn = async (
   task: Partial<TaskPayload>,
-): Promise<ApiResponse<void>> => taskService.updateTask(task);
+): Promise<ApiResponse<void>> => taskService.editTask(task);
 
 // TaskProvider component
 export const TaskProvider: React.FC<PropsWithChildren> = ({ children }) => {
@@ -63,17 +63,17 @@ export const TaskProvider: React.FC<PropsWithChildren> = ({ children }) => {
   } = useAsync(deleteTaskFn);
 
   const {
-    asyncCallback: updateTask,
-    error: updateTaskError,
-    isLoading: isUpdateTaskLoading,
-  } = useAsync(updateTaskFn);
+    asyncCallback: editTask,
+    error: editTaskError,
+    isLoading: isEditTaskLoading,
+  } = useAsync(editTaskFn);
 
   return (
     <TaskContext.Provider
       value={{
         isAddTaskLoading,
         isGetTasksLoading,
-        isUpdateTaskLoading,
+        isEditTaskLoading,
         isDeleteTaskLoading,
         addTask,
         addTaskError,
@@ -81,8 +81,8 @@ export const TaskProvider: React.FC<PropsWithChildren> = ({ children }) => {
         getTasksError,
         deleteTask,
         deleteTaskError,
-        updateTask,
-        updateTaskError,
+        editTask,
+        editTaskError,
       }}
     >
       {children}

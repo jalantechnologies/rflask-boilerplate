@@ -13,7 +13,7 @@ interface EditTaskFormProps {
 }
 
 const useEditTaskForm = ({ onError, onSuccess, task }: EditTaskFormProps) => {
-    const { isUpdateTaskLoading, updateTaskError, updateTask } = useTaskContext();
+    const { isEditTaskLoading, editTaskError, editTask } = useTaskContext();
 
     const formik = useFormik({
         initialValues: {
@@ -43,7 +43,7 @@ const useEditTaskForm = ({ onError, onSuccess, task }: EditTaskFormProps) => {
                 type: values.type as 'Official' | 'Personal' | 'Hobby', // Narrow type to match TaskPayload
                 dueDate: values.dueDate, // Assuming dueDate is already in ISO format
             };
-            updateTask(taskPayload)
+            editTask(taskPayload)
                 .then(() => {
                     onSuccess();
                 })
@@ -55,13 +55,13 @@ const useEditTaskForm = ({ onError, onSuccess, task }: EditTaskFormProps) => {
     // Custom handler for Select change
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { value } = e.target;
-        formik.setFieldValue('type', value); // Update Formik field value
+        formik.setFieldValue('type', value); // edit Formik field value
     };
 
     return {
         formik,
-        isUpdateTaskLoading,
-        updateTaskError,
+        isEditTaskLoading,
+        editTaskError,
         handleSelectChange
     };
 };

@@ -23,7 +23,7 @@ interface EditTaskFormProps {
 
 const EditTaskForm: React.FC<EditTaskFormProps> = ({ task, onError, onSuccess }) => {
     // Pass task as part of the hook
-    const { formik, isUpdateTaskLoading, handleSelectChange } = useEditTaskForm({ onSuccess, onError, task });
+    const { formik, isEditTaskLoading, handleSelectChange } = useEditTaskForm({ onSuccess, onError, task });
     
     return (
         <form onSubmit={formik.handleSubmit}>
@@ -35,7 +35,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({ task, onError, onSuccess })
                     <Input
                         error={formik.touched.title && formik.errors.title}
                         data-testid="title"
-                        disabled={isUpdateTaskLoading}
+                        disabled={isEditTaskLoading}
                         name="title"
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
@@ -51,7 +51,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({ task, onError, onSuccess })
                     <Input
                         error={formik.touched.description && formik.errors.description}
                         data-testid="description"
-                        disabled={isUpdateTaskLoading}
+                        disabled={isEditTaskLoading}
                         name="description"
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
@@ -66,7 +66,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({ task, onError, onSuccess })
                 >
                     <Select
                         handleChange={handleSelectChange} 
-                        isLoading={isUpdateTaskLoading}
+                        isLoading={isEditTaskLoading}
                         options={[
                             { value: '', label: 'Select task type' },
                             { value: 'Official', label: 'Official' },
@@ -96,7 +96,7 @@ const EditTaskForm: React.FC<EditTaskFormProps> = ({ task, onError, onSuccess })
                 <Button
                     type={ButtonType.SUBMIT}
                     kind={ButtonKind.PRIMARY}
-                    isLoading={isUpdateTaskLoading}
+                    isLoading={isEditTaskLoading}
                 >
                     Edit Task
                 </Button>

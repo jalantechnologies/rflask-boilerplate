@@ -6,6 +6,7 @@ import { TaskPayload } from '../../../types';
 import { useTaskContext } from '../../../contexts';
 import { FlexItem, H2 } from '../../../components';
 import TaskItem from '../../../components/tasks/task-item';
+import routes from '../../../constants/routes';
 
 const TaskList: React.FC = () => {
   const { getTasks, isGetTasksLoading, getTasksError } = useTaskContext();
@@ -39,7 +40,7 @@ const TaskList: React.FC = () => {
   }
 
   const handleEditTask = (task: TaskPayload) => {
-    navigate(`/edit-task/${task.taskId}`, { state: { task } }); 
+    navigate(routes.EDITTASK(task.taskId), { state: { task } }); 
   };
 
   const getTypeColor = (type: string) => {

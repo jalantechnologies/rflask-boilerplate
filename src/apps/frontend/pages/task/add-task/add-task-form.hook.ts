@@ -51,10 +51,10 @@ const useAddTaskForm = ({ onError, onSuccess }: AddTaskFormProps) => {
         });
     },
   });
-  // Custom handler for Select change
+
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    formik.setFieldValue('type', value); // Update Formik field value
+    formik.setFieldValue('type', value); 
   };
 
   return {

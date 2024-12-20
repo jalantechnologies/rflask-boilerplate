@@ -80,7 +80,7 @@ export default class TaskService extends APIService {
     deleteTask = async (task: Partial<TaskPayload>): Promise<ApiResponse<void>> =>
         this.apiClient.delete(`/tasks/${task.taskId}`);
 
-    updateTask = async (
+    editTask = async (
         task: Partial<TaskPayload>,
     ): Promise<ApiResponse<void>> =>
         this.apiClient.put(`/tasks/${task.taskId}`, task);
