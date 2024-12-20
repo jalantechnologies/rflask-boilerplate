@@ -7,6 +7,7 @@ import Signup from './authentication/signup';
 import Dashboard from './dashboard';
 import Login from './login';
 import NotFound from './not-found/not-found.page';
+import ProfileSettings from './profile/settings';
 
 export {
   About,
@@ -17,5 +18,6 @@ export {
   Signup,
   OTPPage,
   PhoneLogin,
+  ProfileSettings,
   Login,
 };
