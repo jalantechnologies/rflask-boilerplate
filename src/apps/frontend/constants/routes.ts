@@ -8,6 +8,8 @@ const routes = {
   PHONE_LOGIN: '/signup?auth_mode=otp',
   SIGNUP: '/signup',
   TASKS: '/tasks',
+  ADDTASK:'/tasks/add',
+  EDITTASK:(taskId: string) => `/tasks/${taskId}/edit`,
 };
 
 export default routes;

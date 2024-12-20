@@ -11,7 +11,7 @@ import OTP from './otp';
 import Select from './select';
 import H2 from './typography/h2';
 import ParagraphMedium from './typography/paragraph-medium';
-
+import DateInput from './input/date-input';
 export {
   Button,
   Flex,
@@ -26,4 +26,5 @@ export {
   PasswordInput,
   Select,
   VerticalStackLayout,
+  DateInput,
 };

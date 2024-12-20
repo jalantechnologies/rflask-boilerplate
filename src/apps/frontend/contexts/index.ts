@@ -4,7 +4,7 @@ import {
   ResetPasswordProvider,
   useResetPasswordContext,
 } from './reset-password.provider';
-
+import { TaskProvider,useTaskContext } from './task.provider';
 export {
   AccountProvider,
   useAccountContext,
@@ -12,4 +12,6 @@ export {
   useAuthContext,
   ResetPasswordProvider,
   useResetPasswordContext,
+  TaskProvider,
+  useTaskContext,
 };
