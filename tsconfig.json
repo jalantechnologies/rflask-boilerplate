@@ -13,9 +13,9 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitThis": false,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
