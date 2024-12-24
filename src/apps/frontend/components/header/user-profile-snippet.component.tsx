@@ -30,7 +30,7 @@ const UserProfileSnippet: React.FC<DropdownUserProps> = ({
       if (
         !dropdownOpen ||
         dropdown.current.contains(targetNode) ||
-        trigger.current.contains(targetNode)
+        trigger.current?.contains(targetNode)
       )
         return;
       setDropdownOpen(false);
