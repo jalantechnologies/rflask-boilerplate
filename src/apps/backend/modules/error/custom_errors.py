@@ -2,10 +2,10 @@ from typing import Any, Optional
 
 
 class AppError(Exception):
-    def __init__(self, message: str, code: str, https_status_code: Optional[int] = None) -> None:
+    def __init__(self, message: str, code: str, http_status_code: Optional[int] = None) -> None:
         self.message = message
         self.code = code
-        self.https_code = https_status_code
+        self.http_code = http_status_code
         super().__init__(self.message)
 
     def to_str(self) -> str:
@@ -15,7 +15,7 @@ class AppError(Exception):
         error_dict = {
             "message": self.message,
             "code": self.code,
-            "https_code": self.https_code,
+            "http_code": self.http_code,
             "args": self.args,
             "with_traceback": self.with_traceback,
         }

@@ -7,6 +7,6 @@ class PasswordResetTokenNotFoundError(AppError):
     def __init__(self) -> None:
         super().__init__(
             code=PasswordResetTokenErrorCode.PASSWORD_RESET_TOKEN_NOT_FOUND,
-            https_status_code=404,
+            http_status_code=404,
             message=f"System is unable to find a token with this account",
         )
