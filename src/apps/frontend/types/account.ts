@@ -14,7 +14,7 @@ export class Account {
     this.lastName = json.last_name as string;
     this.phoneNumber = json.phone_number
       ? new PhoneNumber(json.phone_number as JsonObject)
-      : null;
+      : undefined;
     this.username = json.username as string;
   }
 
