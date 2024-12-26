@@ -7,7 +7,7 @@ import Input from '.';
 
 interface PasswordInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  error: string | false | undefined;
+  error?: string;
   name: string;
   placeholder: string;
   testId?: string;

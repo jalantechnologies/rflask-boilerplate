@@ -8,7 +8,7 @@ import Flex from '../flex/flex.component';
 import OTPInput from './otp-input';
 
 interface OTPProps {
-  error: string | false | undefined;
+  error?: string;
   isLoading: boolean;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   onChange: (values: string[]) => void;
