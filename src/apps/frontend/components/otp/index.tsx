@@ -60,7 +60,7 @@ const OTP: React.FC<OTPProps> = ({ error, isLoading, onBlur, onChange }) => {
             disabled={isLoading}
             index={index}
             name={'otp'}
-            error={error}
+            error={error || ''}
             onChange={(e) => handleOTPChange(e.target.value, index)}
             onBlur={onBlur}
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
