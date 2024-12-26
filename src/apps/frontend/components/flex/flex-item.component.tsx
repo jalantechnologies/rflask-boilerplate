@@ -17,16 +17,16 @@ const FlexItem: React.FC<PropsWithChildren<FlexItemProps>> = ({
   justifySelf = 'auto',
   order = 'none',
 }) => (
-    <div
-      className={clsx([
-        styles.alignSelf[alignSelf],
-        styles.flex[flex],
-        styles.justifySelf[justifySelf],
-        styles.order[order],
-      ])}
-    >
-      {children}
-    </div>
-  );
+  <div
+    className={clsx([
+      styles.alignSelf[alignSelf],
+      styles.flex[flex],
+      styles.justifySelf[justifySelf],
+      styles.order[order],
+    ])}
+  >
+    {children}
+  </div>
+);
 
 export default FlexItem;
