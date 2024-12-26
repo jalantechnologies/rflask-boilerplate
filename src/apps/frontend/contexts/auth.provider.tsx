@@ -11,29 +11,29 @@ type AuthContextType = {
   isSignupLoading: boolean;
   isUserAuthenticated: () => boolean;
   isVerifyOTPLoading: boolean;
-  login: (username: string, password: string) => Promise<AccessToken>;
-  loginError: AsyncError;
-  loginResult: AccessToken;
+  login: (username: string, password: string) => Promise<AccessToken | undefined>;
+  loginError: AsyncError | undefined;
+  loginResult: AccessToken | undefined;
   logout: () => void;
   sendOTP: (phoneNumber: PhoneNumber) => Promise<void>;
-  sendOTPError: AsyncError;
+  sendOTPError: AsyncError | undefined;
   signup: (
     firstName: string,
     lastName: string,
     username: string,
     password: string,
   ) => Promise<void>;
-  signupError: AsyncError;
-  verifyOTP: (phoneNumber: PhoneNumber, otp: string) => Promise<AccessToken>;
-  verifyOTPError: AsyncError;
-  verifyOTPResult: AccessToken;
+  signupError: AsyncError | undefined;
+  verifyOTP: (phoneNumber: PhoneNumber, otp: string) => Promise<AccessToken | undefined>;
+  verifyOTPError: AsyncError | undefined;
+  verifyOTPResult: AccessToken | undefined;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const authService = new AuthService();
 
-export const useAuthContext = (): AuthContextType => useContext(AuthContext);
+export const useAuthContext = (): AuthContextType => useContext(AuthContext) as AuthContextType;
 
 const signupFn = async (
   firstName: string,
@@ -57,7 +57,7 @@ const loginFn = async (
 const logoutFn = (): void => localStorage.removeItem('access-token');
 
 const getAccessToken = (): AccessToken =>
-  JSON.parse(localStorage.getItem('access-token')) as AccessToken;
+  JSON.parse(localStorage.getItem('access-token') || 'null') as AccessToken;
 
 const isUserAuthenticated = () => !!getAccessToken();
 
