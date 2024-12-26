@@ -9,7 +9,7 @@ import UserMenuDropdown from './user-menu-dropdown.component';
 import { UserMenuDropdownItem } from '.';
 
 interface DropdownUserProps {
-  account: Account;
+  account: Account | undefined;
   userMenuDropdownItems: UserMenuDropdownItem[];
 }
 
@@ -59,7 +59,7 @@ const UserProfileSnippet: React.FC<DropdownUserProps> = ({
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            {account.displayName()}
+            {account?.displayName()}
           </span>
           <span className="block text-xs">User</span>
         </span>

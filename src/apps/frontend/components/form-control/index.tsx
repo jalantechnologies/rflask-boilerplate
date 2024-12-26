@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from 'react';
 import VerticalStackLayout from '../layouts/vertical-stack-layout';
 
 interface FormControlProps {
-  error: string;
+  error: string | false | undefined;
   label: string;
 }
 

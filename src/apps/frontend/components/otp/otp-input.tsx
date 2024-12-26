@@ -4,7 +4,7 @@ import Input from '../input';
 
 type OTPInputProps = {
   disabled: boolean;
-  error: string;
+  error: string | false | undefined;
   handleInputRef: (ref: HTMLInputElement) => void;
   index: number;
   name: string;

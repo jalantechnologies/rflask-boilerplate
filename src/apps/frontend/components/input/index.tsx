@@ -8,7 +8,7 @@ import styles from './input.styles';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   endEnhancer?: React.ReactElement | string;
-  error: string;
+  error: string | false | undefined;
   handleInputRef?: (ref: Nullable<HTMLInputElement>) => void;
   index?: number;
   startEnhancer?: React.ReactElement | string;
