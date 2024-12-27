@@ -1,11 +1,8 @@
 import configparser
 import os
-from typing import Any
 from pathlib import Path
 from modules.error.custom_errors import MissingKeyError
 from modules.common.types import ErrorCode
-import json
-
 
 def get_parent_directory(directory: str, levels: int) -> Path:
     parent_dir = Path(directory)
@@ -14,11 +11,11 @@ def get_parent_directory(directory: str, levels: int) -> Path:
     return parent_dir
 
 class ConfigService:
-    _config = None
+    _config: configparser.ConfigParser = configparser.ConfigParser()
     config_path = get_parent_directory(__file__, 6) / "config"
 
     @staticmethod
-    def load_config():
+    def load_config()->None:
         config = configparser.ConfigParser()
         default_config = ConfigService.config_path / "default.ini"
         app_env = os.environ.get('APP_ENV', "development")
@@ -37,7 +34,8 @@ class ConfigService:
         print("config:", config_dict)
 
     @staticmethod
-    def __ensure_all_sections_exist(config: configparser.ConfigParser, default_config_path: Path):
+    def __ensure_all_sections_exist(config: configparser.ConfigParser,
+                                    default_config_path: Path)->None:
         default_config = configparser.ConfigParser()
         default_config.read(default_config_path)
 
@@ -46,10 +44,10 @@ class ConfigService:
                 config.add_section(section)
 
     @staticmethod
-    def __load_environment_variables(config: configparser.ConfigParser):
+    def __load_environment_variables(config: configparser.ConfigParser)->None:
         env_config = configparser.ConfigParser()
         custom_env_file = ConfigService.config_path / "custom-environment-variables.ini"
-        
+
         if custom_env_file.exists():
             env_config.read(custom_env_file)
             config.read(custom_env_file)
@@ -63,16 +61,17 @@ class ConfigService:
                     config[section][key] = env_var
 
     @staticmethod
-    def get_value(*, key: str, section: str = 'DEFAULT') -> Any:
+    def get_value(*, key: str, section: str = 'DEFAULT') -> str:
         try:
             value = ConfigService._config.get(section, key, fallback=None)
             return value if value else None
-        except (configparser.NoOptionError, configparser.NoSectionError):
-            raise MissingKeyError(missing_key=key, error_code=ErrorCode.MISSING_KEY)
+        except (configparser.NoOptionError, configparser.NoSectionError) as exc:
+            raise MissingKeyError(missing_key=key, error_code=ErrorCode.MISSING_KEY) from exc
 
     @staticmethod
     def has_value(*, key: str, section: str = 'DEFAULT') -> bool:
         if ConfigService._config.has_option(section, key):
             value = ConfigService._config.get(section, key, fallback=None)
-            return bool(value)  
+            return bool(value)
         return False
+    
