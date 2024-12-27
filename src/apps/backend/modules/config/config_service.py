@@ -1,74 +1,78 @@
-from modules.common.dict_util import DictUtil
-from modules.config.config_manager import ConfigManager
-from modules.config.types import PapertrailConfig
+import configparser
+import os
+from typing import Any
+from pathlib import Path
+from modules.error.custom_errors import MissingKeyError
+from modules.common.types import ErrorCode
+import json
 
+
+def get_parent_directory(directory: str, levels: int) -> Path:
+    parent_dir = Path(directory)
+    for _ in range(levels):
+        parent_dir = parent_dir.parent
+    return parent_dir
 
 class ConfigService:
-    @staticmethod
-    def get_string(key: str) -> str:
-        return DictUtil.required_get_str(input_dict=ConfigManager.config, key=key)
+    _config = None
+    config_path = get_parent_directory(__file__, 6) / "config"
 
     @staticmethod
-    def get_bool(key: str) -> bool:
-        return DictUtil.required_get_bool(input_dict=ConfigManager.config, key=key)
+    def load_config():
+        config = configparser.ConfigParser()
+        default_config = ConfigService.config_path / "default.ini"
+        app_env = os.environ.get('APP_ENV', "development")
+        app_env_config = ConfigService.config_path / f"{app_env}.ini"
+        config.read([default_config, app_env_config])
+        ConfigService.__ensure_all_sections_exist(config, default_config)
+        ConfigService.__load_environment_variables(config=config)
+        ConfigService._config = config
+        config_dict = {
+            section: {
+                key: value
+                for key, value in ConfigService._config[section].items()
+            }
+            for section in ConfigService._config.sections()
+        }
+        print("config:", config_dict)
 
     @staticmethod
-    def get_db_uri() -> str:
-        return DictUtil.required_get_str(input_dict=ConfigManager.config, key="MONGODB_URI")
+    def __ensure_all_sections_exist(config: configparser.ConfigParser, default_config_path: Path):
+        default_config = configparser.ConfigParser()
+        default_config.read(default_config_path)
+
+        for section in default_config.sections():
+            if section not in config:
+                config.add_section(section)
 
     @staticmethod
-    def get_logger_transports() -> tuple:
-        return DictUtil.required_get_tuple(input_dict=ConfigManager.config, key="LOGGER_TRANSPORTS")
+    def __load_environment_variables(config: configparser.ConfigParser):
+        env_config = configparser.ConfigParser()
+        custom_env_file = ConfigService.config_path / "custom-environment-variables.ini"
+        
+        if custom_env_file.exists():
+            env_config.read(custom_env_file)
+            config.read(custom_env_file)
+
+        for section in env_config.sections():
+            if section not in config:
+                config.add_section(section)
+            for key, value in env_config[section].items():
+                env_var = os.environ.get(value)
+                if env_var is not None:
+                    config[section][key] = env_var
 
     @staticmethod
-    def get_papertrail_config() -> PapertrailConfig:
-        return PapertrailConfig(
-            host=DictUtil.required_get_str(input_dict=ConfigManager.config, key="PAPERTRAIL_HOST"),
-            port=int(DictUtil.required_get_str(input_dict=ConfigManager.config, key="PAPERTRAIL_PORT")),
-        )
+    def get_value(*, key: str, section: str = 'DEFAULT') -> Any:
+        try:
+            value = ConfigService._config.get(section, key, fallback=None)
+            return value if value else None
+        except (configparser.NoOptionError, configparser.NoSectionError):
+            raise MissingKeyError(missing_key=key, error_code=ErrorCode.MISSING_KEY)
 
     @staticmethod
-    def get_accounts_config() -> dict:
-        return DictUtil.required_get_dict(input_dict=ConfigManager.config, key="ACCOUNTS")
-
-    @staticmethod
-    def get_token_signing_key() -> str:
-        return DictUtil.required_get_str(input_dict=ConfigService.get_accounts_config(), key="token_signing_key")
-
-    @staticmethod
-    def get_token_expiry_days() -> int:
-        return DictUtil.required_get_int(input_dict=ConfigService.get_accounts_config(), key="token_expiry_days")
-
-    @staticmethod
-    def get_web_app_host() -> str:
-        return DictUtil.required_get_str(input_dict=ConfigManager.config, key="WEB_APP_HOST")
-
-    @staticmethod
-    def get_sendgrid_api_key() -> str:
-        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="SENDGRID")["api_key"])
-
-    @staticmethod
-    def get_mailer_config(key: str) -> str:
-        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="MAILER")[key])
-
-    @staticmethod
-    def get_password_reset_token() -> dict:
-        return DictUtil.required_get_dict(input_dict=ConfigManager.config, key="PASSWORD_RESET_TOKEN")
-
-    @staticmethod
-    def get_twilio_config(key: str) -> str:
-        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="TWILIO")[key])
-
-    @staticmethod
-    def get_otp_config(key: str) -> str:
-        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="OTP")[key])
-
-    @staticmethod
-    def has_key(key: str) -> bool:
-        return key in ConfigManager.config
-
-    @staticmethod
-    def has_default_phone_number() -> bool:
-        if ConfigService.has_key("OTP") and "default_phone_number" in ConfigManager.config["OTP"]:
-            return True
+    def has_value(*, key: str, section: str = 'DEFAULT') -> bool:
+        if ConfigService._config.has_option(section, key):
+            value = ConfigService._config.get(section, key, fallback=None)
+            return bool(value)  
         return False
