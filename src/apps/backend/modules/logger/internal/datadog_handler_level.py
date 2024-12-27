@@ -5,8 +5,8 @@ import logging
 class LogLevel:
     @staticmethod
     def get_level() -> int:
-        ddconfig = ConfigService.get_datadog_config()
-        datadog_level = ddconfig.datadog_log_level.lower()
+        ddconfig_level = ConfigService.get_value(key="LOG_LEVEL", section="DATADOG")
+        datadog_level = ddconfig_level.lower()
         for level in Levels:
             if datadog_level.lower()==level.name:
                 return level.value
