@@ -9,7 +9,7 @@ import UserMenuDropdown from './user-menu-dropdown.component';
 import { UserMenuDropdownItem } from '.';
 
 interface DropdownUserProps {
-  account: Account | undefined;
+  account: Account;
   userMenuDropdownItems: UserMenuDropdownItem[];
 }
 

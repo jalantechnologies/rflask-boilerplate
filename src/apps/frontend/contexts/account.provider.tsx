@@ -6,7 +6,7 @@ import { Account, ApiResponse, AsyncError } from '../types';
 import useAsync from './async.hook';
 
 type AccountContextType = {
-  accountDetails: Account | undefined;
+  accountDetails: Account;
   accountError: AsyncError | undefined;
   getAccountDetails: () => Promise<Account | undefined>;
   isAccountLoading: boolean;
