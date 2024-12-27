@@ -63,15 +63,15 @@ class ConfigService:
     @staticmethod
     def get_value(*, key: str, section: str = 'DEFAULT') -> str:
         try:
-            value = ConfigService._config.get(section, key, fallback=None)
-            return value if value else None
+            value = ConfigService._config.get(section, key)
+            return value 
         except (configparser.NoOptionError, configparser.NoSectionError) as exc:
             raise MissingKeyError(missing_key=key, error_code=ErrorCode.MISSING_KEY) from exc
 
     @staticmethod
     def has_value(*, key: str, section: str = 'DEFAULT') -> bool:
         if ConfigService._config.has_option(section, key):
-            value = ConfigService._config.get(section, key, fallback=None)
+            value = ConfigService._config.get(section, key)
             return bool(value)
         return False
     
