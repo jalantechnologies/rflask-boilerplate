@@ -23,6 +23,10 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
 RUN apt-get install nodejs -y
 RUN node --version && npm --version
 
+COPY Pipfile Pipfile.lock /app/
+RUN cd /app/ && pipenv install --dev
+
+
 COPY package.json /.project/package.json
 COPY package-lock.json /.project/package-lock.json
 RUN cd /.project && npm ci

@@ -31,6 +31,7 @@ types-flask-cors = "==4.0.0.1"
 types-pyyaml = "==6.0.12.12"
 types-requests = "==2.31.0.10"
 vulture = "==2.10"
+gunicorn = "==21.2.0"
 
 [requires]
 python_version = "3.12"
