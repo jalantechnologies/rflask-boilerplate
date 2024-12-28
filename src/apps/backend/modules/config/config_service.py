@@ -17,6 +17,7 @@ class ConfigService:
     @staticmethod
     def load_config()->None:
         config = configparser.ConfigParser()
+        config.optionxform = str # type: ignore
         default_config = ConfigService.config_path / "default.ini"
         app_env = os.environ.get('APP_ENV', "development")
         app_env_config = ConfigService.config_path / f"{app_env}.ini"
@@ -46,20 +47,23 @@ class ConfigService:
     @staticmethod
     def __load_environment_variables(config: configparser.ConfigParser)->None:
         env_config = configparser.ConfigParser()
+        env_config.optionxform = str # type: ignore
         custom_env_file = ConfigService.config_path / "custom-environment-variables.ini"
 
         if custom_env_file.exists():
             env_config.read(custom_env_file)
-            config.read(custom_env_file)
 
         for section in env_config.sections():
             if section not in config:
                 config.add_section(section)
             for key, value in env_config[section].items():
-                env_var = os.environ.get(value)
-                if env_var is not None:
-                    config[section][key] = env_var
-
+                print("key",key)
+                env_var_value = os.environ.get(key)
+                if env_var_value is not None:
+                    config[section][key] = env_var_value
+                elif not config.has_option(section, key):
+                    config[section][key] = ""
+    
     @staticmethod
     def get_value(*, key: str, section: str = 'DEFAULT') -> str:
         try:

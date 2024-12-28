@@ -13,8 +13,8 @@ class PapertrailLogger(BaseLogger):
 
         # Create a console handler and set the level to INFO
         logger_config = PapertrailConfig(
-            host=ConfigService.get_value(key='HOST', section='PAPERTRAIL'),
-            port=int(ConfigService.get_value(key='PORT', section='PAPERTRAIL'))
+            host=ConfigService.get_value(key='PAPERTRAIL_HOST', section='PAPERTRAIL'),
+            port=int(ConfigService.get_value(key='PAPERTRAIL_PORT', section='PAPERTRAIL'))
         )
         papertrail_handler = SysLogHandler(address=(logger_config.host, logger_config.port))
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")

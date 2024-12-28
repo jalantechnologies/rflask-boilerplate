@@ -27,7 +27,7 @@ class ApplicationRepositoryClient:
 
     @staticmethod
     def _create_client() -> MongoClient:
-        connection_uri = ConfigService.get_value(key="URI", section="MONGODB")
+        connection_uri = ConfigService.get_value(key="MONGODB_URI", section="MONGODB")
         Logger.info(message=f"connecting to database - {connection_uri}")
         client = MongoClient(connection_uri, server_api=ServerApi("1"))
         Logger.info(message=f"connected to database - {connection_uri}")
