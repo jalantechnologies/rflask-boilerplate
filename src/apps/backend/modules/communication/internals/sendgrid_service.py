@@ -30,6 +30,6 @@ class SendGridService:
     @staticmethod
     def get_client() -> sendgrid.SendGridAPIClient:
         if not SendGridService.__client:
-            api_key = ConfigService.get_value(key="SENDGRID_API_KEY",section="SENDGRID")
+            api_key = ConfigService.get_string(key="SENDGRID_API_KEY",section="SENDGRID")
             SendGridService.__client = sendgrid.SendGridAPIClient(api_key=api_key)
         return SendGridService.__client
