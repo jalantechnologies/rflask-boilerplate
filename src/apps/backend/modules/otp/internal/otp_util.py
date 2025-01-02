@@ -12,7 +12,7 @@ class OtpUtil:
     def is_default_phone_number(phone_number: str) -> bool:
         default_phone_number = None
         if ConfigService.has_value(key="DEFAULT_PHONE_NUMBER",section="OTP"):
-            default_phone_number = ConfigService.get_value(key="DEFAULT_PHONE_NUMBER",section="OTP")
+            default_phone_number = ConfigService.get_string(key="DEFAULT_PHONE_NUMBER",section="OTP")
             if default_phone_number and phone_number == default_phone_number:
                 return True
         return False
@@ -20,7 +20,7 @@ class OtpUtil:
     @staticmethod
     def generate_otp(length: int, phone_number: str) -> str:
         if OtpUtil.is_default_phone_number(phone_number):
-            return ConfigService.get_value(key="DEFAULT_OTP",section="OTP")
+            return ConfigService.get_string(key="DEFAULT_OTP",section="OTP")
         return "".join(random.choices(string.digits, k=length))
 
     @staticmethod
