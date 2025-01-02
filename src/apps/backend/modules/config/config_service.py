@@ -82,4 +82,3 @@ class ConfigService:
             value = ConfigService._config.get(section, key)
             return bool(value)
         return False
-    
