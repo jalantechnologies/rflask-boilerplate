@@ -27,13 +27,13 @@ class ConfigService:
 
     @staticmethod
     def __load_environment_variables(config: configparser.ConfigParser)->None:
-        custom_env_file = ConfigService.config_path / "custom-environment-variables.ini"
-        if not custom_env_file.exists():
+        custom_environment_file = ConfigService.config_path / "custom-environment-variables.ini"
+        if not custom_environment_file.exists():
             return
         
         env_config = configparser.ConfigParser()
         env_config.optionxform = str # type: ignore
-        env_config.read(custom_env_file)
+        env_config.read(custom_environment_file)
 
         for section in env_config.sections():
             if section not in config:
@@ -55,14 +55,24 @@ class ConfigService:
 
     @staticmethod
     def get_int(*, key: str, section: str = 'DEFAULT') -> int:
-        value = ConfigService.get_string(key=key, section=section)
-        return int(value) if value!='' else ''
+        value = 0
+        try:
+            value = ConfigService._config.getint(section,key)
+        except ValueError as e:
+            print(f"Error setting JWT expiry: {e}")
+        
+        return value
+        
         
 
     @staticmethod
     def get_boolean(*, key: str, section: str = 'DEFAULT') -> bool:
-        value = ConfigService.get_string(key=key, section=section)
-        return ConfigService._config.getboolean(section, key) if value!='' else False
+        value = False
+        try:
+            value = ConfigService._config.getboolean(section,key)
+        except ValueError as e:
+            print(f"Error setting JWT expiry: {e}")
+        return value
     
     @staticmethod
     def get_int(*, key: str, section: str = 'DEFAULT') -> int:
