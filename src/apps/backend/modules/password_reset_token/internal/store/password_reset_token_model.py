@@ -3,8 +3,7 @@ from typing import Annotated, Optional
 
 from bson import ObjectId
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field
-
-from modules.object_id.utils import object_id_validate
+from modules.common.validation_utils import object_id_validate
 
 PyObjectId = Annotated[ObjectId | str, AfterValidator(object_id_validate)]
 
