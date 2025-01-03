@@ -19,5 +19,5 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
-  }
+  },"exclude": ["postcss.config.cjs","./src/apps/frontend/webpack.prod.js","./src/apps/frontend/webpack.dev.js","./src/apps/frontend/webpack.base.js","tailwind.config.js"]
 }
