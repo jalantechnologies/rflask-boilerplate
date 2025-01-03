@@ -1,12 +1,10 @@
 import React from 'react';
 
-import { Nullable } from '../../types/common-types';
-
 import { UserMenuDropdownItem } from '.';
 
 type UserMenuDropdownProps = {
   dropdownOpen: boolean;
-  dropdownRef: React.RefObject<Nullable<HTMLDivElement>>;
+  dropdownRef: React.RefObject<HTMLDivElement>;
   setDropdownOpen: (dropdownOpen: boolean) => void;
   userMenuDropdownItems: UserMenuDropdownItem[];
 };
