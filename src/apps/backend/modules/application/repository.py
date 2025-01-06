@@ -14,7 +14,7 @@ class ApplicationRepositoryClient:
 
     @classmethod
     def get_client(cls) -> MongoClient:
-        connection_caching = ConfigService.get_string(key="MONGODB_CONNECTION_CACHING", section="SERVER_CONFIG")=="True"
+        connection_caching = ConfigService.get_value(key="MONGODB_CONNECTION_CACHING", section="SERVER_CONFIG",expected_type=str)=="True"
 
         if connection_caching:
             if cls._client is None:
@@ -27,7 +27,7 @@ class ApplicationRepositoryClient:
 
     @staticmethod
     def _create_client() -> MongoClient:
-        connection_uri = ConfigService.get_string(key="MONGODB_URI", section="MONGODB")
+        connection_uri = ConfigService.get_value(key="MONGODB_URI", section="MONGODB",expected_type=str)
         Logger.info(message=f"connecting to database - {connection_uri}")
         client = MongoClient(connection_uri, server_api=ServerApi("1"))
         Logger.info(message=f"connected to database - {connection_uri}")
