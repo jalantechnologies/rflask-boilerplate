@@ -15,7 +15,7 @@ class ConfigService:
     def load_config() -> None:
         app_env_config = ConfigService.initialize_config()
         os_env_config = ConfigService.load_environment_variables()
-        ConfigService._config = ConfigService.merge_Configs(app_env_config,os_env_config)
+        ConfigService._config = ConfigService.merge_configs(app_env_config,os_env_config)
         ConfigService.log_config()
     
     @staticmethod
@@ -47,7 +47,7 @@ class ConfigService:
         return env_config
 
     @staticmethod
-    def merge_Configs(app_env_config:ConfigParser,os_env_config:ConfigParser)->ConfigParser:
+    def merge_configs(app_env_config:ConfigParser,os_env_config:ConfigParser)->ConfigParser:
         merge_config = app_env_config
         for section in os_env_config.sections():
             if section not in app_env_config.sections():
