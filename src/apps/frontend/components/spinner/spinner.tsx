@@ -1,8 +1,10 @@
 import React from 'react';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 const Spinner: React.FC = () => (
-  <div
-    className="
+  <ErrorBoundary>
+    <div
+      className="
       inline-block
       size-6
       animate-spin
@@ -14,7 +16,8 @@ const Spinner: React.FC = () => (
       align-[-0.125em]
       motion-reduce:animate-[spin_1.5s_linear_infinite]
     "
-  ></div>
+    ></div>
+  </ErrorBoundary>
 );
 
 export default Spinner;

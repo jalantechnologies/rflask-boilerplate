@@ -5,6 +5,7 @@ import { ButtonKind, ButtonType } from '../../types/button';
 import Spinner from '../spinner/spinner';
 
 import styles from './button.styles';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 interface ButtonProps {
   disabled?: boolean;
@@ -26,19 +27,21 @@ const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
     isLoading && kind === ButtonKind.PRIMARY ? <Spinner /> : children;
 
   return (
-    <button
-      className={clsx([
-        styles.kind[kind].base,
-        disabled || isLoading
-          ? styles.kind[kind].disableState
-          : styles.kind[kind].enableState,
-      ])}
-      disabled={disabled || isLoading}
-      type={type}
-      onClick={onClick}
-    >
-      {content}
-    </button>
+    <ErrorBoundary>
+      <button
+        className={clsx([
+          styles.kind[kind].base,
+          disabled || isLoading
+            ? styles.kind[kind].disableState
+            : styles.kind[kind].enableState,
+        ])}
+        disabled={disabled || isLoading}
+        type={type}
+        onClick={onClick}
+      >
+        {content}
+      </button>
+    </ErrorBoundary>
   );
 };
 

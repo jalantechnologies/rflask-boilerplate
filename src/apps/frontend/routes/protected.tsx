@@ -7,6 +7,7 @@ import { useAccountContext, useAuthContext } from '../contexts';
 import { Dashboard, NotFound } from '../pages';
 import AppLayout from '../pages/app-layout/app-layout';
 import { AsyncError } from '../types';
+import ErrorBoundary from '../error/ErrorBoundary';
 
 const App = () => {
   const { getAccountDetails } = useAccountContext();
@@ -22,9 +23,13 @@ const App = () => {
   }, [getAccountDetails, logout, navigate]);
 
   return (
-    <AppLayout>
-      <Outlet />
-    </AppLayout>
+    <ErrorBoundary>
+      <AppLayout>
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
+      </AppLayout>
+    </ErrorBoundary>
   );
 };
 

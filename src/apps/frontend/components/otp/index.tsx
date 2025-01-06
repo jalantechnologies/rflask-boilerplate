@@ -6,6 +6,7 @@ import FlexItem from '../flex/flex-item.component';
 import Flex from '../flex/flex.component';
 
 import OTPInput from './otp-input';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 interface OTPProps {
   error: string;
@@ -53,25 +54,31 @@ const OTP: React.FC<OTPProps> = ({ error, isLoading, onBlur, onChange }) => {
   };
 
   return (
-    <Flex gap={6}>
-      {otp.map((_, index) => (
-        <FlexItem flex="flex1" key={index}>
-          <OTPInput
-            disabled={isLoading}
-            index={index}
-            name={'otp'}
-            error={error}
-            onChange={(e) => handleOTPChange(e.target.value, index)}
-            onBlur={onBlur}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-              handleOnKeyDown(e, index + 1)
-            }
-            handleInputRef={handleInputRef}
-            value={otp[index]}
-          />
-        </FlexItem>
-      ))}
-    </Flex>
+    <ErrorBoundary>
+      <Flex gap={6}>
+        {otp.map((_, index) => (
+          <ErrorBoundary>
+            <FlexItem flex="flex1" key={index}>
+              <ErrorBoundary>
+                <OTPInput
+                  disabled={isLoading}
+                  index={index}
+                  name={'otp'}
+                  error={error}
+                  onChange={(e) => handleOTPChange(e.target.value, index)}
+                  onBlur={onBlur}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                    handleOnKeyDown(e, index + 1)
+                  }
+                  handleInputRef={handleInputRef}
+                  value={otp[index]}
+                />
+              </ErrorBoundary>
+            </FlexItem>
+          </ErrorBoundary>
+        ))}
+      </Flex>
+    </ErrorBoundary>
   );
 };
 

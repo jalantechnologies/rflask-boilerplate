@@ -1,7 +1,10 @@
 import React, { PropsWithChildren } from 'react';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 const ParagraphMedium: React.FC<PropsWithChildren> = ({ children }) => (
-  <p className="text-xl font-medium">{children}</p>
+  <ErrorBoundary>
+    <p className="text-xl font-medium">{children}</p>
+  </ErrorBoundary>
 );
 
 export default ParagraphMedium;

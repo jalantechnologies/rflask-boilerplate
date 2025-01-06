@@ -4,6 +4,7 @@ import { AuthService } from '../services';
 import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from '../types';
 
 import useAsync from './async.hook';
+import ErrorBoundary from '../error/ErrorBoundary';
 
 type AuthContextType = {
   isLoginLoading: boolean;
@@ -104,27 +105,29 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   } = useAsync(verifyOTPFn);
 
   return (
-    <AuthContext.Provider
-      value={{
-        isLoginLoading,
-        isSendOTPLoading,
-        isSignupLoading,
-        isUserAuthenticated,
-        isVerifyOTPLoading,
-        login,
-        loginError,
-        loginResult,
-        logout: logoutFn,
-        sendOTP,
-        sendOTPError,
-        signup,
-        signupError,
-        verifyOTP,
-        verifyOTPError,
-        verifyOTPResult,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <ErrorBoundary>
+      <AuthContext.Provider
+        value={{
+          isLoginLoading,
+          isSendOTPLoading,
+          isSignupLoading,
+          isUserAuthenticated,
+          isVerifyOTPLoading,
+          login,
+          loginError,
+          loginResult,
+          logout: logoutFn,
+          sendOTP,
+          sendOTPError,
+          signup,
+          signupError,
+          verifyOTP,
+          verifyOTPError,
+          verifyOTPResult,
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
+    </ErrorBoundary>
   );
 };

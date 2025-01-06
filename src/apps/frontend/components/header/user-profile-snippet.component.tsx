@@ -7,6 +7,7 @@ import { Account } from '../../types';
 import UserMenuDropdown from './user-menu-dropdown.component';
 
 import { UserMenuDropdownItem } from '.';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 interface DropdownUserProps {
   account: Account;
@@ -50,38 +51,54 @@ const UserProfileSnippet: React.FC<DropdownUserProps> = ({
   }, [dropdownOpen]);
 
   return (
-    <div className="relative">
-      <Link
-        ref={trigger}
-        onClick={() => setDropdownOpen(!dropdownOpen)}
-        className="flex items-center gap-4"
-        to="#"
-      >
-        <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-black dark:text-white">
-            {account.displayName()}
-          </span>
-          <span className="block text-xs">User</span>
-        </span>
+    <ErrorBoundary>
+      <div className="relative">
+        <ErrorBoundary>
+          <Link
+            ref={trigger}
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="flex items-center gap-4"
+            to="#"
+          >
+            <ErrorBoundary>
+              <span className="hidden text-right lg:block">
+                <ErrorBoundary>
+                  <span className="block text-sm font-medium text-black dark:text-white">
+                    {account.displayName()}
+                  </span>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <span className="block text-xs">User</span>
+                </ErrorBoundary>
+              </span>
+            </ErrorBoundary>
 
-        <span className="size-12 rounded-full">
-          <img src="/assets/img/user.png" alt="User" />
-        </span>
+            <ErrorBoundary>
+              <span className="size-12 rounded-full">
+                <img src="/assets/img/user.png" alt="User" />
+              </span>
+            </ErrorBoundary>
 
-        <img
-          className="hidden fill-current opacity-50 sm:block"
-          src="/assets/img/icon/drop-down-arrow.svg"
-          alt="dropdown icon"
-        />
-      </Link>
+            <ErrorBoundary>
+              <img
+                className="hidden fill-current opacity-50 sm:block"
+                src="/assets/img/icon/drop-down-arrow.svg"
+                alt="dropdown icon"
+              />
+            </ErrorBoundary>
+          </Link>
+        </ErrorBoundary>
 
-      <UserMenuDropdown
-        dropdownOpen={dropdownOpen}
-        dropdownRef={dropdown}
-        setDropdownOpen={setDropdownOpen}
-        userMenuDropdownItems={userMenuDropdownItems}
-      />
-    </div>
+        <ErrorBoundary>
+          <UserMenuDropdown
+            dropdownOpen={dropdownOpen}
+            dropdownRef={dropdown}
+            setDropdownOpen={setDropdownOpen}
+            userMenuDropdownItems={userMenuDropdownItems}
+          />
+        </ErrorBoundary>
+      </div>
+    </ErrorBoundary>
   );
 };
 

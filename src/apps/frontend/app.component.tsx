@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/auth.provider';
 import { Config } from './helpers';
 import { AppRoutes } from './routes';
 import InspectLet from './vendor/inspectlet';
+import ErrorBoundary from './error/ErrorBoundary';
 
 export default function App(): React.ReactElement {
   useEffect(() => {
@@ -18,13 +19,23 @@ export default function App(): React.ReactElement {
   }, []);
 
   return (
-    <AuthProvider>
-      <AccountProvider>
-        <Toaster />
-        <Router>
-          <AppRoutes />
-        </Router>
-      </AccountProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <ErrorBoundary>
+          <AccountProvider>
+            <ErrorBoundary>
+              <Toaster />
+            </ErrorBoundary>
+            <ErrorBoundary>
+              <Router>
+                <ErrorBoundary>
+                  <AppRoutes />
+                </ErrorBoundary>
+              </Router>
+            </ErrorBoundary>
+          </AccountProvider>
+        </ErrorBoundary>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }

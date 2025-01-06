@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { ButtonKind } from '../../types/button';
 import Button from '../button';
-
+import ErrorBoundary from '../../error/ErrorBoundary';
 import Input from '.';
 
 interface PasswordInputProps
@@ -30,32 +30,43 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   };
 
   return (
-    <Input
-      data-testid="password"
-      endEnhancer={
-        <Button onClick={togglePasswordVisibility} kind={ButtonKind.SECONDARY}>
-          {isPasswordVisible ? (
-            <img
-              className="size-6.5 opacity-65"
-              src="/assets/img/icon/eye-closed.svg"
-              alt="hide password icon"
-            />
-          ) : (
-            <img
-              className="size-6.5 opacity-65"
-              src="/assets/img/icon/eye-open.svg"
-              alt="show password icon"
-            />
-          )}
-        </Button>
-      }
-      {...props}
-      error={error}
-      testId={testId}
-      name={name}
-      placeholder={placeholder}
-      type={isPasswordVisible ? 'text' : 'password'}
-    />
+    <ErrorBoundary>
+      <Input
+        data-testid="password"
+        endEnhancer={
+          <ErrorBoundary>
+            <Button
+              onClick={togglePasswordVisibility}
+              kind={ButtonKind.SECONDARY}
+            >
+              {isPasswordVisible ? (
+                <ErrorBoundary>
+                  <img
+                    className="size-6.5 opacity-65"
+                    src="/assets/img/icon/eye-closed.svg"
+                    alt="hide password icon"
+                  />
+                </ErrorBoundary>
+              ) : (
+                <ErrorBoundary>
+                  <img
+                    className="size-6.5 opacity-65"
+                    src="/assets/img/icon/eye-open.svg"
+                    alt="show password icon"
+                  />
+                </ErrorBoundary>
+              )}
+            </Button>
+          </ErrorBoundary>
+        }
+        {...props}
+        error={error}
+        testId={testId}
+        name={name}
+        placeholder={placeholder}
+        type={isPasswordVisible ? 'text' : 'password'}
+      />
+    </ErrorBoundary>
   );
 };
 

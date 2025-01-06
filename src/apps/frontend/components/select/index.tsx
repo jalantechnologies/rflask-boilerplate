@@ -1,4 +1,5 @@
 import React from 'react';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 type OPTION = {
   label: string;
@@ -20,8 +21,9 @@ const Select: React.FC<SelectProps> = ({
   options,
   value,
 }) => (
-  <select
-    className="
+  <ErrorBoundary>
+    <select
+      className="
       items-center
       justify-center
       rounded-lg
@@ -35,17 +37,20 @@ const Select: React.FC<SelectProps> = ({
       focus:border-primary
       focus-visible:shadow-none
     "
-    disabled={isLoading}
-    multiple={multiple}
-    onChange={handleChange}
-    value={value}
-  >
-    {options.map((option, index) => (
-      <option key={index} value={option.value}>
-        {option.label}
-      </option>
-    ))}
-  </select>
+      disabled={isLoading}
+      multiple={multiple}
+      onChange={handleChange}
+      value={value}
+    >
+      {options.map((option, index) => (
+        <ErrorBoundary>
+          <option key={index} value={option.value}>
+            {option.label}
+          </option>
+        </ErrorBoundary>
+      ))}
+    </select>
+  </ErrorBoundary>
 );
 
 export default Select;

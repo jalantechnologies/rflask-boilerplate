@@ -1,6 +1,7 @@
 import React, { FocusEventHandler } from 'react';
 
 import Input from '../input';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 type OTPInputProps = {
   disabled: boolean;
@@ -25,19 +26,21 @@ const OTPInput: React.FC<OTPInputProps> = ({
   onKeyDown,
   value,
 }) => (
-  <Input
-    disabled={disabled}
-    error={error}
-    handleInputRef={handleInputRef}
-    index={index}
-    name={name}
-    onBlur={onBlur}
-    onChange={onChange}
-    onKeyDown={onKeyDown}
-    textAlign="center"
-    type={'number'}
-    value={value}
-  />
+  <ErrorBoundary>
+    <Input
+      disabled={disabled}
+      error={error}
+      handleInputRef={handleInputRef}
+      index={index}
+      name={name}
+      onBlur={onBlur}
+      onChange={onChange}
+      onKeyDown={onKeyDown}
+      textAlign="center"
+      type={'number'}
+      value={value}
+    />
+  </ErrorBoundary>
 );
 
 export default OTPInput;

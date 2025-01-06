@@ -4,6 +4,7 @@ import { AccountService } from '../services';
 import { Account, ApiResponse, AsyncError } from '../types';
 
 import useAsync from './async.hook';
+import ErrorBoundary from '../error/ErrorBoundary';
 
 type AccountContextType = {
   accountDetails: Account;
@@ -31,15 +32,17 @@ export const AccountProvider: React.FC<PropsWithChildren> = ({ children }) => {
   } = useAsync(getAccountDetailsFn);
 
   return (
-    <AccountContext.Provider
-      value={{
-        accountDetails: new Account({ ...accountDetails }), // creating an instance to access its methods
-        accountError,
-        getAccountDetails,
-        isAccountLoading,
-      }}
-    >
-      {children}
-    </AccountContext.Provider>
+    <ErrorBoundary>
+      <AccountContext.Provider
+        value={{
+          accountDetails: new Account({ ...accountDetails }), // creating an instance to access its methods
+          accountError,
+          getAccountDetails,
+          isAccountLoading,
+        }}
+      >
+        {children}
+      </AccountContext.Provider>
+    </ErrorBoundary>
   );
 };

@@ -5,6 +5,7 @@ import { useAuthContext } from '../contexts';
 
 import { protectedRoutes } from './protected';
 import { publicRoutes } from './public';
+import ErrorBoundary from '../error/ErrorBoundary';
 
 export const AppRoutes = () => {
   const { isUserAuthenticated } = useAuthContext();
@@ -13,5 +14,5 @@ export const AppRoutes = () => {
 
   const element = useRoutes([...routes, ...publicRoutes]);
 
-  return <>{element}</>;
+  return <ErrorBoundary>{element}</ErrorBoundary>;
 };

@@ -9,6 +9,7 @@ import AuthenticationFormLayout from '../authentication/authentication-form-layo
 import AuthenticationPageLayout from '../authentication/authentication-page-layout';
 
 import LoginForm from './login-form';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -21,14 +22,24 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <AuthenticationPageLayout>
-      <AuthenticationFormLayout>
-        <VerticalStackLayout gap={8}>
-          <H2>Log In</H2>
-          <LoginForm onSuccess={onSuccess} onError={onError} />
-        </VerticalStackLayout>
-      </AuthenticationFormLayout>
-    </AuthenticationPageLayout>
+    <ErrorBoundary>
+      <AuthenticationPageLayout>
+        <ErrorBoundary>
+          <AuthenticationFormLayout>
+            <ErrorBoundary>
+              <VerticalStackLayout gap={8}>
+                <ErrorBoundary>
+                  <H2>Log In</H2>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <LoginForm onSuccess={onSuccess} onError={onError} />
+                </ErrorBoundary>
+              </VerticalStackLayout>
+            </ErrorBoundary>
+          </AuthenticationFormLayout>
+        </ErrorBoundary>
+      </AuthenticationPageLayout>
+    </ErrorBoundary>
   );
 };
 

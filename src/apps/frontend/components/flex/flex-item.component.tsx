@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { PropsWithChildren } from 'react';
 
 import styles from './flex-item.styles';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 interface FlexItemProps {
   alignSelf?:
@@ -46,16 +47,18 @@ const FlexItem: React.FC<PropsWithChildren<FlexItemProps>> = ({
   justifySelf,
   order,
 }) => (
-  <div
-    className={clsx([
-      styles.alignSelf[alignSelf],
-      styles.flex[flex],
-      styles.justifySelf[justifySelf],
-      styles.order[order],
-    ])}
-  >
-    {children}
-  </div>
+  <ErrorBoundary>
+    <div
+      className={clsx([
+        styles.alignSelf[alignSelf],
+        styles.flex[flex],
+        styles.justifySelf[justifySelf],
+        styles.order[order],
+      ])}
+    >
+      {children}
+    </div>
+  </ErrorBoundary>
 );
 
 export default FlexItem;

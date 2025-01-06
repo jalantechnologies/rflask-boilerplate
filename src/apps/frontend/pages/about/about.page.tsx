@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorBoundary } from '../../error/ErrorBoundary';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 export default function About(): React.ReactElement {
   return (

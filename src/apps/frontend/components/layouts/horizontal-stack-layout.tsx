@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import ErrorBoundary from '../../error/ErrorBoundary';
 
 interface HorizontalStackLayoutProps {
   gap?: number;
@@ -7,7 +8,9 @@ interface HorizontalStackLayoutProps {
 const HorizontalStackLayout: React.FC<
   PropsWithChildren<HorizontalStackLayoutProps>
 > = ({ children, gap = 0 }) => (
-  <div className={`gap-${gap} flex items-center`}>{children}</div>
+  <ErrorBoundary>
+    <div className={`gap-${gap} flex items-center`}>{children}</div>
+  </ErrorBoundary>
 );
 
 export default HorizontalStackLayout;
