@@ -7,7 +7,7 @@ import routes from '../../../constants/routes';
 import { AsyncError } from '../../../types';
 import AuthenticationFormLayout from '../authentication-form-layout';
 import AuthenticationPageLayout from '../authentication-page-layout';
-
+import ErrorBoundary from '../../../error/ErrorBoundary';
 import SignupForm from './signup-form';
 
 export const Signup: React.FC = () => {
@@ -24,14 +24,24 @@ export const Signup: React.FC = () => {
   };
 
   return (
-    <AuthenticationPageLayout>
-      <AuthenticationFormLayout>
-        <VerticalStackLayout gap={8}>
-          <H2>Sign Up</H2>
-          <SignupForm onSuccess={onSuccess} onError={onError} />
-        </VerticalStackLayout>
-      </AuthenticationFormLayout>
-    </AuthenticationPageLayout>
+    <ErrorBoundary>
+      <AuthenticationPageLayout>
+        <ErrorBoundary>
+          <AuthenticationFormLayout>
+            <ErrorBoundary>
+              <VerticalStackLayout gap={8}>
+                <ErrorBoundary>
+                  <H2>Sign Up</H2>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <SignupForm onSuccess={onSuccess} onError={onError} />
+                </ErrorBoundary>
+              </VerticalStackLayout>
+            </ErrorBoundary>
+          </AuthenticationFormLayout>
+        </ErrorBoundary>
+      </AuthenticationPageLayout>
+    </ErrorBoundary>
   );
 };
 

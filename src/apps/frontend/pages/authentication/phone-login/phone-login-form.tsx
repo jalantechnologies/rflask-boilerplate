@@ -15,6 +15,7 @@ import { AsyncError } from '../../../types';
 import { ButtonKind, ButtonType } from '../../../types/button';
 
 import usePhoneLoginForm from './phone-login-form.hook';
+import { ErrorBoundary } from '../../../error/ErrorBoundary';
 
 interface PhoneLoginFormProps {
   onSendOTPSuccess: () => void;
@@ -57,58 +58,88 @@ const PhoneLoginForm: React.FC<PhoneLoginFormProps> = ({
   };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <VerticalStackLayout gap={5}>
-        <Flex gap={4}>
-          <FormControl
-            label={'Phone'}
-            error={formik.touched.countryCode && formik.errors.countryCode}
-          >
-            <Select
-              handleChange={handleChangeSelect}
-              isLoading={isSendOTPLoading}
-              options={COUNTRY_SELECT_OPTIONS}
-              value={`${formik.values.countryCode}, ${formik.values.country}`}
-            />
-          </FormControl>
-          <div className="w-full">
-            <FormControl
-              label={''}
-              error={formik.touched.phoneNumber && formik.errors.phoneNumber}
-            >
-              <Input
-                data-testid="phoneNumber"
-                disabled={isSendOTPLoading}
-                error={formik.touched.phoneNumber && formik.errors.phoneNumber}
-                name="phoneNumber"
-                onChange={handleChangePhone}
-                onBlur={formik.handleBlur}
-                placeholder="Enter your phone number"
-                type="number"
-                value={formik.values.phoneNumber}
-              />
-            </FormControl>
-          </div>
-        </Flex>
+    <ErrorBoundary>
+      <form onSubmit={formik.handleSubmit}>
+        <ErrorBoundary>
+          <VerticalStackLayout gap={5}>
+            <ErrorBoundary>
+              <Flex gap={4}>
+                <ErrorBoundary>
+                  <FormControl
+                    label={'Phone'}
+                    error={
+                      formik.touched.countryCode && formik.errors.countryCode
+                    }
+                  >
+                    <ErrorBoundary>
+                      <Select
+                        handleChange={handleChangeSelect}
+                        isLoading={isSendOTPLoading}
+                        options={COUNTRY_SELECT_OPTIONS}
+                        value={`${formik.values.countryCode}, ${formik.values.country}`}
+                      />
+                    </ErrorBoundary>
+                  </FormControl>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <div className="w-full">
+                    <ErrorBoundary>
+                      <FormControl
+                        label={''}
+                        error={
+                          formik.touched.phoneNumber &&
+                          formik.errors.phoneNumber
+                        }
+                      >
+                        <ErrorBoundary>
+                          <Input
+                            data-testid="phoneNumber"
+                            disabled={isSendOTPLoading}
+                            error={
+                              formik.touched.phoneNumber &&
+                              formik.errors.phoneNumber
+                            }
+                            name="phoneNumber"
+                            onChange={handleChangePhone}
+                            onBlur={formik.handleBlur}
+                            placeholder="Enter your phone number"
+                            type="number"
+                            value={formik.values.phoneNumber}
+                          />
+                        </ErrorBoundary>
+                      </FormControl>
+                    </ErrorBoundary>
+                  </div>
+                </ErrorBoundary>
+              </Flex>
+            </ErrorBoundary>
 
-        <Flex justifyContent="end">
-          <Link
-            to={routes.LOGIN}
-            className="text-sm text-primary hover:underline"
-          >
-            Login with email
-          </Link>
-        </Flex>
+            <ErrorBoundary>
+              <Flex justifyContent="end">
+                <ErrorBoundary>
+                  <Link
+                    to={routes.LOGIN}
+                    className="text-sm text-primary hover:underline"
+                  >
+                    Login with email
+                  </Link>
+                </ErrorBoundary>
+              </Flex>
+            </ErrorBoundary>
 
-        <Button
-          type={ButtonType.SUBMIT}
-          isLoading={isSendOTPLoading}
-          kind={ButtonKind.PRIMARY}
-        >
-          Get OTP
-        </Button>
-      </VerticalStackLayout>
-    </form>
+            <ErrorBoundary>
+              <Button
+                type={ButtonType.SUBMIT}
+                isLoading={isSendOTPLoading}
+                kind={ButtonKind.PRIMARY}
+              >
+                Get OTP
+              </Button>
+            </ErrorBoundary>
+          </VerticalStackLayout>
+        </ErrorBoundary>
+      </form>
+    </ErrorBoundary>
   );
 };
 

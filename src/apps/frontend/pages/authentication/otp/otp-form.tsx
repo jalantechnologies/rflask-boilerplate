@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ErrorBoundary } from '../../../error/ErrorBoundary';
 
 import {
   Button,
@@ -59,43 +60,55 @@ const OTPForm: React.FC<OTPFormProps> = ({
   };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <VerticalStackLayout gap={5}>
-        <FormControl
-          label={`Enter the 4 digit code sent to the mobile number ${countryCode} ${phoneNumber}`}
-          error={formik.touched.otp && (formik.errors.otp as string)}
-        >
-          <OTP
-            error={formik.touched.otp && (formik.errors.otp as string)}
-            isLoading={isVerifyOTPLoading}
-            onError={onError}
-            onBlur={formik.handleBlur}
-            onChange={handleChange}
-          />
-        </FormControl>
+    <ErrorBoundary>
+      <form onSubmit={formik.handleSubmit}>
+        <ErrorBoundary>
+          <VerticalStackLayout gap={5}>
+            <ErrorBoundary>
+              <FormControl
+                label={`Enter the 4 digit code sent to the mobile number ${countryCode} ${phoneNumber}`}
+                error={formik.touched.otp && (formik.errors.otp as string)}
+              >
+                <ErrorBoundary>
+                  <OTP
+                    error={formik.touched.otp && (formik.errors.otp as string)}
+                    isLoading={isVerifyOTPLoading}
+                    onError={onError}
+                    onBlur={formik.handleBlur}
+                    onChange={handleChange}
+                  />
+                </ErrorBoundary>
+              </FormControl>
+            </ErrorBoundary>
 
-        <Flex gap={2}>
-          <p className="text-lg text-black">Did not receive a code?</p>
-          <Button
-            disabled={!isResendEnabled}
-            kind={ButtonKind.TERTIARY}
-            onClick={handleResendOTP}
-          >
-            {isResendEnabled
-              ? 'Resend'
-              : `Resend OTP in 00: ${timerRemainingSeconds}`}
-          </Button>
-        </Flex>
+            <ErrorBoundary>
+              <Flex gap={2}>
+                <p className="text-lg text-black">Did not receive a code?</p>
+                <ErrorBoundary>
+                  <Button
+                    disabled={!isResendEnabled}
+                    kind={ButtonKind.TERTIARY}
+                    onClick={handleResendOTP}
+                  >
+                    {isResendEnabled
+                      ? 'Resend'
+                      : `Resend OTP in 00: ${timerRemainingSeconds}`}
+                  </Button>
+                </ErrorBoundary>
+              </Flex>
+            </ErrorBoundary>
 
-        <Button
-          type={ButtonType.SUBMIT}
-          isLoading={isVerifyOTPLoading}
-          kind={ButtonKind.PRIMARY}
-        >
-          Verify
-        </Button>
-      </VerticalStackLayout>
-    </form>
+            <Button
+              type={ButtonType.SUBMIT}
+              isLoading={isVerifyOTPLoading}
+              kind={ButtonKind.PRIMARY}
+            >
+              Verify
+            </Button>
+          </VerticalStackLayout>
+        </ErrorBoundary>
+      </form>
+    </ErrorBoundary>
   );
 };
 

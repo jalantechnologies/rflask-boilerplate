@@ -1,9 +1,12 @@
 import React from 'react';
+import { ErrorBoundary } from '../../error/ErrorBoundary';
 
 export default function About(): React.ReactElement {
   return (
-    <div>
-      <img id="companyLogo" src="/assets/img/logo.jpg" />
-    </div>
+    <ErrorBoundary>
+      <div>
+        <img id="companyLogo" src="/assets/img/logo.jpg" />
+      </div>
+    </ErrorBoundary>
   );
 }

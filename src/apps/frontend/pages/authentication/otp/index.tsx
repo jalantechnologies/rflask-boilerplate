@@ -10,6 +10,7 @@ import { ButtonKind } from '../../../types/button';
 import useTimer from '../../../utils/use-timer.hook';
 import AuthenticationFormLayout from '../authentication-form-layout';
 import AuthenticationPageLayout from '../authentication-page-layout';
+import { ErrorBoundary } from '../../../error/ErrorBoundary';
 
 import OTPForm from './otp-form';
 
@@ -40,23 +41,38 @@ export const OTPPage: React.FC = () => {
   };
 
   return (
-    <AuthenticationPageLayout>
-      <AuthenticationFormLayout>
-        <VerticalStackLayout gap={8}>
-          <Button kind={ButtonKind.SECONDARY} onClick={handleBackButtonClick}>
-            Back
-          </Button>
-          <H2>Verify Your Account</H2>
-          <OTPForm
-            isResendEnabled={isResendEnabled}
-            onError={onError}
-            onResendOTPSuccess={onResendOTPSuccess}
-            onVerifyOTPSuccess={onVerifyOTPSuccess}
-            timerRemainingSeconds={remaininingSecondsStr}
-          />
-        </VerticalStackLayout>
-      </AuthenticationFormLayout>
-    </AuthenticationPageLayout>
+    <ErrorBoundary>
+      <AuthenticationPageLayout>
+        <ErrorBoundary>
+          <AuthenticationFormLayout>
+            <ErrorBoundary>
+              <VerticalStackLayout gap={8}>
+                <ErrorBoundary>
+                  <Button
+                    kind={ButtonKind.SECONDARY}
+                    onClick={handleBackButtonClick}
+                  >
+                    Back
+                  </Button>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <H2>Verify Your Account</H2>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <OTPForm
+                    isResendEnabled={isResendEnabled}
+                    onError={onError}
+                    onResendOTPSuccess={onResendOTPSuccess}
+                    onVerifyOTPSuccess={onVerifyOTPSuccess}
+                    timerRemainingSeconds={remaininingSecondsStr}
+                  />
+                </ErrorBoundary>
+              </VerticalStackLayout>
+            </ErrorBoundary>
+          </AuthenticationFormLayout>
+        </ErrorBoundary>
+      </AuthenticationPageLayout>
+    </ErrorBoundary>
   );
 };
 

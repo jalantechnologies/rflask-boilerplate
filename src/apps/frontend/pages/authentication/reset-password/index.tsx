@@ -10,6 +10,7 @@ import AuthenticationFormLayout from '../authentication-form-layout';
 import AuthenticationPageLayout from '../authentication-page-layout';
 
 import ResetPasswordForm from './reset-password-form';
+import { ErrorBoundary } from '../../../error/ErrorBoundary';
 
 export const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
@@ -26,15 +27,29 @@ export const ResetPassword: React.FC = () => {
   };
 
   return (
-    <AuthenticationPageLayout>
-      <AuthenticationFormLayout>
-        <VerticalStackLayout gap={6}>
-          <H2>Reset Password</H2>
-          <ParagraphMedium>Setup your new password here</ParagraphMedium>
-          <ResetPasswordForm onSuccess={onSuccess} onError={onError} />
-        </VerticalStackLayout>
-      </AuthenticationFormLayout>
-    </AuthenticationPageLayout>
+    <ErrorBoundary>
+      <AuthenticationPageLayout>
+        <ErrorBoundary>
+          <AuthenticationFormLayout>
+            <ErrorBoundary>
+              <VerticalStackLayout gap={6}>
+                <ErrorBoundary>
+                  <H2>Reset Password</H2>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <ParagraphMedium>
+                    Setup your new password here
+                  </ParagraphMedium>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <ResetPasswordForm onSuccess={onSuccess} onError={onError} />
+                </ErrorBoundary>
+              </VerticalStackLayout>
+            </ErrorBoundary>
+          </AuthenticationFormLayout>
+        </ErrorBoundary>
+      </AuthenticationPageLayout>
+    </ErrorBoundary>
   );
 };
 

@@ -7,6 +7,7 @@ import AuthenticationFormLayout from '../authentication-form-layout';
 import AuthenticationPageLayout from '../authentication-page-layout';
 
 import PhoneLoginForm from './phone-login-form';
+import { ErrorBoundary } from '../../../error/ErrorBoundary';
 
 export const PhoneLogin: React.FC = () => {
   const onSendOTPSuccess = () => {
@@ -20,17 +21,27 @@ export const PhoneLogin: React.FC = () => {
   };
 
   return (
-    <AuthenticationPageLayout>
-      <AuthenticationFormLayout>
-        <VerticalStackLayout gap={8}>
-          <H2>Log In</H2>
-          <PhoneLoginForm
-            onError={onError}
-            onSendOTPSuccess={onSendOTPSuccess}
-          />
-        </VerticalStackLayout>
-      </AuthenticationFormLayout>
-    </AuthenticationPageLayout>
+    <ErrorBoundary>
+      <AuthenticationPageLayout>
+        <ErrorBoundary>
+          <AuthenticationFormLayout>
+            <ErrorBoundary>
+              <VerticalStackLayout gap={8}>
+                <ErrorBoundary>
+                  <H2>Log In</H2>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <PhoneLoginForm
+                    onError={onError}
+                    onSendOTPSuccess={onSendOTPSuccess}
+                  />
+                </ErrorBoundary>
+              </VerticalStackLayout>
+            </ErrorBoundary>
+          </AuthenticationFormLayout>
+        </ErrorBoundary>
+      </AuthenticationPageLayout>
+    </ErrorBoundary>
   );
 };
 

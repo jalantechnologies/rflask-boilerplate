@@ -5,6 +5,7 @@ import { ResetPasswordService } from '../services';
 import { ApiResponse, AsyncError } from '../types';
 
 import useAsync from './async.hook';
+import ErrorBoundary from '../error/ErrorBoundary';
 
 type ResetPasswordContextType = {
   isResetPasswordLoading: boolean;
@@ -49,17 +50,19 @@ export const ResetPasswordProvider: React.FC<PropsWithChildren> = ({
   } = useAsync(resetPasswordFn);
 
   return (
-    <ResetPasswordContext.Provider
-      value={{
-        isResetPasswordLoading,
-        isSendForgotPasswordEmailLoading,
-        resetPassword,
-        resetPasswordError,
-        sendForgotPasswordEmail,
-        sendForgotPasswordEmailError,
-      }}
-    >
-      {children}
-    </ResetPasswordContext.Provider>
+    <ErrorBoundary>
+      <ResetPasswordContext.Provider
+        value={{
+          isResetPasswordLoading,
+          isSendForgotPasswordEmailLoading,
+          resetPassword,
+          resetPasswordError,
+          sendForgotPasswordEmail,
+          sendForgotPasswordEmailError,
+        }}
+      >
+        {children}
+      </ResetPasswordContext.Provider>
+    </ErrorBoundary>
   );
 };

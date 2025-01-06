@@ -12,6 +12,7 @@ import AuthenticationPageLayout from '../authentication-page-layout';
 
 import ForgotPasswordForm from './forgot-password-form';
 import ForgotPasswordResendEmail from './forgot-password-resend-email';
+import { ErrorBoundary } from '../../../error/ErrorBoundary';
 
 export const ForgotPassword: React.FC = () => {
   const passwordResendDelayInSeconds = 60_000;
@@ -51,30 +52,45 @@ export const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <AuthenticationPageLayout>
-      <AuthenticationFormLayout>
-        <VerticalStackLayout gap={6}>
-          <Button kind={ButtonKind.SECONDARY} onClick={handleBackButtonClick}>
-            Back
-          </Button>
-          <H2>Forgot Password?</H2>
-          {isResendEmailPage ? (
-            <ForgotPasswordResendEmail
-              isResendEnabled={isResendEnabled}
-              onSuccess={onResendEmailSuccess}
-              onError={onError}
-              username={username}
-              timerRemainingSeconds={remaininingSecondsStr}
-            />
-          ) : (
-            <ForgotPasswordForm
-              onSuccess={onSendEmailSuccess}
-              onError={onError}
-            />
-          )}
-        </VerticalStackLayout>
-      </AuthenticationFormLayout>
-    </AuthenticationPageLayout>
+    <ErrorBoundary>
+      <AuthenticationPageLayout>
+        <ErrorBoundary>
+          <AuthenticationFormLayout>
+            <ErrorBoundary>
+              <VerticalStackLayout gap={6}>
+                <ErrorBoundary>
+                  <Button
+                    kind={ButtonKind.SECONDARY}
+                    onClick={handleBackButtonClick}
+                  >
+                    Back
+                  </Button>
+                </ErrorBoundary>
+                <H2>Forgot Password?</H2>
+                {isResendEmailPage ? (
+                  <ErrorBoundary>
+                    <ForgotPasswordResendEmail
+                      isResendEnabled={isResendEnabled}
+                      onSuccess={onResendEmailSuccess}
+                      onError={onError}
+                      username={username}
+                      timerRemainingSeconds={remaininingSecondsStr}
+                    />
+                  </ErrorBoundary>
+                ) : (
+                  <ErrorBoundary>
+                    <ForgotPasswordForm
+                      onSuccess={onSendEmailSuccess}
+                      onError={onError}
+                    />
+                  </ErrorBoundary>
+                )}
+              </VerticalStackLayout>
+            </ErrorBoundary>
+          </AuthenticationFormLayout>
+        </ErrorBoundary>
+      </AuthenticationPageLayout>
+    </ErrorBoundary>
   );
 };
 
