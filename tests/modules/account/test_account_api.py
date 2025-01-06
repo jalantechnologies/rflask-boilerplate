@@ -166,8 +166,8 @@ class TestAccountApi(BaseTestAccount):
 
         # Create an expired token by setting the expiry to a date in the past using same method as in the
         # access token service
-        jwt_signing_key = ConfigService.get_string(key="TOKEN_SIGNING_KEY",section="ACCOUNTS")
-        jwt_expiry = timedelta(days=ConfigService.get_int(key="TOKEN_EXPIRY_DAYS",section="ACCOUNTS") - 1)
+        jwt_signing_key = ConfigService.get_value(key="TOKEN_SIGNING_KEY",section="ACCOUNTS",expected_type=str)
+        jwt_expiry = timedelta(days=ConfigService.get_value(key="TOKEN_EXPIRY_DAYS",section="ACCOUNTS",expected_type=int) - 1)
         payload = {"account_id": account.id, "exp": (datetime.now() - jwt_expiry).timestamp()}
         expired_token = jwt.encode(payload, jwt_signing_key, algorithm="HS256")
 

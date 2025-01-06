@@ -29,7 +29,7 @@ class PasswordResetTokenUtil:
 
     @staticmethod
     def get_token_expires_at() -> datetime:
-        default_token_expire_time_in_seconds = ConfigService.get_int(key="TOKEN_EXPIRES_IN_SECONDS",section="ACCOUNTS")
+        default_token_expire_time_in_seconds = ConfigService.get_value(key="TOKEN_EXPIRES_IN_SECONDS",section="ACCOUNTS",expected_type=int)
         return datetime.now() + timedelta(seconds=default_token_expire_time_in_seconds)
 
     @staticmethod
