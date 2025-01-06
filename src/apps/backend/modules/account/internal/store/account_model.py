@@ -6,9 +6,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from pydantic.functional_validators import AfterValidator
 
 from modules.account.types import PhoneNumber
-from modules.common.validation_utils import object_id_validate
+from modules.common.validation_utils import ValidationUtils
 
-PyObjectId = Annotated[ObjectId | str, AfterValidator(object_id_validate)]
+PyObjectId = Annotated[ObjectId | str, AfterValidator(ValidationUtils.object_id_validate)]
 
 
 class AccountModel(BaseModel):

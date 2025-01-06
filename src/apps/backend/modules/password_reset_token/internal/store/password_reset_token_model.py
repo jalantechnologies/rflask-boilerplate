@@ -3,9 +3,9 @@ from typing import Annotated, Optional
 
 from bson import ObjectId
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field
-from modules.common.validation_utils import object_id_validate
+from modules.common.validation_utils import ValidationUtils
 
-PyObjectId = Annotated[ObjectId | str, AfterValidator(object_id_validate)]
+PyObjectId = Annotated[ObjectId | str, AfterValidator(ValidationUtils.object_id_validate)]
 
 
 class PasswordResetTokenModel(BaseModel):
