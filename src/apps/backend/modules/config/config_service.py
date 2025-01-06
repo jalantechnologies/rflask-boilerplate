@@ -1,9 +1,11 @@
 import configparser
 import os
+from typing import Type,TypeVar,Any
 from modules.error.custom_errors import MissingKeyError
 from modules.common.types import ErrorCode
 from modules.common.config_utils import ConfigUtils
 
+T = TypeVar('T')
 
 class ConfigService:
     _config: configparser.ConfigParser = configparser.ConfigParser()
@@ -52,35 +54,24 @@ class ConfigService:
                     config[section][key] = ""
 
     @staticmethod
-    def get_string(*, key: str, section: str = "DEFAULT") -> str:
+    def get_value(key: str, section: str, expected_type: Type[T]) -> T:
         try:
             value = ConfigService._config.get(section, key)
-            return value
+            if expected_type == int:
+                return int(value) if value != '' else None  # type: ignore
+            elif expected_type == bool:
+                return ConfigService._config.getboolean(section, key)  # type: ignore
+            elif expected_type == float:
+                return float(value) if value != '' else None  # type: ignore
+            elif expected_type == str:
+                return value  # type: ignore
+            else:
+                raise ValueError(f"Unsupported type {expected_type}")
         except (configparser.NoOptionError, configparser.NoSectionError) as exc:
             raise MissingKeyError(missing_key=key, error_code=ErrorCode.MISSING_KEY) from exc
-
-    @staticmethod
-    def get_int(*, key: str, section: str = "DEFAULT") -> int:
-        value = 0
-        try:
-            value = ConfigService._config.getint(section, key)
         except ValueError as e:
-            print(f"Error setting JWT expiry: {e}")
-
-        return value
+            raise ValueError(f"Value for {key} in section {section} cannot be cast to {expected_type}: {e}") from e
 
     @staticmethod
-    def get_boolean(*, key: str, section: str = "DEFAULT") -> bool:
-        value = False
-        try:
-            value = ConfigService._config.getboolean(section, key)
-        except ValueError as e:
-            print(f"Error setting JWT expiry: {e}")
-        return value
-
-    @staticmethod
-    def has_value(*, key: str, section: str = "DEFAULT") -> bool:
-        if ConfigService._config.has_option(section, key):
-            value = ConfigService._config.get(section, key)
-            return bool(value)
-        return False
+    def has_value(key: str, section: str = "DEFAULT") -> bool:
+        return ConfigService._config.has_option(section, key)
