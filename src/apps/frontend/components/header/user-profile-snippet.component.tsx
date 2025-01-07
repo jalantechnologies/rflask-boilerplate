@@ -18,13 +18,15 @@ const UserProfileSnippet: React.FC<DropdownUserProps> = ({
   userMenuDropdownItems,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const trigger = useRef<HTMLAnchorElement>(null!);
-  const dropdown = useRef<HTMLDivElement>(null!);
+
+  const trigger = useRef<HTMLAnchorElement>(null);
+  const dropdown = useRef<HTMLDivElement>(null);
 
   // close on click outside
   useEffect(() => {
     const clickHandler = (event: MouseEvent) => {
       const targetNode = event.target as Node;
+      if (!dropdown.current || !trigger.current) return;
       if (
         !dropdownOpen ||
         dropdown.current.contains(targetNode) ||
