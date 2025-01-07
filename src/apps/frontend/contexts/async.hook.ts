@@ -27,7 +27,8 @@ const useAsync = <T>(
         const errorObject = e as { response?: { data?: AsyncError } };
         const err = new AsyncOperationError({
           code: errorObject.response?.data?.code || 'UNKNOWN_ERROR',
-          message: errorObject.response?.data?.message || 'An unknown error occurred',
+          message:
+            errorObject.response?.data?.message || 'An unknown error occurred',
         });
 
         setError(err);

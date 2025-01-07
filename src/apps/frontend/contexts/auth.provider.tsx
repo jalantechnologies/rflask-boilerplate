@@ -17,10 +17,7 @@ type AuthContextType = {
   isSignupLoading: boolean;
   isUserAuthenticated: () => boolean;
   isVerifyOTPLoading: boolean;
-  login: (
-    username: string,
-    password: string,
-  ) => Promise<Nullable<AccessToken>>;
+  login: (username: string, password: string) => Promise<Nullable<AccessToken>>;
   loginError: Nullable<AsyncError>;
   loginResult: Nullable<AccessToken>;
   logout: () => void;

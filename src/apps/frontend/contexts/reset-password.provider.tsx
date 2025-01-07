@@ -21,9 +21,8 @@ type ResetPasswordContextType = {
   sendForgotPasswordEmailError: Nullable<AsyncError>;
 };
 
-const ResetPasswordContext = createContext<Nullable<ResetPasswordContextType>>(
-  null,
-);
+const ResetPasswordContext =
+  createContext<Nullable<ResetPasswordContextType>>(null);
 
 const resetPasswordService = new ResetPasswordService();
 
