@@ -7,17 +7,18 @@ import React, {
 
 import { AccountService } from '../services';
 import { Account, ApiResponse, AsyncError } from '../types';
+import { Nullable } from '../types/common-types';
 
 import useAsync from './async.hook';
 
 type AccountContextType = {
   accountDetails: Account;
-  accountError: AsyncError | undefined;
-  getAccountDetails: () => Promise<Account | undefined>;
+  accountError: Nullable<AsyncError>;
+  getAccountDetails: () => Promise<Nullable<Account>>;
   isAccountLoading: boolean;
 };
 
-const AccountContext = createContext<AccountContextType | null>(null);
+const AccountContext = createContext<Nullable<AccountContextType>>(null);
 
 const accountService = new AccountService();
 

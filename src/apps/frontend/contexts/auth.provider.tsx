@@ -7,6 +7,7 @@ import React, {
 
 import { AuthService } from '../services';
 import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from '../types';
+import { Nullable } from '../types/common-types';
 
 import useAsync from './async.hook';
 
@@ -19,28 +20,28 @@ type AuthContextType = {
   login: (
     username: string,
     password: string,
-  ) => Promise<AccessToken | undefined>;
-  loginError: AsyncError | undefined;
-  loginResult: AccessToken | undefined;
+  ) => Promise<Nullable<AccessToken>>;
+  loginError: Nullable<AsyncError>;
+  loginResult: Nullable<AccessToken>;
   logout: () => void;
-  sendOTP: (phoneNumber: PhoneNumber) => Promise<void>;
-  sendOTPError: AsyncError | undefined;
+  sendOTP: (phoneNumber: PhoneNumber) => Promise<Nullable<void>>;
+  sendOTPError: Nullable<AsyncError>;
   signup: (
     firstName: string,
     lastName: string,
     username: string,
     password: string,
-  ) => Promise<void>;
-  signupError: AsyncError | undefined;
+  ) => Promise<Nullable<void>>;
+  signupError: Nullable<AsyncError>;
   verifyOTP: (
     phoneNumber: PhoneNumber,
     otp: string,
-  ) => Promise<AccessToken | undefined>;
-  verifyOTPError: AsyncError | undefined;
-  verifyOTPResult: AccessToken | undefined;
+  ) => Promise<Nullable<AccessToken>>;
+  verifyOTPError: Nullable<AsyncError>;
+  verifyOTPResult: Nullable<AccessToken>;
 };
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<Nullable<AuthContextType>>(null);
 
 const authService = new AuthService();
 
