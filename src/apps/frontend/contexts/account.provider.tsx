@@ -1,4 +1,9 @@
-import React, { createContext, PropsWithChildren, useContext } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  ReactNode,
+  useContext,
+} from 'react';
 
 import { AccountService } from '../services';
 import { Account, ApiResponse, AsyncError } from '../types';
@@ -22,7 +27,9 @@ export const useAccountContext = (): AccountContextType =>
 const getAccountDetailsFn = async (): Promise<ApiResponse<Account>> =>
   accountService.getAccountDetails();
 
-export const AccountProvider: React.FC<PropsWithChildren> = ({ children }) => {
+export const AccountProvider: React.FC<PropsWithChildren<ReactNode>> = ({
+  children,
+}) => {
   const {
     isLoading: isAccountLoading,
     error: accountError,

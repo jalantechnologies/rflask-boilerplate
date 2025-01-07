@@ -1,4 +1,9 @@
-import React, { createContext, PropsWithChildren, useContext } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  ReactNode,
+  useContext,
+} from 'react';
 
 import { AuthService } from '../services';
 import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from '../types';
@@ -83,7 +88,9 @@ const verifyOTPFn = async (
   return result;
 };
 
-export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
+export const AuthProvider: React.FC<PropsWithChildren<ReactNode>> = ({
+  children,
+}) => {
   const {
     asyncCallback: signup,
     error: signupError,

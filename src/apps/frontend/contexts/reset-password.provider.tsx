@@ -1,4 +1,9 @@
-import React, { createContext, PropsWithChildren, useContext } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  ReactNode,
+  useContext,
+} from 'react';
 
 import { ResetPasswordParams } from '../pages/authentication/reset-password/reset-password-form.hook';
 import { ResetPasswordService } from '../services';
@@ -33,7 +38,7 @@ const sendForgotPasswordEmailFn = async (
 ): Promise<ApiResponse<void>> =>
   resetPasswordService.sendForgotPasswordEmail(username);
 
-export const ResetPasswordProvider: React.FC<PropsWithChildren> = ({
+export const ResetPasswordProvider: React.FC<PropsWithChildren<ReactNode>> = ({
   children,
 }) => {
   const {
