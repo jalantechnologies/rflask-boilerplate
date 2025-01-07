@@ -1,14 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 
 import './satoshi.css';
 import './style.css';
 
 import App from './app.component';
 
-const rootElement = document.getElementById('app');
-
-if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(<App />);
-}
+document.addEventListener('DOMContentLoaded', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  ReactDOM.render(<App />, document.getElementById('app'));
+});
