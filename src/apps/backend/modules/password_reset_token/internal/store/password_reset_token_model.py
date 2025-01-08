@@ -1,22 +1,26 @@
 from datetime import datetime
-from typing import Annotated, Optional
-
+from typing import Optional
 from bson import ObjectId
-from pydantic import AfterValidator, BaseModel, ConfigDict, Field
+from dataclasses import dataclass
+from modules.common.base_model import BaseModel
 
-from modules.object_id.utils import object_id_validate
-
-PyObjectId = Annotated[ObjectId | str, AfterValidator(object_id_validate)]
-
-
+@dataclass
 class PasswordResetTokenModel(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    id: Optional[PyObjectId] = Field(None, alias="_id")
-    account: PyObjectId
-    expires_at: datetime
+    id: Optional[ObjectId | str]
+    account: ObjectId | str
     token: str
+    expires_at: datetime
     is_used: bool = False
+    
+    @classmethod
+    def from_bson(cls, bson_data: dict) -> "PasswordResetTokenModel":
+        return cls(
+            id = bson_data.get("_id"),
+            account = bson_data.get("account",),
+            token = bson_data.get("token",""),
+            expires_at = bson_data.get("expires_at",""),
+            is_used = bson_data.get("is_used","")
+        )
 
     @staticmethod
     def get_collection_name() -> str:
