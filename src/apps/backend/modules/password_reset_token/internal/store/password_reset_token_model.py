@@ -1,18 +1,14 @@
 from datetime import datetime
-from typing import Annotated, Optional
+from typing import Optional
 
 from bson import ObjectId
-from pydantic import AfterValidator, BaseModel, ConfigDict, Field
-from modules.common.validation_utils import ValidationUtils
-
-PyObjectId = Annotated[ObjectId | str, AfterValidator(ValidationUtils.object_id_validate)]
-
+from pydantic import BaseModel, ConfigDict, Field
 
 class PasswordResetTokenModel(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    id: Optional[PyObjectId] = Field(None, alias="_id")
-    account: PyObjectId
+    id: Optional[ObjectId | str] = Field(None, alias="_id")
+    account: ObjectId | str
     expires_at: datetime
     token: str
     is_used: bool = False
