@@ -1,12 +1,12 @@
 from datetime import datetime
-from typing import Any, Optional
+from typing import Optional
 from bson import ObjectId
 from modules.account.types import PhoneNumber
-from modules.object_id.utils import object_id_validate
-from dataclasses import dataclass,asdict
+from dataclasses import dataclass
+from modules.common.base_model import BaseModel
 
 @dataclass
-class OtpModel:
+class OtpModel(BaseModel):
     id: Optional[ObjectId | str]
     otp_code: str
     phone_number: Optional[PhoneNumber]
@@ -14,19 +14,6 @@ class OtpModel:
     active: bool
     created_at: Optional[datetime] = datetime.now()
     updated_at: Optional[datetime] = datetime.now()
-    
-    def __post_init__(self)->None:
-        self.id = object_id_validate(self.id)
-
-
-
-    def to_bson(self) -> dict[str, Any]:
-        data = asdict(self)
-        if data.get("id") is not None:
-            data["_id"] = data.pop("id")
-        else:
-            data.pop("id", None)
-        return data
     
     @classmethod
     def from_bson(cls,bson_data:dict)->"OtpModel":
