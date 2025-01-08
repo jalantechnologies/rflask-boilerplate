@@ -1,20 +1,12 @@
 from datetime import datetime
-from typing import Annotated, Any, Optional
-
+from typing import Any, Optional
 from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field
-from pydantic.functional_validators import AfterValidator
-
 from modules.account.types import PhoneNumber
-from modules.object_id.utils import object_id_validate
-
-PyObjectId = Annotated[ObjectId | str, AfterValidator(object_id_validate)]
-
-
 class AccountModel(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    id: Optional[PyObjectId] = Field(None, alias="_id")
+    id: Optional[ObjectId | str] = Field(None, alias="_id")
     active: bool = True
     first_name: str = ""
     hashed_password: str = ""
