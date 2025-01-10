@@ -12,7 +12,7 @@ const useAsync = <T>(
   const [error, setError] = useState<Nullable<AsyncError>>(null);
 
   const asyncCallback = useCallback(
-    async (...args: unknown[]): Promise<Nullable<T>> => {
+    async (...args: unknown[]) => {
       setError(null);
       setLoading(true);
       try {
@@ -23,11 +23,10 @@ const useAsync = <T>(
         }
 
         return response.data ?? null;
-      } catch (e: unknown) {
-        const errorObject = e as { response?: { data?: AsyncError } };
+      } catch (e) {
         const err = new AsyncOperationError({
-          code: errorObject.response?.data?.code,
-          message: errorObject.response?.data?.message,
+          code: e?.response?.data?.code || e.code,
+          message: e?.response?.data?.message || e.message,
         });
 
         setError(err);
@@ -38,7 +37,6 @@ const useAsync = <T>(
     },
     [asyncFn],
   );
-
   return {
     asyncCallback,
     error,
@@ -46,5 +44,4 @@ const useAsync = <T>(
     result,
   };
 };
-
 export default useAsync;
