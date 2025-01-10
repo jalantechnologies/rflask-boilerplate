@@ -17,7 +17,7 @@ const useTimer = ({ delayInMilliseconds }: UseTimerProps): UseTimerType => {
   const [timerEnd, setTimerEnd] = useState(true);
   let timeoutId: NodeJS.Timeout;
   let intervalId: NodeJS.Timeout;
-  let started: boolean;
+  let started: boolean = false;
 
   const onTick = () => {
     setRemainingTime((oldTime) => oldTime - millisecondsInSecond);

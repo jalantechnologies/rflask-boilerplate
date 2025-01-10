@@ -4,47 +4,18 @@ import React, { PropsWithChildren } from 'react';
 import styles from './flex-item.styles';
 
 interface FlexItemProps {
-  alignSelf?:
-    | 'auto'
-    | 'flexStart'
-    | 'flexEnd'
-    | 'center'
-    | 'baseline'
-    | 'stretch';
-  flex?:
-    | 'flex1'
-    | 'flexAuto'
-    | 'flexInitial'
-    | 'flexNone'
-    | 'grow0'
-    | 'grow'
-    | 'shrink0'
-    | 'shrink';
-  justifySelf?: 'auto' | 'start' | 'end' | 'center' | 'stretch';
-  order?:
-    | 'first'
-    | 'last'
-    | 'none'
-    | 1
-    | 2
-    | 3
-    | 4
-    | 5
-    | 6
-    | 7
-    | 8
-    | 9
-    | 10
-    | 11
-    | 12;
+  alignSelf?: keyof typeof styles.alignSelf;
+  flex?: keyof typeof styles.flex;
+  justifySelf?: keyof typeof styles.justifySelf;
+  order?: keyof typeof styles.order;
 }
 
 const FlexItem: React.FC<PropsWithChildren<FlexItemProps>> = ({
-  alignSelf,
+  alignSelf = 'auto',
   children,
-  flex,
-  justifySelf,
-  order,
+  flex = 'flexAuto',
+  justifySelf = 'auto',
+  order = 'none',
 }) => (
   <div
     className={clsx([

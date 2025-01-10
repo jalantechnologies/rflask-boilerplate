@@ -63,10 +63,10 @@ const OTPForm: React.FC<OTPFormProps> = ({
       <VerticalStackLayout gap={5}>
         <FormControl
           label={`Enter the 4 digit code sent to the mobile number ${countryCode} ${phoneNumber}`}
-          error={formik.touched.otp && (formik.errors.otp as string)}
+          error={formik.touched.otp ? (formik.errors.otp as string) : ''}
         >
           <OTP
-            error={formik.touched.otp && (formik.errors.otp as string)}
+            error={formik.touched.otp ? (formik.errors.otp as string) : ''}
             isLoading={isVerifyOTPLoading}
             onError={onError}
             onBlur={formik.handleBlur}
