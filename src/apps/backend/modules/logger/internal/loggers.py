@@ -4,6 +4,7 @@ from modules.config.config_service import ConfigService
 from modules.logger.internal.console_logger import ConsoleLogger
 from modules.logger.internal.papertrail_logger import PapertrailLogger
 from modules.logger.internal.types import LoggerTransports
+from modules.logger.internal.datadog_logger import DatadogLogger
 
 
 class Loggers:
@@ -18,6 +19,10 @@ class Loggers:
 
             if logger_transport == LoggerTransports.PAPERTRAIL:
                 Loggers._loggers.append(Loggers.__get_papertrail_logger())
+
+            if logger_transport == LoggerTransports.DATADOG:
+                Loggers._loggers.append(Loggers.__get_datadog_logger())
+
 
     @staticmethod
     def info(*, message: str) -> None:
@@ -46,3 +51,6 @@ class Loggers:
     @staticmethod
     def __get_papertrail_logger() -> PapertrailLogger:
         return PapertrailLogger()
+    
+    def __get_datadog_logger() -> DatadogLogger:
+        return DatadogLogger()
