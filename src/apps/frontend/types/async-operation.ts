@@ -22,7 +22,7 @@ export class AsyncOperationError implements AsyncError {
   message: string;
 
   constructor(json: JsonObject) {
-    this.code = (json.code as string) ?? 'UNKNOWN_ERROR';
-    this.message = (json.message as string) ?? 'An unknown error occurred';
+    this.code = json.code as string;
+    this.message = json.message as string;
   }
 }
