@@ -5,3 +5,9 @@ from dataclasses import dataclass
 class PapertrailConfig:
     host: str
     port: int
+
+
+@dataclass(frozen=True)
+class DatadogConfig:
+    api_key: str
+    application_key: str
