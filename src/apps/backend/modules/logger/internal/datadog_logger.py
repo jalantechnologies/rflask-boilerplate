@@ -10,6 +10,9 @@ from datadog_api_client.v2.model.content_encoding import ContentEncoding
 class DatadogLogger(BaseLogger):
     def __init__(self):
         self.config = Configuration()
+        self.config.api_key["apiKeyAuth"] = "YOUR_API_KEY"
+        self.config.api_key["appKeyAuth"] = "YOUR_APPLICATION_KEY"
+
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
 
