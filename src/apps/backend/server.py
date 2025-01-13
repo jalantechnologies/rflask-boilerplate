@@ -10,17 +10,19 @@ from modules.config.config_manager import ConfigManager
 from modules.error.custom_errors import AppError
 from modules.logger.logger_manager import LoggerManager
 from modules.password_reset_token.rest_api.password_reset_token_rest_api_server import PasswordResetTokenRestApiServer
-from werkzeug.middleware.proxy_fix import ProxyFix
+from modules.common.proxy import Proxy
 
 load_dotenv()
 
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app) # type:ignore
 cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Mount deps
 ConfigManager.mount_config()
 LoggerManager.mount_logger()
+
+# Apply Proxy settings if enabled in configuration
+Proxy.apply_proxy_if_enabled(app)
 
 # Register access token apis
 access_token_blueprint = AccessTokenRestApiServer.create()
