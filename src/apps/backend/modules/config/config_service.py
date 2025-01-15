@@ -1,74 +1,92 @@
-from modules.common.dict_util import DictUtil
-from modules.config.config_manager import ConfigManager
-from modules.config.types import PapertrailConfig
+from configparser import ConfigParser,NoOptionError,NoSectionError
+import os
+from typing import Type,TypeVar
+from modules.error.custom_errors import MissingKeyError
+from modules.common.types import ErrorCode
+from modules.common.config_utils import ConfigUtils
 
+T = TypeVar('T')
 
 class ConfigService:
-    @staticmethod
-    def get_string(key: str) -> str:
-        return DictUtil.required_get_str(input_dict=ConfigManager.config, key=key)
+    _config = ConfigParser()
+    config_path = ConfigUtils.get_parent_directory(__file__, 6) / "config"
 
     @staticmethod
-    def get_bool(key: str) -> bool:
-        return DictUtil.required_get_bool(input_dict=ConfigManager.config, key=key)
+    def load_config() -> None:
+        app_env_config = ConfigService.initialize_config()
+        os_env_config = ConfigService.load_environment_variables()
+        ConfigService._config = ConfigService.merge_configs(app_env_config,os_env_config)
+        ConfigService.log_config()
+    
+    @staticmethod
+    def initialize_config() -> ConfigParser:
+        config = ConfigParser()
+        # To preserve the case of keys, we set `config.optionxform = str`.
+        # Visit: https://github.com/python/mypy/issues/5062 for more information on the lint error.
+        config.optionxform = str  # type: ignore
+        default_config = ConfigService.config_path / "default.ini"
+        config.read(default_config)
+        app_env = os.environ.get("APP_ENV", "development")
+        app_env_config = ConfigService.config_path / f"{app_env}.ini"
+        config.read(app_env_config)
+        return config
+    
+    @staticmethod
+    def load_environment_variables() -> ConfigParser:
+        custom_environment_file = ConfigService.config_path / "custom-environment-variables.ini"
+        env_config = ConfigParser(allow_no_value=True)
+        if not custom_environment_file.exists():
+            return env_config
+        # Preserve case sensitivity for keys
+        env_config.optionxform = str  # type: ignore
+        env_config.read(custom_environment_file)
+        for section in env_config.sections():
+            for key, _ in env_config.items(section):
+                value = os.environ.get(key, "")
+                env_config.set(section,key,value)
+        return env_config
 
     @staticmethod
-    def get_db_uri() -> str:
-        return DictUtil.required_get_str(input_dict=ConfigManager.config, key="MONGODB_URI")
+    def merge_configs(app_env_config:ConfigParser,os_env_config:ConfigParser)->ConfigParser:
+        merge_config = app_env_config
+        for section in os_env_config.sections():
+            if section not in app_env_config.sections():
+                merge_config.add_section(section)
+            for key, value in os_env_config[section].items():
+                if value == "":
+                    if not merge_config.has_option(section,key):
+                        merge_config.set(section,key,"")
+                else:
+                    merge_config.set(section,key,value)
+        return merge_config
 
     @staticmethod
-    def get_logger_transports() -> tuple:
-        return DictUtil.required_get_tuple(input_dict=ConfigManager.config, key="LOGGER_TRANSPORTS")
+    def log_config() -> None:
+        config_dict = {
+            section: dict(ConfigService._config[section].items())
+            for section in ConfigService._config.sections()
+        }
+        print("config:", config_dict)
 
     @staticmethod
-    def get_papertrail_config() -> PapertrailConfig:
-        return PapertrailConfig(
-            host=DictUtil.required_get_str(input_dict=ConfigManager.config, key="PAPERTRAIL_HOST"),
-            port=int(DictUtil.required_get_str(input_dict=ConfigManager.config, key="PAPERTRAIL_PORT")),
-        )
+    def get_value(key: str, section: str, expected_type: Type[T]) -> T:
+        try:
+            value = ConfigService._config.get(section, key)
+            if expected_type == int:
+                return int(value) if value != '' else None  # type: ignore
+            elif expected_type == bool:
+                return ConfigService._config.getboolean(section, key)  # type: ignore
+            elif expected_type == float:
+                return float(value) if value != '' else None  # type: ignore
+            elif expected_type == str:
+                return value  # type: ignore
+            else:
+                raise ValueError(f"Unsupported type {expected_type}")
+        except (NoOptionError, NoSectionError) as exc:
+            raise MissingKeyError(missing_key=key, error_code=ErrorCode.MISSING_KEY) from exc
+        except ValueError as e:
+            raise ValueError(f"Value for {key} in section {section} cannot be cast to {expected_type}: {e}") from e
 
     @staticmethod
-    def get_accounts_config() -> dict:
-        return DictUtil.required_get_dict(input_dict=ConfigManager.config, key="ACCOUNTS")
-
-    @staticmethod
-    def get_token_signing_key() -> str:
-        return DictUtil.required_get_str(input_dict=ConfigService.get_accounts_config(), key="token_signing_key")
-
-    @staticmethod
-    def get_token_expiry_days() -> int:
-        return DictUtil.required_get_int(input_dict=ConfigService.get_accounts_config(), key="token_expiry_days")
-
-    @staticmethod
-    def get_web_app_host() -> str:
-        return DictUtil.required_get_str(input_dict=ConfigManager.config, key="WEB_APP_HOST")
-
-    @staticmethod
-    def get_sendgrid_api_key() -> str:
-        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="SENDGRID")["api_key"])
-
-    @staticmethod
-    def get_mailer_config(key: str) -> str:
-        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="MAILER")[key])
-
-    @staticmethod
-    def get_password_reset_token() -> dict:
-        return DictUtil.required_get_dict(input_dict=ConfigManager.config, key="PASSWORD_RESET_TOKEN")
-
-    @staticmethod
-    def get_twilio_config(key: str) -> str:
-        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="TWILIO")[key])
-
-    @staticmethod
-    def get_otp_config(key: str) -> str:
-        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="OTP")[key])
-
-    @staticmethod
-    def has_key(key: str) -> bool:
-        return key in ConfigManager.config
-
-    @staticmethod
-    def has_default_phone_number() -> bool:
-        if ConfigService.has_key("OTP") and "default_phone_number" in ConfigManager.config["OTP"]:
-            return True
-        return False
+    def has_value(key: str, section: str = "DEFAULT") -> bool:
+        return ConfigService._config.has_option(section, key)

@@ -6,7 +6,7 @@ from flask_cors import CORS
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
 from modules.access_token.rest_api.access_token_rest_api_server import AccessTokenRestApiServer
 from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
-from modules.config.config_manager import ConfigManager
+from modules.config.config_service import ConfigService
 from modules.error.custom_errors import AppError
 from modules.logger.logger_manager import LoggerManager
 from modules.password_reset_token.rest_api.password_reset_token_rest_api_server import PasswordResetTokenRestApiServer
@@ -17,7 +17,7 @@ app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Mount deps
-ConfigManager.mount_config()
+ConfigService.load_config()
 LoggerManager.mount_logger()
 
 # Register access token apis
