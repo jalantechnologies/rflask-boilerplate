@@ -25,6 +25,7 @@ class ConfigService:
         return DatadogConfig(
             api_key=DictUtil.required_get_str(input_dict=ConfigManager.config, key="DATADOG_API_KEY"),
             application_key=DictUtil.required_get_str(input_dict=ConfigManager.config, key="DATADOG_APPLICATION_KEY"),
+            app_name = DictUtil.required_get_str(input_dict=ConfigManager.config,key="DATADOG_APP_NAME")
         )
 
     @staticmethod

@@ -7,8 +7,9 @@ from typing import Optional
 class OSSettings:
     INSPECTLET_KEY: Optional[str] = os.environ.get("INSPECTLET_KEY")
     MONGODB_URI: Optional[str] = os.environ.get("MONGODB_URI")
-    PAPERTRAIL_HOST: Optional[str] = os.environ.get("PAPERTRAIL_HOST")
-    PAPERTRAIL_PORT: Optional[str] = os.environ.get("PAPERTRAIL_PORT")
+    DATADOG_API_KEY: Optional[str] = os.environ.get("DATADOG_API_KEY")
+    DATADOG_APPLICATION_KEY: Optional[str] = os.environ.get("DATADOG_APPLICATION_KEY")
+    DATADOG_APP_NAME: Optional[str] = os.environ.get("DATADOG_APP_NAME")
     SENDGRID: Optional[dict[str, Optional[str]]] = field(
         default_factory=lambda: {"api_key": os.environ.get("SENDGRID_API_KEY")}
     )
