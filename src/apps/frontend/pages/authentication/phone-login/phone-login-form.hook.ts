@@ -52,7 +52,7 @@ const usePhoneLoginForm = ({
       sendOTP(
         new PhoneNumber({
           country_code: values.countryCode,
-          phone_number: formattedPhoneNumber,
+          phone_number: formattedPhoneNumber.toString(),
         }),
       )
         .then(() => {
