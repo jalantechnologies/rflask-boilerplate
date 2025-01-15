@@ -5,4 +5,4 @@ from dataclasses import dataclass
 class PreviewSettings:
     LOGGER_TRANSPORTS: tuple[str, str] = ("console", "papertrail")
     SMS_ENABLED: bool = True
-    USE_PROXY: bool = True # Set as True if server is running behind proxy
+    IS_SERVER_RUNNING_BEHIND_PROXY: bool = True
