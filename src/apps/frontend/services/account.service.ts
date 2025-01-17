@@ -4,11 +4,11 @@ import APIService from './api.service';
 
 export default class AccountService extends APIService {
   getAccountDetails = async (
-    accessToken: AccessToken,
+    userAccessToken: AccessToken,
   ): Promise<ApiResponse<Account>> => {
-    return this.apiClient.get(`/accounts/${accessToken.accountId}`, {
+    return this.apiClient.get(`/accounts/${userAccessToken.accountId}`, {
       headers: {
-        Authorization: `Bearer ${accessToken.token}`,
+        Authorization: `Bearer ${userAccessToken.token}`,
       },
     });
   };
