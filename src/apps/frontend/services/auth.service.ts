@@ -1,4 +1,5 @@
 import { AccessToken, ApiResponse, PhoneNumber } from '../types';
+import { JsonObject } from '../types/common-types';
 
 import APIService from './api.service';
 
@@ -19,11 +20,16 @@ export default class AuthService extends APIService {
   login = async (
     username: string,
     password: string,
-  ): Promise<ApiResponse<AccessToken>> =>
-    this.apiClient.post('/access-tokens', {
-      username,
-      password,
-    });
+  ): Promise<ApiResponse<AccessToken>> => {
+      const response = await this.apiClient.post('/access-tokens', {
+        username,
+        password,
+      });
+      if (response.data) {
+        localStorage.setItem('access-token', JSON.stringify(response.data));
+      }
+      return new ApiResponse(new AccessToken(response.data as JsonObject));
+  }
 
   sendOTP = async (phoneNumber: PhoneNumber): Promise<ApiResponse<void>> =>
     this.apiClient.post('/accounts', {
@@ -36,12 +42,17 @@ export default class AuthService extends APIService {
   verifyOTP = async (
     phoneNumber: PhoneNumber,
     otp: string,
-  ): Promise<ApiResponse<AccessToken>> =>
-    this.apiClient.post('/access-tokens', {
-      phone_number: {
-        country_code: phoneNumber.countryCode,
-        phone_number: phoneNumber.phoneNumber,
-      },
-      otp_code: otp,
-    });
+  ): Promise<ApiResponse<AccessToken>> => {
+      const response = await this.apiClient.post('/access-tokens', {
+        phone_number: {
+          country_code: phoneNumber.countryCode,
+          phone_number: phoneNumber.phoneNumber,
+        },
+        otp_code: otp,
+      });
+      if (response.data) {
+        localStorage.setItem('access-token', JSON.stringify(response.data));
+      }
+      return new ApiResponse(new AccessToken(response.data as JsonObject));
+    }
 }

@@ -40,19 +40,12 @@ const signupFn = async (
   lastName: string,
   username: string,
   password: string,
-): Promise<ApiResponse<void>> =>
-  authService.signup(firstName, lastName, username, password);
+): Promise<ApiResponse<void>> => authService.signup(firstName, lastName, username, password);
 
 const loginFn = async (
   username: string,
   password: string,
-): Promise<ApiResponse<AccessToken>> => {
-  const result = await authService.login(username, password);
-  if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
-  }
-  return result;
-};
+): Promise<ApiResponse<AccessToken>> => authService.login(username, password);
 
 const logoutFn = (): void => localStorage.removeItem('access-token');
 
@@ -68,13 +61,8 @@ const sendOTPFn = async (
 const verifyOTPFn = async (
   phoneNumber: PhoneNumber,
   otp: string,
-): Promise<ApiResponse<AccessToken>> => {
-  const result = await authService.verifyOTP(phoneNumber, otp);
-  if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
-  }
-  return result;
-};
+): Promise<ApiResponse<AccessToken>> => authService.verifyOTP(phoneNumber, otp);
+ 
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const {
