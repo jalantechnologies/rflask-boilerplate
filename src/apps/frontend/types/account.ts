@@ -1,11 +1,11 @@
 import { PhoneNumber } from './auth';
-import { JsonObject } from './common-types';
+import { JsonObject, Nullable } from './common-types';
 
 export class Account {
   id: string;
   firstName: string;
   lastName: string;
-  phoneNumber?: PhoneNumber;
+  phoneNumber: Nullable<PhoneNumber>;
   username: string;
 
   constructor(json: JsonObject) {

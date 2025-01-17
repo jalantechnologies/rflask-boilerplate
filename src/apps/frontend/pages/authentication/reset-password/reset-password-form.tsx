@@ -29,13 +29,13 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
     <form onSubmit={formik.handleSubmit}>
       <VerticalStackLayout gap={5}>
         <FormControl
-          error={formik.touched.password && formik.errors.password}
+          error={formik.touched.password ? formik.errors.password : ''}
           label={'Password'}
         >
           <PasswordInput
             data-testid="password"
             disabled={isResetPasswordLoading}
-            error={formik.touched.password && formik.errors.password}
+            error={formik.touched.password ? formik.errors.password : ''}
             name="password"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
@@ -46,7 +46,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
 
         <FormControl
           error={
-            formik.touched.confirmPassword && formik.errors.confirmPassword
+            formik.touched.confirmPassword ? formik.errors.confirmPassword : ''
           }
           label={'Re-type Password'}
         >
@@ -54,7 +54,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
             data-testid="confirmPassword"
             disabled={isResetPasswordLoading}
             error={
-              formik.touched.confirmPassword && formik.errors.confirmPassword
+              formik.touched.confirmPassword
+                ? formik.errors.confirmPassword
+                : ''
             }
             name="confirmPassword"
             onBlur={formik.handleBlur}

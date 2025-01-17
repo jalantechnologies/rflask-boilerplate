@@ -39,22 +39,20 @@ const usePhoneLoginForm = ({
       );
       const isValidPhoneNumber =
         PhoneNumberUtil.getInstance().isValidNumber(parsedPhoneNumber);
+      const formattedPhoneNumber = parsedPhoneNumber.getNationalNumber();
 
-      if (!isValidPhoneNumber) {
+      if (!isValidPhoneNumber || !formattedPhoneNumber) {
         onError({ message: constant.PHONE_VALIDATION_ERROR } as AsyncError);
         return;
       }
 
-      const formattedPhoneNumber = parsedPhoneNumber
-        .getNationalNumber()
-        .toString();
       const encodedCountryCode = encodeURIComponent(values.countryCode);
       const otpPageUrl = `${routes.OTP}&country_code=${encodedCountryCode}&phone_number=${formattedPhoneNumber}`;
 
       sendOTP(
         new PhoneNumber({
           country_code: values.countryCode,
-          phone_number: formattedPhoneNumber,
+          phone_number: formattedPhoneNumber.toString(),
         }),
       )
         .then(() => {
