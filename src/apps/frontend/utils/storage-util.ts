@@ -1,10 +1,10 @@
 import { AccessToken } from '../types';
-import { Nullable } from '../types/common-types';
+import { JsonObject, Nullable } from '../types/common-types';
 
 export const getAccessTokenFromStorage = (): Nullable<AccessToken> => {
   const token = localStorage.getItem('access-token');
   if (token) {
-    return new AccessToken(JSON.parse(token));
+    return new AccessToken(JSON.parse(token) as JsonObject);
   }
   return null;
 };

@@ -8,13 +8,13 @@ import React, {
 import { AuthService } from '../services';
 import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from '../types';
 import { Nullable } from '../types/common-types';
-
-import useAsync from './async.hook';
 import {
   getAccessTokenFromStorage,
   removeAccessTokenFromStorage,
   setAccessTokenToStorage,
 } from '../utils/storage-util';
+
+import useAsync from './async.hook';
 
 type AuthContextType = {
   isLoginLoading: boolean;
