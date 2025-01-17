@@ -10,6 +10,11 @@ import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from '../types';
 import { Nullable } from '../types/common-types';
 
 import useAsync from './async.hook';
+import {
+  getAccessTokenFromStorage,
+  removeAccessTokenFromStorage,
+  setAccessTokenToStorage,
+} from '../utils/storage-util';
 
 type AuthContextType = {
   isLoginLoading: boolean;
@@ -59,17 +64,14 @@ const loginFn = async (
 ): Promise<ApiResponse<AccessToken>> => {
   const result = await authService.login(username, password);
   if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
+    setAccessTokenToStorage(result.data);
   }
   return result;
 };
 
-const logoutFn = (): void => localStorage.removeItem('access-token');
+const logoutFn = (): void => removeAccessTokenFromStorage();
 
-const getAccessToken = (): AccessToken =>
-  JSON.parse(localStorage.getItem('access-token') || 'null') as AccessToken;
-
-const isUserAuthenticated = () => !!getAccessToken();
+const isUserAuthenticated = () => !!getAccessTokenFromStorage();
 
 const sendOTPFn = async (
   phoneNumber: PhoneNumber,
@@ -81,7 +83,7 @@ const verifyOTPFn = async (
 ): Promise<ApiResponse<AccessToken>> => {
   const result = await authService.verifyOTP(phoneNumber, otp);
   if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
+    setAccessTokenToStorage(result.data);
   }
   return result;
 };

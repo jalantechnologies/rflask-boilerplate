@@ -10,6 +10,7 @@ import { Account, ApiResponse, AsyncError } from '../types';
 import { Nullable } from '../types/common-types';
 
 import useAsync from './async.hook';
+import { getAccessTokenFromStorage } from '../utils/storage-util';
 
 type AccountContextType = {
   accountDetails: Account;
@@ -25,8 +26,13 @@ const accountService = new AccountService();
 export const useAccountContext = (): AccountContextType =>
   useContext(AccountContext) as AccountContextType;
 
-const getAccountDetailsFn = async (): Promise<ApiResponse<Account>> =>
-  accountService.getAccountDetails();
+const getAccountDetailsFn = async (): Promise<ApiResponse<Account>> => {
+  const accessToken = getAccessTokenFromStorage();
+  if (accessToken) {
+    return accountService.getAccountDetails(accessToken);
+  }
+  throw new Error('Access token not found');
+};
 
 export const AccountProvider: React.FC<PropsWithChildren<ReactNode>> = ({
   children,
