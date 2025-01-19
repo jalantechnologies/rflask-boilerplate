@@ -25,5 +25,5 @@ class OpenAIAdapter:
             response.raise_for_status()  # Raise an error for bad status codes
             return response.json()["choices"][0]["message"]["content"]
         except requests.RequestException as error:
-            Logger.error(f"Error getting chat completion response from OpenAI: {error}")
+            Logger.error(message=f"Error getting chat completion response from OpenAI: {error}")
             raise ErrorGettingChatCompletionResponse() from error
