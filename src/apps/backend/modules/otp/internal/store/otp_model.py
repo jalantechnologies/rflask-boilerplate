@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import Any, Optional
-from pydantic import BaseModel, ConfigDict, Field
+
 from bson import ObjectId
+from pydantic import BaseModel, ConfigDict, Field
+
 from modules.account.types import PhoneNumber
 
 
