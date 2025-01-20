@@ -72,3 +72,7 @@ class ConfigService:
         if ConfigService.has_key("OTP") and "default_phone_number" in ConfigManager.config["OTP"]:
             return True
         return False
+
+    @staticmethod
+    def get_openai_api_key() -> str:
+        return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="OPENAI")["api_key"])

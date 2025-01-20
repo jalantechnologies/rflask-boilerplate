@@ -12,6 +12,7 @@ class TestingSettings:
         }
     )
     SMS_ENABLED: bool = False
+    OPENAI: dict[str, str] = field(default_factory=lambda: {"api_key": "OPENAI_API_KEY_TEST"})
 
 
 @dataclass(frozen=True)
@@ -25,3 +26,4 @@ class DockerInstanceTestingSettings:
         }
     )
     SMS_ENABLED: bool = False
+    OPENAI: dict[str, str] = field(default_factory=lambda: {"api_key": "OPENAI_API_KEY_TEST"})

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
@@ -7,6 +7,8 @@ class DevelopmentSettings:
     MONGODB_URI: str = "mongodb://localhost:27017/frm-boilerplate-dev"
     SMS_ENABLED: bool = False
     IS_SERVER_RUNNING_BEHIND_PROXY: bool = True
+    OPENAI: dict = field(default_factory=lambda: {"api_key": "OPENAI_API_KEY_DEV"})
+
 
 @dataclass(frozen=True)
 class DockerInstanceDevelopmentSettings:
@@ -14,3 +16,4 @@ class DockerInstanceDevelopmentSettings:
     MONGODB_URI: str = "mongodb://db:27017/frm-boilerplate-dev"
     SMS_ENABLED: bool = False
     IS_SERVER_RUNNING_BEHIND_PROXY: bool = True
+    OPENAI: dict = field(default_factory=lambda: {"api_key": "OPENAI_API_KEY_DEV"})

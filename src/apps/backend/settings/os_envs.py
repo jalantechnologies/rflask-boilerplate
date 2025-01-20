@@ -33,3 +33,6 @@ class OSSettings:
         }
     )
     WEB_APP_HOST: Optional[str] = os.environ.get("WEB_APP_HOST")
+    OPENAI: Optional[dict[str, Optional[str]]] = field(
+        default_factory=lambda: {"api_key": os.environ.get("OPENAI_API_KEY")}
+    )
