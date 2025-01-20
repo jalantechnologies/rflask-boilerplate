@@ -8,6 +8,7 @@ class DevelopmentSettings:
     SMS_ENABLED: bool = False
     IS_SERVER_RUNNING_BEHIND_PROXY: bool = True
 
+
 @dataclass(frozen=True)
 class DockerInstanceDevelopmentSettings:
     LOGGER_TRANSPORTS: tuple[str] = ("console",)

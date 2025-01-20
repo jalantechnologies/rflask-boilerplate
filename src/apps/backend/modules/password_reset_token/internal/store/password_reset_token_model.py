@@ -4,6 +4,7 @@ from typing import Optional
 from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field
 
+
 class PasswordResetTokenModel(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

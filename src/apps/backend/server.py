@@ -12,6 +12,7 @@ from modules.config.config_service import ConfigService
 from modules.error.custom_errors import AppError
 from modules.logger.logger_manager import LoggerManager
 from modules.password_reset_token.rest_api.password_reset_token_rest_api_server import PasswordResetTokenRestApiServer
+from modules.todo.rest_api.todo_rest_api_server import TodoRestApiServer
 
 load_dotenv()
 
@@ -25,7 +26,7 @@ LoggerManager.mount_logger()
 # Apply ProxyFix to interpret `X-Forwarded` headers if enabled in configuration
 # Visit: https://flask.palletsprojects.com/en/stable/deploying/proxy_fix/ for more information
 if ConfigService.has_key("IS_SERVER_RUNNING_BEHIND_PROXY") and ConfigService.get_bool("IS_SERVER_RUNNING_BEHIND_PROXY"):
-    app.wsgi_app = ProxyFix(app.wsgi_app) # type: ignore
+    app.wsgi_app = ProxyFix(app.wsgi_app)  # type: ignore
 
 # Register access token apis
 access_token_blueprint = AccessTokenRestApiServer.create()
@@ -38,6 +39,10 @@ api_blueprint.register_blueprint(password_reset_token_blueprint)
 # Register accounts apis
 account_blueprint = AccountRestApiServer.create()
 api_blueprint.register_blueprint(account_blueprint)
+
+# Register todos apis
+todo_blueprint = TodoRestApiServer.create()
+api_blueprint.register_blueprint(todo_blueprint)
 app.register_blueprint(api_blueprint)
 
 # Register frontend elements
