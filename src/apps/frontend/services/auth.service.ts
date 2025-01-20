@@ -1,4 +1,5 @@
 import { AccessToken, ApiResponse, PhoneNumber } from '../types';
+import { JsonObject } from '../types/common-types';
 
 import APIService from './api.service';
 
@@ -19,11 +20,13 @@ export default class AuthService extends APIService {
   login = async (
     username: string,
     password: string,
-  ): Promise<ApiResponse<AccessToken>> =>
-    this.apiClient.post('/access-tokens', {
+  ): Promise<ApiResponse<AccessToken>> =>{
+    const response = await this.apiClient.post<JsonObject>('/access-tokens', {
       username,
       password,
     });
+    return new ApiResponse(new AccessToken(response.data))
+  }
 
   sendOTP = async (phoneNumber: PhoneNumber): Promise<ApiResponse<void>> =>
     this.apiClient.post('/accounts', {
@@ -37,11 +40,14 @@ export default class AuthService extends APIService {
     phoneNumber: PhoneNumber,
     otp: string,
   ): Promise<ApiResponse<AccessToken>> =>
-    this.apiClient.post('/access-tokens', {
+  {
+    const response = await this.apiClient.post<JsonObject>('/access-tokens', {
       phone_number: {
         country_code: phoneNumber.countryCode,
         phone_number: phoneNumber.phoneNumber,
       },
       otp_code: otp,
     });
+    return new ApiResponse(new AccessToken(response.data))  
+  }
 }
