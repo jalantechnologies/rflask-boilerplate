@@ -3,10 +3,12 @@ import { JsonObject } from './common-types';
 export class AccessToken {
   accountId: string;
   token: string;
+  expiresAt:string
 
   constructor(json: JsonObject) {
     this.accountId = json.account_id as string;
     this.token = json.token as string;
+    this.expiresAt = json.expires_at as string;
   }
 }
 export enum KeyboardKeys {

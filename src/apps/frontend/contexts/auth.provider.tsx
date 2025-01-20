@@ -40,12 +40,23 @@ const signupFn = async (
   lastName: string,
   username: string,
   password: string,
-): Promise<ApiResponse<void>> => authService.signup(firstName, lastName, username, password);
+): Promise<ApiResponse<void>> =>
+  authService.signup(firstName, lastName, username, password);
 
 const loginFn = async (
   username: string,
   password: string,
-): Promise<ApiResponse<AccessToken>> => authService.login(username, password);
+): Promise<ApiResponse<AccessToken>> => {
+  const result = await authService.login(username, password);
+  if (result.data) {
+    localStorage.setItem('access-token', JSON.stringify({
+      account_id:result.data.accountId,
+      expires_at:result.data.expiresAt,
+      token:result.data.token
+    }));
+  }
+  return result;
+};
 
 const logoutFn = (): void => localStorage.removeItem('access-token');
 
@@ -61,8 +72,17 @@ const sendOTPFn = async (
 const verifyOTPFn = async (
   phoneNumber: PhoneNumber,
   otp: string,
-): Promise<ApiResponse<AccessToken>> => authService.verifyOTP(phoneNumber, otp);
- 
+): Promise<ApiResponse<AccessToken>> => {
+  const result = await authService.verifyOTP(phoneNumber, otp);
+  if (result.data) {
+    localStorage.setItem('access-token', JSON.stringify({
+      account_id:result.data.accountId,
+      expires_at:result.data.expiresAt,
+      token:result.data.token
+    }));
+  }
+  return result;
+};
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const {
