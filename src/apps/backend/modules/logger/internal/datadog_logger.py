@@ -7,50 +7,60 @@ from datadog_api_client.v2.api.logs_api import LogsApi
 from datadog_api_client.v2.model.http_log import HTTPLog
 from datadog_api_client.v2.model.content_encoding import ContentEncoding
 from modules.logger.internal.loggerBody import loggerBody
+from modules.logger.internal.DDHandler import DDHandler
 
 
 class DatadogLogger(BaseLogger):
     def __init__(self):
-        self.dgConfig = ConfigService.get_datadog_config()
+        self.ddConfig = ConfigService.get_datadog_config()
         self.config = Configuration()
-        self.config.api_key["apiKeyAuth"] = self.dgConfig[0]
-        self.config.api_key["appKeyAuth"] = self.dgConfig[1]
+        self.config.api_key["apiKeyAuth"] = self.ddConfig.api_key
+        if (self.ddConfig.application_key != None):
+            self.config.api_key["appKeyAuth"] = self.ddConfig.application_key
+        self.app_name = self.ddConfig.app_name
         self.logger = logging.getLogger(__name__)
+        self.format = "[%(asctime)s] %(name)s %(levelname)s %(message)s" 
+        self.formatter = logging.Formatter(
+            format,
+        )
         self.logger.setLevel(logging.INFO)
-        
-
 
     def critical(self, *, message: str) -> None:
-        api_client = ApiClient(self.config)
-        apiInstance = LogsApi(api_client)
-        body = loggerBody.makeLog(message,self.dgConfig[2],"CRITICAL")
-        response = apiInstance.submit_log(body)
+        logger = logging.getLogger(__name__)
+        handler = DDHandler(self.config,self.app_name,'Log-source')
+        handler.setLevel(logging.INFO)
+        handler.setFormatter(self.formatter)
+        logger.addHandler(handler)
         self.logger.critical(message)
 
     def debug(self, *, message: str) -> None:
-        api_client = ApiClient(self.config)
-        apiInstance = LogsApi(api_client)
-        body = loggerBody.makeLog(message,self.dgConfig[2],"DEBUG")
-        response = apiInstance.submit_log(body)
+        logger = logging.getLogger(__name__)
+        handler = DDHandler(self.config,self.app_name,'Log-source')
+        handler.setLevel(logging.INFO)
+        handler.setFormatter(self.formatter)
+        logger.addHandler(handler)
         self.logger.debug(message)
 
     def error(self, *, message: str) -> None:
-        api_client = ApiClient(self.config)
-        apiInstance = LogsApi(api_client)
-        body = loggerBody.makeLog(message,self.dgConfig[2],"ERROR")
-        response = apiInstance.submit_log(body)
+        logger = logging.getLogger(__name__)
+        handler = DDHandler(self.config,self.app_name,'Log-source')
+        handler.setLevel(logging.INFO)
+        handler.setFormatter(self.formatter)
+        logger.addHandler(handler)
         self.logger.error(message)
 
     def info(self, *, message: str) -> None:
-        api_client = ApiClient(self.config)
-        apiInstance = LogsApi(api_client)
-        body = loggerBody.makeLog(message,self.dgConfig[2],"INFO")
-        response = apiInstance.submit_log(body)
+        logger = logging.getLogger(__name__)
+        handler = DDHandler(self.config,self.app_name,'Log-source')
+        handler.setLevel(logging.INFO)
+        handler.setFormatter(self.formatter)
+        logger.addHandler(handler)
         self.logger.info(message)
 
     def warn(self, *, message: str) -> None:
-        api_client = ApiClient(self.config)
-        apiInstance = LogsApi(api_client)
-        body = loggerBody.makeLog(message,self.dgConfig[2],"WARN")
-        response = apiInstance.submit_log(body)
+        logger = logging.getLogger(__name__)
+        handler = DDHandler(self.config,self.app_name,'Log-source')
+        handler.setLevel(logging.INFO)
+        handler.setFormatter(self.formatter)
+        logger.addHandler(handler)
         self.logger.warning(message)
