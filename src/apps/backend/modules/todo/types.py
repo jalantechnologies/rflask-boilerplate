@@ -3,8 +3,8 @@ from datetime import datetime
 
 
 @dataclass(frozen=True)
-class TodosSearchByUsernameParams:
-    username: str
+class TodosSearchByAccountIdParams:
+    account_id: str
 
 
 @dataclass(frozen=True)
@@ -14,7 +14,7 @@ class TodoSearchByIdParams:
 
 @dataclass(frozen=True)
 class CreateTodoParams:
-    username: str
+    account_id: str
     title: str
     description: str
     t_type: str
@@ -24,7 +24,7 @@ class CreateTodoParams:
 @dataclass(frozen=True)
 class Todo:
     id: str
-    username: str
+    account_id: str
     title: str
     description: str
     t_type: str

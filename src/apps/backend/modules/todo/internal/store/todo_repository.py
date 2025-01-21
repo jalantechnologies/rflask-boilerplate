@@ -9,5 +9,5 @@ class TodoRepository(ApplicationRepository):
 
     @classmethod
     def on_init_collection(cls, collection: Collection) -> bool:
-        collection.create_index("username")
+        collection.create_index("account_id")
         return True

@@ -1,12 +1,12 @@
 from modules.todo.internal.todo_reader import TodoReader
 from modules.todo.internal.todo_writer import TodoWriter
-from modules.todo.types import CreateTodoParams, Todo, TodoSearchByIdParams, TodosSearchByUsernameParams
+from modules.todo.types import CreateTodoParams, Todo, TodoSearchByIdParams, TodosSearchByAccountIdParams
 
 
 class TodoService:
     @staticmethod
-    def get_todos_by_username(*, params: TodosSearchByUsernameParams) -> list[Todo]:
-        return TodoReader.get_todos_by_username(params=params)
+    def get_todos_by_account_id(*, params: TodosSearchByAccountIdParams) -> list[Todo]:
+        return TodoReader.get_todos_by_account_id(params=params)
 
     @staticmethod
     def get_todo_by_id(*, params: TodoSearchByIdParams) -> Todo:

@@ -7,7 +7,7 @@ class TodoUtil:
     def convert_todo_model_to_todo(todo_model: TodoModel) -> Todo:
         return Todo(
             id=str(todo_model.id),
-            username=todo_model.username,
+            account_id=todo_model.account_id,
             title=todo_model.title,
             description=todo_model.description,
             t_type=todo_model.t_type,

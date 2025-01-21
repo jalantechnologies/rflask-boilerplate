@@ -7,7 +7,7 @@ from flask.typing import ResponseReturnValue
 from flask.views import MethodView
 
 from modules.todo.todo_service import TodoService
-from modules.todo.types import CreateTodoParams, TodoSearchByIdParams, TodosSearchByUsernameParams
+from modules.todo.types import CreateTodoParams, TodoSearchByIdParams, TodosSearchByAccountIdParams
 
 
 class TodoView(MethodView):
@@ -27,9 +27,9 @@ class TodoView(MethodView):
             todo = TodoService.get_todo_by_id(params=todo_params)
             todo_dict = asdict(todo)
             return jsonify(todo_dict), 200
-        username = request.args.get("username")
-        todos_params = TodosSearchByUsernameParams(username=username)
-        todos = TodoService.get_todos_by_username(params=todos_params)
+        account_id = request.args.get("account_id")
+        todos_params = TodosSearchByAccountIdParams(account_id=account_id)
+        todos = TodoService.get_todos_by_account_id(params=todos_params)
         todos_list = [asdict(todo) for todo in todos]
         return jsonify(todos_list), 200
 

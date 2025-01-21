@@ -6,15 +6,15 @@ from modules.todo.errors import TodoNotFoundError
 from modules.todo.internal.store.todo_model import TodoModel
 from modules.todo.internal.store.todo_repository import TodoRepository
 from modules.todo.internal.todo_util import TodoUtil
-from modules.todo.types import Todo, TodoSearchByIdParams, TodosSearchByUsernameParams
+from modules.todo.types import Todo, TodoSearchByIdParams, TodosSearchByAccountIdParams
 
 
 class TodoReader:
     @staticmethod
-    def get_todos_by_username(*, params: TodosSearchByUsernameParams) -> List[Todo]:
-        todos = TodoRepository.collection().find({"username": params.username})
+    def get_todos_by_account_id(*, params: TodosSearchByAccountIdParams) -> List[Todo]:
+        todos = TodoRepository.collection().find({"account_id": params.account_id})
         if todos.count() == 0:
-            raise TodoNotFoundError(f"Todos for username:: {params.username}, not found")
+            raise TodoNotFoundError(f"Todos for username:: {params.account_id}, not found")
 
         return [TodoUtil.convert_todo_model_to_todo(TodoModel(**todo)) for todo in todos]
 
