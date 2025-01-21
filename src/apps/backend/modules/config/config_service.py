@@ -21,11 +21,11 @@ class ConfigService:
         return DictUtil.required_get_tuple(input_dict=ConfigManager.config, key="LOGGER_TRANSPORTS")
 
     @staticmethod
-    def get_datadog_config() -> "DatadogConfig":
+    def get_datadog_config() -> DatadogConfig:
         return DatadogConfig(
-            api_key=DictUtil.required_get_str(input_dict=ConfigManager.config, key="DATADOG_API_KEY"),
-            application_key=DictUtil.required_get_str(input_dict=ConfigManager.config, key="DATADOG_APPLICATION_KEY"),
-            app_name = DictUtil.required_get_str(input_dict=ConfigManager.config,key="DATADOG_APP_NAME")
+            api_key=DictUtil.required_get_str(input_dict=ConfigManager.config, key="dd_api_key"),
+            application_key=DictUtil.required_get_str(input_dict=ConfigManager.config, key="dd_application_key"),
+            app_name = DictUtil.required_get_str(input_dict=ConfigManager.config,key="dd_app_name")
         )
 
     @staticmethod
