@@ -1,5 +1,7 @@
 import * as React from 'react';
 
-const Dashboard: React.FC = () => <div></div>;
+import { TodoItems } from '../../components';
+
+const Dashboard: React.FC = () => <TodoItems isDashboard={true} />;
 
 export default Dashboard;

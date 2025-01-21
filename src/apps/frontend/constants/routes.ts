@@ -7,7 +7,11 @@ const routes = {
   OTP: '/login?auth_mode=otp',
   PHONE_LOGIN: '/signup?auth_mode=otp',
   SIGNUP: '/signup',
-  TASKS: '/tasks',
+  TODOS: '/todos',
+  CREATE_TODO: '/todos/create',
+  VIEW_TODO: '/todos/:id',
+  EDIT_TODO: '/todos/:id/edit',
+  DELETE_TODO: '/todos/:id/delete',
 };
 
 export default routes;

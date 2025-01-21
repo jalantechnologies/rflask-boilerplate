@@ -4,7 +4,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 
 import routes from '../constants/routes';
 import { useAccountContext, useAuthContext } from '../contexts';
-import { Dashboard, NotFound } from '../pages';
+import { Dashboard, Todos, NotFound } from '../pages';
 import AppLayout from '../pages/app-layout/app-layout';
 import { AsyncError } from '../types';
 
@@ -34,6 +34,7 @@ export const protectedRoutes = [
     element: <App />,
     children: [
       { path: '', element: <Dashboard /> },
+      { path: 'todos', element: <Todos /> },
       { path: '*', element: <NotFound /> },
     ],
   },

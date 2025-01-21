@@ -51,9 +51,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             />
             <SidebarMenuItem
               iconPath="/assets/img/icon/tasks-sidebar-icon.svg"
-              path={routes.TASKS}
+              path={routes.TODOS}
               setIsSidebarOpen={setIsSidebarOpen}
-              title="Tasks"
+              title="Todos"
             />
           </ul>
         </nav>

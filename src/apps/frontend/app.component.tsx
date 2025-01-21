@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { AccountProvider } from './contexts';
-import { AuthProvider } from './contexts/auth.provider';
+import { AccountProvider, AuthProvider, TodoProvider } from './contexts';
 import { Config } from './helpers';
 import { AppRoutes } from './routes';
 import InspectLet from './vendor/inspectlet';
@@ -22,7 +21,9 @@ export default function App(): React.ReactElement {
       <AccountProvider>
         <Toaster />
         <Router>
-          <AppRoutes />
+          <TodoProvider>
+            <AppRoutes />
+          </TodoProvider>
         </Router>
       </AccountProvider>
     </AuthProvider>

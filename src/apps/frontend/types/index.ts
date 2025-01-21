@@ -2,6 +2,7 @@ import { Account } from './account';
 import { AsyncError, AsyncResult, UseAsyncResponse } from './async-operation';
 import { AccessToken, KeyboardKeys, PhoneNumber } from './auth';
 import { ApiResponse, ApiError } from './service-response';
+import { Todo } from './todo';
 
 export {
   AccessToken,
@@ -12,5 +13,6 @@ export {
   AsyncResult,
   KeyboardKeys,
   PhoneNumber,
+  Todo,
   UseAsyncResponse,
 };

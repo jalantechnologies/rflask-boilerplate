@@ -9,6 +9,7 @@ import HorizontalStackLayout from './layouts/horizontal-stack-layout';
 import VerticalStackLayout from './layouts/vertical-stack-layout';
 import OTP from './otp';
 import Select from './select';
+import TodoItems from './todo/TodoItems';
 import H2 from './typography/h2';
 import ParagraphMedium from './typography/paragraph-medium';
 
@@ -26,4 +27,5 @@ export {
   PasswordInput,
   Select,
   VerticalStackLayout,
+  TodoItems,
 };
