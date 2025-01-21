@@ -12,7 +12,7 @@ from modules.todo.types import Todo, TodoSearchByIdParams, TodosSearchByAccountI
 class TodoReader:
     @staticmethod
     def get_todos_by_account_id(*, params: TodosSearchByAccountIdParams) -> List[Todo]:
-        todos = TodoRepository.collection().find({"account_id": params.account_id})
+        todos = TodoRepository.collection().find({"account_id": params.account_id}).limit(int(params.limit))
         if todos.count() == 0:
             raise TodoNotFoundError(f"Todos for username:: {params.account_id}, not found")
 

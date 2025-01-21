@@ -17,7 +17,7 @@ class TodoModel(BaseModel):
     completed: bool = False
     created_at: Optional[datetime] = datetime.now()
     updated_at: Optional[datetime] = None
-    completed_at: Optional[datetime] = None
+    completed_date: Optional[datetime] = None
 
     def to_json(self) -> str:
         return self.model_dump_json()

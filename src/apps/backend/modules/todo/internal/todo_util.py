@@ -10,7 +10,8 @@ class TodoUtil:
             account_id=todo_model.account_id,
             title=todo_model.title,
             description=todo_model.description,
-            t_type=todo_model.t_type,
+            type=todo_model.t_type,
+            dueDate=todo_model.due_date,
             completed=bool(todo_model.completed),
-            due_date=todo_model.due_date,
+            completedDate=todo_model.completed_date,
         )

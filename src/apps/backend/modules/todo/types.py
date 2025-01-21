@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
 
 
 @dataclass(frozen=True)
 class TodosSearchByAccountIdParams:
     account_id: str
+    limit: Optional[int] = 0
 
 
 @dataclass(frozen=True)
@@ -27,9 +29,10 @@ class Todo:
     account_id: str
     title: str
     description: str
-    t_type: str
+    type: str
+    dueDate: datetime
     completed: bool
-    due_date: datetime
+    completedDate: Optional[datetime] = None
 
 
 @dataclass(frozen=True)
