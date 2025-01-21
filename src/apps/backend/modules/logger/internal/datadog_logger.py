@@ -1,11 +1,7 @@
-from logging.handlers import SysLogHandler
 import logging 
 from modules.logger.internal.base_logger import BaseLogger
 from modules.config.config_service import ConfigService
-from datadog_api_client import ApiClient, Configuration
-from datadog_api_client.v2.api.logs_api import LogsApi
-from datadog_api_client.v2.model.http_log import HTTPLog
-from datadog_api_client.v2.model.content_encoding import ContentEncoding
+from datadog_api_client import Configuration
 from modules.logger.internal.DDHandler import DDHandler
 
 
