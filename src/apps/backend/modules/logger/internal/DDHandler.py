@@ -1,6 +1,6 @@
 import os
 from logging import StreamHandler
-from datadog_api_client.v2 import ApiClient, ApiException, Configuration
+from datadog_api_client.v2 import ApiClient
 from datadog_api_client.v2.api import logs_api
 from datadog_api_client.v2.models import *
 
