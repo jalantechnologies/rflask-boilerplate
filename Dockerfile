@@ -4,19 +4,20 @@ ARG DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
 
 RUN apt-get update -y && \
-  apt-get install build-essential -y && \
-  apt-get install git -y && \
-  apt-get install curl -y
+    apt-get install -y \
+        build-essential \
+        git \
+        curl \
+        software-properties-common \
+        libgtk2.0-0 libgtk-3-0 libgbm-dev \
+        libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 \
+        libxtst6 xauth xvfb tzdata \
+        cargo \
+        python3.12 python3.12-dev python3-pip \
+        libffi-dev libssl-dev gcc \
+    && apt-get clean
 
-RUN apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev \
-  libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 \
-  libxtst6 xauth xvfb tzdata software-properties-common
-
-RUN apt-get install cargo -y
-
-RUN add-apt-repository ppa:deadsnakes/ppa -y && \
-  apt-get install python3.12 python3-pip -y && \
-  pip install pipenv
+RUN pip install pipenv
 
 
 RUN curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
@@ -25,19 +26,6 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
 
 RUN apt-get install nodejs -y
 RUN node --version && npm --version
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    python3-dev \
-    libffi-dev \
-    libssl-dev \
-    gcc \
-    && apt-get clean
-
-# Install pipenv dependencies
-RUN pipenv install --dev
-
 
 COPY Pipfile /app/Pipfile
 COPY Pipfile.lock /app/Pipfile.lock
