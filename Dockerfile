@@ -26,6 +26,19 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
 RUN apt-get install nodejs -y
 RUN node --version && npm --version
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    python3-dev \
+    libffi-dev \
+    libssl-dev \
+    gcc \
+    && apt-get clean
+
+# Install pipenv dependencies
+RUN pipenv install --dev
+
+
 COPY Pipfile /app/Pipfile
 COPY Pipfile.lock /app/Pipfile.lock
 RUN pipenv install --dev
