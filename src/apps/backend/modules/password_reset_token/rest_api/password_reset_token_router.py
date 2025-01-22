@@ -7,6 +7,6 @@ class PasswordResetTokenRouter:
     @staticmethod
     def create_route(*, blueprint: Blueprint) -> Blueprint:
         blueprint.add_url_rule(
-            "/password-reset-tokens", view_func=PasswordResetTokenView.as_view("password_reset_token_view")
+            "/password-reset-tokens", view_func=PasswordResetTokenView.as_view("password_reset_token_view"), methods=["POST"]
         )
         return blueprint
