@@ -1,4 +1,4 @@
-import logging 
+import logging
 from modules.logger.internal.base_logger import BaseLogger
 from modules.config.config_service import ConfigService
 from datadog_api_client import Configuration
@@ -10,13 +10,13 @@ class DatadogLogger(BaseLogger):
         self.ddConfig = ConfigService.get_datadog_config()
         self.config = Configuration()
         self.config.api_key["apiKeyAuth"] = self.ddConfig.api_key
-        if (self.ddConfig.application_key != None):
+        if (self.ddConfig.application_key is not None):
             self.config.api_key["appKeyAuth"] = self.ddConfig.application_key
         self.app_name = self.ddConfig.app_name
         self.logger = logging.getLogger(__name__)
-        self.format = "[%(asctime)s] %(name)s %(levelname)s %(message)s" 
+        self.format = "[%(asctime)s] - %(name)s - %(levelname)s - %(message)s"
         self.formatter = logging.Formatter(
-            format,
+            self.format,
         )
         self.logger.setLevel(logging.INFO)
 
