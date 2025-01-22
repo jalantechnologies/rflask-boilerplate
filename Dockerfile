@@ -4,18 +4,21 @@ ARG DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
 
 RUN apt-get update -y && \
-    apt-get install -y \
-        build-essential \
-        git \
-        curl \
-        software-properties-common \
-        libgtk2.0-0 libgtk-3-0 libgbm-dev \
-        libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 \
-        libxtst6 xauth xvfb tzdata \
-        cargo \
-        python3.12 python3.12-dev python3-pip \
-        libffi-dev libssl-dev gcc \
-    && apt-get clean
+apt-get install -y \
+    build-essential \
+    git \
+    curl \
+    software-properties-common \
+    libgtk2.0-0 libgtk-3-0 libgbm-dev \
+    libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 \
+    libxtst6 xauth xvfb tzdata \
+    cargo \
+    libffi-dev libssl-dev gcc \
+&& apt-get clean
+
+RUN add-apt-repository ppa:deadsnakes/ppa -y && \
+    apt-get update -y && \
+    apt-get install -y python3.12 python3.12-dev python3-pip python3.12-distutils
 
 RUN pip install pipenv
 
