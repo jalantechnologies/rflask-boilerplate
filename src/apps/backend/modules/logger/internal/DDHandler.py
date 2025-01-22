@@ -1,17 +1,17 @@
 import os
 from logging import StreamHandler
-from datadog_api_client.v2 import ApiClient
+from datadog_api_client.v2 import ApiClient, Configuration
 from datadog_api_client.v2.api import logs_api
 from datadog_api_client.v2.models import HTTPLog,HTTPLogItem
 
 class DDHandler(StreamHandler):
-    def __init__(self,configuration,service_name,ddsource) -> None:
+    def __init__(self,configuration: Configuration,service_name: str,ddsource: str) -> None:
         StreamHandler.__init__(self)
         self.config = configuration
         self.service_name = service_name
         self.ddsource = ddsource
     
-    def emit(self,record) -> None:
+    def emit(self,record: str) -> None:
         msg = self.format(record)
 
         api_client = ApiClient(self.config)

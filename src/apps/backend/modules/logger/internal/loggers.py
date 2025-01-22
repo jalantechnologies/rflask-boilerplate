@@ -44,5 +44,6 @@ class Loggers:
     def __get_console_logger() -> ConsoleLogger:
         return ConsoleLogger()
     
+    @staticmethod
     def __get_datadog_logger() -> DatadogLogger:
         return DatadogLogger()
