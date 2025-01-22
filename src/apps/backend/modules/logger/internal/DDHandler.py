@@ -3,6 +3,7 @@ from logging import StreamHandler
 from datadog_api_client.v2 import ApiClient, Configuration
 from datadog_api_client.v2.api import logs_api
 from datadog_api_client.v2.models import HTTPLog,HTTPLogItem
+from logging import LogRecord
 
 class DDHandler(StreamHandler):
     def __init__(self,configuration: Configuration,service_name: str,ddsource: str) -> None:
@@ -11,7 +12,7 @@ class DDHandler(StreamHandler):
         self.service_name = service_name
         self.ddsource = ddsource
     
-    def emit(self,record: str) -> None:
+    def emit(self,record: LogRecord) -> None:
         msg = self.format(record)
 
         api_client = ApiClient(self.config)
@@ -27,4 +28,4 @@ class DDHandler(StreamHandler):
             ]
         )
 
-        api_response = api_instance.submit_log(body)
+        api_instance.submit_log(body)
