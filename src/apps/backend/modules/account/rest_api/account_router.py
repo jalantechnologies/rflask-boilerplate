@@ -1,4 +1,3 @@
-from crypt import methods
 from flask import Blueprint
 
 from modules.account.rest_api.account_view import AccountView
