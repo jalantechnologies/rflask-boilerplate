@@ -14,6 +14,14 @@ const constant = {
   PHONE_VALIDATION_ERROR: 'Please enter a valid phone number',
   SEND_OTP_DELAY_IN_MS: 60_000,
   TOASTER_AUTO_HIDE_DURATION: 3000,
+
+  TODO_TITLE_MIN_LENGTH: 5,
+  TODO_DESCRIPTION_MIN_LENGTH: 10,
+  TODO_TITLE_VALIDATION_ERROR: 'Please enter at least 5 characters long title',
+  TODO_DESCRIPTION_VALIDATION_ERROR:
+    'Please enter at least 10 characters long description',
+  TODO_TYPE_VALIDATION_ERROR: 'Please select a valid type',
+  TODO_DUE_DATE_VALIDATION_ERROR: 'Please select a valid due date',
 };
 
 export default constant;

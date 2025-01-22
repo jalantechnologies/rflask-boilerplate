@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useState } from 'react';
-import { FaTag, FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
+import { FaTag, FaPencilAlt, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 import { Todo } from '../../types';
@@ -51,15 +51,9 @@ const TodoItem: React.FC<PropsWithChildren<TodoItemProps>> = ({ todo }) => {
             <FaTag className="mr-2 text-lg" />
             {todo.type}
           </div>
-          <div className="flex space-x-3">
+          <div className="flex space-x-2">
             <Link
-              to={`/todos/${todo.id}`}
-              className="flex h-[36px] items-center justify-center rounded-lg bg-blue-800 px-4 py-2 text-center text-sm text-white hover:bg-blue-700"
-            >
-              <FaEye />
-            </Link>
-            <Link
-              to={`/todos/${todo.id}/edit`}
+              to={`/todos/${todo.id}/update`}
               className="flex h-[36px] items-center justify-center rounded-lg bg-yellow-400 px-4 py-2 text-center text-sm text-white hover:bg-yellow-500"
             >
               <FaPencilAlt />

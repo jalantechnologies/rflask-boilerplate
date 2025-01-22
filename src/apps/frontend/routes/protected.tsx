@@ -4,7 +4,14 @@ import { Outlet, useNavigate } from 'react-router-dom';
 
 import routes from '../constants/routes';
 import { useAccountContext, useAuthContext } from '../contexts';
-import { Dashboard, Todos, NotFound } from '../pages';
+import {
+  Dashboard,
+  Todos,
+  CreateTodo,
+  UpdateTodo,
+  DeleteTodo,
+  NotFound,
+} from '../pages';
 import AppLayout from '../pages/app-layout/app-layout';
 import { AsyncError } from '../types';
 
@@ -35,6 +42,9 @@ export const protectedRoutes = [
     children: [
       { path: '', element: <Dashboard /> },
       { path: 'todos', element: <Todos /> },
+      { path: 'todos/create', element: <CreateTodo /> },
+      { path: 'todos/:id/update', element: <UpdateTodo /> },
+      { path: 'todos/:id/delete', element: <DeleteTodo /> },
       { path: '*', element: <NotFound /> },
     ],
   },

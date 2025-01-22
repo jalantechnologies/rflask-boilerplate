@@ -8,6 +8,9 @@ import Dashboard from './dashboard';
 import Login from './login';
 import NotFound from './not-found/not-found.page';
 import Todos from './todos';
+import CreateTodo from './todos/create-todo';
+import UpdateTodo from './todos/update-todo';
+import DeleteTodo from './todos/delete-todo';
 
 export {
   About,
@@ -20,4 +23,7 @@ export {
   PhoneLogin,
   Login,
   Todos,
+  CreateTodo,
+  UpdateTodo,
+  DeleteTodo,
 };

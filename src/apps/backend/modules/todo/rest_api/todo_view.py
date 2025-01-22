@@ -15,7 +15,9 @@ class TodoView(MethodView):
     @access_auth_middleware
     def post(self) -> ResponseReturnValue:
         request_data = request.get_json()
-        request_data["due_date"] = datetime.fromisoformat(request_data["due_date"])
+        request_data["account_id"] = request_data.pop("accountId")
+        request_data["t_type"] = request_data.pop("type")
+        request_data["due_date"] = datetime.fromisoformat(request_data.pop("dueDate"))
         todo_params: CreateTodoParams = CreateTodoParams(**request_data)
         todo = TodoService.create_todo(params=todo_params)
         todo_dict = asdict(todo)
@@ -39,6 +41,9 @@ class TodoView(MethodView):
     def patch(self, todo_id: str) -> ResponseReturnValue:
         request_data = request.get_json()
         request_data["todo_id"] = todo_id
+        request_data["account_id"] = request_data.pop("accountId")
+        request_data["t_type"] = request_data.pop("type")
+        request_data["due_date"] = datetime.fromisoformat(request_data.pop("dueDate"))
         todo = TodoService.update_todo(**request_data)
         todo_dict = asdict(todo)
         return jsonify(todo_dict), 200

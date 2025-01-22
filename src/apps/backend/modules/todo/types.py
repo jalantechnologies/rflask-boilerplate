@@ -26,7 +26,7 @@ class CreateTodoParams:
 @dataclass(frozen=True)
 class Todo:
     id: str
-    account_id: str
+    accountId: str
     title: str
     description: str
     type: str

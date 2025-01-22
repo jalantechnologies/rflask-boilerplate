@@ -19,7 +19,7 @@ export default class TodoService extends APIService {
     );
   };
 
-  getTodoById = async (todoId: string): Promise<ApiResponse<Todo>> => {
+  getTodo = async (todoId: string): Promise<ApiResponse<Todo>> => {
     const userAccessToken = new AccessToken(
       JSON.parse(localStorage.getItem('access-token')) as JsonObject,
     );

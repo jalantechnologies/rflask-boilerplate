@@ -9,8 +9,7 @@ const routes = {
   SIGNUP: '/signup',
   TODOS: '/todos',
   CREATE_TODO: '/todos/create',
-  VIEW_TODO: '/todos/:id',
-  EDIT_TODO: '/todos/:id/edit',
+  UPDATE_TODO: '/todos/:id/update',
   DELETE_TODO: '/todos/:id/delete',
 };
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { TodoItems } from '../../components';
+import { TodoList } from '../../components';
 
-const Todos: React.FC = () => <TodoItems />;
+const Todos: React.FC = () => <TodoList />;
 
 export default Todos;

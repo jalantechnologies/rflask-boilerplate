@@ -6,6 +6,11 @@ import { Todo, ApiResponse, AsyncError } from '../types';
 import useAsync from './async.hook';
 
 type TodoContextType = {
+  // Get Todo
+  getTodo: (todoId: string) => Promise<Todo>;
+  getTodoError: AsyncError;
+  isGetTodoLoading: boolean;
+
   // Get Todos
   getTodos: (limit: number) => Promise<Todo[]>;
   getTodosError: AsyncError;
@@ -36,6 +41,9 @@ const todoService = new TodoService();
 
 export const useTodoContext = (): TodoContextType => useContext(TodoContext);
 
+const getTodoFn = async (todoId: string): Promise<ApiResponse<Todo>> =>
+  todoService.getTodo(todoId);
+
 const getTodosFn = async (limit: number): Promise<ApiResponse<Todo[]>> =>
   todoService.getTodos(limit);
 
@@ -49,6 +57,12 @@ const deleteTodoFn = async (todoId: string): Promise<ApiResponse<void>> =>
   todoService.deleteTodo(todoId);
 
 export const TodoProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const {
+    isLoading: isGetTodoLoading,
+    error: getTodoError,
+    asyncCallback: getTodo,
+  } = useAsync(getTodoFn);
+
   const {
     isLoading: isGetTodosLoading,
     error: getTodosError,
@@ -76,6 +90,11 @@ export const TodoProvider: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <TodoContext.Provider
       value={{
+        // Get Todo
+        getTodo,
+        getTodoError,
+        isGetTodoLoading,
+
         // Get Todos
         getTodos,
         getTodosError,
