@@ -8,23 +8,16 @@ RUN apt-get update -y && \
   apt-get install git -y && \
   apt-get install curl -y
 
-RUN apt-get install cargo -y
-
 RUN apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev \
   libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 \
   libxtst6 xauth xvfb tzdata software-properties-common
+
+RUN apt-get install cargo -y
 
 RUN add-apt-repository ppa:deadsnakes/ppa -y && \
   apt-get install python3.12 python3-pip -y && \
   pip install pipenv
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    python3-dev \
-    libffi-dev \
-    gcc \
-    && apt-get clean
 
 RUN curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
   bash nodesource_setup.sh && \
