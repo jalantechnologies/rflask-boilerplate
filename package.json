@@ -78,6 +78,7 @@
     "html-webpack-plugin": "^5.5.0",
     "husky": "^9.1.4",
     "js-yaml": "^4.1.0",
+    "lint-staged": "^15.4.1",
     "nyc": "^15.1.0",
     "remark-cli": "^10.0.0",
     "remark-lint": "^9.1.0",
