@@ -23,8 +23,8 @@ LoggerManager.mount_logger()
 
 # Apply ProxyFix to interpret `X-Forwarded` headers if enabled in configuration
 # Visit: https://flask.palletsprojects.com/en/stable/deploying/proxy_fix/ for more information
-if ConfigService.has_key("IS_SERVER_RUNNING_BEHIND_PROXY") and ConfigService.get_bool("IS_SERVER_RUNNING_BEHIND_PROXY"):
-    app.wsgi_app = ProxyFix(app.wsgi_app)  # type: ignore
+if ConfigService.has_value("IS_SERVER_RUNNING_BEHIND_PROXY","SERVER_CONFIG") and ConfigService.get_value("IS_SERVER_RUNNING_BEHIND_PROXY","SERVER_CONFIG",bool):
+    app.wsgi_app = ProxyFix(app.wsgi_app) # type: ignore
 
 # Register access token apis
 access_token_blueprint = AccessTokenRestApiServer.create()
