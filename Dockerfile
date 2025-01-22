@@ -10,11 +10,11 @@ RUN apt-get update -y && \
 
 RUN apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev \
   libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 \
-  libxtst6 xauth xvfb tzdata software-properties-common \build-essential \
+  libxtst6 xauth xvfb tzdata software-properties-common \ build-essential \
   python3-dev \
   libffi-dev \
   libssl-dev \
-  gcc \
+  gcc
 
 RUN add-apt-repository ppa:deadsnakes/ppa -y && \
   apt-get install python3.12 python3-pip -y && \
