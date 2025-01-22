@@ -16,7 +16,8 @@ RUN apt-get cargo -y
 
 RUN add-apt-repository ppa:deadsnakes/ppa -y && \
     apt-get update -y && \
-    apt-get install -y python3.12 python3.12-dev python3-pip python3.12-distutils
+    apt-get install -y python3.12 python3.12-dev python3-pip && \
+  pip install pipenv
 
 RUN pip install pipenv
 
