@@ -6,7 +6,7 @@ from modules.logger.internal.DDHandler import DDHandler
 
 
 class DatadogLogger(BaseLogger):
-    def __init__(self):
+    def __init__(self) -> None:
         self.ddConfig = ConfigService.get_datadog_config()
         self.config = Configuration()
         self.config.api_key["apiKeyAuth"] = self.ddConfig.api_key
