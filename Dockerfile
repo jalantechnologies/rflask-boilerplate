@@ -16,7 +16,7 @@ RUN apt-get install cargo -y
 
 RUN add-apt-repository ppa:deadsnakes/ppa -y && \
     apt-get update -y && \
-    apt-get install -y python3.12 python3.12-dev python3-pip python3.12-distutils && \
+    apt-get install -y python3.12 python3.12-dev python3-pip && \
   pip install pipenv
 
 RUN curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
