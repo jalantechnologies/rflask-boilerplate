@@ -12,11 +12,8 @@ RUN apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev \
   libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 \
   libxtst6 xauth xvfb tzdata software-properties-common
 
-RUN apt-get cargo -y
-
 RUN add-apt-repository ppa:deadsnakes/ppa -y && \
-    apt-get update -y && \
-    apt-get install -y python3.12 python3.12-dev python3-pip && \
+  apt-get install python3.12 python3-pip -y && \
   pip install pipenv
 
 RUN pip install pipenv
