@@ -22,10 +22,11 @@ class ConfigService:
 
     @staticmethod
     def get_datadog_config() -> DatadogConfig:
+        datadogConfig = DictUtil.required_get_dict(input_dict=ConfigManager.config,key="DATADOG")
         return DatadogConfig(
-            api_key=DictUtil.required_get_str(input_dict=ConfigManager.config, key="dd_api_key"),
-            application_key=DictUtil.required_get_str(input_dict=ConfigManager.config, key="dd_application_key"),
-            app_name = DictUtil.required_get_str(input_dict=ConfigManager.config,key="dd_app_name")
+            api_key=DictUtil.required_get_str(input_dict=datadogConfig, key="dd_api_key"),
+            host=DictUtil.required_get_str(input_dict=datadogConfig,key="dd_site_name"),
+            app_name = DictUtil.required_get_str(input_dict=datadogConfig,key="dd_app_name")
         )
 
     @staticmethod

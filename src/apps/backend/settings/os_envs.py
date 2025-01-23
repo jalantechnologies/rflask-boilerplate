@@ -34,8 +34,8 @@ class OSSettings:
 
     DATADOG: Optional[dict[str, Optional[str]]] = field(
         default_factory=lambda: {
-            "dd_api_key": os.environ.get("DATADOG_API_KEY"),
-            "dd_application_key": os.environ.get("DATADOG_APPLICATION_KEY"),
+            "dd_api_key": os.environ.get("DD_API_KEY"),
+            "dd_site_name": os.environ.get("DD_SITE"),
             "dd_app_name": os.environ.get("DATADOG_APP_NAME")
         }
     )
