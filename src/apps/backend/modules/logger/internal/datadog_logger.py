@@ -1,7 +1,5 @@
 import logging
 from modules.logger.internal.base_logger import BaseLogger
-# from modules.config.config_service import ConfigService
-# from datadog_api_client import Configuration
 from modules.logger.internal.DDHandler import DDHandler
 
 
