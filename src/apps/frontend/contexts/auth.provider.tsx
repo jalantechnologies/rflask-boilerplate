@@ -49,7 +49,7 @@ const loginFn = async (
 ): Promise<ApiResponse<AccessToken>> => {
   const result = await authService.login(username, password);
   if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
+    localStorage.setItem('access-token', JSON.stringify(result.data.toJson()));
   }
   return result;
 };
@@ -71,7 +71,7 @@ const verifyOTPFn = async (
 ): Promise<ApiResponse<AccessToken>> => {
   const result = await authService.verifyOTP(phoneNumber, otp);
   if (result.data) {
-    localStorage.setItem('access-token', JSON.stringify(result.data));
+    localStorage.setItem('access-token', JSON.stringify(result.data.toJson()));
   }
   return result;
 };
