@@ -2,26 +2,27 @@ import { useCallback, useState } from 'react';
 
 import { UseAsyncResponse, AsyncResult, AsyncError } from '../types';
 import { AsyncOperationError } from '../types/async-operation';
+import { Nullable } from '../types/common-types';
 
 const useAsync = <T>(
   asyncFn: (...args: unknown[]) => Promise<AsyncResult<T>>,
 ): UseAsyncResponse<T> => {
-  const [result, setResult] = useState<T | undefined>(undefined);
+  const [result, setResult] = useState<Nullable<T>>(null);
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState<AsyncError | undefined>(undefined);
+  const [error, setError] = useState<Nullable<AsyncError>>(null);
 
   const asyncCallback = useCallback(
     async (...args: unknown[]) => {
-      setError(undefined);
+      setError(null);
       setLoading(true);
       try {
         const response = await asyncFn(...args);
 
-        if (response.data) {
-          setResult({ ...response.data });
+        if (response.data !== undefined) {
+          setResult(response.data);
         }
 
-        return response?.data;
+        return response.data ?? null;
       } catch (e) {
         const err = new AsyncOperationError({
           code: e?.response?.data?.code || e.code,
@@ -36,7 +37,6 @@ const useAsync = <T>(
     },
     [asyncFn],
   );
-
   return {
     asyncCallback,
     error,
@@ -44,5 +44,4 @@ const useAsync = <T>(
     result,
   };
 };
-
 export default useAsync;

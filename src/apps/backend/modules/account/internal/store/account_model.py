@@ -1,8 +1,12 @@
 from datetime import datetime
 from typing import Any, Optional
+
 from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field
+
 from modules.account.types import PhoneNumber
+
+
 class AccountModel(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

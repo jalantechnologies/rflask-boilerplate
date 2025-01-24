@@ -26,7 +26,7 @@ const UserProfileSnippet: React.FC<DropdownUserProps> = ({
   useEffect(() => {
     const clickHandler = (event: MouseEvent) => {
       const targetNode = event.target as Node;
-      if (!dropdown.current) return;
+      if (!dropdown.current || !trigger.current) return;
       if (
         !dropdownOpen ||
         dropdown.current.contains(targetNode) ||

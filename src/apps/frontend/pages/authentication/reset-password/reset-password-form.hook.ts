@@ -44,9 +44,9 @@ const useResetPasswordForm = ({
     }),
     onSubmit: (values) => {
       resetPassword({
-        accountId,
+        accountId: accountId || '',
         newPassword: values.password,
-        token,
+        token: token || '',
       })
         .then(() => {
           onSuccess();

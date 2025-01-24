@@ -9,7 +9,7 @@ import styles from './button.styles';
 interface ButtonProps {
   disabled?: boolean;
   isLoading?: boolean;
-  onClick?: (e) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   type?: ButtonType;
   kind?: ButtonKind;
 }

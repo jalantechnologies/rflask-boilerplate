@@ -1,4 +1,4 @@
-import { JsonObject } from './common-types';
+import { JsonObject, Nullable } from './common-types';
 
 export interface AsyncError {
   code: string;
@@ -6,14 +6,15 @@ export interface AsyncError {
 }
 
 export interface AsyncResult<T> {
-  error?: AsyncError;
-  data?: T;
+  error?: Nullable<AsyncError>;
+  data?: Nullable<T>;
 }
 
-export interface UseAsyncResponse<T> extends AsyncResult<T> {
-  result: T;
-  asyncCallback: (...args: unknown[]) => Promise<T>;
+export interface UseAsyncResponse<T> {
+  result: Nullable<T>;
+  asyncCallback: (...args: unknown[]) => Promise<Nullable<T>>;
   isLoading: boolean;
+  error: Nullable<AsyncError>;
 }
 
 export class AsyncOperationError implements AsyncError {

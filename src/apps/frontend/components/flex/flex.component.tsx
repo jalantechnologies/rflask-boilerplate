@@ -4,11 +4,11 @@ import React, { PropsWithChildren } from 'react';
 import styles from './flex.styles';
 
 interface FlexProps {
-  alignItems?: string;
-  direction?: string;
-  flexWrap?: string;
-  gap?: number;
-  justifyContent?: string;
+  alignItems?: keyof typeof styles.alignItems;
+  direction?: keyof typeof styles.direction;
+  flexWrap?: keyof typeof styles.flexWrap;
+  gap?: keyof typeof styles.gap;
+  justifyContent?: keyof typeof styles.justifyContent;
 }
 
 const Flex: React.FC<PropsWithChildren<FlexProps>> = ({
@@ -16,7 +16,7 @@ const Flex: React.FC<PropsWithChildren<FlexProps>> = ({
   children,
   direction = 'row',
   flexWrap = 'nowrap',
-  gap = '0',
+  gap = 0,
   justifyContent = 'start',
 }) => (
   <div

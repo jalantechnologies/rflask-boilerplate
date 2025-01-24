@@ -26,7 +26,9 @@ const useOTPForm = ({
 
   const searchParams = new URLSearchParams(window.location.search);
   const phoneNumber = searchParams.get('phone_number');
-  const countryCode = decodeURIComponent(searchParams.get('country_code'));
+  const countryCode = decodeURIComponent(
+    searchParams.get('country_code') || '',
+  );
 
   const formik = useFormik({
     initialValues: {
