@@ -11,4 +11,13 @@ export default class AccountService extends APIService {
         Authorization: `Bearer ${userAccessToken.token}`,
       },
     });
+
+  deleteAccount = async (
+    userAccessToken: AccessToken,
+  ): Promise<ApiResponse<null>> =>
+    this.apiClient.delete(`/accounts/${userAccessToken.accountId}`, {
+      headers: {
+        Authorization: `Bearer ${userAccessToken.token}`,
+      },
+    });
 }
