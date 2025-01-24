@@ -1,16 +1,16 @@
 from datetime import datetime
 from typing import Any, Optional
 
+from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field
 
-from modules.account.internal.store.account_model import PyObjectId
 from modules.account.types import PhoneNumber
 
 
 class OtpModel(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    id: Optional[PyObjectId] = Field(None, alias="_id")
+    id: Optional[ObjectId | str] = Field(None, alias="_id")
     active: bool = True
     otp_code: str
     phone_number: PhoneNumber

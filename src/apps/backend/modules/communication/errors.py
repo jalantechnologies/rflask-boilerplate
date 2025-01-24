@@ -13,7 +13,7 @@ class ValidationError(AppError):
         self.code = CommunicationErrorCode.VALIDATION_ERROR
         super().__init__(message=msg, code=self.code)
         self.failures = failures
-        self.https_code = 400
+        self.http_code = 400
 
 
 class ServiceError(AppError):

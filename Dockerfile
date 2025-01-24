@@ -23,6 +23,11 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && \
 RUN apt-get install nodejs -y
 RUN node --version && npm --version
 
+COPY Pipfile /app/Pipfile
+COPY Pipfile.lock /app/Pipfile.lock
+RUN pipenv install --dev
+RUN cp -a /app/. /.project/
+
 COPY package.json /.project/package.json
 COPY package-lock.json /.project/package-lock.json
 RUN cd /.project && npm ci
@@ -31,6 +36,7 @@ RUN mkdir -p /opt/app && cp -a /.project/. /opt/app/
 WORKDIR /opt/app
 
 RUN npm ci
+RUN pipenv install --dev
 
 COPY . /opt/app
 
@@ -40,3 +46,4 @@ ARG APP_ENV
 RUN npm run build
 
 CMD [ "npm", "start" ]
+
