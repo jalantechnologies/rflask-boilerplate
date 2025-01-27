@@ -1,8 +1,8 @@
 import os
 
-from src.apps.backend.modules.common.types import ErrorCode
-from src.apps.backend.modules.config.config_service import ConfigService
-from src.apps.backend.modules.error.custom_errors import MissingKeyError
+from modules.common.types import ErrorCode
+from modules.config.config_service import ConfigService
+from modules.error.custom_errors import MissingKeyError
 from tests.modules.config.base_test_config import BaseTestConfig
 
 

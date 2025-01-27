@@ -4,18 +4,18 @@ from unittest import mock
 
 import jwt
 
-from src.apps.backend.modules.access_token.types import AccessTokenErrorCode
-from src.apps.backend.modules.account.account_service import AccountService
-from src.apps.backend.modules.account.types import (
+from modules.access_token.types import AccessTokenErrorCode
+from modules.account.account_service import AccountService
+from modules.account.types import (
     AccountErrorCode,
     CreateAccountByPhoneNumberParams,
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
 )
-from src.apps.backend.modules.communication.sms_service import SMSService
-from src.apps.backend.modules.config.config_service import ConfigService
-from src.apps.backend.modules.otp.types import OtpErrorCode
-from src.apps.backend.server import app
+from modules.communication.sms_service import SMSService
+from modules.config.config_service import ConfigService
+from modules.otp.types import OtpErrorCode
+from server import app
 from tests.modules.account.base_test_account import BaseTestAccount
 
 ACCOUNT_URL = "http://127.0.0.1:8080/api/accounts"

@@ -1,7 +1,7 @@
 import unittest
 from typing import Callable
 
-from src.apps.backend.modules.config.config_manager import ConfigManager
+from modules.config.config_manager import ConfigManager
 
 
 class BaseTestConfig(unittest.TestCase):
