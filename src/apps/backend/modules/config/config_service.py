@@ -26,7 +26,8 @@ class ConfigService:
         return DatadogConfig(
             api_key=DictUtil.required_get_str(input_dict=datadog_config, key="dd_api_key"),
             host=DictUtil.required_get_str(input_dict=datadog_config,key="dd_site_name"),
-            app_name = DictUtil.required_get_str(input_dict=datadog_config,key="dd_app_name")
+            app_name = DictUtil.required_get_str(input_dict=datadog_config,key="dd_app_name"),
+            dd_log_level = DictUtil.required_get_str(input_dict=datadog_config,key="dd_log_level")
         )
 
     @staticmethod

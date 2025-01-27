@@ -36,6 +36,7 @@ class OSSettings:
         default_factory=lambda: {
             "dd_api_key": os.environ.get("DD_API_KEY"),
             "dd_site_name": os.environ.get("DD_SITE"),
-            "dd_app_name": os.environ.get("DATADOG_APP_NAME")
+            "dd_app_name": os.environ.get("DATADOG_APP_NAME"),
+            "dd_log_level": os.environ.get("DD_LOG_LEVEL")
         }
     )
