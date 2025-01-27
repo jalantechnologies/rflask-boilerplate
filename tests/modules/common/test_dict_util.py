@@ -1,5 +1,5 @@
-from modules.common.dict_util import DictUtil
-from modules.error.custom_errors import MissingKeyError, ValueTypeMismatchError
+from src.apps.backend.modules.common.dict_util import DictUtil
+from src.apps.backend.modules.error.custom_errors import MissingKeyError, ValueTypeMismatchError
 
 
 class TestDictUtil:

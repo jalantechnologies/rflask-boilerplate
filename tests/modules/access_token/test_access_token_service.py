@@ -1,10 +1,10 @@
-from modules.access_token.access_token_service import AccessTokenService
-from modules.access_token.types import EmailBasedAuthAccessTokenRequestParams, OTPBasedAuthAccessTokenRequestParams
-from modules.account.account_service import AccountService
-from modules.account.internal.account_writer import AccountWriter
-from modules.account.types import CreateAccountByPhoneNumberParams, CreateAccountByUsernameAndPasswordParams
-from modules.otp.otp_service import OtpService
-from modules.otp.types import CreateOtpParams
+from src.apps.backend.modules.access_token.access_token_service import AccessTokenService
+from src.apps.backend.modules.access_token.types import EmailBasedAuthAccessTokenRequestParams, OTPBasedAuthAccessTokenRequestParams
+from src.apps.backend.modules.account.account_service import AccountService
+from src.apps.backend.modules.account.internal.account_writer import AccountWriter
+from src.apps.backend.modules.account.types import CreateAccountByPhoneNumberParams, CreateAccountByUsernameAndPasswordParams
+from src.apps.backend.modules.otp.otp_service import OtpService
+from src.apps.backend.modules.otp.types import CreateOtpParams
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
 

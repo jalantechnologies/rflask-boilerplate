@@ -1,16 +1,16 @@
 from unittest.mock import patch
 
-from modules.access_token.types import AccessTokenPayload
-from modules.account.account_service import AccountService
-from modules.account.errors import AccountNotFoundError
-from modules.account.types import (
+from src.apps.backend.modules.access_token.types import AccessTokenPayload
+from src.apps.backend.modules.account.account_service import AccountService
+from src.apps.backend.modules.account.errors import AccountNotFoundError
+from src.apps.backend.modules.account.types import (
     AccountErrorCode,
     AccountSearchByIdParams,
     CreateAccountByPhoneNumberParams,
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
 )
-from server import app
+from src.apps.backend.server import app
 from tests.modules.account.base_test_account import BaseTestAccount
 
 

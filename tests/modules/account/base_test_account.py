@@ -1,11 +1,11 @@
 import unittest
 from typing import Callable
 
-from modules.account.internal.store.account_repository import AccountRepository
-from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
-from modules.config.config_manager import ConfigManager
-from modules.logger.logger_manager import LoggerManager
-from modules.otp.internal.store.otp_repository import OtpRepository
+from src.apps.backend.modules.account.internal.store.account_repository import AccountRepository
+from src.apps.backend.modules.account.rest_api.account_rest_api_server import AccountRestApiServer
+from src.apps.backend.modules.config.config_manager import ConfigManager
+from src.apps.backend.modules.logger.logger_manager import LoggerManager
+from src.apps.backend.modules.otp.internal.store.otp_repository import OtpRepository
 
 
 class BaseTestAccount(unittest.TestCase):

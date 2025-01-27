@@ -1,15 +1,15 @@
 import json
 
-from modules.account.account_service import AccountService
-from modules.account.internal.account_writer import AccountWriter
-from modules.account.types import (
+from src.apps.backend.modules.account.account_service import AccountService
+from src.apps.backend.modules.account.internal.account_writer import AccountWriter
+from src.apps.backend.modules.account.types import (
     AccountErrorCode,
     CreateAccountByPhoneNumberParams,
     CreateAccountByUsernameAndPasswordParams,
 )
-from modules.otp.otp_service import OtpService
-from modules.otp.types import CreateOtpParams, OtpErrorCode, VerifyOtpParams
-from server import app
+from src.apps.backend.modules.otp.otp_service import OtpService
+from src.apps.backend.modules.otp.types import CreateOtpParams, OtpErrorCode, VerifyOtpParams
+from src.apps.backend.server import app
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
 API_URL = "http://127.0.0.1:8080/api/access-tokens"
