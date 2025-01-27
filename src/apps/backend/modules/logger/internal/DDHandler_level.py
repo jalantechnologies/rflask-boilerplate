@@ -20,5 +20,5 @@ class LogLevel:
                 return logging.WARNING
             elif level == logging_levels[4]:
                 return logging.ERROR
-            elif level == logging_levels[5]:
+            else :
                 return logging.CRITICAL
