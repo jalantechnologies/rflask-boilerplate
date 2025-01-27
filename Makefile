@@ -19,7 +19,7 @@ run-engine:
 
 run-test:
 	cd src/apps/backend \
-		&& pipenv run pytest tests
+		&& pipenv run pytest --cov=. --cov-report=xml:/app/output/coverage.xml tests
 
 run-engine-winx86:
 	echo "This command is specifically for Windows platform \
