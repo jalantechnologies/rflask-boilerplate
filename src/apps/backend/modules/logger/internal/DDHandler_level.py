@@ -9,15 +9,16 @@ class LogLevel:
         logging_levels = ["notset","debug","info","warning","error","critical"]
         if level.lower() not in logging_levels:
             return logging.DEBUG
-        elif level == logging_levels[0]:
-            return logging.NOTSET
-        elif level == logging_levels[1]:
-            return logging.DEBUG
-        elif level == logging_levels[2]:
-            return logging.INFO
-        elif level == logging_levels[3]:
-            return logging.WARNING
-        elif level == logging_levels[4]:
-            return logging.ERROR
-        elif level == logging_levels[5]:
-            return logging.CRITICAL
+        else :
+            if level == logging_levels[0]:
+                return logging.NOTSET
+            elif level == logging_levels[1]:
+                return logging.DEBUG
+            elif level == logging_levels[2]:
+                return logging.INFO
+            elif level == logging_levels[3]:
+                return logging.WARNING
+            elif level == logging_levels[4]:
+                return logging.ERROR
+            elif level == logging_levels[5]:
+                return logging.CRITICAL
