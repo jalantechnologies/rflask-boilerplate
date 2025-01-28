@@ -12,7 +12,7 @@ export const getAccessTokenFromStorage = (): Nullable<AccessToken> => {
 };
 
 export const setAccessTokenToStorage = (token: AccessToken): void => {
-  localStorage.setItem(ACCESS_TOKEN_KEY, JSON.stringify(token));
+  localStorage.setItem(ACCESS_TOKEN_KEY, JSON.stringify(token.toJson()));
 };
 
 export const removeAccessTokenFromStorage = (): void => {
