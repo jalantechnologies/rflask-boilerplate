@@ -12,7 +12,7 @@ def get_parent_directory(directory: str, levels: int) -> Path:
 
 
 class Config:
-    config: dict[str, Any]
+    config_dict: dict[str, Any]
     config_path: Path = get_parent_directory(__file__, 6) / "config"
 
     @staticmethod
@@ -30,7 +30,7 @@ class Config:
     def load_config() -> None:
         Config.intialize_config()
         Config.process_custom_environment_variables()
-        print(yaml.dump(Config.config))
+        print(yaml.dump(Config.config_dict))
 
     @staticmethod
     def intialize_config() -> None:
@@ -38,7 +38,7 @@ class Config:
         app_env = os.environ.get("APP_ENV", "development")
         app_env_content = Config.read(f"{app_env}.yml")
         merge_content = Config.deep_merge(default_content, app_env_content)
-        Config.config = merge_content
+        Config.config_dict = merge_content
 
     @staticmethod
     def parse_value(value:Optional[str], value_format:str)-> Any:
@@ -64,35 +64,50 @@ class Config:
 
 
     @staticmethod
-    def replace_with_env_values(data:dict[str,Any])-> dict[str,Any]:
+    def replace_with_env_values(data:dict[str,Any]) -> dict[str,Any]:
         """
         Recursively traverse a dictionary and replace values with the corresponding environment variable values
         if the value in the dictionary matches a key in the environment variables.
         """
-        if isinstance(data, dict):
-            keys_to_delete = []  # Collect keys to delete
-            for key, value in data.items():
-                if isinstance(value, dict) and "__name" in value:
-                    env_var_name = value["__name"]
-                    env_var_value = os.getenv(env_var_name)
-                    value_format = value.get("__format")
+        if not isinstance(data, dict):
+            return data
 
-                    if value_format:
-                        data[key] = Config.parse_value(env_var_value, value_format)
-                    else:
-                        data[key] = env_var_value
-                elif isinstance(value, dict):  # If nested, call recursively
-                    data[key] = Config.replace_with_env_values(value)
-                elif isinstance(value, str):  # Replace if the value is an environment key
-                    env_value = os.getenv(value)
-                    if env_value is None:  # Mark key for deletion if env variable is not found
-                        keys_to_delete.append(key)
-                    else:
-                        data[key] = env_value
-            # Delete keys with None values after iteration
-            for key in keys_to_delete:
-                del data[key]
+        keys_to_delete:list = []  # Collect keys to delete
+
+        for key, value in data.items():
+            if isinstance(value, dict):
+                data[key] = Config.process_dict_value(value)
+            elif isinstance(value, str):
+                Config.process_str_value(data, key, value, keys_to_delete)
+
+        Config.delete_keys(data, keys_to_delete)
         return data
+
+    @staticmethod
+    def process_dict_value(value : dict[str,Any]) -> Any:
+        """Process a dictionary value, replacing or recursively traversing it."""
+        if "__name" in value:
+            env_var_name = value["__name"]
+            env_var_value = os.getenv(env_var_name)
+            value_format = value.get("__format")
+            return Config.parse_value(env_var_value, value_format) if value_format else env_var_value
+        return Config.replace_with_env_values(value)
+
+    @staticmethod
+    def process_str_value(data:dict[str,Any], key:str, value:str, keys_to_delete:list) -> None:
+        """Process a string value, replacing it with an environment variable or marking for deletion."""
+        env_value = os.getenv(value)
+        if env_value is None:
+            keys_to_delete.append(key)
+        else:
+            data[key] = env_value
+
+    @staticmethod
+    def delete_keys(data:dict[str,Any], keys_to_delete:list) -> None:
+        """Delete keys marked for deletion."""
+        for key in keys_to_delete:
+            del data[key]
+
 
     @staticmethod
     def process_custom_environment_variables() -> None:
@@ -102,7 +117,7 @@ class Config:
         """
         custom_env_contents = Config.read("custom-environment-variables.yml")
         replaced_custom_env_contents = Config.replace_with_env_values(custom_env_contents)
-        Config.deep_merge(Config.config, replaced_custom_env_contents)
+        Config.deep_merge(Config.config_dict, replaced_custom_env_contents)
 
     @staticmethod
     def deep_merge(dict1: dict[str, Any], dict2: dict[str, Any]) -> dict[str, Any]:
@@ -122,7 +137,7 @@ class Config:
     @staticmethod
     def get(key: str, default: Optional[Any] = None) -> Any:
         keys = key.split(".")
-        value = Config.config
+        value = Config.config_dict
         try:
             for k in keys:
                 value = value[k]
@@ -133,7 +148,7 @@ class Config:
     @staticmethod
     def has(key: str) -> bool:
         keys = key.split(".")
-        value = Config.config
+        value = Config.config_dict
         try:
             for k in keys:
                 value = value[k]
