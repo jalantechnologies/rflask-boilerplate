@@ -17,9 +17,10 @@ class TestConfig(BaseTestConfig):
         assert type(loggers) == tuple
         assert "console" in loggers
 
-    def test_papertrail_config_is_loaded(self) -> None:
+    def test_datadog_config_is_loaded(self) -> None:
         try:
             ConfigService.get_datadog_config()
+
         except MissingKeyError as exc:
             assert exc.code == ErrorCode.MISSING_KEY
 
