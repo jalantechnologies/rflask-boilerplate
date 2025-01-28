@@ -5,10 +5,12 @@ application up and running.
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Configuration](#configuration)
-- [Integrations](#integrations)
-- [Deployment](#deployment)
+- [Boilerplate - FRM](#boilerplate---frm)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+  - [Configuration](#configuration)
+  - [Scripts](#scripts)
+  - [Deployment](#deployment)
 
 ## Getting Started
 
@@ -38,7 +40,7 @@ application up and running.
 
 - Install dependencies - `npm install`
 - Install Python dependencies - `pipenv install --dev`
-- Build Project - `npm run build`
+- Build Project - `npm build`
 - Start Application (without HotReload) - `npm start`
 - Start Application (with HotReload enabled) - `npm run serve`
   - To disable opening up the browser automatically, set `WEBPACK_DEV_DISABLE_OPEN` to `true`.
