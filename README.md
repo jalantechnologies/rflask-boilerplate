@@ -5,10 +5,12 @@ application up and running.
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Configuration](#configuration)
-- [Integrations](#integrations)
-- [Deployment](#deployment)
+- [Boilerplate - FRM](#boilerplate---frm)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+  - [Configuration](#configuration)
+  - [Scripts](#scripts)
+  - [Deployment](#deployment)
 
 ## Getting Started
 
