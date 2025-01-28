@@ -18,8 +18,7 @@ run-engine:
 		&& pipenv run gunicorn -c gunicorn_config.py --reload server:app
 
 run-test:
-	cd src/apps/backend \
-		&& pipenv run pytest tests
+	PYTHONPATH=src/apps/backend pipenv run pytest tests
 
 run-engine-winx86:
 	echo "This command is specifically for Windows platform \
