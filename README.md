@@ -37,6 +37,7 @@ application up and running.
 **Scripts:**
 
 - Install dependencies - `npm install`
+- Install Python dependencies - `pipenv install --dev`
 - Build Project - `npm build`
 - Start Application (without HotReload) - `npm start`
 - Start Application (with HotReload enabled) - `npm run serve`
