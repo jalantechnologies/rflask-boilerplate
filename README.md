@@ -38,7 +38,7 @@ application up and running.
 
 - Install dependencies - `npm install`
 - Install Python dependencies - `pipenv install --dev`
-- Build Project - `npm build`
+- Build Project - `npm run build`
 - Start Application (without HotReload) - `npm start`
 - Start Application (with HotReload enabled) - `npm run serve`
   - To disable opening up the browser automatically, set `WEBPACK_DEV_DISABLE_OPEN` to `true`.
