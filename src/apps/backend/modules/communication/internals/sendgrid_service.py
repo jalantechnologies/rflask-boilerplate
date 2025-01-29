@@ -16,7 +16,10 @@ class SendGridService:
     def send_email(params: SendEmailParams) -> None:
         EmailParams.validate(params)
 
-        message = Mail(from_email=From(params.sender.email, params.sender.name), to_emails=To(params.recipient.email))
+        message = Mail(
+            from_email=From(params.sender.email, params.sender.name),
+            to_emails=To(params.recipient.email),
+        )
         message.template_id = TemplateId(params.template_id)
         message.dynamic_template_data = params.template_data
 
@@ -30,6 +33,6 @@ class SendGridService:
     @staticmethod
     def get_client() -> sendgrid.SendGridAPIClient:
         if not SendGridService.__client:
-            api_key:str = ConfigService.get_value(key="sendgrid.api_key")
+            api_key = ConfigService.get_value(key="sendgrid.api_key", expected_type=str)
             SendGridService.__client = sendgrid.SendGridAPIClient(api_key=api_key)
         return SendGridService.__client

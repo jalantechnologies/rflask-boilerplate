@@ -1,8 +1,8 @@
 import logging
 from logging.handlers import SysLogHandler
 
-from modules.config.types import PapertrailConfig
 from modules.config.config_service import ConfigService
+from modules.config.types import PapertrailConfig
 from modules.logger.internal.base_logger import BaseLogger
 
 
@@ -13,11 +13,15 @@ class PapertrailLogger(BaseLogger):
 
         # Create a console handler and set the level to INFO
         logger_config = PapertrailConfig(
-            host=ConfigService.get_value(key='papertrail.host'),
-            port=ConfigService.get_value(key='papertrail.port')
+            host=ConfigService.get_value(key="papertrail.host", expected_type=str),
+            port=ConfigService.get_value(key="papertrail.port", expected_type=int),
         )
-        papertrail_handler = SysLogHandler(address=(logger_config.host, logger_config.port))
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        papertrail_handler = SysLogHandler(
+            address=(logger_config.host, logger_config.port)
+        )
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
         papertrail_handler.setFormatter(formatter)
 
         self.logger.addHandler(papertrail_handler)

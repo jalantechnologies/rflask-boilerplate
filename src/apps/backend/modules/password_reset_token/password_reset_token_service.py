@@ -6,15 +6,26 @@ from modules.account.types import Account
 from modules.communication.email_service import EmailService
 from modules.communication.types import EmailRecipient, EmailSender, SendEmailParams
 from modules.config.config_service import ConfigService
-from modules.password_reset_token.internal.password_reset_token_reader import PasswordResetTokenReader
-from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
-from modules.password_reset_token.internal.password_reset_token_writer import PasswordResetTokenWriter
-from modules.password_reset_token.types import CreatePasswordResetTokenParams, PasswordResetToken
+from modules.password_reset_token.internal.password_reset_token_reader import (
+    PasswordResetTokenReader,
+)
+from modules.password_reset_token.internal.password_reset_token_util import (
+    PasswordResetTokenUtil,
+)
+from modules.password_reset_token.internal.password_reset_token_writer import (
+    PasswordResetTokenWriter,
+)
+from modules.password_reset_token.types import (
+    CreatePasswordResetTokenParams,
+    PasswordResetToken,
+)
 
 
 class PasswordResetTokenService:
     @staticmethod
-    def create_password_reset_token(params: CreatePasswordResetTokenParams) -> PasswordResetToken:
+    def create_password_reset_token(
+        params: CreatePasswordResetTokenParams,
+    ) -> PasswordResetToken:
         account = AccountReader.get_account_by_username(username=params.username)
         account_obj = Account(
             id=str(account.id),
@@ -24,22 +35,34 @@ class PasswordResetTokenService:
             phone_number=account.phone_number,
         )
         token = PasswordResetTokenUtil.generate_password_reset_token()
-        password_reset_token = PasswordResetTokenWriter.create_password_reset_token(account_obj.id, token)
-        PasswordResetTokenService.send_password_reset_email(account_obj.id, account.first_name, account.username, token)
+        password_reset_token = PasswordResetTokenWriter.create_password_reset_token(
+            account_obj.id, token
+        )
+        PasswordResetTokenService.send_password_reset_email(
+            account_obj.id, account.first_name, account.username, token
+        )
 
         return password_reset_token
 
     @staticmethod
     def get_password_reset_token_by_account_id(account_id: str) -> PasswordResetToken:
-        return PasswordResetTokenReader.get_password_reset_token_by_account_id(account_id)
+        return PasswordResetTokenReader.get_password_reset_token_by_account_id(
+            account_id
+        )
 
     @staticmethod
-    def set_password_reset_token_as_used_by_id(password_reset_token_id: str) -> PasswordResetToken:
-        return PasswordResetTokenWriter.set_password_reset_token_as_used(password_reset_token_id)
+    def set_password_reset_token_as_used_by_id(
+        password_reset_token_id: str,
+    ) -> PasswordResetToken:
+        return PasswordResetTokenWriter.set_password_reset_token_as_used(
+            password_reset_token_id
+        )
 
     @staticmethod
     def verify_password_reset_token(account_id: str, token: str) -> PasswordResetToken:
-        password_reset_token = PasswordResetTokenService.get_password_reset_token_by_account_id(account_id)
+        password_reset_token = (
+            PasswordResetTokenService.get_password_reset_token_by_account_id(account_id)
+        )
 
         if password_reset_token.is_expired:
             raise AccountBadRequestError(
@@ -61,12 +84,20 @@ class PasswordResetTokenService:
         return password_reset_token
 
     @staticmethod
-    def send_password_reset_email(account_id: str, first_name: str, username: str, password_reset_token: str) -> None:
+    def send_password_reset_email(
+        account_id: str, first_name: str, username: str, password_reset_token: str
+    ) -> None:
 
-        web_app_host:str = ConfigService.get_value(key="web_app_host")
-        default_email:str = ConfigService.get_value(key="mailer.default_email")
-        default_email_name:str = ConfigService.get_value(key="mailer.default_email_name")
-        forgot_password_mail_template_id:str = ConfigService.get_value(key="mailer.forgot_password_mail_template_id")
+        web_app_host = ConfigService.get_value(key="web_app_host", expected_type=str)
+        default_email = ConfigService.get_value(
+            key="mailer.default_email", expected_type=str
+        )
+        default_email_name = ConfigService.get_value(
+            key="mailer.default_email_name", expected_type=str
+        )
+        forgot_password_mail_template_id = ConfigService.get_value(
+            key="mailer.forgot_password_mail_template_id", expected_type=str
+        )
 
         template_data = {
             "first_name": first_name,

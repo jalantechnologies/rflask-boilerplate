@@ -14,7 +14,9 @@ class ApplicationRepositoryClient:
 
     @classmethod
     def get_client(cls) -> MongoClient:
-        connection_caching:bool = ConfigService.get_value(key="mongodb.conn_caching")
+        connection_caching = ConfigService.get_value(
+            key="mongodb.conn_caching", expected_type=bool
+        )
 
         if connection_caching:
             if cls._client is None:
@@ -27,7 +29,7 @@ class ApplicationRepositoryClient:
 
     @staticmethod
     def _create_client() -> MongoClient:
-        connection_uri:str = ConfigService.get_value(key="mongodb.uri")
+        connection_uri = ConfigService.get_value(key="mongodb.uri", expected_type=str)
         Logger.info(message=f"connecting to database - {connection_uri}")
         client = MongoClient(connection_uri, server_api=ServerApi("1"))
         Logger.info(message=f"connected to database - {connection_uri}")
@@ -42,7 +44,6 @@ class ApplicationRepository(ABC):
     @abstractmethod
     def collection_name(self) -> str:
         """Return collection name of the Repository"""
-        pass
 
     @classmethod
     def collection(cls) -> Collection:

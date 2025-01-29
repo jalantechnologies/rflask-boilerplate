@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from typing import Any, Optional
+
 import yaml
 
 
@@ -41,7 +42,7 @@ class Config:
         Config.config_dict = merge_content
 
     @staticmethod
-    def parse_value(value:Optional[str], value_format:str)-> Any:
+    def parse_value(value: Optional[str], value_format: str) -> Any:
         """
         Parse the environment variable value based on the specified format.
         """
@@ -60,11 +61,12 @@ class Config:
         try:
             return parser(value)
         except Exception as e:
-            raise ValueError(f"Error parsing value '{value}' as {value_format}: {e}") from e
-
+            raise ValueError(
+                f"Error parsing value '{value}' as {value_format}: {e}"
+            ) from e
 
     @staticmethod
-    def replace_with_env_values(data:dict[str,Any]) -> dict[str,Any]:
+    def replace_with_env_values(data: dict[str, Any]) -> dict[str, Any]:
         """
         Recursively traverse a dictionary and replace values with the corresponding environment variable values
         if the value in the dictionary matches a key in the environment variables.
@@ -72,7 +74,7 @@ class Config:
         if not isinstance(data, dict):
             return data
 
-        keys_to_delete:list = []  # Collect keys to delete
+        keys_to_delete: list = []  # Collect keys to delete
 
         for key, value in data.items():
             if isinstance(value, dict):
@@ -84,17 +86,23 @@ class Config:
         return data
 
     @staticmethod
-    def process_dict_value(value : dict[str,Any]) -> Any:
+    def process_dict_value(value: dict[str, Any]) -> Any:
         """Process a dictionary value, replacing or recursively traversing it."""
         if "__name" in value:
             env_var_name = value["__name"]
             env_var_value = os.getenv(env_var_name)
             value_format = value.get("__format")
-            return Config.parse_value(env_var_value, value_format) if value_format else env_var_value
+            return (
+                Config.parse_value(env_var_value, value_format)
+                if value_format
+                else env_var_value
+            )
         return Config.replace_with_env_values(value)
 
     @staticmethod
-    def process_str_value(data:dict[str,Any], key:str, value:str, keys_to_delete:list) -> None:
+    def process_str_value(
+        data: dict[str, Any], key: str, value: str, keys_to_delete: list
+    ) -> None:
         """Process a string value, replacing it with an environment variable or marking for deletion."""
         env_value = os.getenv(value)
         if env_value is None:
@@ -103,11 +111,10 @@ class Config:
             data[key] = env_value
 
     @staticmethod
-    def delete_keys(data:dict[str,Any], keys_to_delete:list) -> None:
+    def delete_keys(data: dict[str, Any], keys_to_delete: list) -> None:
         """Delete keys marked for deletion."""
         for key in keys_to_delete:
             del data[key]
-
 
     @staticmethod
     def process_custom_environment_variables() -> None:
@@ -116,7 +123,9 @@ class Config:
         and overrides them in the configuration if they exist.
         """
         custom_env_contents = Config.read("custom-environment-variables.yml")
-        replaced_custom_env_contents = Config.replace_with_env_values(custom_env_contents)
+        replaced_custom_env_contents = Config.replace_with_env_values(
+            custom_env_contents
+        )
         Config.deep_merge(Config.config_dict, replaced_custom_env_contents)
 
     @staticmethod
@@ -126,7 +135,11 @@ class Config:
         If a value is a nested dictionary, it will be merged as well.
         """
         for key, value in dict2.items():
-            if isinstance(value, dict) and key in dict1 and isinstance(dict1[key], dict):
+            if (
+                isinstance(value, dict)
+                and key in dict1
+                and isinstance(dict1[key], dict)
+            ):
                 # If both are dictionaries, merge them recursively
                 dict1[key] = Config.deep_merge(dict1[key], value)
             else:

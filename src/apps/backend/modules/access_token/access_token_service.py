@@ -20,18 +20,30 @@ from modules.otp.types import OtpStatus, VerifyOtpParams
 
 class AccessTokenService:
     @staticmethod
-    def create_access_token_by_username_and_password(*, params: EmailBasedAuthAccessTokenRequestParams) -> AccessToken:
+    def create_access_token_by_username_and_password(
+        *, params: EmailBasedAuthAccessTokenRequestParams
+    ) -> AccessToken:
         account = AccountReader.get_account_by_username_and_password(
-            params=AccountSearchParams(username=params.username, password=params.password)
+            params=AccountSearchParams(
+                username=params.username, password=params.password
+            )
         )
 
         return AccessTokenService.__generate_access_token(account=account)
 
     @staticmethod
-    def create_access_token_by_phone_number(*, params: OTPBasedAuthAccessTokenRequestParams) -> AccessToken:
-        account = AccountService.get_account_by_phone_number(phone_number=params.phone_number)
+    def create_access_token_by_phone_number(
+        *, params: OTPBasedAuthAccessTokenRequestParams
+    ) -> AccessToken:
+        account = AccountService.get_account_by_phone_number(
+            phone_number=params.phone_number
+        )
 
-        otp = OtpService.verify_otp(params=VerifyOtpParams(phone_number=params.phone_number, otp_code=params.otp_code))
+        otp = OtpService.verify_otp(
+            params=VerifyOtpParams(
+                phone_number=params.phone_number, otp_code=params.otp_code
+            )
+        )
 
         if otp.status != OtpStatus.SUCCESS:
             raise OtpIncorrectError()
@@ -40,25 +52,37 @@ class AccessTokenService:
 
     @staticmethod
     def __generate_access_token(*, account: Account) -> AccessToken:
-        jwt_signing_key:str = ConfigService.get_value(key="accounts.token_signing_key")
-        jwt_expiry = timedelta(days=ConfigService.get_value(key="accounts.token_expiry_days"))
+        jwt_signing_key = ConfigService.get_value(
+            key="accounts.token_signing_key", expected_type=str
+        )
+        jwt_expiry = timedelta(
+            days=ConfigService.get_value(
+                key="accounts.token_expiry_days", expected_type=int
+            )
+        )
         expiry_time = datetime.now() + jwt_expiry
         payload = {"account_id": account.id, "exp": (expiry_time).timestamp()}
         jwt_token = jwt.encode(payload, jwt_signing_key, algorithm="HS256")
-        access_token = AccessToken(token=jwt_token, account_id=account.id, expires_at=expiry_time.isoformat())
+        access_token = AccessToken(
+            token=jwt_token, account_id=account.id, expires_at=expiry_time.isoformat()
+        )
 
         return access_token
 
     @staticmethod
     def verify_access_token(*, token: str) -> AccessTokenPayload:
 
-        jwt_signing_key:str = ConfigService.get_value(key="accounts.token_signing_key")
+        jwt_signing_key = ConfigService.get_value(
+            key="accounts.token_signing_key", expected_type=str
+        )
 
         try:
             verified_token = jwt.decode(token, jwt_signing_key, algorithms=["HS256"])
         except jwt.exceptions.DecodeError:
             raise AccessTokenInvalidError("Invalid access token")
         except jwt.ExpiredSignatureError:
-            raise AccessTokenExpiredError(message="Access token has expired. Please login again.")
+            raise AccessTokenExpiredError(
+                message="Access token has expired. Please login again."
+            )
 
         return AccessTokenPayload(account_id=verified_token.get("account_id"))
