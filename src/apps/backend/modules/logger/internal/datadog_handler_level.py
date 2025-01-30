@@ -5,7 +5,7 @@ class LogLevel:
     @staticmethod
     def get_level() -> int:
         ddconfig = ConfigService.get_datadog_config()
-        level = ddconfig.dd_log_level.lower()
+        level = ddconfig.datadog_log_level.lower()
         logging_levels = ["notset","debug","info","warning","error","critical"]
         if level.lower() not in logging_levels:
             return logging.DEBUG
