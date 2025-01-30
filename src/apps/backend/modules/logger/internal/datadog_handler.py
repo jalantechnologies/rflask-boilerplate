@@ -13,10 +13,10 @@ class DatadogHandler(StreamHandler):
     
     def emit(self,record: LogRecord) -> None:
         msg = self.format(record)
-        datadogConfig = ConfigService.get_datadog_config()    
+        datadog_config = ConfigService.get_datadog_config()    
         config = Configuration()
-        config.api_key["apiKeyAuth"]=datadogConfig.api_key
-        config.server_variables["site"]=datadogConfig.host
+        config.api_key["apiKeyAuth"]=datadog_config.api_key
+        config.server_variables["site"]=datadog_config.host
         config.debug=True
         with ApiClient(config) as api_client:
             api_instance = LogsApi(api_client)
@@ -27,7 +27,7 @@ class DatadogHandler(StreamHandler):
                         ddtags = f"env : {os.environ.get('APP_NAME')}",
                         hostname = "",
                         message = msg,
-                        service = datadogConfig.app_name
+                        service = datadog_config.app_name
                     )
                 ]
             )
