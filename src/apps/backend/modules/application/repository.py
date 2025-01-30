@@ -14,7 +14,7 @@ class ApplicationRepositoryClient:
 
     @classmethod
     def get_client(cls) -> MongoClient:
-        connection_caching = ConfigService[bool].get_value(key="mongodb.conn_caching")
+        connection_caching = ConfigService[bool].get_value(key="mongodb.connection_caching")
 
         if connection_caching:
             if cls._client is None:

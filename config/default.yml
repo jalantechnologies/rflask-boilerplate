@@ -4,7 +4,7 @@ server:
 is_server_running_behind_proxy: false
 
 mongodb:
-  conn_caching: true
+  connection_caching: true
 
 web_app_host: "http://localhost:3000"
 
