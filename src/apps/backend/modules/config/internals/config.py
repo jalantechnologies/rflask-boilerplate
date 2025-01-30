@@ -4,15 +4,9 @@ from typing import Any, Optional
 import yaml
 
 
-def get_parent_directory(directory: str, levels: int) -> Path:
-    parent_dir = Path(directory)
-    for _ in range(levels):
-        parent_dir = parent_dir.parent
-    return parent_dir
-
 class Config:
     _config_dict: dict[str, Any]
-    _config_path: Path = get_parent_directory(__file__, 7) / "config"
+    _config_path: Path 
 
     @staticmethod
     def load_config() -> None:
@@ -53,10 +47,9 @@ class Config:
             print(e)
         return yaml_content
 
-    
-
     @staticmethod
     def _intialize_config() -> None:
+        Config._config_path = Config._get_base_directory(__file__) / "config"
         default_content = Config._read("default.yml")
         app_env = os.environ.get("APP_ENV", "development")
         app_env_content = Config._read(f"{app_env}.yml")
@@ -131,6 +124,11 @@ class Config:
         for key in keys_to_delete:
             del data[key]
 
+    @staticmethod
+    def _get_base_directory(current_file: str) -> Path:
+        starting_index = current_file.find("app")
+        base_directory = current_file[:starting_index+len("app")]
+        return Path(base_directory)
 
     @staticmethod
     def _process_custom_environment_variables() -> None:
