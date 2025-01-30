@@ -1,7 +1,7 @@
 import logging
 from modules.logger.internal.base_logger import BaseLogger
-from modules.logger.internal.DDHandler import DDHandler
-from modules.logger.internal.DDHandler_level import LogLevel
+from apps.backend.modules.logger.internal.datadog_handler import DatadogHandler
+from apps.backend.modules.logger.internal.datadog_handler_level import LogLevel
 
 
 class DatadogLogger(BaseLogger):
@@ -13,7 +13,7 @@ class DatadogLogger(BaseLogger):
             self.format,
         )
         self.logger.setLevel(LogLevel.get_level())
-        self.handler = DDHandler('flask')
+        self.handler = DatadogHandler('flask')
         self.handler.setLevel(LogLevel.get_level())
         self.handler.setFormatter(self.formatter)
         self.logger.addHandler(self.handler)
