@@ -1,7 +1,7 @@
 import logging
 from modules.logger.internal.base_logger import BaseLogger
-from apps.backend.modules.logger.internal.datadog_handler import DatadogHandler
-from apps.backend.modules.logger.internal.datadog_handler_level import LogLevel
+from modules.logger.internal.datadog_handler import DatadogHandler
+from modules.logger.internal.datadog_handler_level import LogLevel
 
 
 class DatadogLogger(BaseLogger):
