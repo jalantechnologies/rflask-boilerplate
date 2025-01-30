@@ -6,17 +6,17 @@ from datadog_api_client.v2.models import HTTPLog,HTTPLogItem
 from modules.config.config_service import ConfigService
 from logging import LogRecord
 
-class DDHandler(StreamHandler):
+class DatadogHandler(StreamHandler):
     def __init__(self,ddsource: str) -> None:
         StreamHandler.__init__(self)
         self.ddsource = ddsource
     
     def emit(self,record: LogRecord) -> None:
         msg = self.format(record)
-        ddconfig = ConfigService.get_datadog_config()    
+        datadogConfig = ConfigService.get_datadog_config()    
         config = Configuration()
-        config.api_key["apiKeyAuth"]=ddconfig.api_key
-        config.server_variables["site"]=ddconfig.host
+        config.api_key["apiKeyAuth"]=datadogConfig.api_key
+        config.server_variables["site"]=datadogConfig.host
         config.debug=True
         with ApiClient(config) as api_client:
             api_instance = LogsApi(api_client)
@@ -27,7 +27,7 @@ class DDHandler(StreamHandler):
                         ddtags = f"env : {os.environ.get('APP_NAME')}",
                         hostname = "",
                         message = msg,
-                        service = ddconfig.app_name
+                        service = datadogConfig.app_name
                     )
                 ]
             )
