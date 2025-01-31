@@ -4,8 +4,6 @@ from typing import Any, Optional
 
 import yaml
 
-from modules.logger.logger import Logger
-
 
 class ConfigParser:
     # Utility Methods
@@ -30,6 +28,8 @@ class ConfigParser:
             with open(file_path, "r", encoding="utf-8") as file:
                 yaml_content = yaml.safe_load(file)
         except FileNotFoundError:
+            from modules.logger.logger import Logger
+
             Logger.error(message=f"Config file '{filename}' not found.")
         return yaml_content
 
