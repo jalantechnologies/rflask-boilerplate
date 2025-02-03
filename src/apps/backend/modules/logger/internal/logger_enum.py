@@ -2,9 +2,9 @@ import logging
 from enum import Enum 
 
 class Levels(Enum):
-    debug = ["debug",logging.DEBUG]
-    info  = ["info",logging.INFO]
-    warning = ["warning",logging.WARNING]
-    error = ["error",logging.ERROR]
-    critical = ["critical",logging.CRITICAL]
+    debug = logging.DEBUG
+    info  = logging.INFO
+    warning = logging.WARNING
+    error = logging.ERROR
+    critical = logging.CRITICAL
     

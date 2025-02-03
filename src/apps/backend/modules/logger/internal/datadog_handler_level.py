@@ -8,6 +8,6 @@ class LogLevel:
         ddconfig = ConfigService.get_datadog_config()
         datadog_level = ddconfig.datadog_log_level.lower()
         for level in Levels:
-            if datadog_level.lower()==level[0]:
-                return level[1]
+            if datadog_level.lower()==level.name:
+                return level.value
         return logging.DEBUG
