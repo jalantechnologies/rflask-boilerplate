@@ -4,15 +4,17 @@ import React from 'react';
 const HalfImageHalfFormLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <div className="flex h-screen">
-    {/* Left side: Image */}
+  <div className="flex h-screen flex-col md:flex-row">
+    {/* Image Section (Top on Mobile, Left on Desktop) */}
     <div
-      className="flex-1 bg-cover bg-center"
+      className="h-1/3 bg-cover bg-center md:h-auto md:w-1/2"
       style={{ backgroundImage: 'url(/assets/img/auth-background.jpg)' }}
     />
-    {/* Right side: Form */}
-    <div className="flex flex-1 items-start justify-start overflow-hidden p-4">
-      <div className="w-full max-w-[600px] p-4">{children}</div>
+    {/* Form Section (Bottom on Mobile, Right on Desktop) */}
+    <div className="flex h-2/3 w-full items-center justify-center p-4 md:h-auto md:w-1/2">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-md sm:max-w-lg md:max-w-xl">
+        {children}
+      </div>
     </div>
   </div>
 );
@@ -39,9 +41,9 @@ const CenteredFormWithBackgroundLayout: React.FC<{
     }}
   >
     {/* Semi-transparent overlay */}
-    <div className="absolute inset-0 bg-black/50"></div>
+    <div className="absolute inset-0 bg-black/40"></div>
     {/* Centered form */}
-    <div className="relative z-10 w-full max-w-[600px] overflow-hidden rounded-lg bg-black/50 p-6 shadow-lg">
+    <div className="relative z-10 w-full max-w-md rounded-lg bg-black/40 p-6 shadow-lg sm:max-w-lg md:max-w-xl">
       {children}
     </div>
   </div>
@@ -51,7 +53,7 @@ const CenteredFormWithBackgroundLayout: React.FC<{
 const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <div className="flex h-screen items-start justify-center overflow-hidden p-4">
+  <div className="flex items-start justify-center overflow-hidden p-4">
     <div className="w-full max-w-[550px] p-4">{children}</div>
   </div>
 );
