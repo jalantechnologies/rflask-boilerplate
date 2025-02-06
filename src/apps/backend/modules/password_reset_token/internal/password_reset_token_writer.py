@@ -22,8 +22,9 @@ class PasswordResetTokenWriter:
         }
         created_token = PasswordResetTokenRepository.collection().insert_one(new_token_data)
         password_reset_token = PasswordResetTokenRepository.collection().find_one({"_id": created_token.inserted_id})
+        password_reset_token_model = PasswordResetTokenModel.from_bson(password_reset_token)
         return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
-            PasswordResetTokenModel.from_bson(password_reset_token)
+            password_reset_token_model
         )
 
     @staticmethod
@@ -35,7 +36,8 @@ class PasswordResetTokenWriter:
         )
         if updated_token is None:
             raise PasswordResetTokenNotFoundError()
+        password_reset_token_model = PasswordResetTokenModel.from_bson(updated_token)
 
         return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
-            PasswordResetTokenModel.from_bson(updated_token)
+            password_reset_token_model
         )
