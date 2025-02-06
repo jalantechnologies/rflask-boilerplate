@@ -1,3 +1,4 @@
+from typing import List
 from modules.task.internal.task_reader import TaskReader
 from modules.task.internal.task_writer import TaskWriter
 from modules.task.types import DeleteTaskParams, Task, CreateTaskParams, UpdateTaskParams, GetAllTaskParams
@@ -9,7 +10,7 @@ class TaskService:
         return TaskWriter.create_task(params=params)
 
     @staticmethod
-    def get_tasks_for_account(*, params: GetAllTaskParams) -> Task:
+    def get_tasks_for_account(*, params: GetAllTaskParams) -> List[Task]:
         return TaskReader.get_tasks_for_account(params=params)
 
     @staticmethod

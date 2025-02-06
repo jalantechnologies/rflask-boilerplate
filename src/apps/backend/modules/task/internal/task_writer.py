@@ -1,6 +1,7 @@
+from modules.task.errors import TaskNotFoundError
 from modules.task.internal.store.task_repository import TaskRepository
 from modules.task.internal.store.task_model import TaskModel
-from modules.task.types import DeleteTaskParams, CreateTaskParams, UpdateTaskParams
+from modules.task.types import DeleteTaskParams, CreateTaskParams, Task, UpdateTaskParams
 from modules.task.internal.task_util import TaskUtil
 from dataclasses import asdict
 from bson.objectid import ObjectId
@@ -9,7 +10,7 @@ from pymongo import ReturnDocument
 
 class TaskWriter:
     @staticmethod
-    def create_task(*, params: CreateTaskParams):
+    def create_task(*, params: CreateTaskParams) -> Task:
         params_dict = asdict(params)
         task_bson = TaskModel(account=params.account_id, **params_dict).to_bson()
         query = TaskRepository.collection().insert_one(task_bson)
@@ -17,7 +18,7 @@ class TaskWriter:
         return TaskUtil.convert_task_model_to_task(TaskModel(**task))
 
     @staticmethod
-    def update_task(*, params: UpdateTaskParams):
+    def update_task(*, params: UpdateTaskParams) -> Task:
         params_dict = asdict(params)
         task_bson = TaskModel(account=params.account_id, **params_dict).to_bson()
         query = TaskRepository.collection().find_one_and_update(
@@ -25,7 +26,7 @@ class TaskWriter:
         )
 
         if not query:
-            return None
+            raise TaskNotFoundError(f"Task with id {params.task_id} not found")
 
         return TaskUtil.convert_task_model_to_task(TaskModel(**query))
 

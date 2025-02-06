@@ -23,7 +23,7 @@ class TaskView(MethodView):
     def get(self) -> ResponseReturnValue:
         request_args = request.args.to_dict()
         page = int(request_args.get("page", 1)) if "page" in request_args else 1
-        size = int(request_args.get("size", None)) if "size" in request_args else None
+        size = int(request_args.get("size", "")) if "size" in request_args else None
 
         task_params = GetAllTaskParams(account_id=request.account_id, page=page, size=size)
         print(task_params)
