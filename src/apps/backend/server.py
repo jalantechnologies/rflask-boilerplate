@@ -12,6 +12,7 @@ from modules.config.config_service import ConfigService
 from modules.error.custom_errors import AppError
 from modules.logger.logger_manager import LoggerManager
 from modules.password_reset_token.rest_api.password_reset_token_rest_api_server import PasswordResetTokenRestApiServer
+from modules.task.rest_api.task_rest_api_server import TaskRestApiServer
 
 load_dotenv()
 
@@ -38,6 +39,10 @@ api_blueprint.register_blueprint(password_reset_token_blueprint)
 # Register accounts apis
 account_blueprint = AccountRestApiServer.create()
 api_blueprint.register_blueprint(account_blueprint)
+
+# Register task apis
+task_blueprint = TaskRestApiServer.create()
+api_blueprint.register_blueprint(task_blueprint)
 app.register_blueprint(api_blueprint)
 
 # Register frontend elements
