@@ -35,8 +35,9 @@ class AccountWriter:
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
         account = AccountRepository.collection().find_one({"_id": query.inserted_id})
+        account_model = AccountModel.from_bson(account)
 
-        return AccountUtil.convert_account_model_to_account(AccountModel.from_bson(account))
+        return AccountUtil.convert_account_model_to_account(account_model)
 
     @staticmethod
     def create_account_by_phone_number(*, params: CreateAccountByPhoneNumberParams) -> Account:
@@ -53,8 +54,9 @@ class AccountWriter:
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
         account = AccountRepository.collection().find_one({"_id": query.inserted_id})
+        account_model = AccountModel.from_bson(account)
 
-        return AccountUtil.convert_account_model_to_account(AccountModel.from_bson(account))
+        return AccountUtil.convert_account_model_to_account(account_model)
 
     @staticmethod
     def update_password_by_account_id(account_id: str, password: str) -> Account:
@@ -66,5 +68,6 @@ class AccountWriter:
         )
         if updated_account is None:
             raise AccountNotFoundError(f"Account not found: {account_id}")
+        account_model = AccountModel.from_bson(updated_account)
 
-        return AccountUtil.convert_account_model_to_account(AccountModel.from_bson(updated_account))
+        return AccountUtil.convert_account_model_to_account(account_model)

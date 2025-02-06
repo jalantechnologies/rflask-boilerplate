@@ -1,6 +1,5 @@
 from dataclasses import asdict
 
-from modules.account.types import PhoneNumber
 from flask import jsonify, request
 from flask.typing import ResponseReturnValue
 from flask.views import MethodView
@@ -10,6 +9,7 @@ from modules.access_token.types import (
     CreateAccessTokenParams,
     EmailBasedAuthAccessTokenRequestParams,
     OTPBasedAuthAccessTokenRequestParams,
+    PhoneNumber,
 )
 
 

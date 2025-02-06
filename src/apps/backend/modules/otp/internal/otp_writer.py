@@ -30,8 +30,9 @@ class OtpWriter:
         ).to_bson()
         query = OtpRepository.collection().insert_one(otp_bson)
         otp = OtpRepository.collection().find_one({"_id": query.inserted_id})
-
-        return OtpUtil.convert_otp_model_to_otp(OtpModel.from_bson(otp))
+        otp_model = OtpModel.from_bson(otp)
+        
+        return OtpUtil.convert_otp_model_to_otp(otp_model)
 
     @staticmethod
     def verify_otp(*, params: VerifyOtpParams) -> Otp:
@@ -50,4 +51,5 @@ class OtpWriter:
             {"$set": {"status": OtpStatus.SUCCESS, "active": False}},
             return_document=ReturnDocument.AFTER,
         )
-        return OtpUtil.convert_otp_model_to_otp(OtpModel.from_bson(updated_otp))
+        otp_model = OtpModel.from_bson(updated_otp)
+        return OtpUtil.convert_otp_model_to_otp(otp_model)
