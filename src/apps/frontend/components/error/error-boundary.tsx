@@ -22,10 +22,11 @@ class ErrorBoundary extends Component<Props, State> {
 
   public async componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     const error_data: JsonObject = {
-      error: error,
+      'error-name': error.name,
+      'error-message': error.message,
       'error-info': errorInfo,
     };
-    await axios.post('http://127.0.0.1:8080/');
+    await axios.post('http://127.0.0.1:8080/error_logs', error_data);
     console.error('Uncaught error:', error, errorInfo);
   }
 
