@@ -2,7 +2,6 @@ import logging
 
 from modules.logger.internal.base_logger import BaseLogger
 
-
 class ConsoleLogger(BaseLogger):
     def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
