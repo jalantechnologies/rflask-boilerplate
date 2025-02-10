@@ -11,10 +11,7 @@ class ConfigService(Generic[T]):
 
     @classmethod
     def load_config(cls) -> None:
-        """
-        Load the configuration files
-        """
-        cls.config_manager.load_config()
+      cls.config_manager.load_config()
 
     @classmethod
     def get_value(cls, key: str, default: Optional[T] = None) -> T:
