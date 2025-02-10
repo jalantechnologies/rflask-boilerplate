@@ -1,11 +1,11 @@
 import hashlib
 import os
 from datetime import datetime, timedelta
+from typing import Any
 
 import bcrypt
 
 from modules.config.config_service import ConfigService
-from modules.password_reset_token.internal.store.password_reset_token_model import PasswordResetTokenModel
 from modules.password_reset_token.types import PasswordResetToken
 
 
@@ -39,14 +39,14 @@ class PasswordResetTokenUtil:
         return datetime.now() > expires_at
 
     @staticmethod
-    def convert_password_reset_token_model_to_password_reset_token(
-        password_reset_token_model: PasswordResetTokenModel,
+    def convert_password_reset_token_bson_to_password_reset_token(
+        password_reset_token_bson: dict[str,Any],
     ) -> PasswordResetToken:
         return PasswordResetToken(
-            id=str(password_reset_token_model.id),
-            account=str(password_reset_token_model.account),
-            token=password_reset_token_model.token,
-            is_used=password_reset_token_model.is_used,
-            is_expired=PasswordResetTokenUtil.is_token_expired(password_reset_token_model.expires_at),
-            expires_at=str(password_reset_token_model.expires_at),
+            id=str(password_reset_token_bson['_id']),
+            account=str(password_reset_token_bson['account']),
+            token=password_reset_token_bson['token'],
+            is_used=password_reset_token_bson['is_used'],
+            is_expired=PasswordResetTokenUtil.is_token_expired(password_reset_token_bson['expires_at']),
+            expires_at=str(password_reset_token_bson['expires_at']),
         )

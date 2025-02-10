@@ -3,7 +3,6 @@ from pymongo import ReturnDocument
 
 from modules.password_reset_token.errors import PasswordResetTokenNotFoundError
 from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
-from modules.password_reset_token.internal.store.password_reset_token_model import PasswordResetTokenModel
 from modules.password_reset_token.internal.store.password_reset_token_repository import PasswordResetTokenRepository
 from modules.password_reset_token.types import PasswordResetToken
 
@@ -22,9 +21,9 @@ class PasswordResetTokenWriter:
         }
         created_token = PasswordResetTokenRepository.collection().insert_one(new_token_data)
         password_reset_token_bson = PasswordResetTokenRepository.collection().find_one({"_id": created_token.inserted_id})
-        password_reset_token_model = PasswordResetTokenModel.from_bson(password_reset_token_bson)
-        return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
-            password_reset_token_model
+        
+        return PasswordResetTokenUtil.convert_password_reset_token_bson_to_password_reset_token(
+            password_reset_token_bson
         )
 
     @staticmethod
@@ -36,8 +35,7 @@ class PasswordResetTokenWriter:
         )
         if updated_token is None:
             raise PasswordResetTokenNotFoundError()
-        password_reset_token_model = PasswordResetTokenModel.from_bson(updated_token)
 
-        return PasswordResetTokenUtil.convert_password_reset_token_model_to_password_reset_token(
-            password_reset_token_model
+        return PasswordResetTokenUtil.convert_password_reset_token_bson_to_password_reset_token(
+            updated_token
         )

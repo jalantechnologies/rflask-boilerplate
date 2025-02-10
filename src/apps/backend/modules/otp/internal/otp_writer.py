@@ -30,9 +30,7 @@ class OtpWriter:
         ).to_bson()
         query = OtpRepository.collection().insert_one(otp_bson)
         otp_bson = OtpRepository.collection().find_one({"_id": query.inserted_id})
-        otp_model = OtpModel.from_bson(otp_bson)
-        
-        return OtpUtil.convert_otp_model_to_otp(otp_model)
+        return OtpUtil.convert_otp_bson_to_otp(otp_bson)
 
     @staticmethod
     def verify_otp(*, params: VerifyOtpParams) -> Otp:
@@ -46,10 +44,9 @@ class OtpWriter:
         if not otp_bson["active"]:
             raise OtpExpiredError()
 
-        updated_otp = OtpRepository.collection().find_one_and_update(
+        updated_otp_bson = OtpRepository.collection().find_one_and_update(
             {"_id": otp_bson["_id"]},
             {"$set": {"status": OtpStatus.SUCCESS, "active": False}},
             return_document=ReturnDocument.AFTER,
         )
-        otp_model = OtpModel.from_bson(updated_otp)
-        return OtpUtil.convert_otp_model_to_otp(otp_model)
+        return OtpUtil.convert_otp_bson_to_otp(updated_otp_bson)
