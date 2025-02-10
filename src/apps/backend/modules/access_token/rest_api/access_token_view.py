@@ -20,8 +20,8 @@ class AccessTokenView(MethodView):
         if "phone_number" in request_data and "otp_code" in request_data:
             phone_number_data = request_data["phone_number"]
             phone_number_obj = PhoneNumber(**phone_number_data)
-            access_token_params = OTPBasedAuthAccessTokenRequestParams(     
-                phone_number = phone_number_obj, otp_code=request_data["otp_code"]
+            access_token_params = OTPBasedAuthAccessTokenRequestParams(
+                phone_number=phone_number_obj, otp_code=request_data["otp_code"]
             )
             access_token = AccessTokenService.create_access_token_by_phone_number(params=access_token_params)
         elif "username" in request_data and "password" in request_data:

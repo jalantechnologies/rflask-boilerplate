@@ -26,13 +26,13 @@ class AccountReader:
         account_bson = AccountRepository.collection().find_one({"username": username})
         if account_bson is None:
             raise AccountNotFoundError(f"Account with username:: {username}, not found")
-        
+
         return AccountUtil.convert_account_bson_to_account(account_bson)
 
     @staticmethod
     def get_account_by_username_and_password(*, params: AccountSearchParams) -> Account:
         account = AccountReader.get_account_by_username(username=params.username)
-        
+
         if not AccountUtil.compare_password(password=params.password, hashed_password=account.password):
             raise AccountInvalidPasswordError("Invalid password")
         return account
@@ -42,7 +42,7 @@ class AccountReader:
         account_bson = AccountRepository.collection().find_one({"_id": ObjectId(params.id), "active": True})
         if account_bson is None:
             raise AccountNotFoundError(f"Account with id:: {params.id}, not found")
-        
+
         return AccountUtil.convert_account_bson_to_account(account_bson)
 
     @staticmethod
@@ -58,7 +58,7 @@ class AccountReader:
         account_bson = AccountRepository.collection().find_one({"phone_number": phone_number_dict})
         if account_bson is None:
             return None
-        
+
         return AccountUtil.convert_account_bson_to_account(account_bson)
 
     @staticmethod

@@ -25,8 +25,8 @@ class OtpUtil:
     @staticmethod
     def convert_otp_bson_to_otp(otp_bson: dict[str, Any]) -> Otp:
         return Otp(
-            id=str(otp_bson['_id']),
-            otp_code=otp_bson['otp_code'],
-            phone_number=otp_bson['phone_number'],
-            status=otp_bson['status'],
+            id=str(otp_bson["_id"]),
+            otp_code=otp_bson["otp_code"],
+            phone_number=otp_bson["phone_number"],
+            status=otp_bson["status"],
         )

@@ -13,7 +13,7 @@ class OtpModel(BaseModel):
     otp_code: str
     phone_number: PhoneNumber
     status: str
-    
+
     created_at: Optional[datetime] = datetime.now()
     updated_at: Optional[datetime] = datetime.now()
 
