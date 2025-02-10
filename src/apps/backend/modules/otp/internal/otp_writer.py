@@ -29,25 +29,25 @@ class OtpWriter:
             id=None, phone_number=phone_number, otp_code=otp_code, status=str(OtpStatus.PENDING), active=True
         ).to_bson()
         query = OtpRepository.collection().insert_one(otp_bson)
-        otp = OtpRepository.collection().find_one({"_id": query.inserted_id})
-        otp_model = OtpModel.from_bson(otp)
+        otp_bson = OtpRepository.collection().find_one({"_id": query.inserted_id})
+        otp_model = OtpModel.from_bson(otp_bson)
         
         return OtpUtil.convert_otp_model_to_otp(otp_model)
 
     @staticmethod
     def verify_otp(*, params: VerifyOtpParams) -> Otp:
         phone_number_dict = asdict(params.phone_number)
-        otp = OtpRepository.collection().find_one(
+        otp_bson = OtpRepository.collection().find_one(
             {"phone_number": phone_number_dict, "otp_code": params.otp_code}, sort=[("_id", -1)]
         )
-        if otp is None:
+        if otp_bson is None:
             raise OtpIncorrectError()
 
-        if not otp["active"]:
+        if not otp_bson["active"]:
             raise OtpExpiredError()
 
         updated_otp = OtpRepository.collection().find_one_and_update(
-            {"_id": otp["_id"]},
+            {"_id": otp_bson["_id"]},
             {"$set": {"status": OtpStatus.SUCCESS, "active": False}},
             return_document=ReturnDocument.AFTER,
         )
