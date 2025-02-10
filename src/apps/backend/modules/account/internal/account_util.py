@@ -18,10 +18,10 @@ class AccountUtil:
         phone_number_data = account_bson["phone_number"]
         phone_number = PhoneNumber(**phone_number_data) if phone_number_data else None
         return Account(
-            id=str(account_bson["_id"]),
             first_name=account_bson["first_name"],
+            id=str(account_bson["_id"]),
             last_name=account_bson["last_name"],
+            password=account_bson["hashed_password"],
             phone_number=phone_number,
             username=account_bson["username"],
-            password=account_bson["hashed_password"],
         )

@@ -10,8 +10,8 @@ PASSWORD_RESET_TOKEN_VALIDATION_SCHEMA = {
         "properties": {
             "account": {"bsonType": "objectId", "description": "must be an ObjectId and is required"},
             "expires_at": {"bsonType": "date", "description": "must be a valid date and is required"},
-            "token": {"bsonType": "string", "description": "must be a string and is required"},
             "is_used": {"bsonType": "bool", "description": "must be a boolean and is required"},
+            "token": {"bsonType": "string", "description": "must be a string and is required"},
             "_id": {"bsonType": "objectId", "description": "must be an ObjectId"},
         },
     }

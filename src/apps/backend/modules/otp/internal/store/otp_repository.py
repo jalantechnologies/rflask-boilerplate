@@ -9,6 +9,7 @@ OTP_VALIDATION_SCHEMA = {
         "bsonType": "object",
         "required": ["otp_code", "phone_number", "status", "active"],
         "properties": {
+            "active": {"bsonType": "bool", "description": "must be a boolean and is required"},
             "otp_code": {"bsonType": "string", "description": "must be a string and is required"},
             "phone_number": {
                 "bsonType": "object",
@@ -20,7 +21,6 @@ OTP_VALIDATION_SCHEMA = {
                 "description": "must be an object with country_code and phone_number",
             },
             "status": {"bsonType": "string", "description": "must be a string and is required"},
-            "active": {"bsonType": "bool", "description": "must be a boolean and is required"},
             "created_at": {"bsonType": "date", "description": "must be a valid date"},
             "updated_at": {"bsonType": "date", "description": "must be a valid date"},
             "_id": {"bsonType": "objectId", "description": "must be an ObjectId"},

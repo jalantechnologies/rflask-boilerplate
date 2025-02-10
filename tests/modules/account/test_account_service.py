@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from modules.access_token.types import AccessTokenPayload
 from modules.account.account_service import AccountService
-from modules.account.errors import AccountNotFoundError,AccountWithPhoneNumberNotFoundError
+from modules.account.errors import AccountNotFoundError
 from modules.account.types import (
     AccountErrorCode,
     AccountSearchByIdParams,
