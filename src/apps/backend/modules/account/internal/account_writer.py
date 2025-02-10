@@ -34,8 +34,8 @@ class AccountWriter:
             phone_number=None,
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
-        account = AccountRepository.collection().find_one({"_id": query.inserted_id})
-        account_model = AccountModel.from_bson(account)
+        account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})
+        account_model = AccountModel.from_bson(account_bson)
 
         return AccountUtil.convert_account_model_to_account(account_model)
 
@@ -53,8 +53,8 @@ class AccountWriter:
             id=None, first_name="", last_name="", hashed_password="", username="", phone_number=phone_number
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
-        account = AccountRepository.collection().find_one({"_id": query.inserted_id})
-        account_model = AccountModel.from_bson(account)
+        account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})
+        account_model = AccountModel.from_bson(account_bson)
 
         return AccountUtil.convert_account_model_to_account(account_model)
 
