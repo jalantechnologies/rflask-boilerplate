@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 from phonenumbers import is_valid_number, parse
 from pymongo import ReturnDocument
 
-from modules.account.errors import AccountNotFoundError
+from modules.account.errors import AccountWithIdNotFoundError
 from modules.account.internal.account_reader import AccountReader
 from modules.account.internal.account_util import AccountUtil
 from modules.account.internal.store.account_model import AccountModel
@@ -65,6 +65,6 @@ class AccountWriter:
             return_document=ReturnDocument.AFTER,
         )
         if updated_account is None:
-            raise AccountNotFoundError(f"Account not found: {account_id}")
+            raise AccountWithIdNotFoundError(id=account_id)
 
         return AccountUtil.convert_account_bson_to_account(updated_account)
