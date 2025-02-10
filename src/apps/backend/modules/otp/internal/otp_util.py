@@ -1,8 +1,8 @@
 import random
 import string
+from typing import Any
 
 from modules.config.config_service import ConfigService
-from modules.otp.internal.store.otp_model import OtpModel
 from modules.otp.types import Otp
 
 
@@ -23,10 +23,10 @@ class OtpUtil:
         return "".join(random.choices(string.digits, k=length))
 
     @staticmethod
-    def convert_otp_model_to_otp(otp_model: OtpModel) -> Otp:
+    def convert_otp_bson_to_otp(otp_bson: dict[str, Any]) -> Otp:
         return Otp(
-            id=str(otp_model.id),
-            otp_code=otp_model.otp_code,
-            phone_number=otp_model.phone_number,
-            status=otp_model.status,
+            id=str(otp_bson['_id']),
+            otp_code=otp_bson['otp_code'],
+            phone_number=otp_bson['phone_number'],
+            status=otp_bson['status'],
         )

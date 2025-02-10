@@ -1,7 +1,7 @@
+from typing import Any
 import bcrypt
 
-from modules.account.internal.store.account_model import AccountModel
-from modules.account.types import Account, AccountWithPassword
+from modules.account.types import Account, PhoneNumber
 
 
 class AccountUtil:
@@ -14,22 +14,14 @@ class AccountUtil:
         return bcrypt.checkpw(password.encode("utf-8"), hashed_password.encode("utf-8"))
 
     @staticmethod
-    def convert_account_model_to_account(account_model: AccountModel) -> Account:
+    def convert_account_bson_to_account(account_bson: dict[str,Any]) -> Account:
+        phone_number_data = account_bson["phone_number"]
+        phone_number = PhoneNumber(**phone_number_data) if phone_number_data else None
         return Account(
-            id=str(account_model.id),
-            first_name=account_model.first_name,
-            last_name=account_model.last_name,
-            phone_number=account_model.phone_number,
-            username=account_model.username,
-        )
-    
-    @staticmethod
-    def convert_account_model_to_account_password(account_model: AccountModel) -> AccountWithPassword:
-        return AccountWithPassword(
-            id=str(account_model.id),
-            first_name=account_model.first_name,
-            last_name=account_model.last_name,
-            phone_number=account_model.phone_number,
-            username=account_model.username,
-            password=account_model.hashed_password
+            id=str(account_bson['_id']),
+            first_name=account_bson['first_name'],
+            last_name=account_bson['last_name'],
+            phone_number=phone_number,
+            username=account_bson['username'],
+            password=account_bson['hashed_password']
         )

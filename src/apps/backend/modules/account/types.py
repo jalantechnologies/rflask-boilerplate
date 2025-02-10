@@ -50,14 +50,6 @@ class Account:
     first_name: str
     last_name: str
     username: str
-    phone_number: Optional[PhoneNumber] = None
-    
-@dataclass(frozen=True)
-class AccountWithPassword:
-    id: str
-    first_name: str
-    last_name: str
-    username: str
     password: str
     phone_number: Optional[PhoneNumber] = None
 
