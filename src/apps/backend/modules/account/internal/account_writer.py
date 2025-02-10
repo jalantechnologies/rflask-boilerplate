@@ -26,12 +26,12 @@ class AccountWriter:
         del params_dict["password"]
         AccountReader.check_username_not_exist(params=params)
         account_bson = AccountModel(
-            id=None,
             first_name=params.first_name,
-            last_name=params.last_name,
             hashed_password=params_dict["hashed_password"],
-            username=params.username,
+            id=None,
+            last_name=params.last_name,
             phone_number=None,
+            username=params.username,
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
         account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})
@@ -49,7 +49,7 @@ class AccountWriter:
 
         AccountReader.check_phone_number_not_exist(phone_number=params.phone_number)
         account_bson = AccountModel(
-            id=None, first_name="", last_name="", hashed_password="", username="", phone_number=phone_number
+            first_name="", hashed_password="", id=None, last_name="", phone_number=phone_number, username=""
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
         account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})

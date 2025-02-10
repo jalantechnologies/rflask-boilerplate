@@ -26,7 +26,7 @@ class OtpWriter:
         phone_number = PhoneNumber(**asdict(params)["phone_number"])
         otp_code = OtpUtil.generate_otp(length=4, phone_number=phone_number.phone_number)
         otp_bson = OtpModel(
-            id=None, phone_number=phone_number, otp_code=otp_code, status=str(OtpStatus.PENDING), active=True
+            active=True, id=None, phone_number=phone_number, otp_code=otp_code, status=str(OtpStatus.PENDING)
         ).to_bson()
         query = OtpRepository.collection().insert_one(otp_bson)
         otp_bson = OtpRepository.collection().find_one({"_id": query.inserted_id})
@@ -36,7 +36,7 @@ class OtpWriter:
     def verify_otp(*, params: VerifyOtpParams) -> Otp:
         phone_number_dict = asdict(params.phone_number)
         otp_bson = OtpRepository.collection().find_one(
-            {"phone_number": phone_number_dict, "otp_code": params.otp_code}, sort=[("_id", -1)]
+            {"otp_code": params.otp_code, "phone_number": phone_number_dict}, sort=[("_id", -1)]
         )
         if otp_bson is None:
             raise OtpIncorrectError()

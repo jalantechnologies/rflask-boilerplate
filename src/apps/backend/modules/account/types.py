@@ -49,9 +49,9 @@ class Account:
     id: str
     first_name: str
     last_name: str
-    username: str
     password: str
-    phone_number: Optional[PhoneNumber] = None
+    phone_number: Optional[PhoneNumber]
+    username: str
 
 
 @dataclass(frozen=True)
