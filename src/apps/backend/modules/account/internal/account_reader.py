@@ -5,7 +5,9 @@ from bson.objectid import ObjectId
 
 from modules.account.errors import (
     AccountInvalidPasswordError,
-    AccountNotFoundError,
+    AccountWithIdNotFoundError,
+    AccountWithUsernameNotFoundError,
+    AccountWithPhoneNumberNotFoundError,
     AccountWithPhoneNumberExistsError,
     AccountWithUserNameExistsError,
 )
@@ -25,7 +27,7 @@ class AccountReader:
     def get_account_by_username(*, username: str) -> Account:
         account_bson = AccountRepository.collection().find_one({"username": username})
         if account_bson is None:
-            raise AccountNotFoundError(f"Account with username:: {username}, not found")
+            raise AccountWithUsernameNotFoundError(username=username)
 
         return AccountUtil.convert_account_bson_to_account(account_bson)
 
@@ -41,7 +43,7 @@ class AccountReader:
     def get_account_by_id(*, params: AccountSearchByIdParams) -> Account:
         account_bson = AccountRepository.collection().find_one({"_id": ObjectId(params.id), "active": True})
         if account_bson is None:
-            raise AccountNotFoundError(f"Account with id:: {params.id}, not found")
+            raise AccountWithIdNotFoundError(id=params.id)
 
         return AccountUtil.convert_account_bson_to_account(account_bson)
 
@@ -65,7 +67,7 @@ class AccountReader:
     def get_account_by_phone_number(*, phone_number: PhoneNumber) -> Account:
         account = AccountReader.get_account_by_phone_number_optional(phone_number=phone_number)
         if account is None:
-            raise AccountNotFoundError(f"Account with phone number:: {phone_number}, not found")
+            raise AccountWithPhoneNumberNotFoundError(phone_number=phone_number)
 
         return account
 
