@@ -7,12 +7,12 @@ from modules.common.base_model import BaseModel
 
 @dataclass
 class PasswordResetTokenModel(BaseModel):
-    
+
     account: ObjectId | str
     expires_at: datetime
     id: Optional[ObjectId | str]
     token: str
-    
+
     is_used: bool = False
 
     @staticmethod

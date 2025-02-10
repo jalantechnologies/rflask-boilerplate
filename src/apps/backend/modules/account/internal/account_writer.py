@@ -35,7 +35,6 @@ class AccountWriter:
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
         account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})
-        
 
         return AccountUtil.convert_account_bson_to_account(account_bson)
 
@@ -54,7 +53,6 @@ class AccountWriter:
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
         account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})
-        
 
         return AccountUtil.convert_account_bson_to_account(account_bson)
 
@@ -67,6 +65,6 @@ class AccountWriter:
             return_document=ReturnDocument.AFTER,
         )
         if updated_account is None:
-                raise AccountNotFoundError(f"Account not found: {account_id}")
-            
+            raise AccountNotFoundError(f"Account not found: {account_id}")
+
         return AccountUtil.convert_account_bson_to_account(updated_account)

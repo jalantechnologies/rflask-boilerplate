@@ -17,7 +17,9 @@ class PasswordResetTokenService:
         account_obj = AccountReader.get_account_by_username(username=params.username)
         token = PasswordResetTokenUtil.generate_password_reset_token()
         password_reset_token = PasswordResetTokenWriter.create_password_reset_token(account_obj.id, token)
-        PasswordResetTokenService.send_password_reset_email(account_obj.id, account_obj.first_name, account_obj.username, token)
+        PasswordResetTokenService.send_password_reset_email(
+            account_obj.id, account_obj.first_name, account_obj.username, token
+        )
 
         return password_reset_token
 

@@ -40,13 +40,13 @@ class PasswordResetTokenUtil:
 
     @staticmethod
     def convert_password_reset_token_bson_to_password_reset_token(
-        password_reset_token_bson: dict[str,Any],
+        password_reset_token_bson: dict[str, Any]
     ) -> PasswordResetToken:
         return PasswordResetToken(
-            id=str(password_reset_token_bson['_id']),
-            account=str(password_reset_token_bson['account']),
-            token=password_reset_token_bson['token'],
-            is_used=password_reset_token_bson['is_used'],
-            is_expired=PasswordResetTokenUtil.is_token_expired(password_reset_token_bson['expires_at']),
-            expires_at=str(password_reset_token_bson['expires_at']),
+            id=str(password_reset_token_bson["_id"]),
+            account=str(password_reset_token_bson["account"]),
+            token=password_reset_token_bson["token"],
+            is_used=password_reset_token_bson["is_used"],
+            is_expired=PasswordResetTokenUtil.is_token_expired(password_reset_token_bson["expires_at"]),
+            expires_at=str(password_reset_token_bson["expires_at"]),
         )
