@@ -2,22 +2,22 @@ from __future__ import annotations
 
 from typing import Any
 
-from modules.config.internals.default_config import DefaultConfig
-from modules.config.internals.app_env_config import AppEnvConfig
-from modules.config.internals.custom_env_config import CustomEnvConfig
+from modules.config.internals.config_files.default_config_file import DefaultConfig
+from modules.config.internals.config_files.app_env_config_file import AppEnvConfig
+from modules.config.internals.config_files.custom_env_config_file import CustomEnvConfig
 from modules.config.internals.config_utils import ConfigUtil
 
 
-class ConfigFiles:
+class ConfigFilesLoader:
     content: dict[str, Any] = {}
 
     @staticmethod
     def load() -> None:
-        ConfigFiles.content = ConfigFiles._merge_configs()
+        ConfigFilesLoader.content = ConfigFilesLoader._merge_configs()
 
     @staticmethod
     def get_config_contents() -> dict[str, Any]:
-        return ConfigFiles.content
+        return ConfigFilesLoader.content
 
     @staticmethod
     def _merge_configs() -> dict[str, Any]:

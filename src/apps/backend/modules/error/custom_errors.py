@@ -22,9 +22,9 @@ class AppError(Exception):
         return error_dict
 
 
-class MissingKeyError(Exception):
+class MissingKeyError(AppError):
     def __init__(self, *, missing_key: str, error_code: str) -> None:
-        super().__init__(f"{missing_key} is not found")
+        super().__init__(f"{missing_key} is not found",error_code)
         self.code = error_code
 
 
