@@ -23,7 +23,6 @@ waitress = "==2.1.2"
 datadog-api-client = "==2.31.0"
 
 [dev-packages]
-autoflake = "==2.3.1"
 black = "==24.8.0"
 isort = "==5.13.2"
 mypy = "==1.6.1"
@@ -33,6 +32,7 @@ types-flask-cors = "==4.0.0.1"
 types-pyyaml = "==6.0.12.12"
 types-requests = "==2.31.0.10"
 vulture = "==2.10"
+autoflake = "==2.3.1"
 
 [requires]
 python_version = "3.12"
