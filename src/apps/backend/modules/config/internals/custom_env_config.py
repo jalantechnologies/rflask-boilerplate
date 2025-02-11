@@ -2,18 +2,19 @@ import os
 from typing import Any, Optional
 from modules.config.internals.config_utils import ConfigUtil
 
+
 class CustomEnvConfig:
-    
-    filename:str = "custom-environment-variables.yml"
-    
-    @staticmethod
-    def load() -> dict[str,Any]:
-        custom_env_config = ConfigUtil.read_yml_from_config_dir("custom-environment-variables.yml")
-        return CustomEnvConfig._inject_environment_variables(custom_env_config)
+
+    filename: str = "custom-environment-variables.yml"
 
     @staticmethod
-    def _inject_environment_variables(data: dict[str, Any]) -> dict[str, Any]:
-        
+    def load() -> dict[str, Any]:
+        custom_env_config = ConfigUtil.read_yml_from_config_dir("custom-environment-variables.yml")
+        return CustomEnvConfig._apply_environment_overrides(custom_env_config)  # get_os_env
+
+    @staticmethod
+    def _apply_environment_overrides(data: dict[str, Any]) -> dict[str, Any]:
+
         if not isinstance(data, dict):
             return data
 
@@ -37,10 +38,12 @@ class CustomEnvConfig:
             env_var_value = os.getenv(env_var_name)
             value_format = value.get("__format")
             return CustomEnvConfig._parse_value(env_var_value, value_format) if value_format else env_var_value
-        return CustomEnvConfig._inject_environment_variables(value)
+        return CustomEnvConfig._apply_environment_overrides(value)
 
     @staticmethod
-    def _search_and_replace_str_value_with_env(data: dict[str, Any], key: str, value: str, keys_to_delete: list) -> None:
+    def _search_and_replace_str_value_with_env(
+        data: dict[str, Any], key: str, value: str, keys_to_delete: list
+    ) -> None:
         env_value = os.getenv(value)
         if env_value is None:
             keys_to_delete.append(key)

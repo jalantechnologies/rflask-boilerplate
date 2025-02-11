@@ -11,21 +11,16 @@ class ConfigService(Generic[T]):
 
     @classmethod
     def load_config(cls) -> None:
-      cls.config_manager.load_config()
+        cls.config_manager.load_config()
 
     @classmethod
     def get_value(cls, key: str, default: Optional[T] = None) -> T:
-        """
-        Get the value of the key from the configuration
-        """
         value: Optional[T] = cls.config_manager.get(key, default=default)
         if value is None:
+            # Raised when key is not found in config
             raise MissingKeyError(missing_key=key, error_code=ErrorCode.MISSING_KEY)
         return cast(T, value)
 
     @classmethod
     def has_value(cls, key: str) -> bool:
-        """
-        Check if the key exists in the configuration
-        """
         return cls.config_manager.has(key)
