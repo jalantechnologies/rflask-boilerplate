@@ -1,3 +1,4 @@
+from modules.logger.logger import Logger
 from pymongo.collection import Collection
 from pymongo.errors import OperationFailure
 from modules.account.internal.store.account_model import AccountModel
@@ -6,11 +7,11 @@ from modules.application.repository import ApplicationRepository
 ACCOUNT_VALIDATION_SCHEMA = {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["username", "hashed_password"],
+        "required": ["username"],
         "properties": {
             "active": {"bsonType": "bool"},
             "first_name": {"bsonType": "string"},
-            "hashed_password": {"bsonType": "string", "description": "must be a string and is required"},
+            "hashed_password": {"bsonType": "string", "description": "must be a string"},
             "last_name": {"bsonType": "string"},
             "phone_number": {
                 "bsonType": ["object", "null"],
@@ -44,5 +45,5 @@ class AccountRepository(ApplicationRepository):
             if "Collection does not exist" in str(e):
                 collection.database.create_collection(cls.collection_name, validator=ACCOUNT_VALIDATION_SCHEMA)
             else:
-                print("OperationFailure occurred for collection accounts", e.details)
+                Logger.error(message=f"OperationFailure occurred for collection accounts: {e.details}")
         return True
