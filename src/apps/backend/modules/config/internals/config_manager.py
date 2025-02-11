@@ -11,28 +11,20 @@ class ConfigManager:
         self.config_store: dict[str, Any] = {}
 
     def get(self, key: str, default: Optional[Any] = None) -> Optional[Any]:
-        """
-        Retrieve a configuration value using dot-separated keys.
-        """
-        value = self.config_store
-        for k in key.split(self.CONFIG_KEY_SEPARATOR):
-            if not isinstance(value, dict) or k not in value:
-                return default
-            value = value[k]
-        return value
+        value = self._traverse_config(key)
+        return value if value is not None else default
 
     def has(self, key: str) -> bool:
-        """
-        Check if a configuration key exists.
-        """
+        return self._traverse_config(key) is not None
+
+    def load_config(self) -> None:
+        ConfigFiles.load()
+        self.config_store = ConfigFiles.get_config_contents()
+
+    def _traverse_config(self, key: str) -> Optional[Any]:
         value = self.config_store
         for k in key.split(self.CONFIG_KEY_SEPARATOR):
             if not isinstance(value, dict) or k not in value:
-                return False
+                return None  # Indicates key was not found
             value = value[k]
-        return True
-
-    def load_config(self) -> None:
-        self.config_store = ConfigFiles().get_content()
-        print(self.config_store)
-
+        return value
