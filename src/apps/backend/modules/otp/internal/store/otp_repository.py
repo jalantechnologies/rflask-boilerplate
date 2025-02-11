@@ -49,5 +49,5 @@ class OtpRepository(ApplicationRepository):
             if "Collection does not exist" in str(e):
                 collection.database.create_collection(cls.collection_name, validator=OTP_VALIDATION_SCHEMA)
             else:
-                print("OperationFailure occurred for collection accounts", e.details)
+                Logger.error(message=f"OperationFailure occurred for collection otp: {e.details}")
         return True
