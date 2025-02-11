@@ -51,7 +51,7 @@ class TestAccessTokenService(BaseTestAccessToken):
         otp = OtpService.create_otp(params=CreateOtpParams(phone_number=PhoneNumber(**phone_number)))
 
         access_token = AccessTokenService.create_access_token_by_phone_number(
-            params=OTPBasedAuthAccessTokenRequestParams(phone_number=PhoneNumber(**phone_number), otp_code=otp.otp_code)
+            params=OTPBasedAuthAccessTokenRequestParams(otp_code=otp.otp_code, phone_number=PhoneNumber(**phone_number))
         )
 
         assert access_token.account_id == account.id

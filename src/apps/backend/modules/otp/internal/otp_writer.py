@@ -14,10 +14,10 @@ class OtpWriter:
     @staticmethod
     def expire_previous_otps(phone_number: PhoneNumber) -> None:
         phone_number_dict = asdict(phone_number)
-        previous_otps = OtpRepository.collection().find({"phone_number": phone_number_dict, "active": True})
+        previous_otps = OtpRepository.collection().find({"active": True, "phone_number": phone_number_dict})
         for otp in previous_otps:
             OtpRepository.collection().update_one(
-                {"_id": otp["_id"]}, {"$set": {"status": OtpStatus.EXPIRED, "active": False}}
+                {"_id": otp["_id"]}, {"$set": {"active": False, "status": OtpStatus.EXPIRED}}
             )
 
     @staticmethod
@@ -46,7 +46,7 @@ class OtpWriter:
 
         updated_otp_bson = OtpRepository.collection().find_one_and_update(
             {"_id": otp_bson["_id"]},
-            {"$set": {"status": OtpStatus.SUCCESS, "active": False}},
+            {"$set": {"active": False, "status": OtpStatus.SUCCESS}},
             return_document=ReturnDocument.AFTER,
         )
         return OtpUtil.convert_otp_bson_to_otp(updated_otp_bson)
