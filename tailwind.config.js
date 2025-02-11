@@ -211,6 +211,7 @@ module.exports = {
         6: '6px',
       },
       boxShadow: {
+        'custom-box': '-10px 0 0 #3c50e0',
         default: '0px 8px 13px -3px rgba(0, 0, 0, 0.07)',
         card: '0px 1px 3px rgba(0, 0, 0, 0.12)',
         'card-2': '0px 1px 2px rgba(0, 0, 0, 0.05)',
