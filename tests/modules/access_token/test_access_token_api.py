@@ -130,7 +130,7 @@ class TestAccessTokenApi(BaseTestAccessToken):
 
         with app.test_client() as client:
             response = client.post(
-                API_URL, headers=HEADERS, data=json.dumps({"phone_number": phone_number, "otp_code": otp.otp_code})
+                API_URL, headers=HEADERS, data=json.dumps({"otp_code": otp.otp_code, "phone_number": phone_number})
             )
             assert response.status_code == 400
             assert response.json

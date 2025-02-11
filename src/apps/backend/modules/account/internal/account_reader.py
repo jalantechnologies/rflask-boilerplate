@@ -49,7 +49,7 @@ class AccountReader:
 
     @staticmethod
     def check_username_not_exist(*, params: CreateAccountByUsernameAndPasswordParams) -> None:
-        account_bson = AccountRepository.collection().find_one({"username": params.username, "active": True})
+        account_bson = AccountRepository.collection().find_one({"active": True, "username": params.username})
 
         if account_bson:
             raise AccountWithUserNameExistsError(f"Account already exist for username:: {params.username}")
@@ -74,7 +74,7 @@ class AccountReader:
     @staticmethod
     def check_phone_number_not_exist(*, phone_number: PhoneNumber) -> None:
         phone_number_dict = asdict(phone_number)
-        account_bson = AccountRepository.collection().find_one({"phone_number": phone_number_dict, "active": True})
+        account_bson = AccountRepository.collection().find_one({"active": True, "phone_number": phone_number_dict})
 
         if account_bson:
             raise AccountWithPhoneNumberExistsError(f"Account already exist for phone number:: {phone_number}")
