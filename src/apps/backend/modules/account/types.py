@@ -49,7 +49,7 @@ class Account:
     id: str
     first_name: str
     last_name: str
-    password: str
+    hashed_password: str
     phone_number: Optional[PhoneNumber]
     username: str
 

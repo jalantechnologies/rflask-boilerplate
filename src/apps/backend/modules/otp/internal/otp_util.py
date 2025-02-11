@@ -2,6 +2,7 @@ import random
 import string
 from typing import Any
 
+from modules.otp.internal.store.otp_model import OtpModel
 from modules.config.config_service import ConfigService
 from modules.otp.types import Otp
 
@@ -24,9 +25,10 @@ class OtpUtil:
 
     @staticmethod
     def convert_otp_bson_to_otp(otp_bson: dict[str, Any]) -> Otp:
+        validated_data = OtpModel.from_bson(otp_bson)
         return Otp(
-            id=str(otp_bson["_id"]),
-            otp_code=otp_bson["otp_code"],
-            phone_number=otp_bson["phone_number"],
-            status=otp_bson["status"],
+            id=str(validated_data.id),
+            otp_code=validated_data.otp_code,
+            phone_number=validated_data.phone_number,
+            status=validated_data.status,
         )

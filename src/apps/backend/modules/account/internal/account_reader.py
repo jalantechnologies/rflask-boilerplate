@@ -35,8 +35,10 @@ class AccountReader:
     def get_account_by_username_and_password(*, params: AccountSearchParams) -> Account:
         account = AccountReader.get_account_by_username(username=params.username)
 
-        if not AccountUtil.compare_password(password=params.password, hashed_password=account.password):
-            raise AccountInvalidPasswordError("Invalid password")
+        if not AccountUtil.compare_password(password=params.password, hashed_password=account.hashed_password):
+            raise AccountInvalidPasswordError(
+                "Incorrect password. Please try again or Reset your password if you’ve forgotten it."
+            )
         return account
 
     @staticmethod

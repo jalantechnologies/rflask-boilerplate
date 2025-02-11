@@ -1,4 +1,5 @@
 from typing import Any
+from modules.account.internal.store.account_model import AccountModel
 import bcrypt
 
 from modules.account.types import Account, PhoneNumber
@@ -15,13 +16,12 @@ class AccountUtil:
 
     @staticmethod
     def convert_account_bson_to_account(account_bson: dict[str, Any]) -> Account:
-        phone_number_data = account_bson["phone_number"]
-        phone_number = PhoneNumber(**phone_number_data) if phone_number_data else None
+        validated_data = AccountModel.from_bson(account_bson)
         return Account(
-            first_name=account_bson["first_name"],
-            id=str(account_bson["_id"]),
-            last_name=account_bson["last_name"],
-            password=account_bson["hashed_password"],
-            phone_number=phone_number,
-            username=account_bson["username"],
+            first_name=validated_data.first_name,
+            id=str(validated_data.id),
+            last_name=validated_data.last_name,
+            hashed_password=validated_data.hashed_password,
+            phone_number=validated_data.phone_number,
+            username=validated_data.username,
         )
