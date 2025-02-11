@@ -2,8 +2,6 @@ import React, { useRef, useState, FocusEventHandler } from 'react';
 
 import constant from '../../constants';
 import { AsyncError, KeyboardKeys } from '../../types';
-import FlexItem from '../flex/flex-item.component';
-import Flex from '../flex/flex.component';
 
 import OTPInput from './otp-input';
 
@@ -53,9 +51,9 @@ const OTP: React.FC<OTPProps> = ({ error, isLoading, onBlur, onChange }) => {
   };
 
   return (
-    <Flex gap={6}>
+    <div className="flex justify-center gap-3">
       {otp.map((_, index) => (
-        <FlexItem flex="flex1" key={index}>
+        <div key={index} className="flex-1">
           <OTPInput
             disabled={isLoading}
             index={index}
@@ -69,9 +67,9 @@ const OTP: React.FC<OTPProps> = ({ error, isLoading, onBlur, onChange }) => {
             handleInputRef={handleInputRef}
             value={otp[index]}
           />
-        </FlexItem>
+        </div>
       ))}
-    </Flex>
+    </div>
   );
 };
 
