@@ -13,14 +13,14 @@ class ConfigFilesLoader:
 
     @staticmethod
     def load() -> None:
-        ConfigFilesLoader.content = ConfigFilesLoader._merge_configs()
+        ConfigFilesLoader.content = ConfigFilesLoader._load_and_merge_configs()
 
     @staticmethod
     def get_config_contents() -> dict[str, Any]:
         return ConfigFilesLoader.content
 
     @staticmethod
-    def _merge_configs() -> dict[str, Any]:
+    def _load_and_merge_configs() -> dict[str, Any]:
         default_content = DefaultConfig.load()
         app_env_content = AppEnvConfig.load()
         os_env_content = CustomEnvConfig.load()
