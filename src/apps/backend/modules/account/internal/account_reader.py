@@ -36,9 +36,7 @@ class AccountReader:
         account = AccountReader.get_account_by_username(username=params.username)
 
         if not AccountUtil.compare_password(password=params.password, hashed_password=account.hashed_password):
-            raise AccountInvalidPasswordError(
-                "Incorrect password. Please try again or Reset your password if you’ve forgotten it."
-            )
+            raise AccountInvalidPasswordError()
         return account
 
     @staticmethod
@@ -54,7 +52,7 @@ class AccountReader:
         account_bson = AccountRepository.collection().find_one({"active": True, "username": params.username})
 
         if account_bson:
-            raise AccountWithUserNameExistsError(f"An account with the username {params.username} already exists. Try logging in or use a different username.")
+            raise AccountWithUserNameExistsError(username=params.username)
 
     @staticmethod
     def get_account_by_phone_number_optional(*, phone_number: PhoneNumber) -> Optional[Account]:
@@ -79,4 +77,4 @@ class AccountReader:
         account_bson = AccountRepository.collection().find_one({"active": True, "phone_number": phone_number_dict})
 
         if account_bson:
-            raise AccountWithPhoneNumberExistsError(f"An account with the phone number {phone_number} already exists. Try logging in or use a different phone number.")
+            raise AccountWithPhoneNumberExistsError(phone_number=phone_number)

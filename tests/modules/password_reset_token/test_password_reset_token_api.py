@@ -55,7 +55,7 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
             self.assertEqual(response.status_code, 404)
             self.assertIn("message", response.json)
             self.assertEqual(
-                response.json["message"], AccountNotFoundError(f"We could not find an account associated with usename: {username}. Please verify it or you can create a new account.").message
+                response.json["message"], AccountNotFoundError(f"We could not find an account associated with username: {username}. Please verify it or you can create a new account.").message
             )
             self.assertFalse(mock_send_email.called)
 
