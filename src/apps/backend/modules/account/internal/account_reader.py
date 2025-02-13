@@ -54,7 +54,7 @@ class AccountReader:
         account_bson = AccountRepository.collection().find_one({"active": True, "username": params.username})
 
         if account_bson:
-            raise AccountWithUserNameExistsError(f"Account already exist for username:: {params.username}")
+            raise AccountWithUserNameExistsError(f"An account with the username {params.username} already exists. Try logging in or use a different username.")
 
     @staticmethod
     def get_account_by_phone_number_optional(*, phone_number: PhoneNumber) -> Optional[Account]:
@@ -79,4 +79,4 @@ class AccountReader:
         account_bson = AccountRepository.collection().find_one({"active": True, "phone_number": phone_number_dict})
 
         if account_bson:
-            raise AccountWithPhoneNumberExistsError(f"Account already exist for phone number:: {phone_number}")
+            raise AccountWithPhoneNumberExistsError(f"An account with the phone number {phone_number} already exists. Try logging in or use a different phone number.")
