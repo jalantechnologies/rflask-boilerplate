@@ -11,7 +11,6 @@ from modules.otp.internal.store.otp_repository import OtpRepository
 class BaseTestAccount(unittest.TestCase):
     def setup_method(self, method: Callable) -> None:
         print(f"Executing:: {method.__name__}")
-        ConfigService.load_config()
         LoggerManager.mount_logger()
         AccountRestApiServer.create()
 

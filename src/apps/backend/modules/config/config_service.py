@@ -10,11 +10,8 @@ class ConfigService(Generic[T]):
     config_manager: ConfigManager = ConfigManager()
 
     @classmethod
-    def load_config(cls) -> None:
-        cls.config_manager.load_config()
-
-    @classmethod
     def get_value(cls, key: str, default: Optional[T] = None) -> T:
+        print(cls.config_manager.config_store)
         value: Optional[T] = cls.config_manager.get(key, default=default)
         if value is None:
             # Raised when key is not found in config
