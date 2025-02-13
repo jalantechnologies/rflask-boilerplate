@@ -24,7 +24,7 @@ class AppError(Exception):
 
 class MissingKeyError(AppError):
     def __init__(self, *, missing_key: str, error_code: str) -> None:
-        super().__init__(f"{missing_key} is not found",error_code)
+        super().__init__(f"Missing configuration key: '{missing_key}'. Please ensure it is defined in the config files.",error_code)
         self.code = error_code
 
 
