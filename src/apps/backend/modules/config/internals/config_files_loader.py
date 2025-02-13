@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Any
 
 from modules.config.internals.config_files.default_config_file import DefaultConfig
