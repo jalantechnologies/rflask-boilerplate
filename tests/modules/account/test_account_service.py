@@ -67,4 +67,4 @@ class TestAccountService(BaseTestAccount):
             AccountService.get_account_by_phone_number(phone_number=phone_number)
         except AccountNotFoundError as exc:
             assert exc.code == AccountErrorCode.NOT_FOUND
-            assert exc.message == f"Account with phone number:: {phone_number}, not found"
+            assert exc.message == f"We could not find an accouunt phone number: {phone_number}. Please verify it or you can create a new account."

@@ -14,19 +14,19 @@ class AccountNotFoundError(AppError):
 
 class AccountWithUsernameNotFoundError(AccountNotFoundError):
     def __init__(self, username: str) -> None:
-        message = f"Account with username:: {username}, not found"
+        message = f"We could not find an account associated with usename: {username}. Please verify it or you can create a new account."
         super().__init__(message=message)
 
 
 class AccountWithIdNotFoundError(AccountNotFoundError):
     def __init__(self, id: str) -> None:
-        message = f"Account with id:: {id}, not found"
+        message = f"We could not find an account with id: {id}. Please verify and try again."
         super().__init__(message=message)
 
 
 class AccountWithPhoneNumberNotFoundError(AccountNotFoundError):
     def __init__(self, phone_number: PhoneNumber) -> None:
-        message = f"Account with phone number:: {phone_number}, not found"
+        message = f"We could not find an accouunt phone number: {phone_number}. Please verify it or you can create a new account."
         super().__init__(message=message)
 
 

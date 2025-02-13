@@ -7,7 +7,7 @@ from modules.application.repository import ApplicationRepository
 ACCOUNT_VALIDATION_SCHEMA = {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["username"],
+        "required": ["active", "created_at", "updated_at"],
         "properties": {
             "active": {"bsonType": "bool"},
             "first_name": {"bsonType": "string"},
@@ -18,10 +18,11 @@ ACCOUNT_VALIDATION_SCHEMA = {
                 "properties": {"country_code": {"bsonType": "string"}, "phone_number": {"bsonType": "string"}},
                 "description": "must be an object with country_code and phone_number",
             },
-            "username": {"bsonType": "string", "description": "must be a string and is required"},
+            "username": {"bsonType": "string", "description": "must be a string"},
             "created_at": {"bsonType": "date"},
             "updated_at": {"bsonType": "date"},
         },
+        "anyOf": [{"required": ["username"]}, {"required": ["phone_number"]}],
     }
 }
 
