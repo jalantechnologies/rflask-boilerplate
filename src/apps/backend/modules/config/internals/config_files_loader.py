@@ -9,15 +9,11 @@ from modules.config.internals.config_utils import ConfigUtil
 
 
 class ConfigFilesLoader:
-    content: dict[str, Any] = {}
 
     @staticmethod
-    def load() -> None:
-        ConfigFilesLoader.content = ConfigFilesLoader._load_and_merge_configs()
+    def load() -> dict[str, Any]:
+        return ConfigFilesLoader._load_and_merge_configs()
 
-    @staticmethod
-    def get_config_contents() -> dict[str, Any]:
-        return ConfigFilesLoader.content
 
     @staticmethod
     def _load_and_merge_configs() -> dict[str, Any]:

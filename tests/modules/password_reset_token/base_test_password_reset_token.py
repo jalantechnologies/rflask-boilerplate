@@ -10,7 +10,6 @@ from modules.password_reset_token.rest_api.password_reset_token_rest_api_server 
 class BaseTestPasswordResetToken(unittest.TestCase):
     def setup_method(self, method: Callable) -> None:
         print(f"Executing:: {method.__name__}")
-        ConfigService.load_config()
         PasswordResetTokenRestApiServer.create()
 
     def teardown_method(self, method: Callable) -> None:
