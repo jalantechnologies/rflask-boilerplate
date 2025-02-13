@@ -18,7 +18,6 @@ app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Mount deps
-ConfigService.load_config()
 LoggerManager.mount_logger()
 
 # Apply ProxyFix to interpret `X-Forwarded` headers if enabled in configuration

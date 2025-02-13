@@ -1,6 +1,6 @@
 from typing import Any, Optional, cast
 
-from modules.config.internals.config_file_loader import ConfigFilesLoader
+from modules.config.internals.config_files_loader import ConfigFilesLoader
 from modules.config.types import T
 
 
@@ -9,7 +9,7 @@ class ConfigManager:
     CONFIG_KEY_SEPARATOR: str = "."
 
     def __init__(self) -> None:
-        self.config_store: dict[str, Any] = {}
+        self.config_store: dict[str, Any] = ConfigFilesLoader.load()
 
     def get(self, key: str, default: Optional[T] = None) -> Optional[T]:
         value = self._traverse_config(key)
@@ -17,10 +17,6 @@ class ConfigManager:
 
     def has(self, key: str) -> bool:
         return self._traverse_config(key) is not None
-
-    def load_config(self) -> None:
-        ConfigFilesLoader.load()
-        self.config_store = ConfigFilesLoader.get_config_contents()
 
     def _traverse_config(self, key: str) -> Optional[T]:
         value = self.config_store
