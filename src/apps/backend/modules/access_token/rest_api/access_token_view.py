@@ -9,6 +9,7 @@ from modules.access_token.types import (
     CreateAccessTokenParams,
     EmailBasedAuthAccessTokenRequestParams,
     OTPBasedAuthAccessTokenRequestParams,
+    PhoneNumber,
 )
 
 
@@ -17,7 +18,11 @@ class AccessTokenView(MethodView):
         request_data = request.get_json()
         access_token_params: CreateAccessTokenParams
         if "phone_number" in request_data and "otp_code" in request_data:
-            access_token_params = OTPBasedAuthAccessTokenRequestParams(**request_data)
+            phone_number_data = request_data["phone_number"]
+            phone_number_obj = PhoneNumber(**phone_number_data)
+            access_token_params = OTPBasedAuthAccessTokenRequestParams(
+                otp_code=request_data["otp_code"], phone_number=phone_number_obj
+            )
             access_token = AccessTokenService.create_access_token_by_phone_number(params=access_token_params)
         elif "username" in request_data and "password" in request_data:
             access_token_params = EmailBasedAuthAccessTokenRequestParams(**request_data)
