@@ -12,6 +12,26 @@ interface ButtonProps {
   kind?: ButtonKind;
 }
 
+const ButtonClasses: Record<ButtonKind, string> = {
+  [ButtonKind.PRIMARY]:
+    'flex w-full items-center justify-center rounded-lg border bg-primary p-4 font-medium text-white transition active:bg-primary/80',
+  [ButtonKind.SECONDARY]: 'inset-y-0 flex items-center',
+  [ButtonKind.TERTIARY]:
+    'bg-transparent text-center text-lg text-primary active:bg-transparent',
+};
+
+const DisabledClasses: Record<ButtonKind, string> = {
+  [ButtonKind.PRIMARY]: 'cursor-not-allowed bg-primary/80',
+  [ButtonKind.SECONDARY]: 'cursor-not-allowed',
+  [ButtonKind.TERTIARY]: 'cursor-not-allowed text-slate-500',
+};
+
+const EnabledClasses: Record<ButtonKind, string> = {
+  [ButtonKind.PRIMARY]: 'cursor-pointer hover:bg-primary/90',
+  [ButtonKind.SECONDARY]: '',
+  [ButtonKind.TERTIARY]: 'cursor-pointer',
+};
+
 const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   children,
   disabled,
@@ -19,36 +39,18 @@ const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   onClick,
   type = ButtonType.BUTTON,
   kind = ButtonKind.PRIMARY,
-}) => {
-  const content =
-    isLoading && kind === ButtonKind.PRIMARY ? <Spinner /> : children;
-
-  return (
-    <button
-      className={clsx(
-        // Primary button
-        kind === ButtonKind.PRIMARY &&
-          'flex w-full items-center justify-center rounded-lg border bg-primary p-4 font-medium text-white transition active:bg-primary/80',
-        // Secondary button
-        kind === ButtonKind.SECONDARY && 'inset-y-0 flex items-center',
-        // Tertiary button
-        kind === ButtonKind.TERTIARY &&
-          'bg-transparent text-center text-lg text-primary active:bg-transparent',
-        // Disabled or loading states
-        (disabled || isLoading) && 'cursor-not-allowed bg-primary/80',
-        !disabled && !isLoading && 'cursor-pointer hover:bg-primary/90',
-        kind === ButtonKind.TERTIARY &&
-          disabled &&
-          'cursor-not-allowed text-slate-500',
-        kind === ButtonKind.TERTIARY && !disabled && 'cursor-pointer',
-      )}
-      disabled={disabled || isLoading}
-      type={type}
-      onClick={onClick}
-    >
-      {content}
-    </button>
-  );
-};
+}) => (
+  <button
+    className={clsx(
+      ButtonClasses[kind],
+      disabled || isLoading ? DisabledClasses[kind] : EnabledClasses[kind],
+    )}
+    disabled={disabled || isLoading}
+    type={type}
+    onClick={onClick}
+  >
+    {isLoading && kind === ButtonKind.PRIMARY ? <Spinner /> : children}
+  </button>
+);
 
 export default Button;
