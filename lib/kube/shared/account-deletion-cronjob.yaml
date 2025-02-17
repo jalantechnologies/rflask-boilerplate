@@ -5,7 +5,7 @@ metadata:
   name: $KUBE_APP-my-worker
   namespace: $KUBE_NS
   labels:
-    app: $KUBE_APP-my-worker
+    app: $KUBE_APP-account-deletion-worker
     version: $GITHUB_SHA
 spec:
   schedule: "*/5 * * * *"
@@ -15,7 +15,7 @@ spec:
       template:
         metadata:
           labels:
-            app: $KUBE_APP-my-worker
+            app: $KUBE_APP-account-deletion-worker
         spec:
           imagePullSecrets:
             - name: regcred
@@ -23,7 +23,7 @@ spec:
             - name: $KUBE_APP
               image: $KUBE_DEPLOYMENT_IMAGE
               imagePullPolicy: Always
-              command: [ "npm", "run", "script", "--file=cleanup_worker" ]
+              command: [ "npm", "run", "script", "--file=account_deletion_worker" ]
               env:
                 - name: WEB_APP_HOST
                   value: $KUBE_INGRESS_HOSTNAME
