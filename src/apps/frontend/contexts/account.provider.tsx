@@ -12,7 +12,6 @@ import { getAccessTokenFromStorage } from '../utils/storage-util';
 
 import useAsync from './async.hook';
 
-
 type AccountContextType = {
   accountDetails: Account;
   accountError: Nullable<AsyncError>;
