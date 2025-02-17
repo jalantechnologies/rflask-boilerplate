@@ -9,7 +9,8 @@ import {
   Button,
   Input,
 } from '../../components';
-import { CustomLayout } from '../../components/layouts/custom-layout.component'; // Import CustomLayout
+import { CustomLayout } from '../../components/layouts/custom-layout.component';
+import { LayoutType } from '../../components/layouts/layout-config';
 import routes from '../../constants/routes';
 import { AsyncError } from '../../types';
 import { ButtonType, ButtonKind } from '../../types/button';
@@ -21,14 +22,14 @@ import useLoginForm from './login-form.hook';
 interface LoginFormProps {
   onSuccess: () => void;
   onError: (error: AsyncError) => void;
-  layoutType?: string; // Add layoutType prop
+  layoutType?: LayoutType;
   fieldVisibility?: FieldVisibility;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
   onError,
   onSuccess,
-  layoutType = 'default',
+  layoutType = LayoutType.Default,
   fieldVisibility = {
     showEmail: true,
     showPassword: true,
