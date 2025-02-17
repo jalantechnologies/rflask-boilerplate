@@ -9,7 +9,8 @@ import {
   PasswordInput,
   VerticalStackLayout,
 } from '../../../components';
-import { CustomLayout } from '../../../components/layouts/custom-layout.component'; // Import CustomLayout
+import { CustomLayout } from '../../../components/layouts/custom-layout.component';
+import { LayoutType } from '../../../components/layouts/layout-config';
 import routes from '../../../constants/routes';
 import { AsyncError } from '../../../types';
 import { ButtonKind, ButtonType } from '../../../types/button';
@@ -20,14 +21,14 @@ import useSignupForm from './signup-form.hook';
 interface SignupFormProps {
   onError: (error: AsyncError) => void;
   onSuccess: () => void;
-  layoutType?: string; // Add layoutType prop
+  layoutType?: LayoutType;
   fieldVisibility?: FieldVisibility;
 }
 
 const SignupForm: React.FC<SignupFormProps> = ({
   onError,
   onSuccess,
-  layoutType = 'default',
+  layoutType = LayoutType.Default,
   fieldVisibility = {
     showFirstName: true,
     showLastName: true,

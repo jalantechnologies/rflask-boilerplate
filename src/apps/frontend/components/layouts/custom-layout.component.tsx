@@ -1,17 +1,16 @@
 import React from 'react';
 
-import { LayoutConfig } from './layout-config';
+import { LayoutConfig, LayoutType } from './layout-config';
 
 interface CustomLayoutProps {
-  layoutType: string; // The prompt code for the layout (e.g., "half-image", "full-form")
-  children: React.ReactNode; // The form or content to be rendered inside the layout
+  layoutType?: LayoutType;
+  children: React.ReactNode;
 }
 
 export const CustomLayout: React.FC<CustomLayoutProps> = ({
-  layoutType,
+  layoutType = LayoutType.Default,
   children,
 }) => {
-  // Get the layout component based on the layoutType
   const LayoutComponent = LayoutConfig[layoutType] || LayoutConfig.default;
 
   return <LayoutComponent>{children}</LayoutComponent>;

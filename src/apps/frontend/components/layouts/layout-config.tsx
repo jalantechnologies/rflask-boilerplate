@@ -1,16 +1,26 @@
 import React from 'react';
 
-// Layout 1: Half image and half form
+export enum LayoutType {
+  HalfImage = 'half-image',
+  FullForm = 'full-form',
+  BackgroundImage = 'background-image',
+  Default = 'default',
+}
+
+/**
+ * Layout 1: A layout with half an image on the left and a form on the right.
+ * The image is displayed at the top on mobile and on the left side on desktop.
+ * @param {React.ReactNode} children The content to display inside the form section.
+ * @returns {JSX.Element} The JSX structure for the layout.
+ */
 const HalfImageHalfFormLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
   <div className="flex h-screen flex-col md:flex-row">
-    {/* Image Section (Top on Mobile, Left on Desktop) */}
     <div
       className="h-1/3 bg-cover bg-center md:h-auto md:w-1/2"
       style={{ backgroundImage: 'url(/assets/img/auth-background.jpg)' }}
     />
-    {/* Form Section (Bottom on Mobile, Right on Desktop) */}
     <div className="flex h-2/3 w-full items-center justify-center p-4 md:h-auto md:w-1/2">
       <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-md sm:max-w-lg md:max-w-xl">
         {children}
@@ -19,7 +29,11 @@ const HalfImageHalfFormLayout: React.FC<{ children: React.ReactNode }> = ({
   </div>
 );
 
-// Layout 2: Full form (no image)
+/**
+ * Layout 2: A layout with only a full form, no image.
+ * @param {React.ReactNode} children The content to display inside the form section.
+ * @returns {JSX.Element} The JSX structure for the layout.
+ */
 const FullFormLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
@@ -28,7 +42,12 @@ const FullFormLayout: React.FC<{ children: React.ReactNode }> = ({
   </div>
 );
 
-// Layout 3: Centered form with semi-transparent background image
+/**
+ * Layout 3: A centered form with a semi-transparent background image.
+ * The background image covers the entire screen with a dark overlay.
+ * @param {React.ReactNode} children The content to display inside the form section.
+ * @returns {JSX.Element} The JSX structure for the layout.
+ */
 const CenteredFormWithBackgroundLayout: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => (
@@ -40,16 +59,18 @@ const CenteredFormWithBackgroundLayout: React.FC<{
       backgroundPosition: 'center',
     }}
   >
-    {/* Semi-transparent overlay */}
     <div className="absolute inset-0 bg-black/40"></div>
-    {/* Centered form */}
     <div className="relative z-10 w-full max-w-md rounded-lg bg-black/40 p-6 shadow-lg sm:max-w-lg md:max-w-xl">
       {children}
     </div>
   </div>
 );
 
-// Default layout (fallback)
+/**
+ * Default layout: A basic centered form without any background image.
+ * @param {React.ReactNode} children The content to display inside the form section.
+ * @returns {JSX.Element} The JSX structure for the layout.
+ */
 const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
@@ -58,13 +79,12 @@ const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
   </div>
 );
 
-// Map prompt codes to layout components
 export const LayoutConfig: Record<
   string,
   React.FC<{ children: React.ReactNode }>
 > = {
-  'half-image': HalfImageHalfFormLayout,
-  'full-form': FullFormLayout,
-  'background-image': CenteredFormWithBackgroundLayout,
-  default: DefaultLayout,
+  [LayoutType.HalfImage]: HalfImageHalfFormLayout,
+  [LayoutType.FullForm]: FullFormLayout,
+  [LayoutType.BackgroundImage]: CenteredFormWithBackgroundLayout,
+  [LayoutType.Default]: DefaultLayout,
 };

@@ -1,15 +1,16 @@
 import React from 'react';
 
 import { CustomLayout } from '../../components/layouts/custom-layout.component';
+import { LayoutType } from '../../components/layouts/layout-config';
 
 interface AuthenticationFormLayoutProps {
   children: React.ReactNode;
-  layoutType?: string;
+  layoutType?: LayoutType;
 }
 
 const AuthenticationFormLayout: React.FC<AuthenticationFormLayoutProps> = ({
   children,
-  layoutType = 'background-image', // The prompt code for the layout (e.g., "half-image", "full-form","background-image")
+  layoutType = LayoutType.Default,
 }) => (
   <CustomLayout layoutType={layoutType}>
     <div className="flex h-auto min-h-[70vh] items-center justify-center p-4 md:min-h-[50vh] lg:min-h-[60vh]">
