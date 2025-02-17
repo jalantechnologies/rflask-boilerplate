@@ -47,6 +47,14 @@ class ConfigService:
         return DictUtil.required_get_str(input_dict=ConfigManager.config, key="WEB_APP_HOST")
 
     @staticmethod
+    def get_default_otp_enabled() -> bool:
+        return DictUtil.required_get_bool(input_dict=ConfigManager.config, key="DEFAULT_OTP_ENABLED")
+
+    @staticmethod
+    def get_default_otp() -> str:
+        return DictUtil.required_get_str(input_dict=ConfigManager.config, key="DEFAULT_OTP")
+    
+    @staticmethod
     def get_sendgrid_api_key() -> str:
         return str(DictUtil.required_get_dict(input_dict=ConfigManager.config, key="SENDGRID")["api_key"])
 
