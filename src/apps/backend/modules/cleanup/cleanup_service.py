@@ -1,19 +1,11 @@
 from typing import Callable, List
 
 from modules.account.types import SearchAccountByIdParams
-from modules.cleanup.internal.account_deletion_request_reader import (
-    AccountDeletionRequestReader,
-)
-from modules.cleanup.internal.account_deletion_request_writer import (
-    AccountDeletionRequestWriter,
-)
+from modules.cleanup.internal.account_deletion_request_reader import AccountDeletionRequestReader
+from modules.cleanup.internal.account_deletion_request_writer import AccountDeletionRequestWriter
 from modules.cleanup.internal.cleanup_manager import CleanupManager
 from modules.cleanup.internal.cleanup_module_reader import CleanupModuleReader
-from modules.cleanup.types import (
-    AccountDeletionRequest,
-    CleanupModule,
-    SearchAccountDeletionRequestParams,
-)
+from modules.cleanup.types import AccountDeletionRequest, CleanupModule, SearchAccountDeletionRequestParams
 
 
 class CleanupService:
@@ -37,10 +29,7 @@ class CleanupService:
         def decorator(func: Callable) -> Callable:
             # noinspection PyUnresolvedReferences
             CleanupManager.register_hook(
-                func=func,
-                module_name=func.__module__,
-                class_name=func.__qualname__.split(".")[0],
-                main=main,
+                func=func, module_name=func.__module__, class_name=func.__qualname__.split(".")[0], main=main
             )
             return func
 
@@ -51,15 +40,8 @@ class CleanupService:
         CleanupManager.push_hooks()
 
     @staticmethod
-    def execute_hook(
-        *,
-        cleanup_module: CleanupModule,
-        account_deletion_request: AccountDeletionRequest
-    ) -> None:
-        CleanupManager.execute_hook(
-            cleanup_module=cleanup_module,
-            account_deletion_request=account_deletion_request,
-        )
+    def execute_hook(*, cleanup_module: CleanupModule, account_deletion_request: AccountDeletionRequest) -> None:
+        CleanupManager.execute_hook(cleanup_module=cleanup_module, account_deletion_request=account_deletion_request)
 
     @staticmethod
     def get_cleanup_modules() -> List[CleanupModule]:
@@ -74,7 +56,5 @@ class CleanupService:
         CleanupManager.queue_account_deletion(params=params)
 
     @staticmethod
-    def remove_account_deletion_request(
-        *, params: SearchAccountDeletionRequestParams
-    ) -> None:
+    def remove_account_deletion_request(*, params: SearchAccountDeletionRequestParams) -> None:
         AccountDeletionRequestWriter.remove_account_deletion_request(params=params)

@@ -4,9 +4,7 @@ from typing import Callable, List
 
 from modules.account.errors import AccountNotFoundError
 from modules.account.types import SearchAccountByIdParams
-from modules.cleanup.internal.account_deletion_request_writer import (
-    AccountDeletionRequestWriter,
-)
+from modules.cleanup.internal.account_deletion_request_writer import AccountDeletionRequestWriter
 from modules.cleanup.internal.cleanup_module_writer import CleanupModuleWriter
 from modules.cleanup.types import (
     AccountDeletionRequest,
@@ -21,15 +19,10 @@ class CleanupManager:
     HOOKS: List[CreateCleanupModuleParams] = []
 
     @staticmethod
-    def register_hook(
-        func: Callable, module_name: str, class_name: str, main: bool = False
-    ) -> None:
+    def register_hook(func: Callable, module_name: str, class_name: str, main: bool = False) -> None:
         """Register a cleanup hook."""
         params = CreateCleanupModuleParams(
-            module_name=module_name,
-            class_name=class_name,
-            function_name=func.__name__,
-            main=main,
+            module_name=module_name, class_name=class_name, function_name=func.__name__, main=main
         )
         CleanupManager.HOOKS.append(params)
 
@@ -61,17 +54,11 @@ class CleanupManager:
         AccountService.deactivate_account(params=params)
 
         AccountDeletionRequestWriter.create_account_deletion_request(
-            params=CreateAccountDeletionRequestParams(
-                account_id=params.id, requested_at=datetime.now(UTC)
-            )
+            params=CreateAccountDeletionRequestParams(account_id=params.id, requested_at=datetime.now(UTC))
         )
 
     @staticmethod
-    def execute_hook(
-        *,
-        cleanup_module: CleanupModule,
-        account_deletion_request: AccountDeletionRequest,
-    ) -> None:
+    def execute_hook(*, cleanup_module: CleanupModule, account_deletion_request: AccountDeletionRequest) -> None:
         """Execute a cleanup hook."""
         module = importlib.import_module(cleanup_module.module_name)
         cleanup_class = getattr(module, cleanup_module.class_name)

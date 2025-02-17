@@ -1,9 +1,7 @@
 from dataclasses import asdict
 
 from modules.cleanup.internal.store.cleanup_module_model import CleanupModuleModel
-from modules.cleanup.internal.store.cleanup_module_repository import (
-    CleanupModuleRepository,
-)
+from modules.cleanup.internal.store.cleanup_module_repository import CleanupModuleRepository
 from modules.cleanup.types import CreateCleanupModuleParams
 
 

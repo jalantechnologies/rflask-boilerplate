@@ -1,9 +1,7 @@
 from pymongo.collection import Collection
 
 from modules.application.repository import ApplicationRepository
-from modules.cleanup.internal.store.account_deletion_request_model import (
-    AccountDeletionRequestModel,
-)
+from modules.cleanup.internal.store.account_deletion_request_model import AccountDeletionRequestModel
 
 
 class AccountDeletionRequestRepository(ApplicationRepository):

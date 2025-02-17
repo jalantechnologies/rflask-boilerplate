@@ -22,14 +22,10 @@ class AccountView(MethodView):
         account_params: CreateAccountParams
         if "phone_number" in request_data:
             account_params = CreateAccountByPhoneNumberParams(**request_data)
-            account = AccountService.get_or_create_account_by_phone_number(
-                params=account_params
-            )
+            account = AccountService.get_or_create_account_by_phone_number(params=account_params)
         elif "username" in request_data and "password" in request_data:
             account_params = CreateAccountByUsernameAndPasswordParams(**request_data)
-            account = AccountService.create_account_by_username_and_password(
-                params=account_params
-            )
+            account = AccountService.create_account_by_username_and_password(params=account_params)
         account_dict = asdict(account)
         return jsonify(account_dict), 201
 
