@@ -54,15 +54,17 @@ class TestAccountService(BaseTestAccount):
 
     def test_get_or_create_account_by_phone_number(self) -> None:
         account = AccountService.get_or_create_account_by_phone_number(
-            params=CreateAccountByPhoneNumberParams(phone_number={"country_code": "+91", "phone_number": "9999999999"})
+            params=CreateAccountByPhoneNumberParams(
+                phone_number=PhoneNumber(**{"country_code": "+91", "phone_number": "9999999999"})
+            )
         )
 
         assert account.phone_number == PhoneNumber(country_code="+91", phone_number="9999999999")
 
     def test_throw_exception_when_phone_number_not_exist(self) -> None:
-        phone_number = {"country_code": "+91", "phone_number": "9999999999"}
+        phone_number = PhoneNumber(**{"country_code": "+91", "phone_number": "9999999999"})
         try:
             AccountService.get_account_by_phone_number(phone_number=phone_number)
         except AccountNotFoundError as exc:
             assert exc.code == AccountErrorCode.NOT_FOUND
-            assert exc.message == f"Account with phone number:: {phone_number}, not found"
+            assert exc.message == f"We could not find an account phone number: {phone_number}. Please verify it or you can create a new account."

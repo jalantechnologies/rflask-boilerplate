@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 from phonenumbers import is_valid_number, parse
 from pymongo import ReturnDocument
 
-from modules.account.errors import AccountNotFoundError
+from modules.account.errors import AccountWithIdNotFoundError
 from modules.account.internal.account_reader import AccountReader
 from modules.account.internal.account_util import AccountUtil
 from modules.account.internal.store.account_model import AccountModel
@@ -25,11 +25,18 @@ class AccountWriter:
         params_dict["hashed_password"] = AccountUtil.hash_password(password=params.password)
         del params_dict["password"]
         AccountReader.check_username_not_exist(params=params)
-        account_bson = AccountModel(**params_dict).to_bson()
+        account_bson = AccountModel(
+            first_name=params.first_name,
+            hashed_password=params_dict["hashed_password"],
+            id=None,
+            last_name=params.last_name,
+            phone_number=None,
+            username=params.username,
+        ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
-        account = AccountRepository.collection().find_one({"_id": query.inserted_id})
+        account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})
 
-        return AccountUtil.convert_account_model_to_account(AccountModel(**account))
+        return AccountUtil.convert_account_bson_to_account(account_bson)
 
     @staticmethod
     def create_account_by_phone_number(*, params: CreateAccountByPhoneNumberParams) -> Account:
@@ -41,11 +48,13 @@ class AccountWriter:
             raise OtpRequestFailedError()
 
         AccountReader.check_phone_number_not_exist(phone_number=params.phone_number)
-        account_bson = AccountModel(**params_dict).to_bson()
+        account_bson = AccountModel(
+            first_name="", hashed_password="", id=None, last_name="", phone_number=phone_number, username=""
+        ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
-        account = AccountRepository.collection().find_one({"_id": query.inserted_id})
+        account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})
 
-        return AccountUtil.convert_account_model_to_account(AccountModel(**account))
+        return AccountUtil.convert_account_bson_to_account(account_bson)
 
     @staticmethod
     def update_password_by_account_id(account_id: str, password: str) -> Account:
@@ -56,6 +65,6 @@ class AccountWriter:
             return_document=ReturnDocument.AFTER,
         )
         if updated_account is None:
-            raise AccountNotFoundError(f"Account not found: {account_id}")
+            raise AccountWithIdNotFoundError(id=account_id)
 
-        return AccountUtil.convert_account_model_to_account(AccountModel(**updated_account))
+        return AccountUtil.convert_account_bson_to_account(updated_account)

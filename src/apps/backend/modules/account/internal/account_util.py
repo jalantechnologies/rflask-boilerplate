@@ -1,7 +1,8 @@
+from typing import Any
+from modules.account.internal.store.account_model import AccountModel
 import bcrypt
 
-from modules.account.internal.store.account_model import AccountModel
-from modules.account.types import Account
+from modules.account.types import Account, PhoneNumber
 
 
 class AccountUtil:
@@ -14,11 +15,13 @@ class AccountUtil:
         return bcrypt.checkpw(password.encode("utf-8"), hashed_password.encode("utf-8"))
 
     @staticmethod
-    def convert_account_model_to_account(account_model: AccountModel) -> Account:
+    def convert_account_bson_to_account(account_bson: dict[str, Any]) -> Account:
+        validated_account_data = AccountModel.from_bson(account_bson)
         return Account(
-            id=str(account_model.id),
-            first_name=account_model.first_name,
-            last_name=account_model.last_name,
-            phone_number=account_model.phone_number,
-            username=account_model.username,
+            first_name=validated_account_data.first_name,
+            id=str(validated_account_data.id),
+            last_name=validated_account_data.last_name,
+            hashed_password=validated_account_data.hashed_password,
+            phone_number=validated_account_data.phone_number,
+            username=validated_account_data.username,
         )
