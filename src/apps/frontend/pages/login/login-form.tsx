@@ -47,8 +47,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
         <VerticalStackLayout gap={5}>
           {fieldVisibility.showEmail && (
             <FormControl
-              label={'Email'}
-              error={formik.touched.username ? formik.errors.username : ''}
+              label="Email"
+              error={
+                formik.touched.username && formik.errors.username
+                  ? formik.errors.username
+                  : undefined
+              }
             >
               <Input
                 data-testid="username"
@@ -60,7 +64,11 @@ const LoginForm: React.FC<LoginFormProps> = ({
                     alt="email icon"
                   />
                 }
-                error={formik.touched.username ? formik.errors.username : ''}
+                error={
+                  formik.touched.username && formik.errors.username
+                    ? formik.errors.username
+                    : undefined
+                }
                 name="username"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
@@ -71,11 +79,19 @@ const LoginForm: React.FC<LoginFormProps> = ({
           )}
           {fieldVisibility.showPassword && (
             <FormControl
-              label={'Password'}
-              error={formik.touched.password ? formik.errors.password : ''}
+              label="Password"
+              error={
+                formik.touched.password && formik.errors.password
+                  ? formik.errors.password
+                  : undefined
+              }
             >
               <PasswordInput
-                error={formik.touched.password ? formik.errors.password : ''}
+                error={
+                  formik.touched.password && formik.errors.password
+                    ? formik.errors.password
+                    : undefined
+                }
                 name="password"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -96,7 +112,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                   to={routes.FORGOT_PASSWORD}
                   className="text-sm text-primary hover:underline"
                 >
-                  Forget password?
+                  Forgot password?
                 </Link>
               )}
             </Flex>
@@ -120,7 +136,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           </Button>
           {fieldVisibility.showSignUpLink && (
             <p className="self-center font-medium">
-              Don’t have any account?{' '}
+              Don’t have an account?{' '}
               <Link to={routes.SIGNUP} className="text-primary">
                 Sign Up
               </Link>
