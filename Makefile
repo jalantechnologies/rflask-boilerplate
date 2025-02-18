@@ -18,7 +18,7 @@ run-engine:
 		&& pipenv run gunicorn -c gunicorn_config.py --reload server:app
 
 run-test:
-	PYTHONPATH=src/apps/backend pipenv run pytest --cov=. --cov-report=xml:/app/output/coverage.xml tests
+	PYTHONPATH=src/apps/backend pipenv run pytest --disable-warnings -s -x -v --cov=. --cov-report=xml:/app/output/coverage.xml tests
 
 run-engine-winx86:
 	echo "This command is specifically for Windows platform \
