@@ -1,3 +1,5 @@
+import os
+from typing import Tuple, Union, Optional
 from modules.account.internal.account_reader import AccountReader
 from modules.account.internal.account_writer import AccountWriter
 from modules.account.types import (
@@ -9,7 +11,7 @@ from modules.account.types import (
     ResetPasswordParams,
 )
 from modules.otp.otp_service import OtpService
-from modules.otp.types import CreateOtpParams
+from modules.otp.types import CreateOtpParams, Otp
 from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
 
 
@@ -23,16 +25,20 @@ class AccountService:
         return AccountReader.get_account_by_phone_number(phone_number=phone_number)
 
     @staticmethod
-    def get_or_create_account_by_phone_number(*, params: CreateAccountByPhoneNumberParams) -> Account:
+    def get_or_create_account_by_phone_number(
+        *, params: CreateAccountByPhoneNumberParams
+    ) -> Tuple[Account, Optional[Otp]]:
         account = AccountReader.get_account_by_phone_number_optional(phone_number=params.phone_number)
 
         if account is None:
             account = AccountWriter.create_account_by_phone_number(params=params)
 
         create_otp_params = CreateOtpParams(phone_number=params.phone_number)
-        OtpService.create_otp(params=create_otp_params)
-
-        return account
+        otp = OtpService.create_otp(params=create_otp_params)
+        
+        otp_to_return = otp if os.environ.get("APP_ENV", "development") != "production" else None
+        
+        return account, otp_to_return
 
     @staticmethod
     def reset_account_password(*, params: ResetPasswordParams) -> Account:

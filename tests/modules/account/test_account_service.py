@@ -53,7 +53,7 @@ class TestAccountService(BaseTestAccount):
             assert exc.code == AccountErrorCode.NOT_FOUND
 
     def test_get_or_create_account_by_phone_number(self) -> None:
-        account = AccountService.get_or_create_account_by_phone_number(
+        account, otp = AccountService.get_or_create_account_by_phone_number(
             params=CreateAccountByPhoneNumberParams(
                 phone_number=PhoneNumber(**{"country_code": "+91", "phone_number": "9999999999"})
             )
