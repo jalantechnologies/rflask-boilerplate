@@ -46,7 +46,7 @@ class OtpRepository(ApplicationRepository):
         try:
             collection.database.command(add_validation_command)
         except OperationFailure as e:
-            if "Collection does not exist" in str(e):
+            if e.code == 26: # NamespaceNotFound MongoDB error code
                 collection.database.create_collection(cls.collection_name, validator=OTP_VALIDATION_SCHEMA)
             else:
                 Logger.error(message=f"OperationFailure occurred for collection otp: {e.details}")

@@ -16,12 +16,12 @@ class AccountUtil:
 
     @staticmethod
     def convert_account_bson_to_account(account_bson: dict[str, Any]) -> Account:
-        validated_data = AccountModel.from_bson(account_bson)
+        validated_account_data = AccountModel.from_bson(account_bson)
         return Account(
-            first_name=validated_data.first_name,
-            id=str(validated_data.id),
-            last_name=validated_data.last_name,
-            hashed_password=validated_data.hashed_password,
-            phone_number=validated_data.phone_number,
-            username=validated_data.username,
+            first_name=validated_account_data.first_name,
+            id=str(validated_account_data.id),
+            last_name=validated_account_data.last_name,
+            hashed_password=validated_account_data.hashed_password,
+            phone_number=validated_account_data.phone_number,
+            username=validated_account_data.username,
         )

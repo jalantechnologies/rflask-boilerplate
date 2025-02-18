@@ -33,7 +33,7 @@ class PasswordResetTokenRepository(ApplicationRepository):
         try:
             collection.database.command(add_validation_command)
         except OperationFailure as e:
-            if "Collection does not exist" in str(e):
+            if e.code == 26: # NamespaceNotFound MongoDB error code
                 collection.database.create_collection(
                     cls.collection_name, validator=PASSWORD_RESET_TOKEN_VALIDATION_SCHEMA
                 )

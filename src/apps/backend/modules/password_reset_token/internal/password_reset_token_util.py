@@ -42,12 +42,12 @@ class PasswordResetTokenUtil:
     def convert_password_reset_token_bson_to_password_reset_token(
         password_reset_token_bson: dict[str, Any]
     ) -> PasswordResetToken:
-        validated_data = PasswordResetTokenModel.from_bson(password_reset_token_bson)
+        validated_password_reset_token_data = PasswordResetTokenModel.from_bson(password_reset_token_bson)
         return PasswordResetToken(
-            account=str(validated_data.account),
-            id=str(validated_data.id),
-            is_used=validated_data.is_used,
-            is_expired=PasswordResetTokenUtil.is_token_expired(validated_data.expires_at),
-            expires_at=str(validated_data.expires_at),
-            token=validated_data.token
+            account=str(validated_password_reset_token_data.account),
+            id=str(validated_password_reset_token_data.id),
+            is_used=validated_password_reset_token_data.is_used,
+            is_expired=PasswordResetTokenUtil.is_token_expired(validated_password_reset_token_data.expires_at),
+            expires_at=str(validated_password_reset_token_data.expires_at),
+            token=validated_password_reset_token_data.token
         )
