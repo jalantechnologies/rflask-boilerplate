@@ -1,13 +1,13 @@
 export interface FieldVisibility {
   showEmail?: boolean;
-  showPassword?: boolean;
-  showRememberMe?: boolean;
-  showForgotPassword?: boolean;
-  showPhoneLogin?: boolean;
-  showSignUpLink?: boolean;
   showFirstName?: boolean;
+  showForgotPassword?: boolean;
   showLastName?: boolean;
+  showLoginLink?: boolean;
+  showPassword?: boolean;
+  showPhoneLogin?: boolean;
+  showRememberMe?: boolean;
   showRetypePassword?: boolean;
   showSignUpButton?: boolean;
-  showLoginLink?: boolean;
+  showSignUpLink?: boolean;
 }
