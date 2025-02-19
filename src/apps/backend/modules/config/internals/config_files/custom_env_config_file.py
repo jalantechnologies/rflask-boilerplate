@@ -5,11 +5,11 @@ from modules.config.internals.config_utils import ConfigUtil
 
 class CustomEnvConfig:
 
-    filename: str = "custom-environment-variables.yml"
+    FILENAME: str = "custom-environment-variables.yml"
 
     @staticmethod
     def load() -> dict[str, Any]:
-        custom_env_config = ConfigUtil.read_yml_from_config_dir("custom-environment-variables.yml")
+        custom_env_config = ConfigUtil.read_yml_from_config_dir(CustomEnvConfig.FILENAME)
         return CustomEnvConfig._apply_environment_overrides(custom_env_config)  # get_os_env
 
     @staticmethod
@@ -18,18 +18,16 @@ class CustomEnvConfig:
         if not isinstance(data, dict):
             return data
 
-        keys_to_delete: list = []
+        updated_data = {}
 
         for key, value in data.items():
             if isinstance(value, dict):
-                data[key] = CustomEnvConfig._search_and_replace_dict_value_with_env(value)
+                updated_data[key] = CustomEnvConfig._search_and_replace_dict_value_with_env(value)
             elif isinstance(value, str):
-                CustomEnvConfig._search_and_replace_str_value_with_env(data, key, value, keys_to_delete)
-
-        for key in keys_to_delete:
-            del data[key]
-
-        return data
+                result = CustomEnvConfig._search_and_get_str_value_from_env(value)
+                if result is not None:
+                    updated_data[key] = result
+        return updated_data
 
     @staticmethod
     def _search_and_replace_dict_value_with_env(value: dict[str, Any]) -> Any:
@@ -41,14 +39,8 @@ class CustomEnvConfig:
         return CustomEnvConfig._apply_environment_overrides(value)
 
     @staticmethod
-    def _search_and_replace_str_value_with_env(
-        data: dict[str, Any], key: str, value: str, keys_to_delete: list
-    ) -> None:
-        env_value = os.getenv(value)
-        if env_value is None:
-            keys_to_delete.append(key)
-        else:
-            data[key] = env_value
+    def _search_and_get_str_value_from_env(key: str) -> Optional[str]:
+        return os.getenv(key)
 
     @staticmethod
     def _parse_value(value: Optional[str], value_format: str) -> int | float | bool | None:

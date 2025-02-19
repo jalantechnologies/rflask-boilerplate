@@ -5,8 +5,8 @@ from modules.config.internals.config_utils import ConfigUtil
 
 class DefaultConfig:
 
-    filename: str = "default.yml"
+    FILENAME: str = "default.yml"
 
     @staticmethod
     def load() -> dict[str, Any]:
-        return ConfigUtil.read_yml_from_config_dir(DefaultConfig.filename)
+        return ConfigUtil.read_yml_from_config_dir(DefaultConfig.FILENAME)
