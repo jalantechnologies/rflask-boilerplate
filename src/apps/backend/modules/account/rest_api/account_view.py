@@ -21,11 +21,14 @@ class AccountView(MethodView):
         account_params: CreateAccountParams
         if "phone_number" in request_data:
             account_params = CreateAccountByPhoneNumberParams(**request_data)
-            account = AccountService.get_or_create_account_by_phone_number(params=account_params)
+            account, otp = AccountService.get_or_create_account_by_phone_number(params=account_params)
+            account_dict = asdict(account)
+            if otp:
+                account_dict["otp_code"] = otp.otp_code
         elif "username" in request_data and "password" in request_data:
             account_params = CreateAccountByUsernameAndPasswordParams(**request_data)
             account = AccountService.create_account_by_username_and_password(params=account_params)
-        account_dict = asdict(account)
+            account_dict = asdict(account)
         return jsonify(account_dict), 201
 
     @access_auth_middleware

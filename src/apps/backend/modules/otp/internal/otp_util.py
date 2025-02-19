@@ -20,6 +20,8 @@ class OtpUtil:
     def generate_otp(length: int, phone_number: str) -> str:
         if OtpUtil.is_default_phone_number(phone_number):
             return ConfigService.get_otp_config("default_otp")
+        if OtpUtil.is_default_otp_enabled():
+            return ConfigService.get_default_otp()
         return "".join(random.choices(string.digits, k=length))
 
     @staticmethod
@@ -30,3 +32,9 @@ class OtpUtil:
             phone_number=otp_model.phone_number,
             status=otp_model.status,
         )
+
+    @staticmethod
+    def is_default_otp_enabled() -> bool:
+        if ConfigService.has_key("DEFAULT_OTP_ENABLED"):
+            return ConfigService.get_default_otp_enabled()
+        return False
