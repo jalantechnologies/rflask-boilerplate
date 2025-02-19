@@ -6,11 +6,11 @@ import * as Yup from 'yup';
 import constant from '../../../constants';
 import routes from '../../../constants/routes';
 import { useAuthContext } from '../../../contexts';
-import { AsyncError, PhoneNumber } from '../../../types';
+import { AsyncError, OTP, PhoneNumber } from '../../../types';
 
 interface PhoneLoginFormProps {
   onError: (err: AsyncError) => void;
-  onSendOTPSuccess: () => void;
+  onSendOTPSuccess: (otp: OTP) => void;
 }
 
 const usePhoneLoginForm = ({
@@ -55,8 +55,8 @@ const usePhoneLoginForm = ({
           phone_number: formattedPhoneNumber.toString(),
         }),
       )
-        .then(() => {
-          onSendOTPSuccess();
+        .then((otp) => {
+          onSendOTPSuccess(otp as OTP);
           navigate(otpPageUrl);
         })
         .catch((err) => {

@@ -2,17 +2,20 @@ import React from 'react';
 import toast from 'react-hot-toast';
 
 import { H2, VerticalStackLayout } from '../../../components';
-import { AsyncError } from '../../../types';
+import { AsyncError, OTP } from '../../../types';
 import AuthenticationFormLayout from '../authentication-form-layout';
 import AuthenticationPageLayout from '../authentication-page-layout';
 
 import PhoneLoginForm from './phone-login-form';
 
 export const PhoneLogin: React.FC = () => {
-  const onSendOTPSuccess = () => {
-    toast.success(
-      'OTP has been sent successfully. Please check your messages.',
-    );
+  const onSendOTPSuccess = (otp: OTP) => {
+    const baseMessage = "OTP has been sent successfully. Please check your messages.";
+    const message = otp.otpCode
+      ? `${baseMessage} OTP Code: ${otp.otpCode}`
+      : baseMessage;
+
+    toast.success(message);
   };
 
   const onError = (error: AsyncError) => {

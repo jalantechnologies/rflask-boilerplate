@@ -37,3 +37,11 @@ export class PhoneNumber {
     return `${this.countryCode} ${this.phoneNumber}`;
   }
 }
+
+export class OTP {
+  otpCode: string;
+  
+  constructor(json: JsonObject) {
+    this.otpCode = json.otp_code as string;
+  }
+}

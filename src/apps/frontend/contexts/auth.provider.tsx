@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 
 import { AuthService } from '../services';
-import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from '../types';
+import { AccessToken, ApiResponse, AsyncError, OTP, PhoneNumber } from '../types';
 import { Nullable } from '../types/common-types';
 import {
   getAccessTokenFromStorage,
@@ -26,7 +26,7 @@ type AuthContextType = {
   loginError: Nullable<AsyncError>;
   loginResult: Nullable<AccessToken>;
   logout: () => void;
-  sendOTP: (phoneNumber: PhoneNumber) => Promise<Nullable<void>>;
+  sendOTP: (phoneNumber: PhoneNumber) => Promise<Nullable<OTP>>;
   sendOTPError: Nullable<AsyncError>;
   signup: (
     firstName: string,
@@ -75,7 +75,7 @@ const isUserAuthenticated = () => !!getAccessTokenFromStorage();
 
 const sendOTPFn = async (
   phoneNumber: PhoneNumber,
-): Promise<ApiResponse<void>> => authService.sendOTP(phoneNumber);
+): Promise<ApiResponse<OTP>> => authService.sendOTP(phoneNumber);
 
 const verifyOTPFn = async (
   phoneNumber: PhoneNumber,
