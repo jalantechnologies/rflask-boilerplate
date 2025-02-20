@@ -1,13 +1,24 @@
-import React, { PropsWithChildren, ReactNode } from 'react';
+import React from 'react';
 
-const AuthenticationFormLayout: React.FC<PropsWithChildren<ReactNode>> = ({
+import { CustomLayout } from '../../components/layouts/custom-layout.component';
+import { LayoutType } from '../../components/layouts/layout-config';
+
+interface AuthenticationFormLayoutProps {
+  children: React.ReactNode;
+  layoutType?: LayoutType;
+}
+
+const AuthenticationFormLayout: React.FC<AuthenticationFormLayoutProps> = ({
   children,
+  layoutType = LayoutType.Default,
 }) => (
-  <div className="flex min-h-screen flex-wrap items-center justify-center p-4 md:p-6 2xl:p-10">
-    <div className="w-full rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:p-12.5 md:w-4/5 xl:w-2/5">
-      {children}
+  <CustomLayout layoutType={layoutType}>
+    <div className="flex h-auto min-h-[70vh] items-center justify-center p-4 md:min-h-[50vh] lg:min-h-[60vh]">
+      <div className="w-full rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:p-4 md:w-full xl:w-full">
+        {children}
+      </div>
     </div>
-  </div>
+  </CustomLayout>
 );
 
 export default AuthenticationFormLayout;
