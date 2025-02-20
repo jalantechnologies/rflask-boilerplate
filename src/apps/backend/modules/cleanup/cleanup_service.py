@@ -1,11 +1,19 @@
+from datetime import UTC, datetime
 from typing import Callable, List
 
+from modules.account.errors import AccountNotFoundError
 from modules.account.types import SearchAccountByIdParams
+from modules.cleanup.errors import AccountDeletionRequestAlreadyExistsError
 from modules.cleanup.internal.account_deletion_request_reader import AccountDeletionRequestReader
 from modules.cleanup.internal.account_deletion_request_writer import AccountDeletionRequestWriter
 from modules.cleanup.internal.cleanup_manager import CleanupManager
 from modules.cleanup.internal.cleanup_module_reader import CleanupModuleReader
-from modules.cleanup.types import AccountDeletionRequest, CleanupModule, SearchAccountDeletionRequestParams
+from modules.cleanup.types import (
+    AccountDeletionRequest,
+    CleanupModule,
+    CreateAccountDeletionRequestParams,
+    SearchAccountDeletionRequestParams,
+)
 
 
 class CleanupService:
@@ -53,7 +61,25 @@ class CleanupService:
 
     @staticmethod
     def queue_account_deletion(*, params: SearchAccountByIdParams) -> None:
-        CleanupManager.queue_account_deletion(params=params)
+        from modules.account.account_service import AccountService
+
+        account = AccountService.get_account_by_id(params=params)
+        if not account:
+            raise AccountNotFoundError(f"Account not found: {params.id}")
+
+        deletion_request = AccountDeletionRequestReader.get_account_deletion_request_by_id(
+            params=SearchAccountDeletionRequestParams(account_id=params.id)
+        )
+        if deletion_request:
+            raise AccountDeletionRequestAlreadyExistsError(
+                f"Account deletion request already exists for account_id: {params.id}"
+            )
+
+        AccountService.deactivate_account(params=params)
+
+        CleanupManager.queue_account_deletion(
+            params=CreateAccountDeletionRequestParams(account_id=params.id, requested_at=datetime.now(UTC))
+        )
 
     @staticmethod
     def remove_account_deletion_request(*, params: SearchAccountDeletionRequestParams) -> None:

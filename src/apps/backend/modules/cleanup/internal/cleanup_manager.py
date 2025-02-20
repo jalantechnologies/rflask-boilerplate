@@ -1,8 +1,6 @@
 import importlib
-from datetime import UTC, datetime
 from typing import Callable, List
 
-from modules.account.errors import AccountNotFoundError
 from modules.account.types import SearchAccountByIdParams
 from modules.cleanup.internal.account_deletion_request_writer import AccountDeletionRequestWriter
 from modules.cleanup.internal.cleanup_module_writer import CleanupModuleWriter
@@ -42,20 +40,9 @@ class CleanupManager:
         CleanupManager.HOOKS = []
 
     @staticmethod
-    def queue_account_deletion(params: SearchAccountByIdParams) -> None:
+    def queue_account_deletion(params: CreateAccountDeletionRequestParams) -> None:
         """Queue cleanup operation to be handled by the worker thread."""
-
-        from modules.account.account_service import AccountService
-
-        account = AccountService.get_account_by_id(params=params)
-        if not account:
-            raise AccountNotFoundError(f"Account not found: {params.id}")
-
-        AccountService.deactivate_account(params=params)
-
-        AccountDeletionRequestWriter.create_account_deletion_request(
-            params=CreateAccountDeletionRequestParams(account_id=params.id, requested_at=datetime.now(UTC))
-        )
+        AccountDeletionRequestWriter.create_account_deletion_request(params=params)
 
     @staticmethod
     def execute_hook(*, cleanup_module: CleanupModule, account_deletion_request: AccountDeletionRequest) -> None:
