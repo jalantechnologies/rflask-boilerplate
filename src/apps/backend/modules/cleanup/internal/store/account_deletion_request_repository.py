@@ -9,5 +9,5 @@ class AccountDeletionRequestRepository(ApplicationRepository):
 
     @classmethod
     def on_init_collection(cls, collection: Collection) -> bool:
-        collection.create_index("account_id")
+        collection.create_index("account_id", unique=True)
         return True
