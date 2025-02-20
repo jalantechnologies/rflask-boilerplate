@@ -39,6 +39,10 @@
   .taskCheckbox:checked ~ p {
     @apply line-through;
   }
+  .taskCheckbox:checked ~ .box span {
+    @apply opacity-100;
+  }
+  
 }
 
 /* Styling for Flatpickr Calendar */

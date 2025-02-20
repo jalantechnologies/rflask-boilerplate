@@ -49,7 +49,7 @@ const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
     type={type}
     onClick={onClick}
   >
-    {isLoading && kind === ButtonKind.PRIMARY ? <Spinner /> : children}
+    {isLoading ? <Spinner /> : children}
   </button>
 );
 
