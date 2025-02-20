@@ -18,13 +18,6 @@ import { FieldVisibility } from '../../../types/form';
 
 import useSignupForm from './signup-form.hook';
 
-type SignupFields =
-  | 'firstName'
-  | 'lastName'
-  | 'username'
-  | 'password'
-  | 'retypePassword';
-
 interface SignupFormProps {
   onError: (error: AsyncError) => void;
   onSuccess: () => void;
@@ -48,9 +41,6 @@ const SignupForm: React.FC<SignupFormProps> = ({
 }) => {
   const { formik, isSignupLoading } = useSignupForm({ onSuccess, onError });
 
-  const getFormikError = (field: SignupFields) =>
-    formik.touched[field] ? formik.errors[field] : '';
-
   return (
     <CustomLayout layoutType={layoutType}>
       <form onSubmit={formik.handleSubmit}>
@@ -60,11 +50,19 @@ const SignupForm: React.FC<SignupFormProps> = ({
               {fieldVisibility.showFirstName && (
                 <div className="w-full">
                   <FormControl
-                    label="First name"
-                    error={getFormikError('firstName')}
+                    label={'First name'}
+                    error={
+                      formik.touched.firstName && formik.errors.firstName
+                        ? formik.errors.firstName
+                        : undefined
+                    }
                   >
                     <Input
-                      error={getFormikError('firstName')}
+                      error={
+                        formik.touched.firstName && formik.errors.firstName
+                          ? formik.errors.firstName
+                          : undefined
+                      }
                       data-testid="firstName"
                       disabled={isSignupLoading}
                       name="firstName"
@@ -79,11 +77,19 @@ const SignupForm: React.FC<SignupFormProps> = ({
               {fieldVisibility.showLastName && (
                 <div className="w-full">
                   <FormControl
-                    label="Last name"
-                    error={getFormikError('lastName')}
+                    label={'Last name'}
+                    error={
+                      formik.touched.lastName && formik.errors.lastName
+                        ? formik.errors.lastName
+                        : undefined
+                    }
                   >
                     <Input
-                      error={getFormikError('lastName')}
+                      error={
+                        formik.touched.lastName && formik.errors.lastName
+                          ? formik.errors.lastName
+                          : undefined
+                      }
                       data-testid="lastName"
                       disabled={isSignupLoading}
                       name="lastName"
@@ -98,7 +104,14 @@ const SignupForm: React.FC<SignupFormProps> = ({
             </Flex>
           )}
           {fieldVisibility.showEmail && (
-            <FormControl label="Email" error={getFormikError('username')}>
+            <FormControl
+              label={'Email'}
+              error={
+                formik.touched.username && formik.errors.username
+                  ? formik.errors.username
+                  : undefined
+              }
+            >
               <Input
                 data-testid="username"
                 disabled={isSignupLoading}
@@ -109,7 +122,11 @@ const SignupForm: React.FC<SignupFormProps> = ({
                     src="/assets/img/icon/email.svg"
                   />
                 }
-                error={getFormikError('username')}
+                error={
+                  formik.touched.username && formik.errors.username
+                    ? formik.errors.username
+                    : undefined
+                }
                 name="username"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
@@ -119,28 +136,47 @@ const SignupForm: React.FC<SignupFormProps> = ({
             </FormControl>
           )}
           {fieldVisibility.showPassword && (
-            <FormControl label="Password" error={getFormikError('password')}>
+            <FormControl
+              label={'Password'}
+              error={
+                formik.touched.password && formik.errors.password
+                  ? formik.errors.password
+                  : undefined
+              }
+            >
               <PasswordInput
-                error={getFormikError('password')}
-                name="password"
+                error={
+                  formik.touched.password && formik.errors.password
+                    ? formik.errors.password
+                    : undefined
+                }
+                name={'password'}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                placeholder="Enter your password"
+                placeholder={'Enter your password'}
                 value={formik.values.password}
               />
             </FormControl>
           )}
           {fieldVisibility.showRetypePassword && (
             <FormControl
-              label="Re-type Password"
-              error={getFormikError('retypePassword')}
+              label={'Re-type Password'}
+              error={
+                formik.touched.retypePassword && formik.errors.retypePassword
+                  ? formik.errors.retypePassword
+                  : undefined
+              }
             >
               <PasswordInput
-                error={getFormikError('retypePassword')}
-                name="retypePassword"
+                error={
+                  formik.touched.retypePassword && formik.errors.retypePassword
+                    ? formik.errors.retypePassword
+                    : undefined
+                }
+                name={'retypePassword'}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                placeholder="Re-enter the password"
+                placeholder={'Re-enter the password'}
                 value={formik.values.retypePassword}
               />
             </FormControl>
