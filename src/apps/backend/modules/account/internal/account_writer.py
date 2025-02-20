@@ -14,6 +14,7 @@ from modules.account.types import (
     CreateAccountByPhoneNumberParams,
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
+    SearchAccountByIdParams,
 )
 from modules.otp.errors import OtpRequestFailedError
 
@@ -59,3 +60,11 @@ class AccountWriter:
             raise AccountNotFoundError(f"Account not found: {account_id}")
 
         return AccountUtil.convert_account_model_to_account(AccountModel(**updated_account))
+
+    @staticmethod
+    def deactivate_account(*, params: SearchAccountByIdParams) -> None:
+        AccountRepository.collection().update_one({"_id": ObjectId(params.id)}, {"$set": {"active": False}})
+
+    @staticmethod
+    def delete_account(*, params: SearchAccountByIdParams) -> None:
+        AccountRepository.collection().delete_one({"_id": ObjectId(params.id)})

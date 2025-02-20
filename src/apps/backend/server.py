@@ -7,6 +7,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
 from modules.access_token.rest_api.access_token_rest_api_server import AccessTokenRestApiServer
 from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
+from modules.cleanup.cleanup_service import CleanupService
 from modules.config.config_manager import ConfigManager
 from modules.config.config_service import ConfigService
 from modules.error.custom_errors import AppError
@@ -26,6 +27,9 @@ LoggerManager.mount_logger()
 # Visit: https://flask.palletsprojects.com/en/stable/deploying/proxy_fix/ for more information
 if ConfigService.has_key("IS_SERVER_RUNNING_BEHIND_PROXY") and ConfigService.get_bool("IS_SERVER_RUNNING_BEHIND_PROXY"):
     app.wsgi_app = ProxyFix(app.wsgi_app)  # type: ignore
+
+# Register cleanup hooks
+CleanupService.push_hooks()
 
 # Register access token apis
 access_token_blueprint = AccessTokenRestApiServer.create()

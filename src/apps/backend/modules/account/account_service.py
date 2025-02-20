@@ -2,12 +2,13 @@ from modules.account.internal.account_reader import AccountReader
 from modules.account.internal.account_writer import AccountWriter
 from modules.account.types import (
     Account,
-    AccountSearchByIdParams,
     CreateAccountByPhoneNumberParams,
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
     ResetPasswordParams,
+    SearchAccountByIdParams,
 )
+from modules.cleanup.cleanup_service import CleanupService
 from modules.otp.otp_service import OtpService
 from modules.otp.types import CreateOtpParams
 from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
@@ -37,7 +38,7 @@ class AccountService:
     @staticmethod
     def reset_account_password(*, params: ResetPasswordParams) -> Account:
 
-        account = AccountReader.get_account_by_id(params=AccountSearchByIdParams(id=params.account_id))
+        account = AccountReader.get_account_by_id(params=SearchAccountByIdParams(id=params.account_id))
 
         password_reset_token = PasswordResetTokenService.verify_password_reset_token(
             account_id=account.id, token=params.token
@@ -54,5 +55,14 @@ class AccountService:
         return updated_account
 
     @staticmethod
-    def get_account_by_id(*, params: AccountSearchByIdParams) -> Account:
+    def get_account_by_id(*, params: SearchAccountByIdParams) -> Account:
         return AccountReader.get_account_by_id(params=params)
+
+    @staticmethod
+    def deactivate_account(*, params: SearchAccountByIdParams) -> None:
+        return AccountWriter.deactivate_account(params=params)
+
+    @staticmethod
+    @CleanupService.register(main=True)
+    def delete_account_by_id(*, params: SearchAccountByIdParams) -> None:
+        return AccountWriter.delete_account(params=params)
