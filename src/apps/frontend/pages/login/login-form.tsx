@@ -19,8 +19,6 @@ import { FieldVisibility } from '../../types/form';
 import LoginFormCheckbox from './login-form-checkbox';
 import useLoginForm from './login-form.hook';
 
-type LoginFields = 'username' | 'password';
-
 interface LoginFormProps {
   onSuccess: () => void;
   onError: (error: AsyncError) => void;
@@ -43,15 +41,19 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   const { formik, isLoginLoading } = useLoginForm({ onSuccess, onError });
 
-  const getFormikError = (field: LoginFields) =>
-    formik.touched[field] ? formik.errors[field] : '';
-
   return (
     <CustomLayout layoutType={layoutType}>
       <form onSubmit={formik.handleSubmit}>
         <VerticalStackLayout gap={5}>
           {fieldVisibility.showEmail && (
-            <FormControl label="Email" error={getFormikError('username')}>
+            <FormControl
+              label="Email"
+              error={
+                formik.touched.username && formik.errors.username
+                  ? formik.errors.username
+                  : undefined
+              }
+            >
               <Input
                 data-testid="username"
                 disabled={isLoginLoading}
@@ -62,7 +64,11 @@ const LoginForm: React.FC<LoginFormProps> = ({
                     alt="email icon"
                   />
                 }
-                error={getFormikError('username')}
+                error={
+                  formik.touched.username && formik.errors.username
+                    ? formik.errors.username
+                    : undefined
+                }
                 name="username"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
@@ -72,9 +78,20 @@ const LoginForm: React.FC<LoginFormProps> = ({
             </FormControl>
           )}
           {fieldVisibility.showPassword && (
-            <FormControl label="Password" error={getFormikError('password')}>
+            <FormControl
+              label="Password"
+              error={
+                formik.touched.password && formik.errors.password
+                  ? formik.errors.password
+                  : undefined
+              }
+            >
               <PasswordInput
-                error={getFormikError('password')}
+                error={
+                  formik.touched.password && formik.errors.password
+                    ? formik.errors.password
+                    : undefined
+                }
                 name="password"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
