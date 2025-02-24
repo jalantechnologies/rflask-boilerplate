@@ -11,6 +11,7 @@ from modules.config.config_service import ConfigService
 from modules.error.custom_errors import AppError
 from modules.logger.logger_manager import LoggerManager
 from modules.password_reset_token.rest_api.password_reset_token_rest_api_server import PasswordResetTokenRestApiServer
+from modules.worker.rest_api.worker_rest_api_server import WorkerRestApiServer
 
 load_dotenv()
 
@@ -34,6 +35,10 @@ api_blueprint.register_blueprint(access_token_blueprint)
 # Register password reset token apis
 password_reset_token_blueprint = PasswordResetTokenRestApiServer.create()
 api_blueprint.register_blueprint(password_reset_token_blueprint)
+
+# Register worker apis
+worker_blueprint = WorkerRestApiServer.create()
+api_blueprint.register_blueprint(worker_blueprint)
 
 # Register accounts apis
 account_blueprint = AccountRestApiServer.create()
