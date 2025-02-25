@@ -1,26 +1,24 @@
 from dataclasses import dataclass
-from typing import Optional
-
-from celery import Task
 
 
 @dataclass(frozen=True)
-class SearchTaskByIdParams:
+class SearchWorkflowByIdParams:
     id: str
 
 
 @dataclass(frozen=True)
-class SearchTaskByNameParams:
+class SearchWorkflowByNameParams:
     name: str
 
 
 @dataclass(frozen=True)
-class QueueTaskParams:
-    task: Task
-    task_params: Optional[dict] = None
+class QueueWorkflowParams:
+    workflow_name: str
+    workflow_params: list
 
 
 @dataclass(frozen=True)
 class WorkerErrorCode:
-    TASK_WITH_NAME_NOT_FOUND: str = "WORKER_ERR_01"
-    TASK_WITH_ID_NOT_FOUND: str = "WORKER_ERR_02"
+    WORKFLOW_WITH_NAME_NOT_FOUND: str = "WORKER_ERR_01"
+    WORKFLOW_WITH_ID_NOT_FOUND: str = "WORKER_ERR_02"
+    WORKFLOW_START_ERROR: str = "WORKER_ERR_03"

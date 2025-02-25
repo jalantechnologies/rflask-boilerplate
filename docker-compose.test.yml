@@ -21,9 +21,3 @@ services:
     command: mongod --quiet --logpath /dev/null
     ports:
       - '27017:27017'
-
-  cache:
-    image: redis:latest
-    command: [ "redis-server", "--logfile", "/var/log/redis.log" ]
-    ports:
-      - '6379:6379'

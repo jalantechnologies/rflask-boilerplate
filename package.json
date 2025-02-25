@@ -23,7 +23,7 @@
     "serve": "concurrently --kill-others-on-fail npm:serve:*",
     "serve:assets": "cpx \"src/assets/**/*.*\" dist/assets --watch",
     "serve:backend": "make run-engine",
-    "serve:tasks": "make run-celery",
+    "serve:workflows": "make run-workflows",
     "serve:frontend": "webpack serve --output-path dist/public --config src/apps/frontend/webpack.dev.js --hot --progress",
     "start": "npm run serve:backend",
     "test": "cross-env APP_ENV=testing make run-test",

@@ -5,8 +5,8 @@ from dataclasses import dataclass
 class DevelopmentSettings:
     LOGGER_TRANSPORTS: tuple[str] = ("console",)
     MONGODB_URI: str = "mongodb://localhost:27017/frm-boilerplate-dev"
-    CELERY_BROKER_URL: str = "redis://localhost:6379/0"
-    CELERY_BACKEND_URL: str = "redis://localhost:6379/0"
+    TEMPORAL_SERVER_ADDRESS: str = "localhost:7233"
+    TEMPORAL_TASK_QUEUE: str = "frm-boilerplate-dev-queue"
     SMS_ENABLED: bool = False
     IS_SERVER_RUNNING_BEHIND_PROXY: bool = True
 
@@ -15,7 +15,7 @@ class DevelopmentSettings:
 class DockerInstanceDevelopmentSettings:
     LOGGER_TRANSPORTS: tuple[str] = ("console",)
     MONGODB_URI: str = "mongodb://db:27017/frm-boilerplate-dev"
-    CELERY_BROKER_URL: str = "redis://cache:6379/0"
-    CELERY_BACKEND_URL: str = "redis://cache:6379/0"
+    TEMPORAL_SERVER_ADDRESS: str = "temporal:7233"
+    TEMPORAL_TASK_QUEUE: str = "frm-boilerplate-dev-queue"
     SMS_ENABLED: bool = False
     IS_SERVER_RUNNING_BEHIND_PROXY: bool = True

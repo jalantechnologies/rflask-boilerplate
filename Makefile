@@ -17,9 +17,9 @@ run-engine:
 		&& pipenv run python --version \
 		&& pipenv run gunicorn -c gunicorn_config.py --reload server:app
 
-run-celery:
+run-workflows:
 	cd src/apps/backend \
-		&& pipenv run celery -A tasks.celery worker --loglevel=info
+		&& pipenv run python workflows.py
 
 run-test:
 	PYTHONPATH=src/apps/backend pipenv run pytest --disable-warnings -s -x -v --cov=. --cov-report=xml:/app/output/coverage.xml tests
