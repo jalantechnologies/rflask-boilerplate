@@ -14,7 +14,7 @@ class DevelopmentSettings:
 @dataclass(frozen=True)
 class DockerInstanceDevelopmentSettings:
     LOGGER_TRANSPORTS: tuple[str] = ("console",)
-    MONGODB_URI: str = "mongodb://db:27017/frm-boilerplate-dev"
+    MONGODB_URI: str = "mongodb://app-db:27017/frm-boilerplate-dev"
     TEMPORAL_SERVER_ADDRESS: str = "temporal:7233"
     TEMPORAL_TASK_QUEUE: str = "frm-boilerplate-dev-queue"
     SMS_ENABLED: bool = False
