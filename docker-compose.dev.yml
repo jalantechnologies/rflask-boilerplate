@@ -13,8 +13,10 @@ services:
       APP_ENV: 'docker-dev'
     command: /bin/sh -c "npm install && npm run serve"
     depends_on:
-      - app-db
-      - temporal
+      app-db:
+        condition: service_started
+      temporal:
+        condition: service_healthy
     ports:
       - '3000:3000'
       - '8080:8080'
@@ -45,6 +47,19 @@ services:
       POSTGRES_PWD: 'temporal'
       POSTGRES_SEEDS: 'temporal-db'
       DYNAMIC_CONFIG_FILE_PATH: 'config/temporal-sql.yaml'
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "tctl",
+          "--address",
+          "temporal:7233",
+          "workflow",
+          "list"
+        ]
+      interval: 1s
+      timeout: 5s
+      retries: 30
     ports:
       - '7233:7233'
     volumes:
