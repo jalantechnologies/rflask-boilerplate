@@ -30,12 +30,12 @@ class ConfigUtil:
 
     @staticmethod
     def _get_base_config_directory(current_file: str) -> Path:
-        starting_index = current_file.find("app")
+        starting_index = current_file.find("src")
         if starting_index == -1:
-            # Raised when 'app' is not in the project_path
-            raise ValueError(f"'app' not found in current_file path: {current_file}")
+            # Raised when 'src' is not in the project_path
+            raise ValueError(f"'src' not found in current_file path: {current_file}")
 
-        base_directory = current_file[: starting_index + len("app")]
+        base_directory = current_file[: starting_index]
         config_directory = os.path.join(base_directory, "config")
         config_path = Path(config_directory)
 
