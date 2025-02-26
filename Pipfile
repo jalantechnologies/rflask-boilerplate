@@ -21,6 +21,7 @@ tomli = "==2.0.1"
 twilio = "==9.2.4"
 waitress = "==2.1.2"
 datadog-api-client = "==2.31.0"
+temporalio = "==1.10.0"
 
 [dev-packages]
 black = "==24.8.0"
