@@ -18,7 +18,7 @@ class QueueWorkflowParams:
 
 
 @dataclass(frozen=True)
-class WorkerErrorCode:
+class WorkflowErrorCode:
     WORKFLOW_WITH_NAME_NOT_FOUND: str = "WORKER_ERR_01"
     WORKFLOW_WITH_ID_NOT_FOUND: str = "WORKER_ERR_02"
     WORKFLOW_START_ERROR: str = "WORKER_ERR_03"

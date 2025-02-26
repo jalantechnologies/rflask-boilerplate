@@ -5,12 +5,12 @@ from temporalio.client import Client
 from temporalio.service import RPCError
 
 from modules.config.config_service import ConfigService
-from modules.worker.errors import WorkflowIdNotFoundError, WorkflowNameNotFoundError, WorkflowStartError
-from modules.worker.types import QueueWorkflowParams, SearchWorkflowByIdParams, SearchWorkflowByNameParams
+from modules.workflow.errors import WorkflowIdNotFoundError, WorkflowNameNotFoundError, WorkflowStartError
+from modules.workflow.types import QueueWorkflowParams, SearchWorkflowByIdParams, SearchWorkflowByNameParams
 from workflows import WORKFLOW_MAP
 
 
-class WorkerService:
+class WorkflowService:
     @staticmethod
     async def _get_temporal_workflow_status(params: SearchWorkflowByIdParams) -> dict:
         client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
@@ -51,7 +51,7 @@ class WorkerService:
     @staticmethod
     def get_workflow_status(*, params: SearchWorkflowByIdParams) -> dict:
         try:
-            res = asyncio.run(WorkerService._get_temporal_workflow_status(params=params))
+            res = asyncio.run(WorkflowService._get_temporal_workflow_status(params=params))
 
         except RPCError:
             raise WorkflowIdNotFoundError(workflow_id=params.id)
@@ -65,7 +65,7 @@ class WorkerService:
     @staticmethod
     def queue_workflow(*, params: QueueWorkflowParams) -> str:
         try:
-            workflow_id = asyncio.run(WorkerService._queue_temporal_workflow(params=params))
+            workflow_id = asyncio.run(WorkflowService._queue_temporal_workflow(params=params))
 
         except RPCError:
             raise WorkflowStartError(workflow_name=params.workflow_name)
