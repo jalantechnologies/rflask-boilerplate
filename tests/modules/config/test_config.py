@@ -1,7 +1,6 @@
 import os
 from typing import List
 
-from modules.config.types import PapertrailConfig
 from modules.common.types import ErrorCode
 from modules.config.config_service import ConfigService
 from modules.error.custom_errors import MissingKeyError

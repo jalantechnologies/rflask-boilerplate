@@ -14,9 +14,9 @@ class DatadogHandler(StreamHandler):
 
     def emit(self, record: LogRecord) -> None:
         msg = self.format(record)
-        datadog_api_key:str = ConfigService.get_value(key="datadog.api_key")
-        datadog_host:str = ConfigService.get_value(key="datadog.site_name")
-        data_app_name:str = ConfigService.get_value(key="datadog.app_name")
+        datadog_api_key = ConfigService[str].get_value(key="datadog.api_key")
+        datadog_host = ConfigService[str].get_value(key="datadog.site_name")
+        data_app_name = ConfigService[str].get_value(key="datadog.app_name")
         config = Configuration()
         config.api_key["apiKeyAuth"] = datadog_api_key
         config.server_variables["site"] = datadog_host

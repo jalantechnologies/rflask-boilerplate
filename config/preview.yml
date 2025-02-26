@@ -1,7 +1,7 @@
 logger:
   transports:
     - "console"
-    - "papertrail"
+    - "datadog"
 
 sms:
   enabled: true
