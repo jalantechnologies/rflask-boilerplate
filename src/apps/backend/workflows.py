@@ -6,10 +6,11 @@ from temporalio import activity, workflow
 from temporalio.client import Client
 from temporalio.worker import Worker
 
-from modules.config.config_manager import ConfigManager
-from modules.config.config_service import ConfigService
-from modules.logger.logger import Logger
-from modules.logger.logger_manager import LoggerManager
+with workflow.unsafe.imports_passed_through():
+    from modules.config.config_manager import ConfigManager
+    from modules.config.config_service import ConfigService
+    from modules.logger.logger import Logger
+    from modules.logger.logger_manager import LoggerManager
 
 WORKFLOW_MAP = {"add": "AddWorkflow"}
 
