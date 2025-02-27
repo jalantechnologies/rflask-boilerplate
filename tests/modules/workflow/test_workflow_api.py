@@ -1,9 +1,9 @@
 import json
 
+from tests.modules.workflow.base_test_workflow import BaseTestWorkflow
+
 from modules.workflow.types import WorkflowErrorCode
 from server import app
-
-from tests.modules.workflow.base_test_workflow import BaseTestWorkflow
 
 WORKFLOW_API_URL = "http://127.0.0.1:8080/api/workflows"
 HEADERS = {"Content-Type": "application/json"}
@@ -16,11 +16,11 @@ class TestWorkflowApi(BaseTestWorkflow):
             data = response.get_json()
             assert response.status_code == 200
             assert "workflows" in data
-            assert "add" in data["workflows"]
+            assert "AddWorkflow" in data["workflows"]
 
     def test_execute_and_status_workflow(self):
         with app.test_client() as client:
-            payload = {"workflow_name": "add", "workflow_params": [10, 5]}
+            payload = {"name": "AddWorkflow", "arguments": [10, 5]}
             response = client.post(
                 WORKFLOW_API_URL, headers=HEADERS, data=json.dumps(payload)
             )
@@ -37,7 +37,7 @@ class TestWorkflowApi(BaseTestWorkflow):
 
     def test_execute_workflow_invalid_workflow_name(self):
         with app.test_client() as client:
-            payload = {"workflow_name": "non_existent", "workflow_params": [10, 5]}
+            payload = {"name": "non_existent", "arguments": [10, 5]}
             response = client.post(
                 WORKFLOW_API_URL, headers=HEADERS, data=json.dumps(payload)
             )

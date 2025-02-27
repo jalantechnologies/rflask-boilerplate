@@ -7,14 +7,11 @@ class SearchWorkflowByIdParams:
 
 
 @dataclass(frozen=True)
-class SearchWorkflowByNameParams:
-    name: str
-
-
-@dataclass(frozen=True)
 class QueueWorkflowParams:
-    workflow_name: str
-    workflow_params: list
+    name: str
+    arguments: list
+    priority: str
+    cron_schedule: str
 
 
 @dataclass(frozen=True)

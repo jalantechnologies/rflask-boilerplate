@@ -5,15 +5,21 @@ from temporalio.client import Client
 from temporalio.service import RPCError
 
 from modules.config.config_service import ConfigService
-from modules.workflow.errors import WorkflowIdNotFoundError, WorkflowNameNotFoundError, WorkflowStartError
-from modules.workflow.types import QueueWorkflowParams, SearchWorkflowByIdParams, SearchWorkflowByNameParams
+from modules.workflow.errors import (
+    WorkflowIdNotFoundError,
+    WorkflowNameNotFoundError,
+    WorkflowStartError,
+)
+from modules.workflow.types import QueueWorkflowParams, SearchWorkflowByIdParams
 from workflows import WORKFLOW_MAP
 
 
 class WorkflowService:
     @staticmethod
     async def _get_temporal_workflow_status(params: SearchWorkflowByIdParams) -> dict:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await Client.connect(
+            ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
+        )
         handle = client.get_workflow_handle(params.id)
         result = await handle.result()
         info = await handle.describe()
@@ -30,28 +36,34 @@ class WorkflowService:
 
     @staticmethod
     async def _queue_temporal_workflow(params: QueueWorkflowParams) -> str:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await Client.connect(
+            ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
+        )
+
+        if params.name not in WORKFLOW_MAP.keys():
+            raise WorkflowNameNotFoundError(workflow_name=params.name)
+
+        task_queue = (
+            ConfigService.get_string("TEMPORAL_DEFAULT_TASK_QUEUE")
+            if params.priority == "DEFAULT"
+            else ConfigService.get_string("TEMPORAL_HIGH_PRIORITY_TASK_QUEUE")
+        )
+
         handle = await client.start_workflow(
-            params.workflow_name,
-            args=params.workflow_params,
-            id=f"{params.workflow_name}-{str(uuid.uuid4())}",
-            task_queue=ConfigService.get_string("TEMPORAL_TASK_QUEUE"),
+            params.name,
+            args=params.arguments,
+            cron_schedule=params.cron_schedule,
+            id=f"{params.name}-{str(uuid.uuid4())}",
+            task_queue=task_queue,
         )
         return handle.id
 
     @staticmethod
-    def get_workflow_by_name(*, params: SearchWorkflowByNameParams) -> str:
-        workflow = WORKFLOW_MAP.get(params.name)
-
-        if not workflow:
-            raise WorkflowNameNotFoundError(workflow_name=params.name)
-
-        return workflow
-
-    @staticmethod
     def get_workflow_status(*, params: SearchWorkflowByIdParams) -> dict:
         try:
-            res = asyncio.run(WorkflowService._get_temporal_workflow_status(params=params))
+            res = asyncio.run(
+                WorkflowService._get_temporal_workflow_status(params=params)
+            )
 
         except RPCError:
             raise WorkflowIdNotFoundError(workflow_id=params.id)
@@ -65,9 +77,11 @@ class WorkflowService:
     @staticmethod
     def queue_workflow(*, params: QueueWorkflowParams) -> str:
         try:
-            workflow_id = asyncio.run(WorkflowService._queue_temporal_workflow(params=params))
+            workflow_id = asyncio.run(
+                WorkflowService._queue_temporal_workflow(params=params)
+            )
 
         except RPCError:
-            raise WorkflowStartError(workflow_name=params.workflow_name)
+            raise WorkflowStartError(workflow_name=params.name)
 
         return workflow_id
