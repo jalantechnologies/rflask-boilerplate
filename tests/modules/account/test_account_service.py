@@ -12,6 +12,7 @@ from modules.account.types import (
 )
 from server import app
 from tests.modules.account.base_test_account import BaseTestAccount
+from modules.config.config_service import ConfigService
 
 
 class TestAccountService(BaseTestAccount):
@@ -68,3 +69,13 @@ class TestAccountService(BaseTestAccount):
         except AccountNotFoundError as exc:
             assert exc.code == AccountErrorCode.NOT_FOUND
             assert exc.message == f"We could not find an account phone number: {phone_number}. Please verify it or you can create a new account."
+
+    def test_get_or_create_account_by_exempt_phone_number(self) -> None:
+        exempted_phone_number = ConfigService.get_otp_config("exempt_phone_number")
+        otp_code = ConfigService.get_otp_config("exempt_otp")
+        phone_number = PhoneNumber(**{"country_code": "+91", "phone_number": exempted_phone_number})
+        account, otp = AccountService.get_or_create_account_by_phone_number(
+            params=CreateAccountByPhoneNumberParams(phone_number=phone_number)
+        )
+        assert otp.otp_code == otp_code
+        assert account.phone_number == PhoneNumber(country_code="+91", phone_number=exempted_phone_number)

@@ -19,8 +19,8 @@ class OSSettings:
     )
     OTP: Optional[dict[str, Optional[str]]] = field(
         default_factory=lambda: {
-            "default_phone_number": os.environ.get("DEFAULT_PHONE_NUMBER"),
-            "default_otp": os.environ.get("DEFAULT_OTP"),
+            "exempt_phone_number": os.environ.get("EXEMPT_PHONE_NUMBER"),
+            "exempt_otp": os.environ.get("EXEMPT_OTP"),
         }
     )
     TWILIO: Optional[dict[str, Optional[str]]] = field(

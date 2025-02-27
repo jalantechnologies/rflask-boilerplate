@@ -19,7 +19,7 @@ class OtpService:
             recipient_phone=recipient_phone_number,
         )
         if (
-            not OtpUtil.is_default_phone_number(phone_number=recipient_phone_number.phone_number)
+            not OtpUtil.is_exempt_phone_number(phone_number=recipient_phone_number.phone_number)
             and not OtpUtil.is_default_otp_enabled()
         ):
             SMSService.send_sms(params=send_sms_params)

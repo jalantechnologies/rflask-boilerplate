@@ -12,6 +12,12 @@ class TestingSettings:
         }
     )
     SMS_ENABLED: bool = False
+    OTP: dict[str, str] = field(
+        default_factory=lambda: {
+            "exempt_phone_number": "1234567890",
+            "exempt_otp": "1234",
+        }
+    )
 
 
 @dataclass(frozen=True)
@@ -25,3 +31,9 @@ class DockerInstanceTestingSettings:
         }
     )
     SMS_ENABLED: bool = False
+    OTP: dict[str, str] = field(
+        default_factory=lambda: {
+            "exempt_phone_number": "1234567890",
+            "exempt_otp": "1234",
+        }
+    )

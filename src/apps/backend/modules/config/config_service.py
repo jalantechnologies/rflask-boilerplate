@@ -79,7 +79,7 @@ class ConfigService:
         return key in ConfigManager.config
 
     @staticmethod
-    def has_default_phone_number() -> bool:
-        if ConfigService.has_key("OTP") and "default_phone_number" in ConfigManager.config["OTP"]:
+    def has_exempt_phone_number() -> bool:
+        if ConfigService.has_key("OTP") and "exempt_phone_number" in ConfigManager.config["OTP"]:
             return True
         return False
