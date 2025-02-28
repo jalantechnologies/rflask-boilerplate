@@ -1,5 +1,5 @@
 import asyncio
-from typing import Callable, Type
+from typing import Any, Callable, Dict, Type
 
 from dotenv import load_dotenv
 from temporalio import workflow
@@ -13,19 +13,32 @@ with workflow.unsafe.imports_passed_through():
     from modules.logger.logger_manager import LoggerManager
 
 # Global registry for workflows
-WORKFLOW_MAP = {}
+WORKFLOW_MAP: Dict[str, Dict[str, Any]] = {}
 
 
-def register_temporal_workflow() -> Callable:
+def register_temporal_workflow(
+    priority: str = "default",
+) -> Callable:
     """
     Decorator to register a Temporal workflow with additional metadata.
     """
 
-    def decorator(cls: Type) -> Callable:
-        cls = workflow.defn(cls)  # Wrap the class as a Temporal workflow.
+    def decorator(cls: Type) -> Type:
+        if hasattr(cls, "run"):
+            cls.run = workflow.run(
+                cls.run
+            )  # Wrap the run method as a Temporal workflow
 
-        # Register the workflow in the global map.
-        WORKFLOW_MAP[cls.__name__] = cls
+        else:
+            raise ValueError(f"Class '{cls.__name__}' does not have a 'run' method")
+
+        cls = workflow.defn(cls)  # Wrap the class as a Temporal workflow
+
+        # Register the workflow in the global map
+        WORKFLOW_MAP[cls.__name__] = {
+            "priority": priority,
+            "class": cls,
+        }
 
         return cls
 
@@ -34,19 +47,30 @@ def register_temporal_workflow() -> Callable:
 
 # Just for demonstration; in practice this would be done inside a module
 @register_temporal_workflow()
-class AddWorkflow:
-    @workflow.run
+class TestDefaultWorkflow:
+    """
+    A simple test workflow to demonstrate the Temporal workflow decorator.
+
+    This workflow adds two numbers together.
+    """
+
     async def run(self, x: int, y: int) -> int:
         return x + y
 
 
 # Just for demonstration; in practice this would be done inside a module
-@register_temporal_workflow()
-class BuildUserFeedWorkflow:
-    @workflow.run
-    async def run(self, user_id: str) -> dict:
-        # Add logic as needed
-        return {"user_id": user_id, "feed": []}
+@register_temporal_workflow(
+    priority="critical",
+)
+class TestCriticalWorkflow:
+    """
+    A simple test workflow to demonstrate the Temporal workflow decorator.
+
+    This workflow adds two numbers together.
+    """
+
+    async def run(self, x: int, y: int) -> int:
+        return x + y
 
 
 async def main() -> None:
@@ -60,16 +84,29 @@ async def main() -> None:
     client = await Client.connect(temporal_server)
 
     default_queue = ConfigService.get_string("TEMPORAL_DEFAULT_TASK_QUEUE")
-    high_priority_queue = ConfigService.get_string("TEMPORAL_HIGH_PRIORITY_TASK_QUEUE")
+    critical_queue = ConfigService.get_string("TEMPORAL_CRITICAL_TASK_QUEUE")
 
-    Logger.info(message=f"Starting workers on queues: Default='{default_queue}', Priority='{high_priority_queue}'")
+    Logger.info(
+        message=f"Starting workers on queues: Default='{default_queue}', Critical='{critical_queue}'"
+    )
 
-    # Create two worker instances, one for each queue
-    worker_default = Worker(client, task_queue=default_queue, workflows=list(WORKFLOW_MAP.values()))
-    worker_high_priority = Worker(client, task_queue=high_priority_queue, workflows=list(WORKFLOW_MAP.values()))
+    # Create workers for each priority level
+    workflows_default = [
+        wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == "default"
+    ]
+    workflows_critical = [
+        wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == "critical"
+    ]
+
+    worker_default = Worker(
+        client, task_queue=default_queue, workflows=workflows_default
+    )
+    worker_critical = Worker(
+        client, task_queue=critical_queue, workflows=workflows_critical
+    )
 
     # Run both workers concurrently
-    await asyncio.gather(worker_default.run(), worker_high_priority.run())
+    await asyncio.gather(worker_default.run(), worker_critical.run())
 
 
 if __name__ == "__main__":

@@ -27,3 +27,30 @@ class WorkflowStartError(AppError):
             http_status_code=500,
             message=f"Could not start workflow with name: {workflow_name}. Please verify and try again.",
         )
+
+
+class WorkflowAlreadyCompletedError(AppError):
+    def __init__(self, workflow_id: str) -> None:
+        super().__init__(
+            code=WorkflowErrorCode.WORKFLOW_ALREADY_COMPLETED,
+            http_status_code=400,
+            message=f"Workflow with id: {workflow_id} has already completed. Please verify and try again.",
+        )
+
+
+class WorkflowAlreadyCancelledError(AppError):
+    def __init__(self, workflow_id: str) -> None:
+        super().__init__(
+            code=WorkflowErrorCode.WORKFLOW_ALREADY_CANCELLED,
+            http_status_code=400,
+            message=f"Workflow with id: {workflow_id} has already been cancelled. Please verify and try again.",
+        )
+
+
+class WorkflowAlreadyTerminatedError(AppError):
+    def __init__(self, workflow_id: str) -> None:
+        super().__init__(
+            code=WorkflowErrorCode.WORKFLOW_ALREADY_TERMINATED,
+            http_status_code=400,
+            message=f"Workflow with id: {workflow_id} has already been terminated. Please verify and try again.",
+        )

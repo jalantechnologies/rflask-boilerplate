@@ -1,4 +1,5 @@
 import json
+import time
 
 from tests.modules.workflow.base_test_workflow import BaseTestWorkflow
 
@@ -16,11 +17,13 @@ class TestWorkflowApi(BaseTestWorkflow):
             data = response.get_json()
             assert response.status_code == 200
             assert "workflows" in data
-            assert "AddWorkflow" in data["workflows"]
+            assert {"name": "TestDefaultWorkflow", "priority": "default"} in data[
+                "workflows"
+            ]
 
-    def test_execute_and_status_workflow(self):
+    def test_queue_and_get_details_workflow(self):
         with app.test_client() as client:
-            payload = {"name": "AddWorkflow", "arguments": [10, 5]}
+            payload = {"name": "TestDefaultWorkflow", "arguments": [10, 5]}
             response = client.post(
                 WORKFLOW_API_URL, headers=HEADERS, data=json.dumps(payload)
             )
@@ -29,11 +32,13 @@ class TestWorkflowApi(BaseTestWorkflow):
             workflow_id = data.get("workflow_id")
             assert workflow_id
 
+            time.sleep(1)
+
             response = client.get(f"{WORKFLOW_API_URL}/{workflow_id}", headers=HEADERS)
             assert response.status_code == 200
-            status_data = response.get_json()
-            assert status_data["workflow_id"] == workflow_id
-            assert status_data["result"] == 15
+            data = response.get_json()
+            assert data["workflow_id"] == workflow_id
+            assert int(data["runs"][0]["result"]) == 15
 
     def test_execute_workflow_invalid_workflow_name(self):
         with app.test_client() as client:

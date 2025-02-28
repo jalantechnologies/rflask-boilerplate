@@ -15,7 +15,8 @@ class WorkflowView(MethodView):
 
         {
             "name": "...",
-            "arguments": [...]
+            "arguments": [...] # Optional list of arguments
+            "cron_schedule": "..." # Optional crontab expression
         }
         """
 
@@ -23,14 +24,12 @@ class WorkflowView(MethodView):
 
         name = request_data.get("name")
         arguments = request_data.get("arguments", [])
-        priority = request_data.get("priority", "DEFAULT")
         cron_schedule = request_data.get("cron_schedule", "")
 
         res = WorkflowService.queue_workflow(
             params=QueueWorkflowParams(
                 name=name,
                 arguments=arguments,
-                priority=priority,
                 cron_schedule=cron_schedule,
             )
         )
@@ -40,7 +39,7 @@ class WorkflowView(MethodView):
     def get(self, id: Optional[str] = None) -> ResponseReturnValue:
         if id:
             workflow_params = SearchWorkflowByIdParams(id=id)
-            workflow_status = WorkflowService.get_workflow_status(
+            workflow_status = WorkflowService.get_workflow_details(
                 params=workflow_params
             )
 
@@ -49,3 +48,11 @@ class WorkflowView(MethodView):
         else:
             workflows = WorkflowService.get_all_workflows()
             return jsonify({"workflows": workflows}), 200
+
+    def patch(self, id: str) -> ResponseReturnValue:
+        WorkflowService.cancel_workflow(params=SearchWorkflowByIdParams(id=id))
+        return jsonify({"message": f"Workflow {id} cancelled"}), 200
+
+    def delete(self, id: str) -> ResponseReturnValue:
+        WorkflowService.terminate_workflow(params=SearchWorkflowByIdParams(id=id))
+        return jsonify({"message": f"Workflow {id} terminated"}), 200
