@@ -1,5 +1,7 @@
 import axios from 'axios';
+
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+
 import { JsonObject } from '../../types/common-types';
 
 interface Props {
@@ -15,18 +17,17 @@ class ErrorBoundary extends Component<Props, State> {
     hasError: false,
   };
 
-  public static getDerivedStateFromError(_: Error): State {
-    // Update state so the next render will show the fallback UI.
+  public static getDerivedStateFromError(_error: Error): State {
     return { hasError: true };
   }
 
   public async componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    const error_data: JsonObject = {
+    const errorData: JsonObject = {
       'error-name': error.name,
       'error-message': error.message,
       'error-info': errorInfo,
     };
-    await axios.post('http://127.0.0.1:8080/client_logs', error_data);
+    await axios.post('http://127.0.0.1:8080/client_logs', errorData);
     console.error('Uncaught error:', error, errorInfo);
   }
 
