@@ -18,9 +18,9 @@ class FrontendLogger:
         logger = logging.getLogger(__name__)
         error_details = [self.error["error-name"], self.error["error-message"], self.error["error-info"]]
         message = " - ".join(error_details)
-        format = "%(asctime)s - " + message
-        formatter = logging.Formatter(format)
+        log_syntax = "%(asctime)s - " + message
+        formatter = logging.Formatter(log_syntax)
         handler = DatadogHandler("react")
-        handler.setFormatter(self.formatter)
-        logger.addHandler(self.handler)
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
         logger.error(message)
