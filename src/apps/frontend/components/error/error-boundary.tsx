@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 import { JsonObject } from '../../types/common-types';
@@ -18,10 +17,11 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   public static getDerivedStateFromError(_error: Error): State {
+    _error;
     return { hasError: true };
   }
 
-  public async componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public static async componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     const errorData: JsonObject = {
       'error-name': error.name,
       'error-message': error.message,
