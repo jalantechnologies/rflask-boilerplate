@@ -60,6 +60,7 @@ client_logs = Blueprint("client_logs", __name__)
 
 
 @client_logs.route("/client_logs", methods=["POST"])
-def get_error() -> None:
+def get_error() -> str:
     error = request.get_json()
     FrontendLogger(error=error)
+    return "Logs Sent"
