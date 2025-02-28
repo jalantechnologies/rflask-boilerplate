@@ -2,7 +2,7 @@ import json
 import os
 from typing import Union
 
-from flask import Blueprint, Request, send_from_directory
+from flask import Blueprint, request, send_from_directory
 from werkzeug.wrappers import Response
 
 from modules.logger.internal.frontend_logger import FrontendLogger
@@ -61,5 +61,5 @@ client_logs = Blueprint("client_logs", __name__)
 
 @client_logs.route("/client_logs", methods=["POST"])
 def get_error():
-    error = Request.get_json()
+    error = request.get_json()
     FrontendLogger(error=error)
