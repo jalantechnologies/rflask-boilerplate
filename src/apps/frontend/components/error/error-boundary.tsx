@@ -17,7 +17,7 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   public static getDerivedStateFromError(_error: Error): State {
-    _error;
+    void _error;
     return { hasError: true };
   }
 
@@ -28,7 +28,6 @@ class ErrorBoundary extends Component<Props, State> {
       'error-info': errorInfo,
     };
     await axios.post('http://127.0.0.1:8080/client_logs', errorData);
-    console.error('Uncaught error:', error, errorInfo);
   }
 
   public render() {
