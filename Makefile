@@ -19,7 +19,7 @@ run-engine:
 
 run-workflows:
 	cd src/apps/backend \
-		&& pipenv run python workflows.py
+		&& PYTHONPATH=./ pipenv run python workflows/worker.py
 
 run-test:
 	PYTHONPATH=src/apps/backend pipenv run pytest --disable-warnings -s -x -v --cov=. --cov-report=xml:/app/output/coverage.xml tests
