@@ -1,8 +1,6 @@
 import axios from 'axios';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
-import { string } from 'yup';
-
 import { JsonObject } from '../../types/common-types';
 
 interface Props {
@@ -18,23 +16,27 @@ class ErrorBoundary extends Component<Props, State> {
     hasError: false,
   };
 
-  public errorData: JsonObject = {
-    'error-name': string,
-    'error-message': string,
-    'error-info': string,
+  errorData: JsonObject & {
+    'error-name': string;
+    'error-message': string;
+    'error-info': string;
   };
 
   public static getDerivedStateFromError(): State {
     return { hasError: true };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public async componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.errorData = {
       'error-name': error.name,
       'error-message': error.message,
       'error-info': errorInfo.componentStack,
     };
-    axios.post('http://127.0.0.1:8080/client_logs', this.errorData);
+    try {
+      await axios.post('http://127.0.0.1:8080/client_logs', this.errorData);
+    } catch (err) {
+      console.error('Error logging client logs:', err);
+    }
   }
 
   public render() {
