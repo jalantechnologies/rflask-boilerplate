@@ -1,37 +1,35 @@
-from typing import Any, Callable, Dict, Type
+from typing import Any, Dict, Type
 
 from temporalio import workflow
 
-from modules.workflow.types import WorkflowPriority
+from workflows.base_workflow import BaseWorkflow
 
-# Global registry for workflows
+# A global map storing workflow metadata
 WORKFLOW_MAP: Dict[str, Dict[str, Any]] = {}
 
 
-def register_temporal_workflow(
-    priority: WorkflowPriority = WorkflowPriority.DEFAULT,
-) -> Callable:
+def register_temporal_workflow(cls: Type) -> Type:
     """
-    Decorator to register a Temporal workflow with additional metadata.
+    Decorator to register a Temporal workflow with additional metadata,
+    enforcing that the workflow inherits from BaseWorker and has a run() method.
     """
+    if not issubclass(cls, BaseWorkflow):
+        raise TypeError(f"Workflow '{cls.__name__}' must inherit from BaseWorker")
 
-    def decorator(cls: Type) -> Type:
-        if hasattr(cls, "run"):
-            cls.run = workflow.run(
-                cls.run
-            )  # Wrap the run method as a Temporal workflow runner method
+    # Ensure there's a run() method to wrap.
+    if not hasattr(cls, "run"):
+        raise ValueError(f"Workflow '{cls.__name__}' must define a 'run' method")
 
-        else:
-            raise ValueError(f"Class '{cls.__name__}' does not have a 'run' method")
+    # Wrap the run() method so Temporal recognizes it as the workflow entry point.
+    cls.run = workflow.run(cls.run)
 
-        cls = workflow.defn(cls)  # Wrap the class as a Temporal workflow
+    # Decorate the class itself as a workflow definition.
+    cls = workflow.defn(cls)
 
-        # Register the workflow in the global map
-        WORKFLOW_MAP[cls.__name__] = {"priority": priority, "class": cls}
+    # Register in the global map, storing the assigned priority.
+    WORKFLOW_MAP[cls.__name__] = {"priority": cls.priority, "class": cls}
 
-        return cls
-
-    return decorator
+    return cls
 
 
 # Import all workflows to be registered below

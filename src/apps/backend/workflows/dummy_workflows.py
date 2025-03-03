@@ -1,26 +1,25 @@
 from modules.workflow.types import WorkflowPriority
+from workflows.base_workflow import BaseWorkflow
 from workflows.workflow_registry import register_temporal_workflow
 
 
-@register_temporal_workflow()
-class TestDefaultWorkflow:
+@register_temporal_workflow
+class TestDefaultWorkflow(BaseWorkflow):
     """
-    A simple test workflow to demonstrate the Temporal workflow decorator.
-
-    This workflow adds two numbers together.
+    A simple test workflow to demonstrate the default-priority worker.
     """
 
     async def run(self, x: int, y: int) -> int:
         return x + y
 
 
-@register_temporal_workflow(priority=WorkflowPriority.CRITICAL)
-class TestCriticalWorkflow:
+@register_temporal_workflow
+class TestCriticalWorkflow(BaseWorkflow):
     """
-    A simple test workflow to demonstrate the Temporal workflow decorator.
+    A simple test workflow to demonstrate a critical-priority worker.
+    """
 
-    This workflow adds two numbers together.
-    """
+    priority: WorkflowPriority = WorkflowPriority.CRITICAL
 
     async def run(self, x: int, y: int) -> int:
         return x + y
