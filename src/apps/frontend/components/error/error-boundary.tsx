@@ -20,13 +20,13 @@ class ErrorBoundary extends Component<Props, State> {
     return { hasError: true };
   }
 
-  public static async componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     const errorData: JsonObject = {
       'error-name': error.name,
       'error-message': error.message,
-      'error-info': errorInfo,
+      'error-info': errorInfo.componentStack,
     };
-    await axios.post('http://127.0.0.1:8080/client_logs', errorData);
+    axios.post('http://127.0.0.1:8080/client_logs', errorData);
   }
 
   public render() {
