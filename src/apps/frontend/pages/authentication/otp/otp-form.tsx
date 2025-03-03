@@ -9,7 +9,7 @@ import {
   VerticalStackLayout,
 } from '../../../components';
 import routes from '../../../constants/routes';
-import { AsyncError } from '../../../types';
+import { AsyncError, OTPCode } from '../../../types';
 import { ButtonKind, ButtonType } from '../../../types/button';
 
 import useOTPForm from './otp-form-hook';
@@ -17,7 +17,7 @@ import useOTPForm from './otp-form-hook';
 interface OTPFormProps {
   isResendEnabled: boolean;
   onError: (error: AsyncError) => void;
-  onResendOTPSuccess: () => void;
+  onResendOTPSuccess: (otp: OTPCode) => void;
   onVerifyOTPSuccess: () => void;
   timerRemainingSeconds: string;
 }

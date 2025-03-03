@@ -11,13 +11,13 @@ import {
 } from '../../../components';
 import COUNTRY_SELECT_OPTIONS from '../../../constants/countries';
 import routes from '../../../constants/routes';
-import { AsyncError, OTP } from '../../../types';
+import { AsyncError, OTPCode } from '../../../types';
 import { ButtonKind, ButtonType } from '../../../types/button';
 
 import usePhoneLoginForm from './phone-login-form.hook';
 
 interface PhoneLoginFormProps {
-  onSendOTPSuccess: (otp: OTP) => void;
+  onSendOTPSuccess: (otp: OTPCode) => void;
   onError: (error: AsyncError) => void;
 }
 

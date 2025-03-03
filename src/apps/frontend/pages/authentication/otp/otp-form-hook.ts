@@ -3,11 +3,11 @@ import * as Yup from 'yup';
 
 import constant from '../../../constants';
 import { useAuthContext } from '../../../contexts';
-import { AsyncError, PhoneNumber } from '../../../types';
+import { AsyncError, OTPCode, PhoneNumber } from '../../../types';
 
 interface OTPFormProps {
   onError: (error: AsyncError) => void;
-  onResendOTPSuccess: () => void;
+  onResendOTPSuccess: (otp: OTPCode) => void;
   onVerifyOTPSuccess: () => void;
 }
 
@@ -65,8 +65,8 @@ const useOTPForm = ({
         phone_number: phoneNumber,
       }),
     )
-      .then(() => {
-        onResendOTPSuccess();
+      .then((otp) => {
+        onResendOTPSuccess(otp as OTPCode);
       })
       .catch((error) => {
         onError(error as AsyncError);

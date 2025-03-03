@@ -38,9 +38,9 @@ export class PhoneNumber {
   }
 }
 
-export class OTP {
+export class OTPCode {
   otpCode: string;
-  
+
   constructor(json: JsonObject) {
     this.otpCode = json.otp_code as string;
   }

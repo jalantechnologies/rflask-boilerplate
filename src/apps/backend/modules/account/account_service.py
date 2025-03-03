@@ -36,7 +36,7 @@ class AccountService:
         create_otp_params = CreateOtpParams(phone_number=params.phone_number)
         otp = OtpService.create_otp(params=create_otp_params)
         
-        otp_to_return = otp if os.environ.get("APP_ENV", "development") != "production" else None
+        otp_to_return = otp if os.environ.get("APP_ENV", "development") not in ["production", "preview"] else None
         
         return account, otp_to_return
 

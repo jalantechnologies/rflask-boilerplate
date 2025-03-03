@@ -1,4 +1,4 @@
-import { AccessToken, ApiResponse, OTP, PhoneNumber } from '../types';
+import { AccessToken, ApiResponse, OTPCode, PhoneNumber } from '../types';
 import { JsonObject } from '../types/common-types';
 
 import APIService from './api.service';
@@ -28,14 +28,14 @@ export default class AuthService extends APIService {
     return new ApiResponse(new AccessToken(response.data));
   };
 
-  sendOTP = async (phoneNumber: PhoneNumber): Promise<ApiResponse<OTP>> => {
+  sendOTP = async (phoneNumber: PhoneNumber): Promise<ApiResponse<OTPCode>> => {
     const response = await this.apiClient.post<JsonObject>('/accounts', {
       phone_number: {
         country_code: phoneNumber.countryCode,
         phone_number: phoneNumber.phoneNumber,
       },
     });
-    return new ApiResponse(new OTP(response.data));
+    return new ApiResponse(new OTPCode(response.data));
   }
 
   verifyOTP = async (

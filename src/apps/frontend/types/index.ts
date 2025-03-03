@@ -1,6 +1,6 @@
 import { Account } from './account';
 import { AsyncError, AsyncResult, UseAsyncResponse } from './async-operation';
-import { AccessToken, KeyboardKeys, PhoneNumber, OTP } from './auth';
+import { AccessToken, KeyboardKeys, PhoneNumber, OTPCode } from './auth';
 import { ApiResponse, ApiError } from './service-response';
 
 export {
@@ -13,5 +13,5 @@ export {
   KeyboardKeys,
   PhoneNumber,
   UseAsyncResponse,
-  OTP,
+  OTPCode,
 };

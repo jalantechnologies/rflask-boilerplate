@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 
 import { AuthService } from '../services';
-import { AccessToken, ApiResponse, AsyncError, OTP, PhoneNumber } from '../types';
+import { AccessToken, ApiResponse, AsyncError, OTPCode, PhoneNumber } from '../types';
 import { Nullable } from '../types/common-types';
 import {
   getAccessTokenFromStorage,
@@ -26,8 +26,9 @@ type AuthContextType = {
   loginError: Nullable<AsyncError>;
   loginResult: Nullable<AccessToken>;
   logout: () => void;
-  sendOTP: (phoneNumber: PhoneNumber) => Promise<Nullable<OTP>>;
+  sendOTP: (phoneNumber: PhoneNumber) => Promise<Nullable<OTPCode>>;
   sendOTPError: Nullable<AsyncError>;
+  sendOTPResult: Nullable<OTPCode>;
   signup: (
     firstName: string,
     lastName: string,
@@ -75,7 +76,7 @@ const isUserAuthenticated = () => !!getAccessTokenFromStorage();
 
 const sendOTPFn = async (
   phoneNumber: PhoneNumber,
-): Promise<ApiResponse<OTP>> => authService.sendOTP(phoneNumber);
+): Promise<ApiResponse<OTPCode>> => authService.sendOTP(phoneNumber);
 
 const verifyOTPFn = async (
   phoneNumber: PhoneNumber,
@@ -108,6 +109,7 @@ export const AuthProvider: React.FC<PropsWithChildren<ReactNode>> = ({
     isLoading: isSendOTPLoading,
     error: sendOTPError,
     asyncCallback: sendOTP,
+    result: sendOTPResult,
   } = useAsync(sendOTPFn);
 
   const {
@@ -131,6 +133,7 @@ export const AuthProvider: React.FC<PropsWithChildren<ReactNode>> = ({
         logout: logoutFn,
         sendOTP,
         sendOTPError,
+        sendOTPResult,
         signup,
         signupError,
         verifyOTP,

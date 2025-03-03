@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, H2, VerticalStackLayout } from '../../../components';
 import constant from '../../../constants';
 import routes from '../../../constants/routes';
-import { AsyncError } from '../../../types';
+import { AsyncError, OTPCode } from '../../../types';
 import { ButtonKind } from '../../../types/button';
 import useTimer from '../../../utils/use-timer.hook';
 import AuthenticationFormLayout from '../authentication-form-layout';
@@ -24,11 +24,14 @@ export const OTPPage: React.FC = () => {
     navigate(routes.DASHBOARD);
   };
 
-  const onResendOTPSuccess = () => {
+  const onResendOTPSuccess = (otp: OTPCode) => {
     startTimer();
-    toast.success(
-      'OTP has been successfully re-sent. Please check your messages.',
-    );
+    const baseMessage = "OTP has been re-sent successfully. Please check your messages.";
+    const message = otp.otpCode
+      ? `${baseMessage} OTP Code: ${otp.otpCode}`
+      : baseMessage;
+
+    toast.success(message);
   };
 
   const onError = (error: AsyncError) => {

@@ -6,18 +6,18 @@ import * as Yup from 'yup';
 import constant from '../../../constants';
 import routes from '../../../constants/routes';
 import { useAuthContext } from '../../../contexts';
-import { AsyncError, OTP, PhoneNumber } from '../../../types';
+import { AsyncError, OTPCode, PhoneNumber } from '../../../types';
 
 interface PhoneLoginFormProps {
   onError: (err: AsyncError) => void;
-  onSendOTPSuccess: (otp: OTP) => void;
+  onSendOTPSuccess: (otp: OTPCode) => void;
 }
 
 const usePhoneLoginForm = ({
   onSendOTPSuccess,
   onError,
 }: PhoneLoginFormProps) => {
-  const { isSendOTPLoading, sendOTPError, sendOTP } = useAuthContext();
+  const { isSendOTPLoading, sendOTPError, sendOTP, sendOTPResult } = useAuthContext();
 
   const navigate = useNavigate();
 
@@ -56,7 +56,7 @@ const usePhoneLoginForm = ({
         }),
       )
         .then((otp) => {
-          onSendOTPSuccess(otp as OTP);
+          onSendOTPSuccess(otp as OTPCode);
           navigate(otpPageUrl);
         })
         .catch((err) => {
@@ -69,6 +69,7 @@ const usePhoneLoginForm = ({
     formik,
     isSendOTPLoading,
     sendOTPError,
+    sendOTPResult,
   };
 };
 
