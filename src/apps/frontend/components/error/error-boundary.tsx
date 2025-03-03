@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
-import { JsonObject } from '../../types/common-types';
 import { string } from 'yup';
+
+import { JsonObject } from '../../types/common-types';
 
 interface Props {
   children?: ReactNode;
@@ -16,6 +17,7 @@ class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
   };
+
   public errorData: JsonObject = {
     'error-name': string,
     'error-message': string,
