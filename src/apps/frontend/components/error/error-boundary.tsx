@@ -17,9 +17,9 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   errorData: JsonObject & {
-    'error-name': string;
-    'error-message': string;
     'error-info': string;
+    'error-message': string;
+    'error-name': string;
   };
 
   public static getDerivedStateFromError(): State {
