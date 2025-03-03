@@ -17,7 +17,7 @@ run-engine:
 		&& pipenv run python --version \
 		&& pipenv run gunicorn -c gunicorn_config.py --reload server:app
 
-run-workflows:
+run-workers:
 	cd src/apps/backend \
 		&& PYTHONPATH=./ pipenv run python workflows/worker.py
 
