@@ -56,10 +56,10 @@ def serve_api_home() -> Response:
     return Response(json.dumps(message), status=200)
 
 
-client_logs = Blueprint("client_logs", __name__)
+log_blueprint = Blueprint("client_logs", __name__)
 
 
-@client_logs.route("/client_logs", methods=["POST"])
+@log_blueprint.route("/client_logs", methods=["POST"])
 def get_error() -> str:
     error = request.get_json()
     FrontendLogger(error=error)
