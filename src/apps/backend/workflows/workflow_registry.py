@@ -21,7 +21,8 @@ def register_temporal_workflow(cls: Type) -> Type:
         raise ValueError(f"Workflow '{cls.__name__}' must define a 'run' method")
 
     # Wrap the run() method so Temporal recognizes it as the workflow entry point.
-    cls.run = workflow.run(cls.run)
+    wrapped_run = workflow.run(cls.run)
+    setattr(cls, "run", wrapped_run)
 
     # Decorate the class itself as a workflow definition.
     cls = workflow.defn(cls)
