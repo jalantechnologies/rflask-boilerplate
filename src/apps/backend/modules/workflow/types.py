@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 
 
 @dataclass(frozen=True)
@@ -21,3 +22,8 @@ class WorkflowErrorCode:
     WORKFLOW_ALREADY_COMPLETED: str = "WORKER_ERR_04"
     WORKFLOW_ALREADY_CANCELLED: str = "WORKER_ERR_05"
     WORKFLOW_ALREADY_TERMINATED: str = "WORKER_ERR_06"
+
+
+class WorkflowPriority(Enum):
+    DEFAULT = "DEFAULT"
+    CRITICAL = "CRITICAL"

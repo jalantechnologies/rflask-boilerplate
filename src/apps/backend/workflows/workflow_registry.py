@@ -2,18 +2,24 @@ from typing import Any, Callable, Dict, Type
 
 from temporalio import workflow
 
+from modules.workflow.types import WorkflowPriority
+
 # Global registry for workflows
 WORKFLOW_MAP: Dict[str, Dict[str, Any]] = {}
 
 
-def register_temporal_workflow(priority: str = "default") -> Callable:
+def register_temporal_workflow(
+    priority: WorkflowPriority = WorkflowPriority.DEFAULT,
+) -> Callable:
     """
     Decorator to register a Temporal workflow with additional metadata.
     """
 
     def decorator(cls: Type) -> Type:
         if hasattr(cls, "run"):
-            cls.run = workflow.run(cls.run)  # Wrap the run method as a Temporal workflow runner method
+            cls.run = workflow.run(
+                cls.run
+            )  # Wrap the run method as a Temporal workflow runner method
 
         else:
             raise ValueError(f"Class '{cls.__name__}' does not have a 'run' method")

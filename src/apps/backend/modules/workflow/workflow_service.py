@@ -14,7 +14,11 @@ from modules.workflow.errors import (
     WorkflowNameNotFoundError,
     WorkflowStartError,
 )
-from modules.workflow.types import QueueWorkflowParams, SearchWorkflowByIdParams
+from modules.workflow.types import (
+    QueueWorkflowParams,
+    SearchWorkflowByIdParams,
+    WorkflowPriority,
+)
 from workflows.workflow_registry import WORKFLOW_MAP
 
 
@@ -26,19 +30,25 @@ class WorkflowService:
 
     @staticmethod
     async def _get_temporal_workflow_details(params: SearchWorkflowByIdParams) -> dict:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await Client.connect(
+            ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
+        )
 
         runs = []
 
         async for info in client.list_workflows(f"WorkflowId = '{params.id}'"):
-            handle = client.get_workflow_handle(workflow_id=params.id, run_id=info.run_id)
+            handle = client.get_workflow_handle(
+                workflow_id=params.id, run_id=info.run_id
+            )
             info = await handle.describe()
 
             result = None
             if info.status and info.status.name == "COMPLETED":
                 history = await handle.fetch_history()
                 result_event = history.events[-1]
-                result_data = result_event.workflow_execution_completed_event_attributes.result.payloads[0].data
+                result_data = result_event.workflow_execution_completed_event_attributes.result.payloads[
+                    0
+                ].data
                 result = result_data.decode("utf-8")
 
             runs.append(
@@ -65,14 +75,16 @@ class WorkflowService:
 
     @staticmethod
     async def _queue_temporal_workflow(params: QueueWorkflowParams) -> str:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await Client.connect(
+            ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
+        )
 
         if params.name not in WORKFLOW_MAP.keys():
             raise WorkflowNameNotFoundError(workflow_name=params.name)
 
         task_queue = (
             ConfigService.get_string("TEMPORAL_DEFAULT_TASK_QUEUE")
-            if WORKFLOW_MAP[params.name]["priority"] == "default"
+            if WORKFLOW_MAP[params.name]["priority"] == WorkflowPriority.DEFAULT
             else ConfigService.get_string("TEMPORAL_CRITICAL_TASK_QUEUE")
         )
 
@@ -87,7 +99,9 @@ class WorkflowService:
 
     @staticmethod
     async def _cancel_temporal_workflow(params: SearchWorkflowByIdParams) -> None:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await Client.connect(
+            ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
+        )
         handle = client.get_workflow_handle(params.id)
 
         if await WorkflowService._get_temporal_workflow_status(handle) == "COMPLETED":
@@ -103,7 +117,9 @@ class WorkflowService:
 
     @staticmethod
     async def _terminate_temporal_workflow(params: SearchWorkflowByIdParams) -> None:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await Client.connect(
+            ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
+        )
         handle = client.get_workflow_handle(params.id)
 
         if await WorkflowService._get_temporal_workflow_status(handle) == "COMPLETED":
@@ -117,7 +133,9 @@ class WorkflowService:
     @staticmethod
     def get_workflow_details(*, params: SearchWorkflowByIdParams) -> dict:
         try:
-            res = asyncio.run(WorkflowService._get_temporal_workflow_details(params=params))
+            res = asyncio.run(
+                WorkflowService._get_temporal_workflow_details(params=params)
+            )
 
         except RPCError:
             raise WorkflowIdNotFoundError(workflow_id=params.id)
@@ -136,7 +154,9 @@ class WorkflowService:
     @staticmethod
     def queue_workflow(*, params: QueueWorkflowParams) -> str:
         try:
-            workflow_id = asyncio.run(WorkflowService._queue_temporal_workflow(params=params))
+            workflow_id = asyncio.run(
+                WorkflowService._queue_temporal_workflow(params=params)
+            )
 
         except RPCError:
             raise WorkflowStartError(workflow_name=params.name)

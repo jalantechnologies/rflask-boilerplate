@@ -4,14 +4,21 @@ import pytest
 from tests.modules.workflow.base_test_workflow import BaseTestWorkflow
 
 from modules.workflow.errors import WorkflowIdNotFoundError, WorkflowNameNotFoundError
-from modules.workflow.types import QueueWorkflowParams, SearchWorkflowByIdParams
+from modules.workflow.types import (
+    QueueWorkflowParams,
+    SearchWorkflowByIdParams,
+    WorkflowPriority,
+)
 from modules.workflow.workflow_service import WorkflowService
 
 
 class TestWorkflowService(BaseTestWorkflow):
     def test_get_all_workflows(self) -> None:
         workflows_list = WorkflowService.get_all_workflows()
-        assert {"name": "TestDefaultWorkflow", "priority": "default"} in workflows_list
+        assert {
+            "name": "TestDefaultWorkflow",
+            "priority": WorkflowPriority.DEFAULT,
+        } in workflows_list
 
     def test_queue_and_get_details_workflow(self) -> None:
         queue_params = QueueWorkflowParams(

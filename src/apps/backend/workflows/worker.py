@@ -5,6 +5,7 @@ from temporalio import workflow
 from temporalio.client import Client
 from temporalio.worker import Worker
 
+from modules.workflow.types import WorkflowPriority
 from workflows.workflow_registry import WORKFLOW_MAP
 
 with workflow.unsafe.imports_passed_through():
@@ -27,13 +28,27 @@ async def main() -> None:
     default_queue = ConfigService.get_string("TEMPORAL_DEFAULT_TASK_QUEUE")
     critical_queue = ConfigService.get_string("TEMPORAL_CRITICAL_TASK_QUEUE")
 
-    Logger.info(message=f"Starting workers on queues: Default='{default_queue}', Critical='{critical_queue}'")
+    Logger.info(
+        message=f"Starting workers on queues: Default='{default_queue}', Critical='{critical_queue}'"
+    )
 
     # Create workers for each priority level
-    workflows_default = [wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == "default"]
-    workflows_critical = [wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == "critical"]
-    worker_default = Worker(client, task_queue=default_queue, workflows=workflows_default)
-    worker_critical = Worker(client, task_queue=critical_queue, workflows=workflows_critical)
+    workflows_default = [
+        wf["class"]
+        for wf in WORKFLOW_MAP.values()
+        if wf["priority"] == WorkflowPriority.DEFAULT
+    ]
+    workflows_critical = [
+        wf["class"]
+        for wf in WORKFLOW_MAP.values()
+        if wf["priority"] == WorkflowPriority.CRITICAL
+    ]
+    worker_default = Worker(
+        client, task_queue=default_queue, workflows=workflows_default
+    )
+    worker_critical = Worker(
+        client, task_queue=critical_queue, workflows=workflows_critical
+    )
 
     # Run both workers concurrently
     await asyncio.gather(worker_default.run(), worker_critical.run())
