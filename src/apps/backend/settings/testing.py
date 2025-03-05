@@ -5,8 +5,6 @@ from dataclasses import dataclass, field
 class TestingSettings:
     MONGODB_URI: str = "mongodb://localhost:27017/frm-boilerplate-test"
     TEMPORAL_SERVER_ADDRESS: str = "localhost:7233"
-    TEMPORAL_DEFAULT_TASK_QUEUE: str = "frm-boilerplate-test-default-queue"
-    TEMPORAL_CRITICAL_TASK_QUEUE: str = "frm-boilerplate-test-critical-queue"
     MAILER: dict[str, str] = field(
         default_factory=lambda: {
             "default_email": "DEFAULT_EMAIL",
@@ -21,8 +19,6 @@ class TestingSettings:
 class DockerInstanceTestingSettings:
     MONGODB_URI: str = "mongodb://app-db:27017/frm-boilerplate-test"
     TEMPORAL_SERVER_ADDRESS: str = "temporal:7233"
-    TEMPORAL_DEFAULT_TASK_QUEUE: str = "frm-boilerplate-docker-test-default-queue"
-    TEMPORAL_CRITICAL_TASK_QUEUE: str = "frm-boilerplate-docker-test-critical-queue"
     MAILER: dict[str, str] = field(
         default_factory=lambda: {
             "default_email": "DEFAULT_EMAIL",

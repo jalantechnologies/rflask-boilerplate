@@ -25,29 +25,14 @@ async def main() -> None:
     temporal_server = ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
     client = await Client.connect(temporal_server)
 
-    default_queue = ConfigService.get_string("TEMPORAL_DEFAULT_TASK_QUEUE")
-    critical_queue = ConfigService.get_string("TEMPORAL_CRITICAL_TASK_QUEUE")
+    # Create workers for each priority level
+    workflows_default = [wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == WorkflowPriority.DEFAULT]
+    workflows_critical = [wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == WorkflowPriority.CRITICAL]
+    worker_default = Worker(client, task_queue=WorkflowPriority.DEFAULT.value, workflows=workflows_default)
+    worker_critical = Worker(client, task_queue=WorkflowPriority.CRITICAL.value, workflows=workflows_critical)
 
     Logger.info(
-        message=f"Starting workers on queues: Default='{default_queue}', Critical='{critical_queue}'"
-    )
-
-    # Create workers for each priority level
-    workflows_default = [
-        wf["class"]
-        for wf in WORKFLOW_MAP.values()
-        if wf["priority"] == WorkflowPriority.DEFAULT
-    ]
-    workflows_critical = [
-        wf["class"]
-        for wf in WORKFLOW_MAP.values()
-        if wf["priority"] == WorkflowPriority.CRITICAL
-    ]
-    worker_default = Worker(
-        client, task_queue=default_queue, workflows=workflows_default
-    )
-    worker_critical = Worker(
-        client, task_queue=critical_queue, workflows=workflows_critical
+        message=f"Starting workers on queues: Default='{WorkflowPriority.DEFAULT.value}', Critical='{WorkflowPriority.CRITICAL.value}'"
     )
 
     # Run both workers concurrently

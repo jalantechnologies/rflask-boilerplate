@@ -14,7 +14,7 @@ from modules.workflow.errors import (
     WorkflowNameNotFoundError,
     WorkflowStartError,
 )
-from modules.workflow.types import QueueWorkflowParams, SearchWorkflowByIdParams, WorkflowPriority
+from modules.workflow.types import QueueWorkflowParams, SearchWorkflowByIdParams
 from workflows.workflow_registry import WORKFLOW_MAP
 
 
@@ -70,18 +70,12 @@ class WorkflowService:
         if params.name not in WORKFLOW_MAP.keys():
             raise WorkflowNameNotFoundError(workflow_name=params.name)
 
-        task_queue = (
-            ConfigService.get_string("TEMPORAL_DEFAULT_TASK_QUEUE")
-            if WORKFLOW_MAP[params.name]["priority"] == WorkflowPriority.DEFAULT
-            else ConfigService.get_string("TEMPORAL_CRITICAL_TASK_QUEUE")
-        )
-
         handle = await client.start_workflow(
             params.name,
             args=params.arguments,
             cron_schedule=params.cron_schedule,
             id=f"{params.name}-{str(uuid.uuid4())}",
-            task_queue=task_queue,
+            task_queue=WORKFLOW_MAP[params.name]["priority"].value,
         )
         return handle.id
 
