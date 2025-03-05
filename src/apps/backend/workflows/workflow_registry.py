@@ -8,7 +8,7 @@ from workflows.base_workflow import BaseWorkflow
 WORKFLOW_MAP: Dict[str, Dict[str, Any]] = {}
 
 
-def register_temporal_workflow(cls: Type) -> Type:
+def register_workflow(cls: Type) -> Type:
     """
     Decorator to register a Temporal workflow with additional metadata,
     enforcing that the workflow inherits from BaseWorker and has a run() method.
