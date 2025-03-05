@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
 
 @dataclass(frozen=True)
 class SearchWorkflowByIdParams:
     id: str
+    runs_limit: Optional[int] = None
 
 
 @dataclass(frozen=True)

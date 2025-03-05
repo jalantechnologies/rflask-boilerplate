@@ -46,7 +46,7 @@ class WorkflowService:
 
         runs = []
 
-        async for info in client.list_workflows(f"WorkflowId = '{params.id}'"):
+        async for info in client.list_workflows(f"WorkflowId = '{params.id}'", limit=params.runs_limit):
             handle = client.get_workflow_handle(workflow_id=params.id, run_id=info.run_id)
             info = await handle.describe()
 
