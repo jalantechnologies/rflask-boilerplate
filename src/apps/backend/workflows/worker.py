@@ -27,23 +27,31 @@ async def main() -> None:
 
     try:
         client = await Client.connect(server_address, retry_config=RetryConfig(max_retries=3))
-
     except RuntimeError:
         Logger.error(message=f"Failed to connect to Temporal server at {server_address}. Exiting...")
         return
 
-    # Create workers for each priority level
-    workflows_default = [wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == WorkflowPriority.DEFAULT]
-    workflows_critical = [wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == WorkflowPriority.CRITICAL]
-    worker_default = Worker(client, task_queue=WorkflowPriority.DEFAULT.value, workflows=workflows_default)
-    worker_critical = Worker(client, task_queue=WorkflowPriority.CRITICAL.value, workflows=workflows_critical)
+    worker_coros = []
 
-    Logger.info(
-        message=f"Starting workers on queues: Default='{WorkflowPriority.DEFAULT.value}', Critical='{WorkflowPriority.CRITICAL.value}'"
-    )
+    # Iterate over each priority level defined in WorkflowPriority enum
+    for priority in WorkflowPriority:
+        # Filter workflows for the current priority
+        workflows_for_priority = [wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == priority]
 
-    # Run both workers concurrently
-    await asyncio.gather(worker_default.run(), worker_critical.run())
+        # Only create a worker if there are workflows for that priority
+        if workflows_for_priority:
+            task_queue = priority.value
+            Logger.info(
+                message=f"Starting worker on queue '{task_queue}' for priority '{priority.name}' "
+                f"with {len(workflows_for_priority)} workflow(s)."
+            )
+            worker = Worker(client, task_queue=task_queue, workflows=workflows_for_priority)
+            worker_coros.append(worker.run())
+
+    if worker_coros:
+        await asyncio.gather(*worker_coros)
+    else:
+        Logger.error(message="No workflows registered for any priority.")
 
 
 if __name__ == "__main__":
