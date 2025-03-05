@@ -2,6 +2,16 @@ from modules.error.custom_errors import AppError
 from modules.workflow.types import WorkflowErrorCode
 
 
+class WorkflowClientConnectionError(AppError):
+    def __init__(self, server_address: str) -> None:
+        super().__init__(
+            code=WorkflowErrorCode.WORKFLOW_CLIENT_CONNECTION_ERROR,
+            http_status_code=500,
+            message=f"Failed to connect to Temporal server. "
+            f"Verify that the temporal server is running at {server_address} and try again.",
+        )
+
+
 class WorkflowIdNotFoundError(AppError):
     def __init__(self, workflow_id: str) -> None:
         super().__init__(

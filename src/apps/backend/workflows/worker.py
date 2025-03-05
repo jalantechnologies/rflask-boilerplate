@@ -3,6 +3,7 @@ import asyncio
 from dotenv import load_dotenv
 from temporalio import workflow
 from temporalio.client import Client
+from temporalio.service import RetryConfig
 from temporalio.worker import Worker
 
 from modules.workflow.types import WorkflowPriority
@@ -22,8 +23,14 @@ async def main() -> None:
     ConfigManager.mount_config()
     LoggerManager.mount_logger()
 
-    temporal_server = ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
-    client = await Client.connect(temporal_server)
+    server_address = ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
+
+    try:
+        client = await Client.connect(server_address, retry_config=RetryConfig(max_retries=3))
+
+    except RuntimeError:
+        Logger.error(message=f"Failed to connect to Temporal server at {server_address}. Exiting...")
+        return
 
     # Create workers for each priority level
     workflows_default = [wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == WorkflowPriority.DEFAULT]

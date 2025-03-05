@@ -1,15 +1,16 @@
 import asyncio
 import uuid
-from typing import Dict
+from typing import Dict, Optional
 
 from temporalio.client import Client, WorkflowHandle
-from temporalio.service import RPCError
+from temporalio.service import RetryConfig, RPCError
 
 from modules.config.config_service import ConfigService
 from modules.workflow.errors import (
     WorkflowAlreadyCancelledError,
     WorkflowAlreadyCompletedError,
     WorkflowAlreadyTerminatedError,
+    WorkflowClientConnectionError,
     WorkflowIdNotFoundError,
     WorkflowNameNotFoundError,
     WorkflowStartError,
@@ -19,6 +20,21 @@ from workflows.workflow_registry import WORKFLOW_MAP
 
 
 class WorkflowService:
+    CLIENT: Optional[Client] = None
+
+    @staticmethod
+    async def _get_client() -> Client:
+        if not WorkflowService.CLIENT:
+            try:
+                WorkflowService.CLIENT = await Client.connect(
+                    ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"), retry_config=RetryConfig(max_retries=3)
+                )
+
+            except RuntimeError:
+                raise WorkflowClientConnectionError(server_address=ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+
+        return WorkflowService.CLIENT
+
     @staticmethod
     async def _get_workflow_status(handle: WorkflowHandle) -> str:
         info = await handle.describe()
@@ -26,7 +42,7 @@ class WorkflowService:
 
     @staticmethod
     async def _get_workflow_details(params: SearchWorkflowByIdParams) -> dict:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await WorkflowService._get_client()
 
         runs = []
 
@@ -65,7 +81,7 @@ class WorkflowService:
 
     @staticmethod
     async def _queue_workflow(params: QueueWorkflowParams) -> str:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await WorkflowService._get_client()
 
         if params.name not in WORKFLOW_MAP.keys():
             raise WorkflowNameNotFoundError(workflow_name=params.name)
@@ -81,7 +97,7 @@ class WorkflowService:
 
     @staticmethod
     async def _cancel_workflow(params: SearchWorkflowByIdParams) -> None:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await WorkflowService._get_client()
         handle = client.get_workflow_handle(params.id)
 
         if await WorkflowService._get_workflow_status(handle) == "COMPLETED":
@@ -97,7 +113,7 @@ class WorkflowService:
 
     @staticmethod
     async def _terminate_workflow(params: SearchWorkflowByIdParams) -> None:
-        client = await Client.connect(ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+        client = await WorkflowService._get_client()
         handle = client.get_workflow_handle(params.id)
 
         if await WorkflowService._get_workflow_status(handle) == "COMPLETED":
