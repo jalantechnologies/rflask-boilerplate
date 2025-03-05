@@ -27,7 +27,8 @@ class WorkflowNameNotFoundError(AppError):
         super().__init__(
             code=WorkflowErrorCode.WORKFLOW_WITH_NAME_NOT_FOUND,
             http_status_code=404,
-            message=f"Workflow with given name: {workflow_name}. " f"Verify the name of the workflow and try again.",
+            message=f"Workflow with given name: {workflow_name} not found. "
+            f"Verify the name of the workflow and try again.",
         )
 
 
@@ -46,7 +47,8 @@ class WorkflowAlreadyCompletedError(AppError):
         super().__init__(
             code=WorkflowErrorCode.WORKFLOW_ALREADY_COMPLETED,
             http_status_code=400,
-            message=f"Workflow with id: {workflow_id} has already completed. Verify the workflow ID and try again.",
+            message=f"Workflow with id: {workflow_id} has already been completed. "
+            f"Verify the workflow ID and try again.",
         )
 
 
