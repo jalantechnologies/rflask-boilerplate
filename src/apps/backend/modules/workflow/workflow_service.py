@@ -2,7 +2,7 @@ import asyncio
 import uuid
 from typing import Dict, Optional
 
-from temporalio.client import Client, WorkflowHandle
+from temporalio.client import Client, WorkflowExecutionStatus, WorkflowHandle
 from temporalio.service import RetryConfig, RPCError
 
 from modules.config.config_service import ConfigService
@@ -36,9 +36,9 @@ class WorkflowService:
         return WorkflowService.CLIENT
 
     @staticmethod
-    async def _get_workflow_status(handle: WorkflowHandle) -> str:
+    async def _get_workflow_status(handle: WorkflowHandle) -> WorkflowExecutionStatus:
         info = await handle.describe()
-        return info.status.name if info.status else "UNKNOWN"
+        return info.status
 
     @staticmethod
     async def _get_workflow_details(params: SearchWorkflowByIdParams) -> dict:
@@ -51,7 +51,7 @@ class WorkflowService:
             info = await handle.describe()
 
             result = None
-            if info.status and info.status.name == "COMPLETED":
+            if info.status and info.status == WorkflowExecutionStatus.COMPLETED:
                 history = await handle.fetch_history()
                 result_event = history.events[-1]
                 result_data = result_event.workflow_execution_completed_event_attributes.result.payloads[0].data
@@ -60,10 +60,10 @@ class WorkflowService:
             runs.append(
                 {
                     "run_id": info.run_id,
-                    "status": info.status.name if info.status else "UNKNOWN",
+                    "status": info.status.name,
                     "result": result,
-                    "start_time": str(info.start_time),
-                    "close_time": str(info.close_time) if info.close_time else None,
+                    "start_time": info.start_time,
+                    "close_time": info.close_time,
                 }
             )
 
@@ -71,10 +71,10 @@ class WorkflowService:
         info = await handle.describe()
         return {
             "workflow_id": info.id,
-            "status": info.status.name if info.status else "UNKNOWN",
+            "status": info.status,
             "runs": runs,
-            "start_time": str(info.start_time),
-            "close_time": str(info.close_time) if info.close_time else None,
+            "start_time": info.start_time,
+            "close_time": info.close_time,
             "task_queue": info.task_queue,
             "workflow_type": info.workflow_type,
         }
@@ -100,13 +100,13 @@ class WorkflowService:
         client = await WorkflowService._get_client()
         handle = client.get_workflow_handle(params.id)
 
-        if await WorkflowService._get_workflow_status(handle) == "COMPLETED":
+        if await WorkflowService._get_workflow_status(handle) == WorkflowExecutionStatus.COMPLETED:
             raise WorkflowAlreadyCompletedError(workflow_id=params.id)
 
-        if await WorkflowService._get_workflow_status(handle) == "CANCELED":
+        if await WorkflowService._get_workflow_status(handle) == WorkflowExecutionStatus.CANCELED:
             raise WorkflowAlreadyCancelledError(workflow_id=params.id)
 
-        if await WorkflowService._get_workflow_status(handle) == "TERMINATED":
+        if await WorkflowService._get_workflow_status(handle) == WorkflowExecutionStatus.TERMINATED:
             raise WorkflowAlreadyTerminatedError(workflow_id=params.id)
 
         await handle.cancel()
@@ -116,10 +116,10 @@ class WorkflowService:
         client = await WorkflowService._get_client()
         handle = client.get_workflow_handle(params.id)
 
-        if await WorkflowService._get_workflow_status(handle) == "COMPLETED":
+        if await WorkflowService._get_workflow_status(handle) == WorkflowExecutionStatus.COMPLETED:
             raise WorkflowAlreadyCompletedError(workflow_id=params.id)
 
-        if await WorkflowService._get_workflow_status(handle) == "TERMINATED":
+        if await WorkflowService._get_workflow_status(handle) == WorkflowExecutionStatus.CANCELED:
             raise WorkflowAlreadyTerminatedError(workflow_id=params.id)
 
         await handle.terminate()
