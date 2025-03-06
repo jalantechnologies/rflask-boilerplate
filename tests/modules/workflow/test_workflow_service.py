@@ -1,8 +1,6 @@
 import time
 
 import pytest
-from tests.modules.workflow.base_test_workflow import BaseTestWorkflow
-
 from modules.workflow.errors import WorkflowIdNotFoundError, WorkflowNameNotFoundError
 from modules.workflow.types import (
     QueueWorkflowParams,
@@ -10,6 +8,9 @@ from modules.workflow.types import (
     WorkflowPriority,
 )
 from modules.workflow.workflow_service import WorkflowService
+from temporalio.client import WorkflowExecutionStatus
+
+from tests.modules.workflow.base_test_workflow import BaseTestWorkflow
 
 
 class TestWorkflowService(BaseTestWorkflow):
@@ -33,7 +34,7 @@ class TestWorkflowService(BaseTestWorkflow):
         data = WorkflowService.get_workflow_details(params=details_params)
         assert data["workflow_id"] == workflow_id
         assert int(data["runs"][0]["result"]) == 15
-        assert data["status"] == "COMPLETED"
+        assert data["status"] == WorkflowExecutionStatus.COMPLETED
 
     def test_queue_workflow_with_invalid_name(self) -> None:
         queue_params = QueueWorkflowParams(
