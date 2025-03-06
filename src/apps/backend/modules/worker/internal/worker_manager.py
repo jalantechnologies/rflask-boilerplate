@@ -5,46 +5,46 @@ from temporalio.client import Client, WorkflowExecutionStatus, WorkflowHandle
 from temporalio.service import RetryConfig
 
 from modules.config.config_service import ConfigService
-from modules.workflow.errors import (
-    WorkflowAlreadyCancelledError,
-    WorkflowAlreadyCompletedError,
-    WorkflowAlreadyTerminatedError,
-    WorkflowClientConnectionError,
-    WorkflowNotRegisteredError,
+from modules.worker.errors import (
+    WorkerAlreadyCancelledError,
+    WorkerAlreadyCompletedError,
+    WorkerAlreadyTerminatedError,
+    WorkerClassNotRegisteredError,
+    WorkerClientConnectionError,
 )
-from modules.workflow.types import QueueWorkflowParams, SearchWorkflowByIdParams
-from workflows.workflow_registry import WORKFLOW_MAP
+from modules.worker.types import RunWorkerParams, SearchWorkerByIdParams
+from workers.worker_registry import WORKER_MAP
 
 
-class WorkflowManager:
+class WorkerManager:
     CLIENT: Optional[Client] = None
 
     @staticmethod
     async def _get_client() -> Client:
-        if not WorkflowManager.CLIENT:
+        if not WorkerManager.CLIENT:
             try:
-                WorkflowManager.CLIENT = await Client.connect(
+                WorkerManager.CLIENT = await Client.connect(
                     ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"),
                     retry_config=RetryConfig(max_retries=3),
                 )
 
             except RuntimeError:
-                raise WorkflowClientConnectionError(
+                raise WorkerClientConnectionError(
                     server_address=ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
                 )
 
-        return WorkflowManager.CLIENT
+        return WorkerManager.CLIENT
 
     @staticmethod
-    async def _get_workflow_status(
+    async def _get_worker_status(
         handle: WorkflowHandle,
     ) -> Optional[WorkflowExecutionStatus]:
         info = await handle.describe()
         return info.status
 
     @staticmethod
-    async def get_workflow_details(params: SearchWorkflowByIdParams) -> dict:
-        client = await WorkflowManager._get_client()
+    async def get_worker_details(params: SearchWorkerByIdParams) -> dict:
+        client = await WorkerManager._get_client()
 
         runs = []
 
@@ -78,71 +78,71 @@ class WorkflowManager:
         handle = client.get_workflow_handle(params.id)
         info = await handle.describe()
         return {
-            "workflow_id": info.id,
+            "worker_id": info.id,
             "status": info.status,
             "runs": runs,
             "start_time": info.start_time,
             "close_time": info.close_time,
             "task_queue": info.task_queue,
-            "workflow_type": info.workflow_type,
+            "worker_type": info.workflow_type,
         }
 
     @staticmethod
-    async def queue_workflow(params: QueueWorkflowParams) -> str:
-        client = await WorkflowManager._get_client()
+    async def run_worker(params: RunWorkerParams) -> str:
+        client = await WorkerManager._get_client()
 
-        if params.cls not in WORKFLOW_MAP.keys():
-            raise WorkflowNotRegisteredError(cls_name=params.cls.__name__)
+        if params.cls not in WORKER_MAP.keys():
+            raise WorkerClassNotRegisteredError(cls_name=params.cls.__name__)
 
         handle: WorkflowHandle = await client.start_workflow(
             params.cls,
             args=params.arguments,
             cron_schedule=params.cron_schedule,
             id=f"{params.cls.__name__}-{str(uuid.uuid4())}",
-            task_queue=WORKFLOW_MAP[params.cls].value,
+            task_queue=WORKER_MAP[params.cls].value,
         )
         return handle.id
 
     @staticmethod
-    async def cancel_workflow(params: SearchWorkflowByIdParams) -> None:
-        client = await WorkflowManager._get_client()
+    async def cancel_worker(params: SearchWorkerByIdParams) -> None:
+        client = await WorkerManager._get_client()
         handle = client.get_workflow_handle(params.id)
 
         if (
-            await WorkflowManager._get_workflow_status(handle)
+            await WorkerManager._get_worker_status(handle)
             == WorkflowExecutionStatus.COMPLETED
         ):
-            raise WorkflowAlreadyCompletedError(workflow_id=params.id)
+            raise WorkerAlreadyCompletedError(worker_id=params.id)
 
         if (
-            await WorkflowManager._get_workflow_status(handle)
+            await WorkerManager._get_worker_status(handle)
             == WorkflowExecutionStatus.CANCELED
         ):
-            raise WorkflowAlreadyCancelledError(workflow_id=params.id)
+            raise WorkerAlreadyCancelledError(worker_id=params.id)
 
         if (
-            await WorkflowManager._get_workflow_status(handle)
+            await WorkerManager._get_worker_status(handle)
             == WorkflowExecutionStatus.TERMINATED
         ):
-            raise WorkflowAlreadyTerminatedError(workflow_id=params.id)
+            raise WorkerAlreadyTerminatedError(worker_id=params.id)
 
         await handle.cancel()
 
     @staticmethod
-    async def terminate_workflow(params: SearchWorkflowByIdParams) -> None:
-        client = await WorkflowManager._get_client()
+    async def terminate_worker(params: SearchWorkerByIdParams) -> None:
+        client = await WorkerManager._get_client()
         handle = client.get_workflow_handle(params.id)
 
         if (
-            await WorkflowManager._get_workflow_status(handle)
+            await WorkerManager._get_worker_status(handle)
             == WorkflowExecutionStatus.COMPLETED
         ):
-            raise WorkflowAlreadyCompletedError(workflow_id=params.id)
+            raise WorkerAlreadyCompletedError(worker_id=params.id)
 
         if (
-            await WorkflowManager._get_workflow_status(handle)
+            await WorkerManager._get_worker_status(handle)
             == WorkflowExecutionStatus.CANCELED
         ):
-            raise WorkflowAlreadyTerminatedError(workflow_id=params.id)
+            raise WorkerAlreadyTerminatedError(worker_id=params.id)
 
         await handle.terminate()

@@ -5,7 +5,7 @@ from modules.config.config_manager import ConfigManager
 from modules.logger.logger_manager import LoggerManager
 
 
-class BaseTestWorkflow(unittest.TestCase):
+class BaseTestWorker(unittest.TestCase):
     def setup_method(self, method: Callable) -> None:
         print(f"Executing:: {method.__name__}")
         ConfigManager.mount_config()
