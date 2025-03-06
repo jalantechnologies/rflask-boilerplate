@@ -9,7 +9,11 @@ from modules.worker.errors import (
     WorkerStartError,
 )
 from modules.worker.internal.worker_manager import WorkerManager
-from modules.worker.types import RunWorkerParams, SearchWorkerByIdParams
+from modules.worker.types import (
+    RunWorkerCronParams,
+    RunWorkerParams,
+    SearchWorkerByIdParams,
+)
 from workers.base_worker import BaseWorker
 from workers.worker_registry import WORKER_MAP
 
@@ -43,6 +47,21 @@ class WorkerService:
 
         try:
             worker_id = asyncio.run(WorkerManager.run_worker(params=params))
+
+        except RPCError:
+            raise WorkerStartError(worker_name=params.cls.__name__)
+
+        return worker_id
+
+    @staticmethod
+    def run_worker_cron(*, params: RunWorkerCronParams) -> str:
+        if not issubclass(params.cls, BaseWorker) or not hasattr(params.cls, "run"):
+            raise WorkerClassInvalidError(
+                cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__
+            )
+
+        try:
+            worker_id = asyncio.run(WorkerManager.run_worker_cron(params=params))
 
         except RPCError:
             raise WorkerStartError(worker_name=params.cls.__name__)

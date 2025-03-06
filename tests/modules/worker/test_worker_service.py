@@ -24,9 +24,7 @@ class TestWorkerService(BaseTestWorker):
         } in workers_list
 
     def test_queue_and_get_details_worker(self) -> None:
-        queue_params = RunWorkerParams(
-            TestDefaultWorker, arguments=[10, 5], cron_schedule=""
-        )
+        queue_params = RunWorkerParams(TestDefaultWorker, arguments=[10, 5])
         worker_id = WorkerService.run_worker(params=queue_params)
         assert worker_id
 
@@ -41,7 +39,7 @@ class TestWorkerService(BaseTestWorker):
     def test_queue_worker_with_invalid_class(self) -> None:
         class InvalidWorker: ...
 
-        run_params = RunWorkerParams(InvalidWorker, arguments=[10, 5], cron_schedule="")
+        run_params = RunWorkerParams(InvalidWorker, arguments=[10, 5])
         with pytest.raises(WorkerClassInvalidError):
             WorkerService.run_worker(params=run_params)
 
@@ -49,9 +47,7 @@ class TestWorkerService(BaseTestWorker):
         class NonExistentWorker(BaseWorker):
             async def run(self) -> None: ...
 
-        run_params = RunWorkerParams(
-            NonExistentWorker, arguments=[10, 5], cron_schedule=""
-        )
+        run_params = RunWorkerParams(NonExistentWorker, arguments=[10, 5])
         with pytest.raises(WorkerClassNotRegisteredError):
             WorkerService.run_worker(params=run_params)
 

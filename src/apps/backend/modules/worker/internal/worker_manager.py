@@ -12,7 +12,11 @@ from modules.worker.errors import (
     WorkerClassNotRegisteredError,
     WorkerClientConnectionError,
 )
-from modules.worker.types import RunWorkerParams, SearchWorkerByIdParams
+from modules.worker.types import (
+    RunWorkerCronParams,
+    RunWorkerParams,
+    SearchWorkerByIdParams,
+)
 from workers.worker_registry import WORKER_MAP
 
 
@@ -89,6 +93,21 @@ class WorkerManager:
 
     @staticmethod
     async def run_worker(params: RunWorkerParams) -> str:
+        client = await WorkerManager._get_client()
+
+        if params.cls not in WORKER_MAP.keys():
+            raise WorkerClassNotRegisteredError(cls_name=params.cls.__name__)
+
+        handle: WorkflowHandle = await client.start_workflow(
+            params.cls,
+            args=params.arguments,
+            id=f"{params.cls.__name__}-{str(uuid.uuid4())}",
+            task_queue=WORKER_MAP[params.cls].value,
+        )
+        return handle.id
+
+    @staticmethod
+    async def run_worker_cron(params: RunWorkerCronParams) -> str:
         client = await WorkerManager._get_client()
 
         if params.cls not in WORKER_MAP.keys():
