@@ -33,7 +33,7 @@ class WorkflowManager:
         return WorkflowManager.CLIENT
 
     @staticmethod
-    async def _get_workflow_status(handle: WorkflowHandle) -> WorkflowExecutionStatus:
+    async def _get_workflow_status(handle: WorkflowHandle) -> Optional[WorkflowExecutionStatus]:
         info = await handle.describe()
         return info.status
 
@@ -57,7 +57,7 @@ class WorkflowManager:
             runs.append(
                 {
                     "run_id": info.run_id,
-                    "status": info.status.name,
+                    "status": info.status,
                     "result": result,
                     "start_time": info.start_time,
                     "close_time": info.close_time,
