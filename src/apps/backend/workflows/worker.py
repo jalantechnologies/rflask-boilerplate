@@ -36,7 +36,7 @@ async def main() -> None:
     # Iterate over each priority level defined in WorkflowPriority enum
     for priority in WorkflowPriority:
         # Filter workflows for the current priority
-        workflows_for_priority = [wf["class"] for wf in WORKFLOW_MAP.values() if wf["priority"] == priority]
+        workflows_for_priority = [_cls for _cls, _priority in WORKFLOW_MAP.items() if _priority == priority]
 
         # Only create a worker if there are workflows for that priority
         if workflows_for_priority:

@@ -22,13 +22,13 @@ class WorkflowIdNotFoundError(AppError):
         )
 
 
-class WorkflowNameNotFoundError(AppError):
-    def __init__(self, workflow_name: str) -> None:
+class WorkflowNotRegisteredError(AppError):
+    def __init__(self, cls_name: str) -> None:
         super().__init__(
-            code=WorkflowErrorCode.WORKFLOW_WITH_NAME_NOT_FOUND,
+            code=WorkflowErrorCode.WORKFLOW_NOT_REGISTERED,
             http_status_code=404,
-            message=f"Workflow with given name: {workflow_name} not found. "
-            f"Verify the name of the workflow and try again.",
+            message=f"Workflow with given class: {cls_name} not found. "
+            f"Verify the class you are using and try again.",
         )
 
 

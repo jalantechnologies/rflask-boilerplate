@@ -21,11 +21,11 @@ class WorkflowService:
         return res
 
     @staticmethod
-    def get_all_workflows() -> list[Dict[str, str]]:
+    def get_all_workflows() -> list[Dict[str, object]]:
         workflows = []
 
-        for name, details in WORKFLOW_MAP.items():
-            workflows.append({"name": name, "priority": details["priority"]})
+        for cls, priority in WORKFLOW_MAP.items():
+            workflows.append({"name": cls, "priority": priority})
 
         return workflows
 
@@ -35,7 +35,7 @@ class WorkflowService:
             workflow_id = asyncio.run(WorkflowManager.queue_workflow(params=params))
 
         except RPCError:
-            raise WorkflowStartError(workflow_name=params.name)
+            raise WorkflowStartError(workflow_name=params.cls.__name__)
 
         return workflow_id
 

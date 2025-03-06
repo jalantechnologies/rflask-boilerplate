@@ -1,11 +1,12 @@
-from typing import Any, Dict, Type
+from typing import Dict, Type
 
 from temporalio import workflow
 
+from modules.workflow.types import WorkflowPriority
 from workflows.base_workflow import BaseWorkflow
 
 # A global map storing workflow metadata
-WORKFLOW_MAP: Dict[str, Dict[str, Any]] = {}
+WORKFLOW_MAP: Dict[Type, WorkflowPriority] = {}
 
 
 def register_workflow(cls: Type) -> Type:
@@ -28,7 +29,7 @@ def register_workflow(cls: Type) -> Type:
     cls = workflow.defn(cls)
 
     # Register in the global map, storing the assigned priority.
-    WORKFLOW_MAP[cls.__name__] = {"priority": cls.priority, "class": cls}
+    WORKFLOW_MAP[cls] = cls.priority
 
     return cls
 
