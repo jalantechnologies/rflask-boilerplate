@@ -1,16 +1,17 @@
 import os
 from typing import Any, Optional
 from modules.config.internals.config_utils import ConfigUtil
-
+from modules.config.types import Config
 
 class CustomEnvConfig:
 
     FILENAME: str = "custom-environment-variables.yml"
 
     @staticmethod
-    def load() -> dict[str, Any]:
+    def load() -> Config:
         custom_env_config = ConfigUtil.read_yml_from_config_dir(CustomEnvConfig.FILENAME)
-        return CustomEnvConfig._apply_environment_overrides(custom_env_config)  # get_os_env
+        custom_env_dict = CustomEnvConfig._apply_environment_overrides(custom_env_config)  # get_os_env
+        return Config(custom_env_dict)
 
     @staticmethod
     def _apply_environment_overrides(data: dict[str, Any]) -> dict[str, Any]:
@@ -49,7 +50,7 @@ class CustomEnvConfig:
 
         parsers = {
             "boolean": lambda x: x.lower() in ["true", "1"],
-            "number": lambda x: int(x) if x.isdigit() else float(x),
+            "int": lambda x: int(x) if x.isdigit() else float(x),
         }
 
         parser = parsers.get(value_format)
