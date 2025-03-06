@@ -1,5 +1,5 @@
+from modules.application.worker.types import WorkerErrorCode
 from modules.error.custom_errors import AppError
-from modules.worker.types import WorkerErrorCode
 
 
 class WorkerClientConnectionError(AppError):

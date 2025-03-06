@@ -3,13 +3,13 @@ from typing import Dict
 
 from temporalio.service import RPCError
 
-from modules.worker.errors import (
+from modules.application.worker.errors import (
     WorkerClassInvalidError,
     WorkerIdNotFoundError,
     WorkerStartError,
 )
-from modules.worker.internal.worker_manager import WorkerManager
-from modules.worker.types import (
+from modules.application.worker.internal.worker_manager import WorkerManager
+from modules.application.worker.types import (
     RunWorkerCronParams,
     RunWorkerParams,
     SearchWorkerByIdParams,

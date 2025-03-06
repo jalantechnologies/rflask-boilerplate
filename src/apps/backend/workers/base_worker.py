@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from modules.worker.types import WorkerPriority
+from modules.application.worker.types import WorkerPriority
 
 
 class BaseWorker(ABC):
@@ -14,5 +14,5 @@ class BaseWorker(ABC):
     @abstractmethod
     async def run(self, *args: Any, **kwargs: Any) -> Any:
         """
-        Subclasses must implement the run() method, which is the worker's entry point.
+        Subclasses must implement the run() method, which is the application's entry point.
         """

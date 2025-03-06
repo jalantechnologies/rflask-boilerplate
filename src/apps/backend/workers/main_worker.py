@@ -6,7 +6,7 @@ from temporalio.client import Client
 from temporalio.service import RetryConfig
 from temporalio.worker import Worker
 
-from modules.worker.types import WorkerPriority
+from modules.application.worker.types import WorkerPriority
 from workers.worker_registry import WORKER_MAP
 
 with workflow.unsafe.imports_passed_through():
@@ -44,7 +44,7 @@ async def main() -> None:
             _cls for _cls, _priority in WORKER_MAP.items() if _priority == priority
         ]
 
-        # Only create a worker if there are workers for that priority
+        # Only create a application if there are workers for that priority
         if workers_for_priority:
             task_queue = priority.value
             Logger.info(

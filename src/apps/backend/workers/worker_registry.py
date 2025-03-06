@@ -2,17 +2,17 @@ from typing import Dict, Type
 
 from temporalio import workflow
 
-from modules.worker.types import WorkerPriority
+from modules.application.worker.types import WorkerPriority
 from workers.base_worker import BaseWorker
 
-# A global map storing worker metadata
+# A global map storing application metadata
 WORKER_MAP: Dict[Type, WorkerPriority] = {}
 
 
 def register_worker(cls: Type) -> Type:
     """
-    Decorator to register a Temporal worker with additional metadata,
-    enforcing that the worker inherits from BaseWorker and has a run() method.
+    Decorator to register a Temporal application with additional metadata,
+    enforcing that the application inherits from BaseWorker and has a run() method.
     """
     if not issubclass(cls, BaseWorker):
         raise TypeError(f"Worker '{cls.__name__}' must inherit from BaseWorker")
@@ -21,11 +21,11 @@ def register_worker(cls: Type) -> Type:
     if not hasattr(cls, "run"):
         raise ValueError(f"Worker '{cls.__name__}' must define a 'run' method")
 
-    # Wrap the run() method so Temporal recognizes it as the worker entry point.
+    # Wrap the run() method so Temporal recognizes it as the application entry point.
     wrapped_run = workflow.run(cls.run)
     setattr(cls, "run", wrapped_run)
 
-    # Decorate the class itself as a worker definition.
+    # Decorate the class itself as a application definition.
     cls = workflow.defn(cls)
 
     # Register in the global map, storing the assigned priority.

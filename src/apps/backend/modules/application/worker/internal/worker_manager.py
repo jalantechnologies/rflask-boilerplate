@@ -4,19 +4,19 @@ from typing import Optional
 from temporalio.client import Client, WorkflowExecutionStatus, WorkflowHandle
 from temporalio.service import RetryConfig
 
-from modules.config.config_service import ConfigService
-from modules.worker.errors import (
+from modules.application.worker.errors import (
     WorkerAlreadyCancelledError,
     WorkerAlreadyCompletedError,
     WorkerAlreadyTerminatedError,
     WorkerClassNotRegisteredError,
     WorkerClientConnectionError,
 )
-from modules.worker.types import (
+from modules.application.worker.types import (
     RunWorkerCronParams,
     RunWorkerParams,
     SearchWorkerByIdParams,
 )
+from modules.config.config_service import ConfigService
 from workers.worker_registry import WORKER_MAP
 
 
