@@ -22,7 +22,7 @@ class RunWorkerImmediatelyParams:
 class RunWorkerAsCronParams:
     cls: Type["BaseWorker"]
     arguments: list
-    cron_schedule: str
+    cron_schedule: str  # Example: "/10 * * * *" (every 10 minutes)
 
 
 @dataclass(frozen=True)
