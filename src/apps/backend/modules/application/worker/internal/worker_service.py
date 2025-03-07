@@ -3,22 +3,18 @@ from typing import List, Type
 
 from temporalio.service import RPCError
 
-from modules.application.errors import (
-    WorkerClassInvalidError,
-    WorkerIdNotFoundError,
-    WorkerStartError,
-)
-from modules.application.types import (
-    RunWorkerAsCronParams,
-    RunWorkerImmediatelyParams,
-    SearchWorkerByIdParams,
-)
+from modules.application.errors import WorkerClassInvalidError, WorkerIdNotFoundError, WorkerStartError
+from modules.application.types import RunWorkerAsCronParams, RunWorkerImmediatelyParams, SearchWorkerByIdParams
 from modules.application.worker.internal.worker_manager import WorkerManager
 from workers.base_worker import BaseWorker
 from workers.worker_registry import WORKER_MAP
 
 
 class WorkerService:
+    @staticmethod
+    def connect_client() -> None:
+        asyncio.run(WorkerManager.connect_client())
+
     @staticmethod
     def get_worker_details(*, params: SearchWorkerByIdParams) -> dict:
         try:
@@ -41,9 +37,7 @@ class WorkerService:
     @staticmethod
     def run_worker_immediately(*, params: RunWorkerImmediatelyParams) -> str:
         if not issubclass(params.cls, BaseWorker) or not hasattr(params.cls, "run"):
-            raise WorkerClassInvalidError(
-                cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__
-            )
+            raise WorkerClassInvalidError(cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__)
 
         try:
             worker_id = asyncio.run(WorkerManager.run_worker_immediately(params=params))
@@ -56,9 +50,7 @@ class WorkerService:
     @staticmethod
     def run_worker_as_cron(*, params: RunWorkerAsCronParams) -> str:
         if not issubclass(params.cls, BaseWorker) or not hasattr(params.cls, "run"):
-            raise WorkerClassInvalidError(
-                cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__
-            )
+            raise WorkerClassInvalidError(cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__)
 
         try:
             worker_id = asyncio.run(WorkerManager.run_worker_as_cron(params=params))

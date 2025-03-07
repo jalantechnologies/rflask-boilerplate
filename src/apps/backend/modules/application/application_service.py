@@ -1,15 +1,15 @@
 from typing import List, Type
 
-from modules.application.types import (
-    RunWorkerAsCronParams,
-    RunWorkerImmediatelyParams,
-    SearchWorkerByIdParams,
-)
+from modules.application.types import RunWorkerAsCronParams, RunWorkerImmediatelyParams, SearchWorkerByIdParams
 from modules.application.worker.internal.worker_service import WorkerService
 from workers.base_worker import BaseWorker
 
 
 class ApplicationService:
+    @staticmethod
+    def connect_client() -> None:
+        return WorkerService.connect_client()
+
     @staticmethod
     def get_worker_details(*, params: SearchWorkerByIdParams) -> dict:
         return WorkerService.get_worker_details(params=params)

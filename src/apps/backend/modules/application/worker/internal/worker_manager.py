@@ -11,62 +11,49 @@ from modules.application.errors import (
     WorkerClassNotRegisteredError,
     WorkerClientConnectionError,
 )
-from modules.application.types import (
-    RunWorkerAsCronParams,
-    RunWorkerImmediatelyParams,
-    SearchWorkerByIdParams,
-)
+from modules.application.types import RunWorkerAsCronParams, RunWorkerImmediatelyParams, SearchWorkerByIdParams
 from modules.config.config_service import ConfigService
+from modules.logger.logger import Logger
 from workers.worker_registry import WORKER_MAP
 
 
 class WorkerManager:
-    CLIENT: Optional[Client] = None
+    CLIENT: Client
 
     @staticmethod
-    async def _get_client() -> Client:
-        if not WorkerManager.CLIENT:
-            try:
-                WorkerManager.CLIENT = await Client.connect(
-                    ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"),
-                    retry_config=RetryConfig(max_retries=3),
-                )
+    async def connect_client() -> None:
+        try:
+            WorkerManager.CLIENT = await Client.connect(
+                ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"), retry_config=RetryConfig(max_retries=3)
+            )
 
-            except RuntimeError:
-                raise WorkerClientConnectionError(
-                    server_address=ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
-                )
+            Logger.info(
+                message=f"Connected to temporal server at {
+                ConfigService.get_string('TEMPORAL_SERVER_ADDRESS')
+            }"
+            )
 
-        return WorkerManager.CLIENT
+        except RuntimeError:
+            raise WorkerClientConnectionError(server_address=ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
 
     @staticmethod
-    async def _get_worker_status(
-        handle: WorkflowHandle,
-    ) -> Optional[WorkflowExecutionStatus]:
+    async def _get_worker_status(handle: WorkflowHandle) -> Optional[WorkflowExecutionStatus]:
         info = await handle.describe()
         return info.status
 
     @staticmethod
     async def get_worker_details(params: SearchWorkerByIdParams) -> dict:
-        client = await WorkerManager._get_client()
-
         runs = []
 
-        async for info in client.list_workflows(
-            f"WorkflowId = '{params.id}'", limit=params.runs_limit
-        ):
-            handle = client.get_workflow_handle(
-                workflow_id=params.id, run_id=info.run_id
-            )
+        async for info in WorkerManager.CLIENT.list_workflows(f"WorkflowId = '{params.id}'", limit=params.runs_limit):
+            handle = WorkerManager.CLIENT.get_workflow_handle(workflow_id=params.id, run_id=info.run_id)
             info = await handle.describe()
 
             result = None
             if info.status and info.status == WorkflowExecutionStatus.COMPLETED:
                 history = await handle.fetch_history()
                 result_event = history.events[-1]
-                result_data = result_event.workflow_execution_completed_event_attributes.result.payloads[
-                    0
-                ].data
+                result_data = result_event.workflow_execution_completed_event_attributes.result.payloads[0].data
                 result = result_data.decode("utf-8")
 
             runs.append(
@@ -79,7 +66,7 @@ class WorkerManager:
                 }
             )
 
-        handle = client.get_workflow_handle(params.id)
+        handle = WorkerManager.CLIENT.get_workflow_handle(params.id)
         info = await handle.describe()
         return {
             "worker_id": info.id,
@@ -93,12 +80,10 @@ class WorkerManager:
 
     @staticmethod
     async def run_worker_immediately(params: RunWorkerImmediatelyParams) -> str:
-        client = await WorkerManager._get_client()
-
         if params.cls not in WORKER_MAP.keys():
             raise WorkerClassNotRegisteredError(cls_name=params.cls.__name__)
 
-        handle: WorkflowHandle = await client.start_workflow(
+        handle: WorkflowHandle = await WorkerManager.CLIENT.start_workflow(
             params.cls.__name__,
             args=params.arguments,
             id=f"{params.cls.__name__}-{str(uuid.uuid4())}",
@@ -108,12 +93,10 @@ class WorkerManager:
 
     @staticmethod
     async def run_worker_as_cron(params: RunWorkerAsCronParams) -> str:
-        client = await WorkerManager._get_client()
-
         if params.cls not in WORKER_MAP.keys():
             raise WorkerClassNotRegisteredError(cls_name=params.cls.__name__)
 
-        handle: WorkflowHandle = await client.start_workflow(
+        handle: WorkflowHandle = await WorkerManager.CLIENT.start_workflow(
             params.cls.__name__,
             args=params.arguments,
             cron_schedule=params.cron_schedule,
@@ -124,8 +107,7 @@ class WorkerManager:
 
     @staticmethod
     async def cancel_worker(params: SearchWorkerByIdParams) -> None:
-        client = await WorkerManager._get_client()
-        handle = client.get_workflow_handle(params.id)
+        handle = WorkerManager.CLIENT.get_workflow_handle(params.id)
 
         status = await WorkerManager._get_worker_status(handle)
 
@@ -142,8 +124,7 @@ class WorkerManager:
 
     @staticmethod
     async def terminate_worker(params: SearchWorkerByIdParams) -> None:
-        client = await WorkerManager._get_client()
-        handle = client.get_workflow_handle(params.id)
+        handle = WorkerManager.CLIENT.get_workflow_handle(params.id)
 
         status = await WorkerManager._get_worker_status(handle)
 
