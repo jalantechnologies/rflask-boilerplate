@@ -3,16 +3,16 @@ import time
 import pytest
 from temporalio.client import WorkflowExecutionStatus
 from tests.modules.application.base_test_application import BaseTestApplication
+from tests.modules.application.mock_workers import MockDefaultWorker
 
 from modules.application.application_service import ApplicationService
 from modules.application.errors import WorkerIdNotFoundError
-from workers.dummy_workers import TestDefaultWorker
 
 
 class TestWorkerService(BaseTestApplication):
     def test_run_worker_and_get_details(self) -> None:
         worker_id = ApplicationService.run_worker_immediately(
-            cls=TestDefaultWorker, arguments=("Hello, world!",)
+            cls=MockDefaultWorker, arguments=("Hello, world!",)
         )
         assert worker_id
 

@@ -19,7 +19,7 @@ run-engine:
 
 run-workers:
 	cd src/apps/backend \
-		&& PYTHONPATH=./ pipenv run python workers/main_worker.py
+		&& PYTHONPATH=./ pipenv run python temporal_server.py
 
 run-test:
 	PYTHONPATH=src/apps/backend pipenv run pytest --disable-warnings -s -x -v --cov=. --cov-report=xml:/app/output/coverage.xml tests

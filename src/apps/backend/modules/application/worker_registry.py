@@ -1,11 +1,9 @@
-from typing import Dict, Type
+from typing import Type
 
 from temporalio import workflow
 
-from modules.application.types import BaseWorker, WorkerPriority
-
-# A global map storing application metadata
-WORKER_MAP: Dict[Type[BaseWorker], WorkerPriority] = {}
+from modules.application.application_service import ApplicationService
+from modules.application.types import BaseWorker
 
 
 def register_worker(cls: Type[BaseWorker]) -> Type[BaseWorker]:
@@ -28,10 +26,6 @@ def register_worker(cls: Type[BaseWorker]) -> Type[BaseWorker]:
     cls = workflow.defn(cls)
 
     # Register in the global map, storing the assigned priority.
-    WORKER_MAP[cls] = cls.priority
+    ApplicationService.register_worker(cls)
 
     return cls
-
-
-# Import all workers to be registered below
-import workers.dummy_workers  # noqa: F401

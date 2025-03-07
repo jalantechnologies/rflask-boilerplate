@@ -1,12 +1,12 @@
 from modules.application.types import BaseWorker, WorkerPriority
+from modules.application.worker_registry import register_worker
 from modules.logger.logger import Logger
-from workers.worker_registry import register_worker
 
 
 @register_worker
-class TestDefaultWorker(BaseWorker):
+class MockDefaultWorker(BaseWorker):
     """
-    A simple test application to demonstrate the default-priority application.
+    A simple mock worker to demonstrate the default-priority application.
     """
 
     async def run(self, message: str) -> None:
@@ -14,9 +14,9 @@ class TestDefaultWorker(BaseWorker):
 
 
 @register_worker
-class TestCriticalWorker(BaseWorker):
+class MockCriticalWorker(BaseWorker):
     """
-    A simple test application to demonstrate a critical-priority application.
+    A simple mock worker to demonstrate a critical-priority application.
     """
 
     priority: WorkerPriority = WorkerPriority.CRITICAL

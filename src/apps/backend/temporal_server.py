@@ -5,12 +5,12 @@ from temporalio.client import Client
 from temporalio.service import RetryConfig
 from temporalio.worker import UnsandboxedWorkflowRunner, Worker
 
+from modules.application.application_service import ApplicationService
 from modules.application.types import WorkerPriority
 from modules.config.config_manager import ConfigManager
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
-from workers.worker_registry import WORKER_MAP
 
 
 async def main() -> None:
@@ -38,7 +38,9 @@ async def main() -> None:
     for priority in WorkerPriority:
         # Filter workers for the current priority
         workers_for_priority = [
-            _cls for _cls, _priority in WORKER_MAP.items() if _priority == priority
+            _cls
+            for _cls, _priority in ApplicationService.get_registered_workers().items()
+            if _priority == priority
         ]
 
         # Only create a application if there are workers for that priority
