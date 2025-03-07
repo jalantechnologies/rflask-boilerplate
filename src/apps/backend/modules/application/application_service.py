@@ -1,9 +1,9 @@
 import os
 import sys
-from typing import Any, Dict, Tuple, Type
+from typing import Any, List, Tuple, Type
 
 from modules.application.internal.worker_manager import WorkerManager
-from modules.application.types import BaseWorker, Worker, WorkerPriority
+from modules.application.types import BaseWorker, RegisteredWorker, Worker
 
 
 class ApplicationService:
@@ -12,7 +12,7 @@ class ApplicationService:
         return WorkerManager.register_worker(worker)
 
     @staticmethod
-    def get_all_registered_workers() -> Dict[Type[BaseWorker], WorkerPriority]:
+    def get_all_registered_workers() -> List[RegisteredWorker]:
         return WorkerManager.get_all_registered_workers()
 
     @staticmethod

@@ -1,6 +1,6 @@
 import asyncio
 import uuid
-from typing import Any, Dict, Optional, Tuple, Type
+from typing import Any, List, Optional, Tuple, Type
 
 from temporalio.client import Client, WorkflowExecutionStatus, WorkflowHandle
 from temporalio.service import RetryConfig, RPCError
@@ -13,14 +13,14 @@ from modules.application.errors import (
     WorkerIdNotFoundError,
     WorkerStartError,
 )
-from modules.application.types import BaseWorker, Worker, WorkerPriority
+from modules.application.types import BaseWorker, RegisteredWorker, Worker
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 
 
 class WorkerManager:
     CLIENT: Client
-    WORKER_MAP: Dict[Type[BaseWorker], WorkerPriority] = {}
+    REGISTERED_WORKERS: List[RegisteredWorker] = []
 
     @staticmethod
     async def _connect_temporal_server() -> None:
@@ -104,11 +104,11 @@ class WorkerManager:
 
     @staticmethod
     def register_worker(worker: Type[BaseWorker]) -> None:
-        WorkerManager.WORKER_MAP[worker] = worker.priority
+        WorkerManager.REGISTERED_WORKERS.append(RegisteredWorker(cls=worker, priority=worker.priority))
 
     @staticmethod
-    def get_all_registered_workers() -> Dict[Type[BaseWorker], WorkerPriority]:
-        return WorkerManager.WORKER_MAP
+    def get_all_registered_workers() -> List[RegisteredWorker]:
+        return WorkerManager.REGISTERED_WORKERS
 
     @staticmethod
     def connect_temporal_server() -> None:

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Optional, Type
 
 from temporalio.client import WorkflowExecutionStatus
 
@@ -24,6 +24,12 @@ class BaseWorker(ABC):
         """
         Subclasses must implement the run() method, which is the application's entry point.
         """
+
+
+@dataclass(frozen=True)
+class RegisteredWorker:
+    cls: Type[BaseWorker]
+    priority: WorkerPriority
 
 
 @dataclass(frozen=True)

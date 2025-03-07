@@ -34,7 +34,7 @@ async def main() -> None:
     for priority in WorkerPriority:
         # Filter workers for the current priority
         workers_for_priority = [
-            _cls for _cls, _priority in ApplicationService.get_all_registered_workers().items() if _priority == priority
+            worker.cls for worker in ApplicationService.get_all_registered_workers() if worker.priority == priority
         ]
 
         # Only create a application if there are workers for that priority
