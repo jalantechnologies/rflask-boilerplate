@@ -7,7 +7,6 @@ from temporalio.worker import UnsandboxedWorkflowRunner, Worker
 
 from modules.application.application_service import ApplicationService
 from modules.application.types import WorkerPriority
-from modules.config.config_manager import ConfigManager
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
@@ -17,15 +16,18 @@ async def main() -> None:
     load_dotenv()
 
     # Mount configuration and logger
-    ConfigManager.mount_config()
     LoggerManager.mount_logger()
 
-    server_address = ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
+    server_address = ConfigService[str].get_value(key="temporal.server_address")
 
     try:
-        client = await Client.connect(server_address, retry_config=RetryConfig(max_retries=3))
+        client = await Client.connect(
+            server_address, retry_config=RetryConfig(max_retries=3)
+        )
     except RuntimeError:
-        Logger.error(message=f"Failed to connect to Temporal server at {server_address}. Exiting...")
+        Logger.error(
+            message=f"Failed to connect to Temporal server at {server_address}. Exiting..."
+        )
         return
 
     worker_coros = []
@@ -34,7 +36,9 @@ async def main() -> None:
     for priority in WorkerPriority:
         # Filter workers for the current priority
         workers_for_priority = [
-            worker.cls for worker in ApplicationService.get_all_registered_workers() if worker.priority == priority
+            worker.cls
+            for worker in ApplicationService.get_all_registered_workers()
+            if worker.priority == priority
         ]
 
         # Only create a application if there are workers for that priority

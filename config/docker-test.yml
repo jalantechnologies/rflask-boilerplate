@@ -1,5 +1,8 @@
 mongodb:
-  uri: "mongodb://db:27017/frm-boilerplate-test"
+  uri: "mongodb://app-db:27017/frm-boilerplate-test"
+
+temporal:
+  server_address: "temporal:7233"
 
 mailer:
   default_email: "DEFAULT_EMAIL"
