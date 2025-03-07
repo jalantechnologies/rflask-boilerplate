@@ -3,7 +3,7 @@ import asyncio
 from dotenv import load_dotenv
 from temporalio.client import Client
 from temporalio.service import RetryConfig
-from temporalio.worker import Worker
+from temporalio.worker import UnsandboxedWorkflowRunner, Worker
 
 from modules.application.types import WorkerPriority
 from modules.config.config_manager import ConfigManager
@@ -49,7 +49,10 @@ async def main() -> None:
                 f"with {len(workers_for_priority)} worker(s)."
             )
             temporal_worker = Worker(
-                client, task_queue=task_queue, workflows=workers_for_priority
+                client,
+                task_queue=task_queue,
+                workflows=workers_for_priority,
+                workflow_runner=UnsandboxedWorkflowRunner(),
             )
             worker_coros.append(temporal_worker.run())
 

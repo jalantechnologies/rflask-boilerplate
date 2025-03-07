@@ -1,4 +1,8 @@
-from modules.application.types import RunWorkerAsCronParams, RunWorkerImmediatelyParams, SearchWorkerByIdParams
+from modules.application.types import (
+    RunWorkerAsCronParams,
+    RunWorkerImmediatelyParams,
+    Worker,
+)
 from modules.application.worker.internal.worker_service import WorkerService
 
 
@@ -8,8 +12,8 @@ class ApplicationService:
         return WorkerService.connect_temporal_server()
 
     @staticmethod
-    def get_worker_details(*, params: SearchWorkerByIdParams) -> dict:
-        return WorkerService.get_worker_details(params=params)
+    def get_worker_by_id(*, worker_id: str) -> Worker:
+        return WorkerService.get_worker_by_id(worker_id=worker_id)
 
     @staticmethod
     def run_worker_immediately(*, params: RunWorkerImmediatelyParams) -> str:
@@ -20,9 +24,9 @@ class ApplicationService:
         return WorkerService.schedule_worker_as_cron(params=params)
 
     @staticmethod
-    def cancel_worker(*, params: SearchWorkerByIdParams) -> None:
-        return WorkerService.cancel_worker(params=params)
+    def cancel_worker(*, worker_id: str) -> None:
+        return WorkerService.cancel_worker(worker_id=worker_id)
 
     @staticmethod
-    def terminate_worker(*, params: SearchWorkerByIdParams) -> None:
-        return WorkerService.terminate_worker(params=params)
+    def terminate_worker(*, worker_id: str) -> None:
+        return WorkerService.terminate_worker(worker_id=worker_id)
