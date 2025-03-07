@@ -1,6 +1,6 @@
 import asyncio
 import uuid
-from typing import Any, List, Optional, Tuple, Type
+from typing import Any, Optional, Tuple, Type
 
 from temporalio.client import Client, WorkflowExecutionStatus, WorkflowHandle
 from temporalio.service import RetryConfig, RPCError
@@ -11,16 +11,17 @@ from modules.application.errors import (
     WorkerAlreadyTerminatedError,
     WorkerClientConnectionError,
     WorkerIdNotFoundError,
+    WorkerNotRegisteredError,
     WorkerStartError,
 )
-from modules.application.types import BaseWorker, RegisteredWorker, Worker
+from modules.application.types import BaseWorker, Worker
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
+from temporal_config import TemporalConfig
 
 
 class WorkerManager:
     CLIENT: Client
-    REGISTERED_WORKERS: List[RegisteredWorker] = []
 
     @staticmethod
     async def _connect_temporal_server() -> None:
@@ -46,6 +47,9 @@ class WorkerManager:
     async def _start_worker(
         cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str = ""
     ) -> str:
+        if not cls in TemporalConfig.WORKERS:
+            raise WorkerNotRegisteredError(worker_name=cls.__name__)
+
         handle: WorkflowHandle = await WorkerManager.CLIENT.start_workflow(
             cls.__name__,
             args=arguments,
@@ -113,16 +117,6 @@ class WorkerManager:
             raise WorkerAlreadyTerminatedError(worker_id=worker_id)
 
         await handle.terminate()
-
-    @staticmethod
-    def register_worker(worker: Type[BaseWorker]) -> None:
-        WorkerManager.REGISTERED_WORKERS.append(
-            RegisteredWorker(cls=worker, priority=worker.priority)
-        )
-
-    @staticmethod
-    def get_all_registered_workers() -> List[RegisteredWorker]:
-        return WorkerManager.REGISTERED_WORKERS
 
     @staticmethod
     def connect_temporal_server() -> None:

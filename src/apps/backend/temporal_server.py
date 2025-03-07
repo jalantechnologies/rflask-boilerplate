@@ -5,18 +5,19 @@ from temporalio.client import Client
 from temporalio.service import RetryConfig
 from temporalio.worker import UnsandboxedWorkflowRunner, Worker
 
-from modules.application.application_service import ApplicationService
 from modules.application.types import WorkerPriority
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
+from temporal_config import TemporalConfig
 
 
 async def main() -> None:
     load_dotenv()
 
-    # Mount configuration and logger
+    # Mount logger and workers
     LoggerManager.mount_logger()
+    TemporalConfig.mount_workers()
 
     server_address = ConfigService[str].get_value(key="temporal.server_address")
 
@@ -37,7 +38,7 @@ async def main() -> None:
         # Filter workers for the current priority
         workers_for_priority = [
             worker.cls
-            for worker in ApplicationService.get_all_registered_workers()
+            for worker in TemporalConfig.get_all_registered_workers()
             if worker.priority == priority
         ]
 

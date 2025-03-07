@@ -6,7 +6,7 @@ from modules.error.custom_errors import AppError
 @dataclass(frozen=True)
 class WorkerErrorCode:
     WORKER_CLIENT_CONNECTION_ERROR: str = "WORKER_ERR_01"
-    WORKER_CLASS_INVALID: str = "WORKER_ERR_02"
+    WORKER_NOT_REGISTERED: str = "WORKER_ERR_02"
     WORKER_WITH_ID_NOT_FOUND: str = "WORKER_ERR_03"
     WORKER_START_ERROR: str = "WORKER_ERR_04"
     WORKER_ALREADY_COMPLETED: str = "WORKER_ERR_05"
@@ -21,6 +21,16 @@ class WorkerClientConnectionError(AppError):
             http_status_code=500,
             message=f"Failed to connect to Temporal server. "
             f"Verify that the temporal server is running at {server_address} and try again.",
+        )
+
+
+class WorkerNotRegisteredError(AppError):
+    def __init__(self, worker_name: str) -> None:
+        super().__init__(
+            code=WorkerErrorCode.WORKER_NOT_REGISTERED,
+            http_status_code=400,
+            message=f"Worker class {worker_name} is not registered. "
+            f"Have you included it in the list of workers in 'temporal_config.py'?",
         )
 
 
