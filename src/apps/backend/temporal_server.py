@@ -23,13 +23,9 @@ async def main() -> None:
     server_address = ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
 
     try:
-        client = await Client.connect(
-            server_address, retry_config=RetryConfig(max_retries=3)
-        )
+        client = await Client.connect(server_address, retry_config=RetryConfig(max_retries=3))
     except RuntimeError:
-        Logger.error(
-            message=f"Failed to connect to Temporal server at {server_address}. Exiting..."
-        )
+        Logger.error(message=f"Failed to connect to Temporal server at {server_address}. Exiting...")
         return
 
     worker_coros = []
@@ -38,9 +34,7 @@ async def main() -> None:
     for priority in WorkerPriority:
         # Filter workers for the current priority
         workers_for_priority = [
-            _cls
-            for _cls, _priority in ApplicationService.get_registered_workers().items()
-            if _priority == priority
+            _cls for _cls, _priority in ApplicationService.get_all_registered_workers().items() if _priority == priority
         ]
 
         # Only create a application if there are workers for that priority

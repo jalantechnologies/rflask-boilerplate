@@ -14,7 +14,7 @@ class ApplicationService:
         ApplicationService.WORKER_MAP[worker] = worker.priority
 
     @staticmethod
-    def get_registered_workers() -> Dict[Type[BaseWorker], WorkerPriority]:
+    def get_all_registered_workers() -> Dict[Type[BaseWorker], WorkerPriority]:
         return ApplicationService.WORKER_MAP
 
     @staticmethod
@@ -26,18 +26,12 @@ class ApplicationService:
         return WorkerManager.get_worker_by_id(worker_id=worker_id)
 
     @staticmethod
-    def run_worker_immediately(
-        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...]
-    ) -> str:
+    def run_worker_immediately(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...]) -> str:
         return WorkerManager.run_worker_immediately(cls=cls, arguments=arguments)
 
     @staticmethod
-    def run_worker_as_cron(
-        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str
-    ) -> str:
-        return WorkerManager.schedule_worker_as_cron(
-            cls=cls, arguments=arguments, cron_schedule=cron_schedule
-        )
+    def run_worker_as_cron(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str) -> str:
+        return WorkerManager.schedule_worker_as_cron(cls=cls, arguments=arguments, cron_schedule=cron_schedule)
 
     @staticmethod
     def cancel_worker(*, worker_id: str) -> None:
@@ -49,7 +43,5 @@ class ApplicationService:
 
 
 # Import mock workers for testing
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../.."))
-)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../..")))
 from tests.modules.application import mock_workers  # noqa: F401
