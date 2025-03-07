@@ -16,10 +16,6 @@ from workers.dummy_workers import TestDefaultWorker
 
 
 class TestWorkerService(BaseTestApplication):
-    def test_get_all_worker_classes(self) -> None:
-        worker_class_list = ApplicationService.get_all_worker_classes()
-        assert TestDefaultWorker in worker_class_list
-
     def test_run_worker_and_get_details(self) -> None:
         run_params = RunWorkerImmediatelyParams(TestDefaultWorker, arguments=(10, 5))
         worker_id = ApplicationService.run_worker_immediately(params=run_params)

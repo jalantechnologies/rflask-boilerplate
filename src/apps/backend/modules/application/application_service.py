@@ -1,8 +1,9 @@
-from typing import List, Type
-
-from modules.application.types import RunWorkerAsCronParams, RunWorkerImmediatelyParams, SearchWorkerByIdParams
+from modules.application.types import (
+    RunWorkerAsCronParams,
+    RunWorkerImmediatelyParams,
+    SearchWorkerByIdParams,
+)
 from modules.application.worker.internal.worker_service import WorkerService
-from workers.base_worker import BaseWorker
 
 
 class ApplicationService:
@@ -13,10 +14,6 @@ class ApplicationService:
     @staticmethod
     def get_worker_details(*, params: SearchWorkerByIdParams) -> dict:
         return WorkerService.get_worker_details(params=params)
-
-    @staticmethod
-    def get_all_worker_classes() -> List[Type[BaseWorker]]:
-        return WorkerService.get_all_worker_classes()
 
     @staticmethod
     def run_worker_immediately(*, params: RunWorkerImmediatelyParams) -> str:
