@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import List, Type
 
 from modules.application.worker.internal.worker_service import WorkerService
 from modules.application.worker.types import (
@@ -6,6 +6,7 @@ from modules.application.worker.types import (
     RunWorkerParams,
     SearchWorkerByIdParams,
 )
+from workers.base_worker import BaseWorker
 
 
 class ApplicationService:
@@ -14,8 +15,8 @@ class ApplicationService:
         return WorkerService.get_worker_details(params=params)
 
     @staticmethod
-    def get_all_workers() -> list[Dict[str, object]]:
-        return WorkerService.get_all_workers()
+    def get_all_worker_classes() -> List[Type[BaseWorker]]:
+        return WorkerService.get_all_worker_classes()
 
     @staticmethod
     def run_worker(*, params: RunWorkerParams) -> str:

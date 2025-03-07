@@ -1,31 +1,24 @@
 import time
 
 import pytest
+from temporalio.client import WorkflowExecutionStatus
+from tests.modules.application.base_test_application import BaseTestApplication
+
 from modules.application.application_service import ApplicationService
 from modules.application.worker.errors import (
     WorkerClassInvalidError,
     WorkerClassNotRegisteredError,
     WorkerIdNotFoundError,
 )
-from modules.application.worker.types import (
-    RunWorkerParams,
-    SearchWorkerByIdParams,
-    WorkerPriority,
-)
-from temporalio.client import WorkflowExecutionStatus
+from modules.application.worker.types import RunWorkerParams, SearchWorkerByIdParams
 from workers.base_worker import BaseWorker
 from workers.dummy_workers import TestDefaultWorker
 
-from tests.modules.application.base_test_application import BaseTestApplication
-
 
 class TestWorkerService(BaseTestApplication):
-    def test_get_all_workers(self) -> None:
-        workers_list = ApplicationService.get_all_workers()
-        assert {
-            "name": TestDefaultWorker,
-            "priority": WorkerPriority.DEFAULT,
-        } in workers_list
+    def test_get_all_worker_classes(self) -> None:
+        worker_class_list = ApplicationService.get_all_worker_classes()
+        assert TestDefaultWorker in worker_class_list
 
     def test_run_worker_and_get_details(self) -> None:
         run_params = RunWorkerParams(TestDefaultWorker, arguments=[10, 5])

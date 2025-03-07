@@ -1,5 +1,5 @@
 import asyncio
-from typing import Dict
+from typing import List, Type
 
 from temporalio.service import RPCError
 
@@ -30,13 +30,13 @@ class WorkerService:
         return res
 
     @staticmethod
-    def get_all_workers() -> list[Dict[str, object]]:
-        workers = []
+    def get_all_worker_classes() -> List[Type[BaseWorker]]:
+        worker_classes = []
 
-        for cls, priority in WORKER_MAP.items():
-            workers.append({"name": cls, "priority": priority})
+        for cls in WORKER_MAP.keys():
+            worker_classes.append(cls)
 
-        return workers
+        return worker_classes
 
     @staticmethod
     def run_worker(*, params: RunWorkerParams) -> str:

@@ -6,7 +6,7 @@ from modules.application.worker.types import WorkerPriority
 from workers.base_worker import BaseWorker
 
 # A global map storing application metadata
-WORKER_MAP: Dict[Type, WorkerPriority] = {}
+WORKER_MAP: Dict[Type[BaseWorker], WorkerPriority] = {}
 
 
 def register_worker(cls: Type) -> Type:
