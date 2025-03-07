@@ -45,12 +45,7 @@ const Tasks: React.FC = () => {
   return (
     <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
       <TaskHeader onAddTask={() => setIsModalOpen(true)} />
-      <div className="shadow-default rounded-2xl border border-[#e4e7ec]">
-        <div className="flex items-center justify-between px-4 py-2">
-          <button className="inline-flex items-center xl:justify-start justify-center gap-2 px-4 py-2 font-medium rounded-md group hover:text-gray-900 text-black bg-gray-800">
-            All Tasks
-          </button>
-        </div>
+      <div className="">
         <TaskList tasks={tasks} />
       </div>
       <TaskModal

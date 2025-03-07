@@ -1,5 +1,11 @@
-export interface Task {
+export class Task {
+  description: string;
   id: string;
   title: string;
-  description: string;
+
+  constructor(description: string, id: string, title: string) {
+    this.description = description;
+    this.id = id;
+    this.title = title;
+  }
 }

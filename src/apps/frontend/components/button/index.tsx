@@ -10,8 +10,6 @@ interface ButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   type?: ButtonType;
   kind?: ButtonKind;
-  startIcon?: React.ReactElement | string;
-  endIcon?: React.ReactElement | string;
 }
 
 const ButtonClasses: Record<ButtonKind, string> = {
@@ -41,8 +39,6 @@ const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
   onClick,
   type = ButtonType.BUTTON,
   kind = ButtonKind.PRIMARY,
-  startIcon,
-  endIcon,
 }) => (
   <button
     className={clsx(
@@ -53,17 +49,7 @@ const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
     type={type}
     onClick={onClick}
   >
-    {startIcon && (
-      <span className="flex h-full min-w-6 items-center justify-center">
-        {startIcon}
-      </span>
-    )}
     {isLoading ? <Spinner /> : children}
-    {endIcon && (
-      <span className="flex h-full min-w-6 items-center justify-center">
-        {endIcon}
-      </span>
-    )}
   </button>
 );
 

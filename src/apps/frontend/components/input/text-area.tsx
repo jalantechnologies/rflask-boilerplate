@@ -2,39 +2,39 @@ import React from 'react';
 
 interface TextAreaProps {
   cols: number;
-  rows: number;
-  value: string;
-  name: string;
-  placeholder: string;
   disabled?: boolean;
-  testId?: string;
+  name: string;
   onBlur?: React.FocusEventHandler<HTMLTextAreaElement>;
   onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+  placeholder: string;
+  rows: number;
+  testId?: string;
+  value: string;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
   cols,
-  rows,
-  value,
-  name,
-  placeholder,
   disabled = false,
-  testId,
+  name,
   onBlur,
   onChange,
+  placeholder,
+  rows,
+  testId,
+  value,
 }) => {
   return (
     <textarea
+      className={`w-full rounded-sm border px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none border-stroke`}
       cols={cols}
-      rows={rows}
-      value={value}
-      name={name}
-      placeholder={placeholder}
+      data-testid={testId}
       disabled={disabled}
+      name={name}
       onBlur={onBlur}
       onChange={onChange}
-      data-testid={testId}
-      className={`w-full rounded-sm border px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none border-stroke`}
+      placeholder={placeholder}
+      rows={rows}
+      value={value}
     />
   );
 };
