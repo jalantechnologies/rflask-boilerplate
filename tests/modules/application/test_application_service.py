@@ -10,7 +10,10 @@ from modules.application.worker.errors import (
     WorkerClassNotRegisteredError,
     WorkerIdNotFoundError,
 )
-from modules.application.worker.types import RunWorkerParams, SearchWorkerByIdParams
+from modules.application.worker.types import (
+    RunWorkerImmediatelyParams,
+    SearchWorkerByIdParams,
+)
 from workers.base_worker import BaseWorker
 from workers.dummy_workers import TestDefaultWorker
 
@@ -21,8 +24,8 @@ class TestWorkerService(BaseTestApplication):
         assert TestDefaultWorker in worker_class_list
 
     def test_run_worker_and_get_details(self) -> None:
-        run_params = RunWorkerParams(TestDefaultWorker, arguments=[10, 5])
-        worker_id = ApplicationService.run_worker(params=run_params)
+        run_params = RunWorkerImmediatelyParams(TestDefaultWorker, arguments=[10, 5])
+        worker_id = ApplicationService.run_worker_immediately(params=run_params)
         assert worker_id
 
         time.sleep(1)
@@ -36,17 +39,17 @@ class TestWorkerService(BaseTestApplication):
     def test_run_worker_with_invalid_class(self) -> None:
         class InvalidWorker: ...
 
-        run_params = RunWorkerParams(InvalidWorker, arguments=[10, 5])
+        run_params = RunWorkerImmediatelyParams(InvalidWorker, arguments=[10, 5])
         with pytest.raises(WorkerClassInvalidError):
-            ApplicationService.run_worker(params=run_params)
+            ApplicationService.run_worker_immediately(params=run_params)
 
     def test_run_unregistered_worker(self) -> None:
         class NonExistentWorker(BaseWorker):
             async def run(self) -> None: ...
 
-        run_params = RunWorkerParams(NonExistentWorker, arguments=[10, 5])
+        run_params = RunWorkerImmediatelyParams(NonExistentWorker, arguments=[10, 5])
         with pytest.raises(WorkerClassNotRegisteredError):
-            ApplicationService.run_worker(params=run_params)
+            ApplicationService.run_worker_immediately(params=run_params)
 
     def test_get_details_with_invalid_worker_id(self) -> None:
         status_params = SearchWorkerByIdParams(id="non_existent")

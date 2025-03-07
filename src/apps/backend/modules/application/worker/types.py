@@ -10,13 +10,13 @@ class SearchWorkerByIdParams:
 
 
 @dataclass(frozen=True)
-class RunWorkerParams:
+class RunWorkerImmediatelyParams:
     cls: Type
     arguments: list
 
 
 @dataclass(frozen=True)
-class RunWorkerCronParams:
+class RunWorkerAsCronParams:
     cls: Type
     arguments: list
     cron_schedule: str

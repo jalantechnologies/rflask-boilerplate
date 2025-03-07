@@ -2,8 +2,8 @@ from typing import List, Type
 
 from modules.application.worker.internal.worker_service import WorkerService
 from modules.application.worker.types import (
-    RunWorkerCronParams,
-    RunWorkerParams,
+    RunWorkerAsCronParams,
+    RunWorkerImmediatelyParams,
     SearchWorkerByIdParams,
 )
 from workers.base_worker import BaseWorker
@@ -19,12 +19,12 @@ class ApplicationService:
         return WorkerService.get_all_worker_classes()
 
     @staticmethod
-    def run_worker(*, params: RunWorkerParams) -> str:
-        return WorkerService.run_worker(params=params)
+    def run_worker_immediately(*, params: RunWorkerImmediatelyParams) -> str:
+        return WorkerService.run_worker_immediately(params=params)
 
     @staticmethod
-    def run_worker_cron(*, params: RunWorkerCronParams) -> str:
-        return WorkerService.run_worker_cron(params=params)
+    def run_worker_as_cron(*, params: RunWorkerAsCronParams) -> str:
+        return WorkerService.run_worker_as_cron(params=params)
 
     @staticmethod
     def cancel_worker(*, params: SearchWorkerByIdParams) -> None:
