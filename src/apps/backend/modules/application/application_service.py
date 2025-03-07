@@ -1,8 +1,4 @@
-from modules.application.types import (
-    RunWorkerAsCronParams,
-    RunWorkerImmediatelyParams,
-    SearchWorkerByIdParams,
-)
+from modules.application.types import RunWorkerAsCronParams, RunWorkerImmediatelyParams, SearchWorkerByIdParams
 from modules.application.worker.internal.worker_service import WorkerService
 
 
@@ -21,7 +17,7 @@ class ApplicationService:
 
     @staticmethod
     def run_worker_as_cron(*, params: RunWorkerAsCronParams) -> str:
-        return WorkerService.run_worker_as_cron(params=params)
+        return WorkerService.schedule_worker_as_cron(params=params)
 
     @staticmethod
     def cancel_worker(*, params: SearchWorkerByIdParams) -> None:

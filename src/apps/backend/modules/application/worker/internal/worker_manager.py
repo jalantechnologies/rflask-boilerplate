@@ -106,7 +106,7 @@ class WorkerManager:
         return await WorkerManager._start_worker(params)
 
     @staticmethod
-    async def run_worker_as_cron(params: RunWorkerAsCronParams) -> str:
+    async def schedule_worker_as_cron(params: RunWorkerAsCronParams) -> str:
         if params.cls not in WORKER_MAP.keys():
             raise WorkerClassNotRegisteredError(cls_name=params.cls.__name__)
 
