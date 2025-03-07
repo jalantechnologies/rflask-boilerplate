@@ -24,7 +24,7 @@ ConfigManager.mount_config()
 LoggerManager.mount_logger()
 
 # Connect to Temporal server
-ApplicationService.connect_client()
+ApplicationService.connect_temporal_server()
 
 # Apply ProxyFix to interpret `X-Forwarded` headers if enabled in configuration
 # Visit: https://flask.palletsprojects.com/en/stable/deploying/proxy_fix/ for more information

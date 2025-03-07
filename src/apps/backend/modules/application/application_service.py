@@ -4,8 +4,8 @@ from modules.application.worker.internal.worker_service import WorkerService
 
 class ApplicationService:
     @staticmethod
-    def connect_client() -> None:
-        return WorkerService.connect_client()
+    def connect_temporal_server() -> None:
+        return WorkerService.connect_temporal_server()
 
     @staticmethod
     def get_worker_details(*, params: SearchWorkerByIdParams) -> dict:

@@ -22,7 +22,7 @@ class WorkerManager:
     CLIENT: Client
 
     @staticmethod
-    async def connect_client() -> None:
+    async def connect_temporal_server() -> None:
         server_address = ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
         try:
             WorkerManager.CLIENT = await Client.connect(server_address, retry_config=RetryConfig(max_retries=3))
