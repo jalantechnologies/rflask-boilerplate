@@ -17,7 +17,7 @@ class Loggers:
                 Loggers._LOGGERS.append(Loggers.__get_console_logger())
 
             if logger_transport == LoggerTransports.DATADOG:
-                Loggers._LOGGERS.append(Loggers.__get_datadog_logger())
+                Loggers._loggers.append(Loggers.__get_datadog_logger())
 
     @staticmethod
     def info(*, message: str) -> None:

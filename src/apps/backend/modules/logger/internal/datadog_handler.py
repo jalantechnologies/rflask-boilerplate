@@ -1,16 +1,26 @@
+import logging
 import os
-from logging import StreamHandler
+from logging import LogRecord, StreamHandler
+
 from datadog_api_client import ApiClient, Configuration
 from datadog_api_client.v2.api.logs_api import LogsApi
 from datadog_api_client.v2.models import HTTPLog, HTTPLogItem
+
 from modules.config.config_service import ConfigService
-from logging import LogRecord
 
 
 class DatadogHandler(StreamHandler):
     def __init__(self, ddsource: str) -> None:
         StreamHandler.__init__(self)
         self.ddsource = ddsource
+
+    def getStatus(self) -> str:
+        if self.level in [logging.NOTSET, logging.DEBUG, logging.INFO]:
+            return "info"
+        elif self.level in [logging.WARNING]:
+            return "warn"
+        else:
+            return "error"
 
     def emit(self, record: LogRecord) -> None:
         msg = self.format(record)
@@ -31,6 +41,7 @@ class DatadogHandler(StreamHandler):
                         hostname="",
                         message=msg,
                         service=data_app_name,
+                        status=self.getStatus(),
                     )
                 ]
             )
