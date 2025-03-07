@@ -28,7 +28,7 @@ class ApplicationService:
         return WorkerManager.run_worker_immediately(cls=cls, arguments=arguments)
 
     @staticmethod
-    def run_worker_as_cron(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str) -> str:
+    def schedule_worker_as_cron(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str) -> str:
         return WorkerManager.schedule_worker_as_cron(cls=cls, arguments=arguments, cron_schedule=cron_schedule)
 
     @staticmethod
