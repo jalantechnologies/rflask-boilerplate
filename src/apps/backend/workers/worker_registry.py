@@ -2,8 +2,7 @@ from typing import Dict, Type
 
 from temporalio import workflow
 
-from modules.application.types import WorkerPriority
-from workers.base_worker import BaseWorker
+from modules.application.types import BaseWorker, WorkerPriority
 
 # A global map storing application metadata
 WORKER_MAP: Dict[Type[BaseWorker], WorkerPriority] = {}

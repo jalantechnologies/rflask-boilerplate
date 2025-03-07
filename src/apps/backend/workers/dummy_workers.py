@@ -1,5 +1,4 @@
-from modules.application.types import WorkerPriority
-from workers.base_worker import BaseWorker
+from modules.application.types import BaseWorker, WorkerPriority
 from workers.worker_registry import register_worker
 
 

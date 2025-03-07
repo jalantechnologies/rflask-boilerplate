@@ -10,8 +10,11 @@ from modules.application.errors import (
     WorkerClassNotRegisteredError,
     WorkerIdNotFoundError,
 )
-from modules.application.types import RunWorkerImmediatelyParams, SearchWorkerByIdParams
-from workers.base_worker import BaseWorker
+from modules.application.types import (
+    BaseWorker,
+    RunWorkerImmediatelyParams,
+    SearchWorkerByIdParams,
+)
 from workers.dummy_workers import TestDefaultWorker
 
 

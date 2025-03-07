@@ -1,9 +1,26 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Optional, Tuple, Type
+from typing import Any, Optional, Tuple, Type
 
-if TYPE_CHECKING:
-    from workers.base_worker import BaseWorker
+
+class WorkerPriority(Enum):
+    DEFAULT = "DEFAULT"
+    CRITICAL = "CRITICAL"
+
+
+class BaseWorker(ABC):
+    """
+    Base class for all Temporal workers.
+    """
+
+    priority: WorkerPriority = WorkerPriority.DEFAULT
+
+    @abstractmethod
+    async def run(self, *args: Any, **kwargs: Any) -> Any:
+        """
+        Subclasses must implement the run() method, which is the application's entry point.
+        """
 
 
 @dataclass(frozen=True)
@@ -14,13 +31,13 @@ class SearchWorkerByIdParams:
 
 @dataclass(frozen=True)
 class RunWorkerImmediatelyParams:
-    cls: Type["BaseWorker"]
+    cls: Type[BaseWorker]
     arguments: Tuple[Any, ...]
 
 
 @dataclass(frozen=True)
 class RunWorkerAsCronParams:
-    cls: Type["BaseWorker"]
+    cls: Type[BaseWorker]
     arguments: Tuple[Any, ...]
     cron_schedule: str  # Example: "/10 * * * *" (every 10 minutes)
 
@@ -35,8 +52,3 @@ class WorkerErrorCode:
     WORKER_ALREADY_COMPLETED: str = "WORKER_ERR_06"
     WORKER_ALREADY_CANCELLED: str = "WORKER_ERR_07"
     WORKER_ALREADY_TERMINATED: str = "WORKER_ERR_08"
-
-
-class WorkerPriority(Enum):
-    DEFAULT = "DEFAULT"
-    CRITICAL = "CRITICAL"

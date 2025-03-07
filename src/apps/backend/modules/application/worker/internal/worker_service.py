@@ -2,10 +2,18 @@ import asyncio
 
 from temporalio.service import RPCError
 
-from modules.application.errors import WorkerClassInvalidError, WorkerIdNotFoundError, WorkerStartError
-from modules.application.types import RunWorkerAsCronParams, RunWorkerImmediatelyParams, SearchWorkerByIdParams
+from modules.application.errors import (
+    WorkerClassInvalidError,
+    WorkerIdNotFoundError,
+    WorkerStartError,
+)
+from modules.application.types import (
+    BaseWorker,
+    RunWorkerAsCronParams,
+    RunWorkerImmediatelyParams,
+    SearchWorkerByIdParams,
+)
 from modules.application.worker.internal.worker_manager import WorkerManager
-from workers.base_worker import BaseWorker
 
 
 class WorkerService:
@@ -26,7 +34,9 @@ class WorkerService:
     @staticmethod
     def run_worker_immediately(*, params: RunWorkerImmediatelyParams) -> str:
         if not issubclass(params.cls, BaseWorker) or not hasattr(params.cls, "run"):
-            raise WorkerClassInvalidError(cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__)
+            raise WorkerClassInvalidError(
+                cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__
+            )
 
         try:
             worker_id = asyncio.run(WorkerManager.run_worker_immediately(params=params))
@@ -39,10 +49,14 @@ class WorkerService:
     @staticmethod
     def schedule_worker_as_cron(*, params: RunWorkerAsCronParams) -> str:
         if not issubclass(params.cls, BaseWorker) or not hasattr(params.cls, "run"):
-            raise WorkerClassInvalidError(cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__)
+            raise WorkerClassInvalidError(
+                cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__
+            )
 
         try:
-            worker_id = asyncio.run(WorkerManager.schedule_worker_as_cron(params=params))
+            worker_id = asyncio.run(
+                WorkerManager.schedule_worker_as_cron(params=params)
+            )
 
         except RPCError:
             raise WorkerStartError(worker_name=params.cls.__name__)
