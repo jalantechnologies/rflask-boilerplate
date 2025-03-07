@@ -49,57 +49,62 @@ application up and running.
 
 ## Configuration
 
-In the `config` directory:
+In the `config` directory, we maintain environment-specific YAML files to manage application configurations.
 
-We are keeping config schema as a environment specific yml files.
+### Configuration Files
 
-In the `config` directory:
+- **`custom-environment-variables.yml`** – Overrides values using environment variables.
+- **`development.yml`** – Configuration for the development environment (default).
+- **`testing.yml`** – Configuration for the testing environment (`APP_ENV` must be set to `testing`).
+- **`preview.yml`** – Configuration for the preview environment (`APP_ENV` must be set to `preview`).
+- **`production.yml`** – Configuration for the production environment (`APP_ENV` must be set to `production`).
+- **`default.yml`** – Stores constant values that remain unchanged across deployments.
 
-- Consult/update `custom-environment-variables.yml` for loading values via environment. This overrides any value set in files defined below.
-- Consult/update `development.yml` for values at development. (The default env)
-- Consult/update `testing.yml` for values at testing. `APP_ENV` must be set to `testing` for this.
-- Consult/update `preview.yml` for values at `preview` `APP_ENV` must be set to `preview` for this.
-- Consult/update `production.yml` for values at production. `APP_ENV` must be set to `production` for this.
-- Consult/update `default.yml` for **constant values only**. Define entries here which will remain same across deployments.
+### Environment Selection
+The configuration schema is loaded based on the `APP_ENV` value provided when starting the server:
+`APP_ENV=<environment_name>`
 
-**INFO:** Based on the environment which will be passed during spawning the server as an argument
- with `APP_ENV=<environment_name>`, this will further load the schema accordingly.
+### `default.yml` Guidelines
+- If a configuration value **varies across deployments**, set it to `null` in `default.yml` and define it in the respective environment-specific file.
+- If a configuration value **remains the same across all deployments**, define it directly in `default.yml`.
 
-**INFO:** `default.yml` config file lists the all available entries which the system uses. For creating a new config entry: 
-- If the config value tends to change across deployments, provide `null` for the same in `default.yml` and value should be provided in respective deployment file.
-- If the config value is supposed to be same across deployments, provide the same in `default.yml`.
+### `.env` Support
+For injecting environment variables, you can add a `.env` file in the application root directory.
 
-**INFO:** For injecting environment variables, can add `.env` file in the application root directory.
+## Custom Environment Variables
+Some deployment scenarios require environment variables for handling sensitive data or settings that should not be stored in the codebase.
 
-### Custom Environment Variables
+To facilitate this, we use `custom-environment-variables.yml` to map environment variables to configuration keys.
 
-Some deployment situations rely heavily on environment variables to configure secrets and settings best left out of a codebase.
-
-For enabling this we have a dedicated file called `custom-environment-variables.yml` for mapping the environment variable names into our configuration schema.
-For example:
-
-```yml  
+### Example Mapping:
+```yml
 mongodb:
-  uri: "MONGODB_URI" 
+  uri: "MONGODB_URI"
 
-inspectlet:  
-  key: "INSPECTLET_KEY"  
+inspectlet:
+  key: "INSPECTLET_KEY"
 
-papertrail:  
-  host: "PAPERTRAIL_HOST"  
-  port:  
-    __name: "PAPERTRAIL_PORT"  
-    __format: "number"  
-```  
-... would cause our Config Manager to check for environment variables `MONGODB_URI` and `INSPECTLET_KEY`. If they exist they would override `mongodb.uri` and `inspectlet.key` in our configuration.
+demo:
+  host: "DEMO_HOST"
+  port:
+    __name: "DEMO_PORT"
+    __format: "number"
+```
 
-For `PAPERTRAIL_PORT` it will try to parse the found environment variable according to the specified format in `__format` (`number` in this case) and extend the values for `papertrail.port`. Empty environment variables are ignored, and their mappings have no effect on your config.
+#### Behavior:
+- If the environment variable `MONGODB_URI` exists, it will override `mongodb.uri`.
+- If `INSPECTLET_KEY` is present, it will override `inspectlet.key`.
+- `DEMO_PORT` will be converted to a number before overriding `demo.port`.
+- Empty environment variables are ignored and do not affect the configuration.
 
-**Available `__format` types**:  
-- `boolean`  
-- `number`  
+### Available `__format` Types:
+- `boolean`
+- `number`
 
-**Precedence**: Custom environment variables override all other configuration files, including `default.yml` and `{app_env}.yml`.  
+### Configuration Precedence:
+1. **Custom Environment Variables** (highest priority)
+2. **Environment-Specific Configuration Files** (e.g., `development.yml`, `production.yml`)
+3. **`default.yml`** (lowest priority, used as fallback)
 
 
 **UI Config:**
