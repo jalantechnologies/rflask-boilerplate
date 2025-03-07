@@ -1,42 +1,51 @@
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import yaml
 
-from modules.config.types import Config
+from modules.config.internals.types import Config
+
 
 class ConfigUtil:
-    DIR_LEVELS_FROM_BASE_DIR_TO_CONFIG_UTILS:int = 6
-    CURRENT_FILE:str = __file__
-    
+    DIR_LEVELS_FROM_BASE_DIR_TO_CONFIG_UTILS: int = 6
+    CURRENT_FILE: str = __file__
+
     @staticmethod
-    def deep_merge(config1: "Config", config2: "Config") -> "Config":
-        for key, value in config2.items():
-            if isinstance(value, dict) and key in config1 and isinstance(config1[key], dict):
-                config1[key] = ConfigUtil.deep_merge(Config(config1[key]), Config(value))
-            else:
-                config1[key] = value
-        return config1
+    def deep_merge(*configs: Config) -> Config:
+        merged_config: Config = {}
+
+        for config in configs:
+            for key, value in config.items():
+                if isinstance(value, dict) and key in merged_config and isinstance(merged_config[key], dict):
+                    merged_config[key] = ConfigUtil.deep_merge(cast(Config, merged_config[key]), value)
+                else:
+                    merged_config[key] = value
+
+        return merged_config
 
     @staticmethod
     def read_yml_from_config_dir(filename: str) -> dict[str, Any]:
         config_path = ConfigUtil._get_base_config_directory(ConfigUtil.CURRENT_FILE)
-        file_path = config_path / filename  # Path lib's join operator
+        file_path = os.path.join(config_path, filename)
+
         try:
             with open(file_path, "r", encoding="utf-8") as file:
                 content = yaml.safe_load(file) or {}
         except FileNotFoundError:
             # Raised when filename is not found in config dir
             raise FileNotFoundError(f"Config file '{filename}' not found in {config_path}")
+
         return content
 
     @staticmethod
     def _get_base_config_directory(current_file: str) -> Path:
         base_directory = Path(current_file).resolve().parents[ConfigUtil.DIR_LEVELS_FROM_BASE_DIR_TO_CONFIG_UTILS]
-        config_directory = base_directory / "config" # Path lib's join operator
+        config_directory = os.path.join(base_directory, "config")
 
-        if not config_directory.exists() or not config_directory.is_dir():
+        config_path = Path(config_directory)  # Convert back to Path for consistency
+
+        if not config_path.exists() or not config_path.is_dir():
             raise FileNotFoundError(f"Config directory does not exist: {config_directory}")
 
-        return config_directory
+        return config_path
