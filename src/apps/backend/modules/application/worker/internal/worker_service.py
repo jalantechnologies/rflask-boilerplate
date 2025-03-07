@@ -1,18 +1,10 @@
 import asyncio
+from typing import Any, Tuple, Type
 
 from temporalio.service import RPCError
 
-from modules.application.errors import (
-    WorkerClassInvalidError,
-    WorkerIdNotFoundError,
-    WorkerStartError,
-)
-from modules.application.types import (
-    BaseWorker,
-    RunWorkerAsCronParams,
-    RunWorkerImmediatelyParams,
-    Worker,
-)
+from modules.application.errors import WorkerIdNotFoundError, WorkerStartError
+from modules.application.types import BaseWorker, Worker
 from modules.application.worker.internal.worker_manager import WorkerManager
 
 
@@ -32,34 +24,32 @@ class WorkerService:
         return res
 
     @staticmethod
-    def run_worker_immediately(*, params: RunWorkerImmediatelyParams) -> str:
-        if not issubclass(params.cls, BaseWorker) or not hasattr(params.cls, "run"):
-            raise WorkerClassInvalidError(
-                cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__
+    def run_worker_immediately(
+        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...]
+    ) -> str:
+        try:
+            worker_id = asyncio.run(
+                WorkerManager.run_worker_immediately(cls=cls, arguments=arguments)
             )
 
-        try:
-            worker_id = asyncio.run(WorkerManager.run_worker_immediately(params=params))
-
         except RPCError:
-            raise WorkerStartError(worker_name=params.cls.__name__)
+            raise WorkerStartError(worker_name=cls.__name__)
 
         return worker_id
 
     @staticmethod
-    def schedule_worker_as_cron(*, params: RunWorkerAsCronParams) -> str:
-        if not issubclass(params.cls, BaseWorker) or not hasattr(params.cls, "run"):
-            raise WorkerClassInvalidError(
-                cls_name=params.cls.__name__, base_cls_name=BaseWorker.__name__
-            )
-
+    def schedule_worker_as_cron(
+        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str
+    ) -> str:
         try:
             worker_id = asyncio.run(
-                WorkerManager.schedule_worker_as_cron(params=params)
+                WorkerManager.schedule_worker_as_cron(
+                    cls=cls, arguments=arguments, cron_schedule=cron_schedule
+                )
             )
 
         except RPCError:
-            raise WorkerStartError(worker_name=params.cls.__name__)
+            raise WorkerStartError(worker_name=cls.__name__)
 
         return worker_id
 

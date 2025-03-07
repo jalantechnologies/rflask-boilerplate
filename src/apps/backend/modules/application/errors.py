@@ -22,26 +22,6 @@ class WorkerIdNotFoundError(AppError):
         )
 
 
-class WorkerClassInvalidError(AppError):
-    def __init__(self, cls_name: str, base_cls_name: str) -> None:
-        super().__init__(
-            code=WorkerErrorCode.WORKER_CLASS_INVALID,
-            http_status_code=400,
-            message=f"Worker with given class: {cls_name} is invalid. "
-            f"All worker classes must implement from {base_cls_name} and define a run() method.",
-        )
-
-
-class WorkerClassNotRegisteredError(AppError):
-    def __init__(self, cls_name: str) -> None:
-        super().__init__(
-            code=WorkerErrorCode.WORKER_CLASS_NOT_REGISTERED,
-            http_status_code=404,
-            message=f"Worker with given class: {cls_name} not registered. "
-            f"Verify the class you are using and try again.",
-        )
-
-
 class WorkerStartError(AppError):
     def __init__(self, worker_name: str) -> None:
         super().__init__(

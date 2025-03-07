@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional, Tuple, Type
+from typing import Any, Optional
 
 from temporalio.client import WorkflowExecutionStatus
 
@@ -37,25 +37,11 @@ class Worker:
 
 
 @dataclass(frozen=True)
-class RunWorkerImmediatelyParams:
-    cls: Type[BaseWorker]
-    arguments: Tuple[Any, ...]
-
-
-@dataclass(frozen=True)
-class RunWorkerAsCronParams:
-    cls: Type[BaseWorker]
-    arguments: Tuple[Any, ...]
-    cron_schedule: str  # Example: "/10 * * * *" (every 10 minutes)
-
-
-@dataclass(frozen=True)
 class WorkerErrorCode:
     WORKER_CLIENT_CONNECTION_ERROR: str = "WORKER_ERR_01"
     WORKER_CLASS_INVALID: str = "WORKER_ERR_02"
-    WORKER_CLASS_NOT_REGISTERED: str = "WORKER_ERR_03"
-    WORKER_WITH_ID_NOT_FOUND: str = "WORKER_ERR_04"
-    WORKER_START_ERROR: str = "WORKER_ERR_05"
-    WORKER_ALREADY_COMPLETED: str = "WORKER_ERR_06"
-    WORKER_ALREADY_CANCELLED: str = "WORKER_ERR_07"
-    WORKER_ALREADY_TERMINATED: str = "WORKER_ERR_08"
+    WORKER_WITH_ID_NOT_FOUND: str = "WORKER_ERR_03"
+    WORKER_START_ERROR: str = "WORKER_ERR_04"
+    WORKER_ALREADY_COMPLETED: str = "WORKER_ERR_05"
+    WORKER_ALREADY_CANCELLED: str = "WORKER_ERR_06"
+    WORKER_ALREADY_TERMINATED: str = "WORKER_ERR_07"

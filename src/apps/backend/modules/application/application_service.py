@@ -1,8 +1,6 @@
-from modules.application.types import (
-    RunWorkerAsCronParams,
-    RunWorkerImmediatelyParams,
-    Worker,
-)
+from typing import Any, Tuple, Type
+
+from modules.application.types import BaseWorker, Worker
 from modules.application.worker.internal.worker_service import WorkerService
 
 
@@ -16,12 +14,18 @@ class ApplicationService:
         return WorkerService.get_worker_by_id(worker_id=worker_id)
 
     @staticmethod
-    def run_worker_immediately(*, params: RunWorkerImmediatelyParams) -> str:
-        return WorkerService.run_worker_immediately(params=params)
+    def run_worker_immediately(
+        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...]
+    ) -> str:
+        return WorkerService.run_worker_immediately(cls=cls, arguments=arguments)
 
     @staticmethod
-    def run_worker_as_cron(*, params: RunWorkerAsCronParams) -> str:
-        return WorkerService.schedule_worker_as_cron(params=params)
+    def run_worker_as_cron(
+        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str
+    ) -> str:
+        return WorkerService.schedule_worker_as_cron(
+            cls=cls, arguments=arguments, cron_schedule=cron_schedule
+        )
 
     @staticmethod
     def cancel_worker(*, worker_id: str) -> None:
