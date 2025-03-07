@@ -2,19 +2,19 @@ from typing import Generic, Optional, cast
 
 from modules.common.types import ErrorCode
 from modules.config.internals.config_manager import ConfigManager
-from modules.config.types import T
+from modules.config.types import ConfigType
 from modules.error.custom_errors import MissingKeyError
 
 
-class ConfigService(Generic[T]):
+class ConfigService(Generic[ConfigType]):
     config_manager: ConfigManager = ConfigManager()
 
     @classmethod
-    def get_value(cls, key: str, default: Optional[T] = None) -> T:
-        value: Optional[T] = cls.config_manager.get(key, default=default)
+    def get_value(cls, key: str, default: Optional[ConfigType] = None) -> ConfigType:
+        value: Optional[ConfigType] = cls.config_manager.get(key, default=default)
         if value is None:
             raise MissingKeyError(missing_key=key, error_code=ErrorCode.MISSING_KEY)
-        return cast(T, value)
+        return cast(ConfigType, value)
 
     @classmethod
     def has_value(cls, key: str) -> bool:

@@ -5,7 +5,7 @@ from modules.config.internals.config_files.app_env_config_file import AppEnvConf
 from modules.config.internals.config_files.custom_env_config_file import CustomEnvConfig
 from modules.config.internals.config_utils import ConfigUtil
 from modules.config.internals.types import Config
-from modules.config.types import T
+from modules.config.types import ConfigType
 
 
 class ConfigManager:
@@ -21,14 +21,14 @@ class ConfigManager:
 
         self.config_store: Config = merged_content
 
-    def get(self, key: str, default: Optional[T] = None) -> Optional[T]:
+    def get(self, key: str, default: Optional[ConfigType] = None) -> Optional[ConfigType]:
         value = self._traverse_config(key)
         return value if value is not None else default
 
     def has(self, key: str) -> bool:
         return self._traverse_config(key) is not None
 
-    def _traverse_config(self, key: str) -> Optional[T]:
+    def _traverse_config(self, key: str) -> Optional[ConfigType]:
         values = self.config_store
         for k in key.split(self.CONFIG_KEY_SEPARATOR):
             if not isinstance(values, dict) or k not in values:
@@ -37,8 +37,8 @@ class ConfigManager:
             next_values = values[k]
 
             if not isinstance(next_values, dict):
-                return cast(T, next_values)
+                return cast(ConfigType, next_values)
 
             values = next_values
 
-        return cast(T, values)
+        return cast(ConfigType, values)
