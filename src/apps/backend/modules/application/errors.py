@@ -29,7 +29,7 @@ class WorkerIdNotFoundError(AppError):
         super().__init__(
             code=WorkerErrorCode.WORKER_WITH_ID_NOT_FOUND,
             http_status_code=404,
-            message=f"Worker with given id: {worker_id} not found. " f"Verify the ID of the worker and try again.",
+            message=f"Worker with given id: {worker_id} not found. Verify the ID of the worker and try again.",
         )
 
 
@@ -58,7 +58,7 @@ class WorkerAlreadyCancelledError(AppError):
         super().__init__(
             code=WorkerErrorCode.WORKER_ALREADY_CANCELLED,
             http_status_code=400,
-            message=f"Worker with id: {worker_id} has already been cancelled." f"Verify the worker ID and try again.",
+            message=f"Worker with id: {worker_id} has already been cancelled. Verify the worker ID and try again.",
         )
 
 
@@ -67,5 +67,5 @@ class WorkerAlreadyTerminatedError(AppError):
         super().__init__(
             code=WorkerErrorCode.WORKER_ALREADY_TERMINATED,
             http_status_code=400,
-            message=f"Worker with id: {worker_id} has already been terminated. " f"Verify the worker ID and try again.",
+            message=f"Worker with id: {worker_id} has already been terminated. Verify the worker ID and try again.",
         )
