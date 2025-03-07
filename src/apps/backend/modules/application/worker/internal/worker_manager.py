@@ -43,6 +43,17 @@ class WorkerManager:
         return info.status
 
     @staticmethod
+    async def _start_worker(params: Union[RunWorkerImmediatelyParams, RunWorkerAsCronParams]) -> str:
+        handle: WorkflowHandle = await WorkerManager.CLIENT.start_workflow(
+            params.cls.__name__,
+            args=params.arguments,
+            id=f"{params.cls.__name__}-{str(uuid.uuid4())}",
+            task_queue=WORKER_MAP[params.cls].value,
+            cron_schedule=params.cron_schedule if isinstance(params, RunWorkerAsCronParams) else "",
+        )
+        return handle.id
+
+    @staticmethod
     async def get_worker_details(
         params: SearchWorkerByIdParams,
     ) -> Dict[
@@ -95,27 +106,14 @@ class WorkerManager:
         if params.cls not in WORKER_MAP.keys():
             raise WorkerClassNotRegisteredError(cls_name=params.cls.__name__)
 
-        handle: WorkflowHandle = await WorkerManager.CLIENT.start_workflow(
-            params.cls.__name__,
-            args=params.arguments,
-            id=f"{params.cls.__name__}-{str(uuid.uuid4())}",
-            task_queue=WORKER_MAP[params.cls].value,
-        )
-        return handle.id
+        return await WorkerManager._start_worker(params)
 
     @staticmethod
     async def run_worker_as_cron(params: RunWorkerAsCronParams) -> str:
         if params.cls not in WORKER_MAP.keys():
             raise WorkerClassNotRegisteredError(cls_name=params.cls.__name__)
 
-        handle: WorkflowHandle = await WorkerManager.CLIENT.start_workflow(
-            params.cls.__name__,
-            args=params.arguments,
-            cron_schedule=params.cron_schedule,
-            id=f"{params.cls.__name__}-{str(uuid.uuid4())}",
-            task_queue=WORKER_MAP[params.cls].value,
-        )
-        return handle.id
+        return await WorkerManager._start_worker(params)
 
     @staticmethod
     async def cancel_worker(params: SearchWorkerByIdParams) -> None:
