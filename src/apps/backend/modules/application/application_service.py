@@ -1,11 +1,11 @@
 from typing import List, Type
 
-from modules.application.worker.internal.worker_service import WorkerService
-from modules.application.worker.types import (
+from modules.application.types import (
     RunWorkerAsCronParams,
     RunWorkerImmediatelyParams,
     SearchWorkerByIdParams,
 )
+from modules.application.worker.internal.worker_service import WorkerService
 from workers.base_worker import BaseWorker
 
 

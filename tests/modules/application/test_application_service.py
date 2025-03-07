@@ -5,15 +5,12 @@ from temporalio.client import WorkflowExecutionStatus
 from tests.modules.application.base_test_application import BaseTestApplication
 
 from modules.application.application_service import ApplicationService
-from modules.application.worker.errors import (
+from modules.application.errors import (
     WorkerClassInvalidError,
     WorkerClassNotRegisteredError,
     WorkerIdNotFoundError,
 )
-from modules.application.worker.types import (
-    RunWorkerImmediatelyParams,
-    SearchWorkerByIdParams,
-)
+from modules.application.types import RunWorkerImmediatelyParams, SearchWorkerByIdParams
 from workers.base_worker import BaseWorker
 from workers.dummy_workers import TestDefaultWorker
 

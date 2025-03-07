@@ -1,4 +1,4 @@
-from modules.application.worker.types import WorkerErrorCode
+from modules.application.types import WorkerErrorCode
 from modules.error.custom_errors import AppError
 
 

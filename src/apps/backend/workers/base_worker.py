@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from modules.application.worker.types import WorkerPriority
+from modules.application.types import WorkerPriority
 
 
 class BaseWorker(ABC):

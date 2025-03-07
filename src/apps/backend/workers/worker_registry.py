@@ -2,7 +2,7 @@ from typing import Dict, Type
 
 from temporalio import workflow
 
-from modules.application.worker.types import WorkerPriority
+from modules.application.types import WorkerPriority
 from workers.base_worker import BaseWorker
 
 # A global map storing application metadata

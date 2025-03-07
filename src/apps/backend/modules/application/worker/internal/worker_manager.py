@@ -4,14 +4,18 @@ from typing import Optional
 from temporalio.client import Client, WorkflowExecutionStatus, WorkflowHandle
 from temporalio.service import RetryConfig
 
-from modules.application.worker.errors import (
+from modules.application.errors import (
     WorkerAlreadyCancelledError,
     WorkerAlreadyCompletedError,
     WorkerAlreadyTerminatedError,
     WorkerClassNotRegisteredError,
     WorkerClientConnectionError,
 )
-from modules.application.worker.types import RunWorkerAsCronParams, RunWorkerImmediatelyParams, SearchWorkerByIdParams
+from modules.application.types import (
+    RunWorkerAsCronParams,
+    RunWorkerImmediatelyParams,
+    SearchWorkerByIdParams,
+)
 from modules.config.config_service import ConfigService
 from workers.worker_registry import WORKER_MAP
 
@@ -24,16 +28,21 @@ class WorkerManager:
         if not WorkerManager.CLIENT:
             try:
                 WorkerManager.CLIENT = await Client.connect(
-                    ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"), retry_config=RetryConfig(max_retries=3)
+                    ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"),
+                    retry_config=RetryConfig(max_retries=3),
                 )
 
             except RuntimeError:
-                raise WorkerClientConnectionError(server_address=ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+                raise WorkerClientConnectionError(
+                    server_address=ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
+                )
 
         return WorkerManager.CLIENT
 
     @staticmethod
-    async def _get_worker_status(handle: WorkflowHandle) -> Optional[WorkflowExecutionStatus]:
+    async def _get_worker_status(
+        handle: WorkflowHandle,
+    ) -> Optional[WorkflowExecutionStatus]:
         info = await handle.describe()
         return info.status
 
@@ -43,15 +52,21 @@ class WorkerManager:
 
         runs = []
 
-        async for info in client.list_workflows(f"WorkflowId = '{params.id}'", limit=params.runs_limit):
-            handle = client.get_workflow_handle(workflow_id=params.id, run_id=info.run_id)
+        async for info in client.list_workflows(
+            f"WorkflowId = '{params.id}'", limit=params.runs_limit
+        ):
+            handle = client.get_workflow_handle(
+                workflow_id=params.id, run_id=info.run_id
+            )
             info = await handle.describe()
 
             result = None
             if info.status and info.status == WorkflowExecutionStatus.COMPLETED:
                 history = await handle.fetch_history()
                 result_event = history.events[-1]
-                result_data = result_event.workflow_execution_completed_event_attributes.result.payloads[0].data
+                result_data = result_event.workflow_execution_completed_event_attributes.result.payloads[
+                    0
+                ].data
                 result = result_data.decode("utf-8")
 
             runs.append(
