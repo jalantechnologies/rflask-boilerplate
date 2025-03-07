@@ -1,36 +1,30 @@
 from typing import Any, Tuple, Type
 
+from modules.application.internal.worker_manager import WorkerManager
 from modules.application.types import BaseWorker, Worker
-from modules.application.worker.internal.worker_service import WorkerService
 
 
 class ApplicationService:
     @staticmethod
     def connect_temporal_server() -> None:
-        return WorkerService.connect_temporal_server()
+        return WorkerManager.connect_temporal_server()
 
     @staticmethod
     def get_worker_by_id(*, worker_id: str) -> Worker:
-        return WorkerService.get_worker_by_id(worker_id=worker_id)
+        return WorkerManager.get_worker_by_id(worker_id=worker_id)
 
     @staticmethod
-    def run_worker_immediately(
-        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...]
-    ) -> str:
-        return WorkerService.run_worker_immediately(cls=cls, arguments=arguments)
+    def run_worker_immediately(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...]) -> str:
+        return WorkerManager.run_worker_immediately(cls=cls, arguments=arguments)
 
     @staticmethod
-    def run_worker_as_cron(
-        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str
-    ) -> str:
-        return WorkerService.schedule_worker_as_cron(
-            cls=cls, arguments=arguments, cron_schedule=cron_schedule
-        )
+    def run_worker_as_cron(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str) -> str:
+        return WorkerManager.schedule_worker_as_cron(cls=cls, arguments=arguments, cron_schedule=cron_schedule)
 
     @staticmethod
     def cancel_worker(*, worker_id: str) -> None:
-        return WorkerService.cancel_worker(worker_id=worker_id)
+        return WorkerManager.cancel_worker(worker_id=worker_id)
 
     @staticmethod
     def terminate_worker(*, worker_id: str) -> None:
-        return WorkerService.terminate_worker(worker_id=worker_id)
+        return WorkerManager.terminate_worker(worker_id=worker_id)
