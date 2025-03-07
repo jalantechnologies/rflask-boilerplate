@@ -7,15 +7,13 @@ from modules.application.types import BaseWorker, Worker, WorkerPriority
 
 
 class ApplicationService:
-    WORKER_MAP: Dict[Type[BaseWorker], WorkerPriority] = {}
-
     @staticmethod
     def register_worker(worker: Type[BaseWorker]) -> None:
-        ApplicationService.WORKER_MAP[worker] = worker.priority
+        return WorkerManager.register_worker(worker)
 
     @staticmethod
     def get_all_registered_workers() -> Dict[Type[BaseWorker], WorkerPriority]:
-        return ApplicationService.WORKER_MAP
+        return WorkerManager.get_all_registered_workers()
 
     @staticmethod
     def connect_temporal_server() -> None:

@@ -1,6 +1,6 @@
 import asyncio
 import uuid
-from typing import Any, Optional, Tuple, Type
+from typing import Any, Dict, Optional, Tuple, Type
 
 from temporalio.client import Client, WorkflowExecutionStatus, WorkflowHandle
 from temporalio.service import RetryConfig, RPCError
@@ -13,21 +13,20 @@ from modules.application.errors import (
     WorkerIdNotFoundError,
     WorkerStartError,
 )
-from modules.application.types import BaseWorker, Worker
+from modules.application.types import BaseWorker, Worker, WorkerPriority
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 
 
 class WorkerManager:
     CLIENT: Client
+    WORKER_MAP: Dict[Type[BaseWorker], WorkerPriority] = {}
 
     @staticmethod
     async def _connect_temporal_server() -> None:
         server_address = ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
         try:
-            WorkerManager.CLIENT = await Client.connect(
-                server_address, retry_config=RetryConfig(max_retries=3)
-            )
+            WorkerManager.CLIENT = await Client.connect(server_address, retry_config=RetryConfig(max_retries=3))
 
             Logger.info(message=f"Connected to temporal server at {server_address}")
 
@@ -35,16 +34,12 @@ class WorkerManager:
             raise WorkerClientConnectionError(server_address=server_address)
 
     @staticmethod
-    async def _get_worker_status(
-        handle: WorkflowHandle,
-    ) -> Optional[WorkflowExecutionStatus]:
+    async def _get_worker_status(handle: WorkflowHandle) -> Optional[WorkflowExecutionStatus]:
         info = await handle.describe()
         return info.status
 
     @staticmethod
-    async def _start_worker(
-        cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str = ""
-    ) -> str:
+    async def _start_worker(cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str = "") -> str:
         handle: WorkflowHandle = await WorkerManager.CLIENT.start_workflow(
             cls.__name__,
             args=arguments,
@@ -69,18 +64,12 @@ class WorkerManager:
         )
 
     @staticmethod
-    async def _run_worker_immediately(
-        cls: Type[BaseWorker], arguments: Tuple[Any, ...]
-    ) -> str:
+    async def _run_worker_immediately(cls: Type[BaseWorker], arguments: Tuple[Any, ...]) -> str:
         return await WorkerManager._start_worker(cls, arguments)
 
     @staticmethod
-    async def _schedule_worker_as_cron(
-        cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str
-    ) -> str:
-        return await WorkerManager._start_worker(
-            cls, arguments, cron_schedule=cron_schedule
-        )
+    async def _schedule_worker_as_cron(cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str) -> str:
+        return await WorkerManager._start_worker(cls, arguments, cron_schedule=cron_schedule)
 
     @staticmethod
     async def _cancel_worker(worker_id: str) -> None:
@@ -114,6 +103,14 @@ class WorkerManager:
         await handle.terminate()
 
     @staticmethod
+    def register_worker(worker: Type[BaseWorker]) -> None:
+        WorkerManager.WORKER_MAP[worker] = worker.priority
+
+    @staticmethod
+    def get_all_registered_workers() -> Dict[Type[BaseWorker], WorkerPriority]:
+        return WorkerManager.WORKER_MAP
+
+    @staticmethod
     def connect_temporal_server() -> None:
         asyncio.run(WorkerManager._connect_temporal_server())
 
@@ -128,13 +125,9 @@ class WorkerManager:
         return res
 
     @staticmethod
-    def run_worker_immediately(
-        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...]
-    ) -> str:
+    def run_worker_immediately(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...]) -> str:
         try:
-            worker_id = asyncio.run(
-                WorkerManager._run_worker_immediately(cls=cls, arguments=arguments)
-            )
+            worker_id = asyncio.run(WorkerManager._run_worker_immediately(cls=cls, arguments=arguments))
 
         except RPCError:
             raise WorkerStartError(worker_name=cls.__name__)
@@ -142,14 +135,10 @@ class WorkerManager:
         return worker_id
 
     @staticmethod
-    def schedule_worker_as_cron(
-        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str
-    ) -> str:
+    def schedule_worker_as_cron(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str) -> str:
         try:
             worker_id = asyncio.run(
-                WorkerManager._schedule_worker_as_cron(
-                    cls=cls, arguments=arguments, cron_schedule=cron_schedule
-                )
+                WorkerManager._schedule_worker_as_cron(cls=cls, arguments=arguments, cron_schedule=cron_schedule)
             )
 
         except RPCError:
