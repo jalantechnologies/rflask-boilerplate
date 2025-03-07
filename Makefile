@@ -17,7 +17,7 @@ run-engine:
 		&& pipenv run python --version \
 		&& pipenv run gunicorn -c gunicorn_config.py --reload server:app
 
-run-workers:
+run-temporal-server:
 	cd src/apps/backend \
 		&& PYTHONPATH=./ pipenv run python temporal_server.py
 
