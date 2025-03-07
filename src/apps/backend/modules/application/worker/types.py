@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import TYPE_CHECKING, Optional, Type
+from typing import TYPE_CHECKING, Any, Optional, Tuple, Type
 
 if TYPE_CHECKING:
     from workers.base_worker import BaseWorker
@@ -15,13 +15,13 @@ class SearchWorkerByIdParams:
 @dataclass(frozen=True)
 class RunWorkerImmediatelyParams:
     cls: Type["BaseWorker"]
-    arguments: list
+    arguments: Tuple[Any, ...]
 
 
 @dataclass(frozen=True)
 class RunWorkerAsCronParams:
     cls: Type["BaseWorker"]
-    arguments: list
+    arguments: Tuple[Any, ...]
     cron_schedule: str  # Example: "/10 * * * *" (every 10 minutes)
 
 

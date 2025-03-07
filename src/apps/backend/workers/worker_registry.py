@@ -9,7 +9,7 @@ from workers.base_worker import BaseWorker
 WORKER_MAP: Dict[Type[BaseWorker], WorkerPriority] = {}
 
 
-def register_worker(cls: Type) -> Type:
+def register_worker(cls: Type[BaseWorker]) -> Type[BaseWorker]:
     """
     Decorator to register a Temporal application with additional metadata,
     enforcing that the application inherits from BaseWorker and has a run() method.

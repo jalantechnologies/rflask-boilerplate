@@ -24,7 +24,7 @@ class TestWorkerService(BaseTestApplication):
         assert TestDefaultWorker in worker_class_list
 
     def test_run_worker_and_get_details(self) -> None:
-        run_params = RunWorkerImmediatelyParams(TestDefaultWorker, arguments=[10, 5])
+        run_params = RunWorkerImmediatelyParams(TestDefaultWorker, arguments=(10, 5))
         worker_id = ApplicationService.run_worker_immediately(params=run_params)
         assert worker_id
 
@@ -39,7 +39,7 @@ class TestWorkerService(BaseTestApplication):
     def test_run_worker_with_invalid_class(self) -> None:
         class InvalidWorker: ...
 
-        run_params = RunWorkerImmediatelyParams(InvalidWorker, arguments=[10, 5])
+        run_params = RunWorkerImmediatelyParams(InvalidWorker, arguments=(10, 5))
         with pytest.raises(WorkerClassInvalidError):
             ApplicationService.run_worker_immediately(params=run_params)
 
@@ -47,7 +47,7 @@ class TestWorkerService(BaseTestApplication):
         class NonExistentWorker(BaseWorker):
             async def run(self) -> None: ...
 
-        run_params = RunWorkerImmediatelyParams(NonExistentWorker, arguments=[10, 5])
+        run_params = RunWorkerImmediatelyParams(NonExistentWorker, arguments=(10, 5))
         with pytest.raises(WorkerClassNotRegisteredError):
             ApplicationService.run_worker_immediately(params=run_params)
 
