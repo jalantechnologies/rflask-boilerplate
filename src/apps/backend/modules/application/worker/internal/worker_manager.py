@@ -1,5 +1,6 @@
 import uuid
-from typing import Optional
+from datetime import datetime
+from typing import Dict, List, Optional, Union
 
 from temporalio.client import Client, WorkflowExecutionStatus, WorkflowHandle
 from temporalio.service import RetryConfig
@@ -42,7 +43,18 @@ class WorkerManager:
         return info.status
 
     @staticmethod
-    async def get_worker_details(params: SearchWorkerByIdParams) -> dict:
+    async def get_worker_details(
+        params: SearchWorkerByIdParams,
+    ) -> Dict[
+        str,
+        Union[
+            str,
+            List[Dict[str, Union[str, WorkflowExecutionStatus, datetime, None]]],
+            WorkflowExecutionStatus,
+            datetime,
+            None,
+        ],
+    ]:
         runs = []
 
         async for info in WorkerManager.CLIENT.list_workflows(f"WorkflowId = '{params.id}'", limit=params.runs_limit):
