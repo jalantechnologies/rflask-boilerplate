@@ -7,9 +7,9 @@ class TaskNotFoundError(AppError):
         super().__init__(code=TaskErrorCode.NOT_FOUND, http_status_code=404, message=message)
 
 
-class TaskWithIdNotFoundError(TaskNotFoundError):
-    def __init__(self, id: str) -> None:
-        super().__init__(message=f"We could not find a task with id: {id}. Please verify and try again.")
+class TaskCreationError(AppError):
+    def __init__(self, message: str) -> None:
+        super().__init__(code=TaskErrorCode.CREATION_ERROR, http_status_code=500, message=message)
 
 
 class TaskBadRequestError(AppError):
@@ -24,3 +24,18 @@ class TaskAlreadyExistsError(AppError):
             http_status_code=409,
             message=f"A task with the name '{task_name}' already exists. Please choose a different name.",
         )
+
+
+class TaskServiceError(AppError):
+    def __init__(self, message: str) -> None:
+        super().__init__(code=TaskErrorCode.SERVICE_ERROR, http_status_code=500, message=message)
+
+
+class DatabaseError(AppError):
+    def __init__(self, message: str) -> None:
+        super().__init__(code=TaskErrorCode.DATABASE_ERROR, http_status_code=500, message=message)
+
+
+class TaskConversionError(AppError):
+    def __init__(self, message: str) -> None:
+        super().__init__(code=TaskErrorCode.CONVERSION_ERROR, http_status_code=500, message=message)

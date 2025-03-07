@@ -35,7 +35,7 @@ class TaskRepository(ApplicationRepository):
         try:
             collection.database.command(add_validation_command)
         except OperationFailure as e:
-            if e.code == 26:  # NamespaceNotFound MongoDB error code
+            if e.code == 26:
                 collection.database.create_collection(cls.collection_name, validator=TASK_VALIDATION_SCHEMA)
             else:
                 Logger.error(message=f"OperationFailure occurred for collection tasks: {e.details}")

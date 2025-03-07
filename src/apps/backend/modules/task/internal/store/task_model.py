@@ -12,7 +12,6 @@ class TaskModel(BaseModel):
     id: ObjectId
     title: str
     description: str
-
     created_at: Optional[datetime] = datetime.now()
     updated_at: Optional[datetime] = datetime.now()
 

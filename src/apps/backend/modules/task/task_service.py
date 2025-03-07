@@ -1,21 +1,34 @@
+from typing import List
+
+from modules.task.errors import TaskCreationError, TaskNotFoundError, TaskServiceError
 from modules.task.internal.task_reader import TaskReader
 from modules.task.internal.task_writer import TaskWriter
-from modules.task.types import CreateTaskParams, Task, TaskSearchByIdParams, UpdateTaskParams
+from modules.task.types import CreateTaskParams, Task
 
 
 class TaskService:
     @staticmethod
     def create_task(*, params: CreateTaskParams) -> Task:
-        return TaskWriter.create_task(params=params)
+        try:
+            task = TaskWriter.create_task(params=params)
+            return task
+
+        except TaskCreationError as e:
+            raise e
+
+        except Exception as e:
+            raise TaskCreationError(f"An unexpected error occurred while creating the task: {str(e)}")
 
     @staticmethod
-    def get_task_by_id(*, params: TaskSearchByIdParams) -> Task:
-        return TaskReader.get_task_by_id(params=params)
+    def get_tasks() -> List[Task]:
+        try:
+            task_list = TaskReader.get_tasks()
+            if not task_list:
+                raise TaskNotFoundError("No tasks were found in the service layer.")
+            return task_list
 
-    @staticmethod
-    def update_task(*, params: UpdateTaskParams) -> Task:
-        return TaskWriter.update_task(params=params)
+        except TaskNotFoundError as e:
+            raise e
 
-    @staticmethod
-    def delete_task(*, task_id: str) -> None:
-        return TaskWriter.delete_task(task_id=task_id)
+        except Exception as e:
+            raise TaskServiceError(f"Error occurred in TaskService: {str(e)}")
