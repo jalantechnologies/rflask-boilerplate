@@ -49,26 +49,58 @@ application up and running.
 
 ## Configuration
 
-In the `src/apps/backend/settings/` directory:
+In the `config` directory:
 
-We are keeping config as a schema environment specific.
+We are keeping config schema as a environment specific yml files.
 
-Example:
+In the `config` directory:
 
-- For development - we have `development.py` and so for other environments.
+- Consult/update `custom-environment-variables.yml` for loading values via environment. This overrides any value set in files defined below.
+- Consult/update `development.yml` for values at development. (The default env)
+- Consult/update `testing.yml` for values at testing. `APP_ENV` must be set to `testing` for this.
+- Consult/update `preview.yml` for values at `preview` `APP_ENV` must be set to `preview` for this.
+- Consult/update `production.yml` for values at production. `APP_ENV` must be set to `production` for this.
+- Consult/update `default.yml` for **constant values only**. Define entries here which will remain same across deployments.
 
-Based on the environment which will be passed during spawning the server as an argument
-with `APP_ENV=<environment_name>`, this will further load the schema accordingly.
+**INFO:** Based on the environment which will be passed during spawning the server as an argument
+ with `APP_ENV=<environment_name>`, this will further load the schema accordingly.
 
-Note:
+**INFO:** `default.yml` config file lists the all available entries which the system uses. For creating a new config entry: 
+- If the config value tends to change across deployments, provide `null` for the same in `default.yml` and value should be provided in respective deployment file.
+- If the config value is supposed to be same across deployments, provide the same in `default.yml`.
 
-- `default.py` - This file will be used to keep all our **constant values**.
-- If no environment name is passed, the default environment will be considered as `development`.
+**INFO:** For injecting environment variables, can add `.env` file in the application root directory.
 
-**.env File**
+### Custom Environment Variables
 
-Application also supports loading environment variables from `.env` file. Just add the file to `src/apps/backend` and it
-should be picked up by the server.
+Some deployment situations rely heavily on environment variables to configure secrets and settings best left out of a codebase.
+
+For enabling this we have a dedicated file called `custom-environment-variables.yml` for mapping the environment variable names into our configuration schema.
+For example:
+
+```yml  
+mongodb:
+  uri: "MONGODB_URI" 
+
+inspectlet:  
+  key: "INSPECTLET_KEY"  
+
+papertrail:  
+  host: "PAPERTRAIL_HOST"  
+  port:  
+    __name: "PAPERTRAIL_PORT"  
+    __format: "number"  
+```  
+... would cause our Config Manager to check for environment variables `MONGODB_URI` and `INSPECTLET_KEY`. If they exist they would override `mongodb.uri` and `inspectlet.key` in our configuration.
+
+For `PAPERTRAIL_PORT` it will try to parse the found environment variable according to the specified format in `__format` (`number` in this case) and extend the values for `papertrail.port`. Empty environment variables are ignored, and their mappings have no effect on your config.
+
+**Available `__format` types**:  
+- `boolean`  
+- `number`  
+
+**Precedence**: Custom environment variables override all other configuration files, including `default.yml` and `{app_env}.yml`.  
+
 
 **UI Config:**
 
