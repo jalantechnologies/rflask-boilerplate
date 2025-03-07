@@ -23,19 +23,14 @@ class WorkerManager:
 
     @staticmethod
     async def connect_client() -> None:
+        server_address = ConfigService.get_string("TEMPORAL_SERVER_ADDRESS")
         try:
-            WorkerManager.CLIENT = await Client.connect(
-                ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"), retry_config=RetryConfig(max_retries=3)
-            )
+            WorkerManager.CLIENT = await Client.connect(server_address, retry_config=RetryConfig(max_retries=3))
 
-            Logger.info(
-                message=f"Connected to temporal server at {
-                ConfigService.get_string('TEMPORAL_SERVER_ADDRESS')
-            }"
-            )
+            Logger.info(message=f"Connected to temporal server at {server_address}")
 
         except RuntimeError:
-            raise WorkerClientConnectionError(server_address=ConfigService.get_string("TEMPORAL_SERVER_ADDRESS"))
+            raise WorkerClientConnectionError(server_address=server_address)
 
     @staticmethod
     async def _get_worker_status(handle: WorkflowHandle) -> Optional[WorkflowExecutionStatus]:
