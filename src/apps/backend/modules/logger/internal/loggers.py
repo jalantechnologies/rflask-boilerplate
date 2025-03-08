@@ -26,7 +26,7 @@ class Loggers:
 
     @staticmethod
     def debug(*, message: str) -> None:
-        [logger.debubg(message=message) for logger in Loggers._loggers]
+        [logger.debug(message=message) for logger in Loggers._loggers]
 
     @staticmethod
     def error(*, message: str) -> None:
