@@ -10,6 +10,7 @@ application up and running.
   - [Getting Started](#getting-started)
   - [Configuration](#configuration)
   - [Scripts](#scripts)
+  - [Workers](#workers)
   - [Deployment](#deployment)
 
 ## Getting Started
@@ -120,6 +121,35 @@ Steps:
 
 - Create a python file under - `src/apps/backend/scripts` (ex - `my-script.py`)
 - Run the script using npm - `npm run script --file=example_worker_script`
+
+## Workers
+
+This application supports queuing workers from the web application which are run independent of the web server by [Temporal](https://temporal.io/). 
+
+You can define workers in any module, preferably in a `/workers` directory. A worker needs to inherit from [`BaseWorker`](src/apps/backend/modules/application/types.py) and have a `run()` method.
+You can use the `HealthCheckWorker` inside the `application` module as a reference. 
+
+```python
+from modules.application.types import BaseWorker
+
+class ExampleWorker(BaseWorker):
+    async def run(self):
+        ... # Your worker logic here
+```
+
+Once a worker is defined, it needs to be imported in the [`temporal_config.py`](src/apps/backend/temporal_config.py) and added to the `WORKERS` list. 
+
+Hereafter, the system will take care of registering the worker with the Temporal server. 
+
+The `ApplicationService` exposes various methods to interact with the workers:
+
+- `get_worker_by_id` - Get a worker by its ID
+- `run_worker_immediately` - Run a one-off worker immediately
+- `schedule_worker_as_cron` - Schedule a worker to run as a cron job (you need to pass a cron expression in the `cron_schedule` parameter, e.g., `*/10 * * * *` for every 10 minutes)
+- `cancel_worker` - Cancel a worker by its ID; please remember that cancellation will ONLY work when you explicitly handle the `asyncio.CancelledError` exception in your worker's `run()` method
+- `terminate_worker` - Terminate a worker immediately by its ID
+
+NOTE: Please refer to the [Temporal Python SDK documentation](https://docs.temporal.io/develop/python/cancellation) for detailed information on cancellation vs termination.
 
 ## Deployment
 
