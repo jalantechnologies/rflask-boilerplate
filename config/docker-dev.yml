@@ -2,7 +2,10 @@ logger:
   transports: ["console"]
 
 mongodb:
-  uri: "mongodb://db:27017/frm-boilerplate-dev"
+  uri: "mongodb://app-db:27017/frm-boilerplate-dev"
+
+temporal:
+  server_address: "temporal:7233"
 
 sms:
   enabled: false

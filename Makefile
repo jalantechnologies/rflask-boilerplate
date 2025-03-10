@@ -17,6 +17,10 @@ run-engine:
 		&& pipenv run python --version \
 		&& pipenv run gunicorn -c gunicorn_config.py --reload server:app
 
+run-temporal-server:
+	cd src/apps/backend \
+		&& PYTHONPATH=./ pipenv run python temporal_server.py
+
 run-test:
 	PYTHONPATH=src/apps/backend pipenv run pytest --disable-warnings -s -x -v --cov=. --cov-report=xml:/app/output/coverage.xml tests
 

@@ -1,6 +1,9 @@
 mongodb:
   uri: "mongodb://localhost:27017/frm-boilerplate-test"
 
+temporal:
+  server_address: "localhost:7233"
+
 mailer:
   default_email: "DEFAULT_EMAIL"
   default_email_name: "DEFAULT_EMAIL_NAME"

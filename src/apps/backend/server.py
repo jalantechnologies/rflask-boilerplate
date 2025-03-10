@@ -5,12 +5,18 @@ from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
-from modules.access_token.rest_api.access_token_rest_api_server import AccessTokenRestApiServer
+from modules.access_token.rest_api.access_token_rest_api_server import (
+    AccessTokenRestApiServer,
+)
 from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
+from modules.application.application_service import ApplicationService
+from modules.application.workers.health_check_worker import HealthCheckWorker
 from modules.config.config_service import ConfigService
 from modules.error.custom_errors import AppError
 from modules.logger.logger_manager import LoggerManager
-from modules.password_reset_token.rest_api.password_reset_token_rest_api_server import PasswordResetTokenRestApiServer
+from modules.password_reset_token.rest_api.password_reset_token_rest_api_server import (
+    PasswordResetTokenRestApiServer,
+)
 
 load_dotenv()
 
@@ -20,11 +26,20 @@ cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 # Mount deps
 LoggerManager.mount_logger()
 
+# Connect to Temporal Server
+ApplicationService.connect_temporal_server()
+
+# Start the health check worker
+# In production, it is optional to run this worker
+ApplicationService.schedule_worker_as_cron(
+    cls=HealthCheckWorker, cron_schedule="*/10 * * * *"
+)
+
 # Apply ProxyFix to interpret `X-Forwarded` headers if enabled in configuration
 # Visit: https://flask.palletsprojects.com/en/stable/deploying/proxy_fix/ for more information
-if ConfigService.has_value("is_server_running_behind_proxy") and ConfigService[bool].get_value(
-    "is_server_running_behind_proxy"
-):
+if ConfigService.has_value("is_server_running_behind_proxy") and ConfigService[
+    bool
+].get_value("is_server_running_behind_proxy"):
     app.wsgi_app = ProxyFix(app.wsgi_app)  # type: ignore
 
 # Register access token apis

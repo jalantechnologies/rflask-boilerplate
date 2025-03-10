@@ -13,7 +13,10 @@ services:
       APP_ENV: 'docker-dev'
     command: /bin/sh -c "npm install && npm run serve"
     depends_on:
-      - db
+      app-db:
+        condition: service_started
+      temporal:
+        condition: service_healthy
     ports:
       - '3000:3000'
       - '8080:8080'
@@ -22,7 +25,7 @@ services:
       - '/app/node_modules/'
     working_dir: /app
 
-  db:
+  app-db:
     image: mongo:5.0
     command:
       - '--logpath'
@@ -31,4 +34,58 @@ services:
       - '27017:27017'
     volumes:
       - './data/mongodb:/data/db'
-      - './logs:/var/log'
+      - './logs/mongodb:/var/log'
+
+  temporal:
+    image: temporalio/auto-setup:1.27.0
+    depends_on:
+      - temporal-db
+    environment:
+      DB: 'postgres12'
+      DB_PORT: '5432'
+      POSTGRES_USER: 'temporal'
+      POSTGRES_PWD: 'temporal'
+      POSTGRES_SEEDS: 'temporal-db'
+      DYNAMIC_CONFIG_FILE_PATH: 'config/temporal-sql.yaml'
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "tctl",
+          "--address",
+          "temporal:7233",
+          "workflow",
+          "list"
+        ]
+      interval: 1s
+      timeout: 5s
+      retries: 30
+    ports:
+      - '7233:7233'
+    volumes:
+      - './temporal-sql.yaml:/etc/temporal/config/temporal-sql.yaml'
+
+  temporal-db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: 'temporal'
+      POSTGRES_USER: 'temporal'
+    command: >
+      postgres -c logging_collector=on
+               -c log_directory=/var/log
+               -c log_filename=postgresql.log
+    ports:
+      - '5432:5432'
+    volumes:
+      - './data/postgresql:/var/lib/postgresql/data'
+      - './logs/postgresql:/var/log/'
+
+  temporal-ui:
+    image: temporalio/ui:2.34.0
+    depends_on:
+      - temporal
+    environment:
+      TEMPORAL_ADDRESS: 'temporal:7233'
+      TEMPORAL_CORS_ORIGINS: 'http://localhost:3000'
+    ports:
+      - '8233:8080'
