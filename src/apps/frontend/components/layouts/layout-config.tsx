@@ -64,7 +64,7 @@ const CenteredFormWithBackgroundLayout: React.FC<{
 const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <div className="flex min-h-[70vh] items-start justify-center overflow-hidden p-4">
+  <div className="flex min-h-[60vh] items-start justify-center overflow-hidden p-4">
     <div className="w-full max-w-[550px] p-4">{children}</div>
   </div>
 );
