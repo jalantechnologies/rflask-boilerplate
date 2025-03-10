@@ -7,6 +7,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
 from modules.access_token.rest_api.access_token_rest_api_server import AccessTokenRestApiServer
 from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
+from modules.comment.rest_api.comment_rest_api_server import CommentRestApiServer
 from modules.config.config_manager import ConfigManager
 from modules.config.config_service import ConfigService
 from modules.error.custom_errors import AppError
@@ -36,9 +37,13 @@ api_blueprint.register_blueprint(access_token_blueprint)
 password_reset_token_blueprint = PasswordResetTokenRestApiServer.create()
 api_blueprint.register_blueprint(password_reset_token_blueprint)
 
-# Register task APIs
+# Register task apis
 task_blueprint = TaskRestApiServer.create()
 api_blueprint.register_blueprint(task_blueprint)
+
+# Register comment apis
+comment_blueprint = CommentRestApiServer.create()
+api_blueprint.register_blueprint(comment_blueprint)
 
 # Register accounts apis
 account_blueprint = AccountRestApiServer.create()

@@ -4,11 +4,6 @@ from typing import Optional
 
 
 @dataclass(frozen=True)
-class TaskSearchParams:
-    title: str
-
-
-@dataclass(frozen=True)
 class CreateTaskParams:
     title: str
     description: Optional[str]
