@@ -26,7 +26,7 @@ export const Signup: React.FC = () => {
   return (
     <AuthenticationPageLayout>
       <AuthenticationFormLayout>
-        <VerticalStackLayout gap={8}>
+        <VerticalStackLayout gap={4}>
           <H2>Sign Up</H2>
           <SignupForm onSuccess={onSuccess} onError={onError} />
         </VerticalStackLayout>
