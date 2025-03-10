@@ -4,7 +4,7 @@ from flask.typing import ResponseReturnValue
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
+from bin.blueprints import api_blueprint, img_assets_blueprint, log_blueprint, react_blueprint
 from modules.access_token.rest_api.access_token_rest_api_server import AccessTokenRestApiServer
 from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
 from modules.config.config_service import ConfigService
@@ -43,6 +43,8 @@ app.register_blueprint(api_blueprint)
 # Register frontend elements
 app.register_blueprint(img_assets_blueprint)
 app.register_blueprint(react_blueprint)
+
+app.register_blueprint(log_blueprint)
 
 
 @app.errorhandler(AppError)
