@@ -14,7 +14,7 @@ class DatadogHandler(StreamHandler):
         StreamHandler.__init__(self)
         self.ddsource = ddsource
 
-    def getStatus(self) -> str:
+    def get_status(self) -> str:
         if self.level in [logging.NOTSET, logging.DEBUG, logging.INFO]:
             return "info"
         elif self.level in [logging.WARNING]:
@@ -41,7 +41,7 @@ class DatadogHandler(StreamHandler):
                         hostname="",
                         message=msg,
                         service=data_app_name,
-                        status=self.getStatus(),
+                        status=self.get_status(),
                     )
                 ]
             )
