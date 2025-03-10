@@ -14,15 +14,13 @@ export enum LayoutType {
 const HalfImageHalfFormLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <div className="flex h-screen flex-col md:flex-row">
+  <div className="flex min-h-screen flex-col md:flex-row">
     <div
       className="h-1/3 bg-cover bg-center md:h-auto md:w-1/2"
       style={{ backgroundImage: 'url(/assets/img/auth-background.jpg)' }}
     />
-    <div className="flex h-2/3 w-full items-center justify-center p-4 md:h-auto md:w-1/2">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-md sm:max-w-lg md:max-w-xl">
-        {children}
-      </div>
+    <div className="flex w-full items-center justify-center p-4 md:w-1/2">
+      <div className="w-full max-w-md">{children}</div>
     </div>
   </div>
 );
@@ -33,7 +31,7 @@ const HalfImageHalfFormLayout: React.FC<{ children: React.ReactNode }> = ({
 const FullFormLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <div className="flex h-screen items-start justify-center overflow-hidden p-4">
+  <div className="flex min-h-screen items-start justify-center p-4">
     <div className="w-full max-w-[600px] p-4">{children}</div>
   </div>
 );
@@ -46,7 +44,7 @@ const CenteredFormWithBackgroundLayout: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => (
   <div
-    className="flex h-screen items-start justify-center overflow-hidden"
+    className="flex min-h-screen items-start justify-center overflow-hidden"
     style={{
       backgroundImage: 'url(/assets/img/auth-background.jpg)',
       backgroundSize: 'cover',
@@ -66,7 +64,7 @@ const CenteredFormWithBackgroundLayout: React.FC<{
 const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <div className="flex h-screen items-start justify-center overflow-hidden p-4">
+  <div className="flex min-h-[70vh] items-start justify-center overflow-hidden p-4">
     <div className="w-full max-w-[550px] p-4">{children}</div>
   </div>
 );
