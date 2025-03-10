@@ -14,6 +14,11 @@ const constant = {
   PHONE_VALIDATION_ERROR: 'Please enter a valid phone number',
   SEND_OTP_DELAY_IN_MS: 60_000,
   TOASTER_AUTO_HIDE_DURATION: 3000,
+  ADD_TASK_MIN_LENGTH: 3,
+  ADD_TASK_VALIDATION_ERROR: 'Title should be at least 3 characters long',
+  ADD_TASK_DESCRIPTION_MIN_LENGTH: 1,
+  ADD_TASK_DESCRIPTION_VALIDATION_ERROR:
+    'Description should be at least 1 character long',
 };
 
 export default constant;
