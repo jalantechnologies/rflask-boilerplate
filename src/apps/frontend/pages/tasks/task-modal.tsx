@@ -14,6 +14,7 @@ import { Task } from '../../types/task';
 interface TaskModalProps {
   btnText: string;
   formik: FormikProps<Task>;
+  isEdit?: boolean;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -21,12 +22,15 @@ interface TaskModalProps {
 const TaskModal: React.FC<TaskModalProps> = ({
   btnText,
   formik,
+  isEdit = false,
   isOpen,
   onClose,
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <h4 className="mb-2 text-2xl font-semibold text-black">Add a new Task</h4>
+      <h4 className="mb-2 text-2xl font-semibold text-black">
+        {isEdit ? 'Edit Task' : 'Add a New Task'}
+      </h4>
       <form onSubmit={formik.handleSubmit} className="p-6">
         <VerticalStackLayout gap={4}>
           <FormControl label="Task Title">
@@ -51,7 +55,9 @@ const TaskModal: React.FC<TaskModalProps> = ({
             />
           </FormControl>
           <div className="flex justify-end gap-2">
-            <Button type={ButtonType.SUBMIT}>{btnText}</Button>
+            <Button type={ButtonType.SUBMIT}>
+              {isEdit ? 'Update Task' : btnText}
+            </Button>
           </div>
         </VerticalStackLayout>
       </form>

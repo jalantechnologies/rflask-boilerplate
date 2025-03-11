@@ -1,37 +1,82 @@
 import React, { useState } from 'react';
+import { Formik, FormikProps } from 'formik';
+import MenuItem from '../../components/menu-item';
+import { Button } from '../../components';
+import { ButtonKind } from '../../types/button';
+import { Comment } from '../../types/comment';
+import CommentModal from './comment-modal';
+import DeleteModal from '../../components/common/DeleteModal';
 
 const CommentSection: React.FC<{ taskId: string }> = () => {
-  const [comments, setComments] = useState<{ name: string; text: string }[]>(
-    [],
-  );
+  const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleAddComment = () => {
     if (!newComment.trim()) return;
-    setComments([...comments, { name: 'User', text: newComment }]);
+    const newCommentObj = new Comment(
+      (comments.length + 1).toString(),
+      newComment,
+    );
+    setComments([...comments, newCommentObj]);
     setNewComment('');
   };
 
+  const handleEditComment = (comment: Comment) => {
+    setSelectedComment(comment);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveComment = (values: Comment) => {
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.id === values.id ? { ...comment, text: values.text } : comment,
+      ),
+    );
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className="mt-3 bg-gray-100  rounded-lg">
+    <div className="mt-3 bg-gray-100 rounded-lg p-4">
       <div className="space-y-2">
-        {comments.map((comment, index) => (
+        {comments.map((comment) => (
           <div
-            key={index}
-            className="flex items-start space-x-2 bg-[#aba7a726] rounded-xl px-5 py-3"
+            key={comment.id}
+            className="flex items-start justify-between space-x-2 bg-[#aba7a726] rounded-xl px-5 py-3"
           >
-            <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold">
-              {comment.name[0]}
+            <div className="flex gap-3">
+              <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center text-white font-bold">
+                U
+              </div>
+              <div>
+                <p className="text-md font-semibold text-black pb-2">
+                  User
+                  <span className="text-[#808080] text-[11px] inline-block pl-1 align-bottom">
+                    17:30
+                  </span>
+                </p>
+                <p className="text-gray-600 text-md text-black">
+                  {comment.text}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-md font-semibold text-black pb-2">
-                {comment.name}
-                <span className="text-[#808080] text-[11px] inline-block	pl-1 align-bottom">
-                  17:30
-                </span>
-              </p>
-              <p className="text-gray-600 text-md text-black">{comment.text}</p>
-            </div>
+
+            <MenuItem>
+              <Button
+                kind={ButtonKind.SECONDARY}
+                onClick={() => handleEditComment(comment)}
+              >
+                Edit
+              </Button>
+              <Button
+                kind={ButtonKind.SECONDARY}
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                Delete
+              </Button>
+            </MenuItem>
           </div>
         ))}
       </div>
@@ -51,6 +96,32 @@ const CommentSection: React.FC<{ taskId: string }> = () => {
           ➤
         </button>
       </div>
+
+      {isModalOpen && selectedComment && (
+        <Formik
+          initialValues={selectedComment}
+          onSubmit={(values) => handleSaveComment(values)}
+        >
+          {(formik: FormikProps<Comment>) => (
+            <CommentModal
+              btnText="Update Comment"
+              formik={formik}
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            />
+          )}
+        </Formik>
+      )}
+
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={() => {
+          setIsDeleteModalOpen(false);
+        }}
+        title="Delete Comment"
+        message="Are you sure you want to delete this comment? This action cannot be undone."
+      />
     </div>
   );
 };
