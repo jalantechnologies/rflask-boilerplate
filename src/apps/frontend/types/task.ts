@@ -8,4 +8,11 @@ export class Task {
     this.id = id;
     this.title = title;
   }
+
+  static fromApiArray(data: any[]): Task[] {
+    return data.map(
+      (item) =>
+        new Task(item.description || '', item.id || '', item.title || ''),
+    );
+  }
 }

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import TaskModal from './task-modal';
@@ -6,10 +7,22 @@ import constant from '../../constants';
 import TaskHeader from './task-header';
 import { Task } from '../../types/task';
 import TaskList from './task-list';
+import { useTaskContext } from '../../contexts/task.provider';
+import { AsyncError } from '../../types';
 
 const Tasks: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const onError = (error: AsyncError) => {
+    toast.error(error.message);
+  };
+
+  const { getTaskList } = useTaskContext();
+
+  useEffect(() => {
+    getTaskList().catch((error) => onError(error as AsyncError));
+  }, []);
 
   const addTaskFormik = useFormik({
     initialValues: {
