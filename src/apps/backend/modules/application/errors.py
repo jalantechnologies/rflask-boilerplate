@@ -19,8 +19,8 @@ class WorkerClientConnectionError(AppError):
         super().__init__(
             code=WorkerErrorCode.WORKER_CLIENT_CONNECTION_ERROR,
             http_status_code=500,
-            message=f"Failed to connect to Temporal server. "
-            f"Verify that the temporal server is running at {server_address} and try again.",
+            message=f"System is unable to find a running instance of Temporal server at {server_address}. "
+            f"Please make sure it is running and restart the server.",
         )
 
 
