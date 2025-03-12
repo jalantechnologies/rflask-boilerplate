@@ -10,21 +10,19 @@ interface ErrorData extends JsonObject {
   'error-name': string;
 }
 
-const logErrorToServer = async (
+const logErrorToServer = (
   error: Error,
   errorInfo: { componentStack: string },
-): Promise<void> => {
+): void => {
   const errorData: ErrorData = {
     'error-name': error.name,
     'error-message': error.message,
     'error-info': errorInfo.componentStack,
   };
 
-  try {
-    await axios.post('http://127.0.0.1:8080/client_logs', errorData);
-  } catch (err) {
+  axios.post('http://127.0.0.1:8080/client_logs', errorData).catch((err) => {
     console.error('Error logging client logs:', err);
-  }
+  });
 };
 
 const ErrorFallback = ({
