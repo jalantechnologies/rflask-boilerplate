@@ -14,10 +14,10 @@ class DatadogHandler(StreamHandler):
         StreamHandler.__init__(self)
         self.ddsource = ddsource
 
-    def get_status(self) -> str:
-        if self.level in [logging.NOTSET, logging.DEBUG, logging.INFO]:
+    def __get_status(self, record: LogRecord) -> str:
+        if record.levelno in [logging.NOTSET, logging.DEBUG, logging.INFO]:
             return "info"
-        elif self.level in [logging.WARNING]:
+        elif record.levelno in [logging.WARNING]:
             return "warn"
         else:
             return "error"
@@ -41,7 +41,7 @@ class DatadogHandler(StreamHandler):
                         hostname="",
                         message=msg,
                         service=data_app_name,
-                        status=self.get_status(),
+                        status=self.__get_status(record=record),
                     )
                 ]
             )

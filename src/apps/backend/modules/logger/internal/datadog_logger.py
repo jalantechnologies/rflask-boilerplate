@@ -18,21 +18,16 @@ class DatadogLogger(BaseLogger):
         self.logger.addHandler(self.handler)
 
     def critical(self, *, message: str) -> None:
-        self.handler.setLevel(logging.CRITICAL)
         self.logger.critical(message)
 
     def debug(self, *, message: str) -> None:
-        self.handler.setLevel(logging.DEBUG)
         self.logger.debug(message)
 
     def error(self, *, message: str) -> None:
-        self.handler.setLevel(logging.ERROR)
         self.logger.error(message)
 
     def info(self, *, message: str) -> None:
-        self.handler.setLevel(logging.INFO)
         self.logger.info(message)
 
     def warn(self, *, message: str) -> None:
-        self.handler.setLevel(logging.WARNING)
         self.logger.warning(message)
