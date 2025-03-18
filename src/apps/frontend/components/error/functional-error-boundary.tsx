@@ -1,28 +1,13 @@
-import axios from 'axios';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { JsonObject } from '../../types/common-types';
+import send_logs from './datadog-logger';
 
-interface ErrorData extends JsonObject {
-  'error-info': string;
-  'error-message': string;
-  'error-name': string;
-}
-
-const logErrorToServer = (
+const logErrorToDatadog = (
   error: Error,
   errorInfo: { componentStack: string },
 ): void => {
-  const errorData: ErrorData = {
-    'error-name': error.name,
-    'error-message': error.message,
-    'error-info': errorInfo.componentStack,
-  };
-
-  axios.post('http://127.0.0.1:8080/client_logs', errorData).catch((err) => {
-    console.error('Error logging client logs:', err);
-  });
+  send_logs(error, errorInfo);
 };
 
 const ErrorFallback = ({
@@ -47,7 +32,7 @@ const ErrorFallback = ({
 const FunctionalErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <ErrorBoundary FallbackComponent={ErrorFallback} onError={logErrorToServer}>
+  <ErrorBoundary FallbackComponent={ErrorFallback} onError={logErrorToDatadog}>
     {children}
   </ErrorBoundary>
 );
