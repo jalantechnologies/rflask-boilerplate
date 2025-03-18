@@ -2,10 +2,8 @@ import json
 import os
 from typing import Union
 
-from flask import Blueprint, request, send_from_directory
+from flask import Blueprint, send_from_directory
 from werkzeug.wrappers import Response
-
-from modules.logger.internal.frontend_logger import FrontendLogger
 
 satic_root = "../../../"
 
@@ -54,13 +52,3 @@ api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 def serve_api_home() -> Response:
     message = {"msg": "Start your development..."}
     return Response(json.dumps(message), status=200)
-
-
-log_blueprint = Blueprint("client_logs", __name__)
-
-
-@log_blueprint.route("/client_logs", methods=["POST"])
-def get_error() -> str:
-    error = request.get_json()
-    FrontendLogger(error=error)
-    return "Logs Sent"
