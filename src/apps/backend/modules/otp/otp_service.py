@@ -18,7 +18,7 @@ class OtpService:
             message_body=f"{otp.otp_code} is your One Time Password (OTP) for verification.",
             recipient_phone=recipient_phone_number,
         )
-        if not OtpUtil.is_default_phone_number(phone_number=recipient_phone_number.phone_number):
+        if not OtpUtil.is_exempt_phone_number(phone_number=recipient_phone_number.phone_number):
             SMSService.send_sms(params=send_sms_params)
 
         return otp

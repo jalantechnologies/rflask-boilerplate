@@ -9,18 +9,18 @@ from modules.otp.types import Otp
 
 class OtpUtil:
     @staticmethod
-    def is_default_phone_number(phone_number: str) -> bool:
-        default_phone_number = None
-        if ConfigService[str].has_value(key="otp.default_phone_number"):
-            default_phone_number = ConfigService[str].get_value(key="otp.default_phone_number")
-            if default_phone_number and phone_number == default_phone_number:
+    def is_exempt_phone_number(phone_number: str) -> bool:
+        exempt_phone_number = None
+        if ConfigService[str].has_value(key="otp.exempt_phone_number"):
+            exempt_phone_number = ConfigService[str].get_value(key="otp.exempt_phone_number")
+            if exempt_phone_number and phone_number == exempt_phone_number:
                 return True
         return False
 
     @staticmethod
     def generate_otp(length: int, phone_number: str) -> str:
-        if OtpUtil.is_default_phone_number(phone_number):
-            default_otp = ConfigService[str].get_value(key="otp.default_otp")
+        if OtpUtil.is_exempt_phone_number(phone_number):
+            default_otp = ConfigService[str].get_value(key="otp.exempt_otp")
             return default_otp
         return "".join(random.choices(string.digits, k=length))
 
