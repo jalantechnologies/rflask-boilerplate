@@ -9,11 +9,11 @@ datadogLogs.init({
   sessionSampleRate: 100,
 });
 
-const send_logs = (error: Error, errorInfo: ErrorInfo) => {
+const sendLogs = (error: Error, errorInfo: ErrorInfo) => {
   datadogLogs.logger.error(error.message, {
     'error-info': errorInfo.componentStack,
     error: error.name,
   });
 };
 
-export default send_logs;
+export default sendLogs;

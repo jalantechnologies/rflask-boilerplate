@@ -1,13 +1,13 @@
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import send_logs from './datadog-logger';
+import sendLogs from './datadog-logger';
 
 const logErrorToDatadog = (
   error: Error,
   errorInfo: { componentStack: string },
 ): void => {
-  send_logs(error, errorInfo);
+  sendLogs(error, errorInfo);
 };
 
 const ErrorFallback = ({
@@ -18,7 +18,7 @@ const ErrorFallback = ({
   resetErrorBoundary: () => void;
 }) => (
   <div className="rounded border border-red-500 bg-red-100 p-4 text-red-800">
-    <h2 className="text-lg font-bold">Something went wrong</h2>
+    <h2 className="text-lg font-bold">{error.name}</h2>
     <p>{error.message}</p>
     <button
       className="mt-2 rounded bg-blue-500 px-4 py-2 text-white"
