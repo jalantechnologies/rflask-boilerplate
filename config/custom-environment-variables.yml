@@ -24,8 +24,8 @@ sendgrid:
   api_key: 'SENDGRID_API_KEY'
 
 otp:
-  default_phone_number: 'DEFAULT_PHONE_NUMBER'
-  default_otp: 'DEFAULT_OTP'
+  exempt_phone_number: 'EXEMPT_PHONE_NUMBER'
+  exempt_otp: 'EXEMPT_OTP'
 
 twilio:
   account_sid: 'TWILIO_ACCOUNT_SID'
