@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -9,6 +9,7 @@ import {
   Select,
   VerticalStackLayout,
 } from '../../../components';
+import constant from '../../../constants';
 import COUNTRY_SELECT_OPTIONS from '../../../constants/countries';
 import routes from '../../../constants/routes';
 import { AsyncError } from '../../../types';
@@ -25,6 +26,14 @@ const PhoneLoginForm: React.FC<PhoneLoginFormProps> = ({
   onError,
   onSendOTPSuccess,
 }) => {
+  const currentLoginMethod = constant.CURRENT_LOGIN_MECHANISM;
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (currentLoginMethod === constant.EMAIL_BASED_AUTHENTICATION) {
+      navigate(routes.LOGIN);
+    }
+  }, [currentLoginMethod, navigate]);
+
   const { formik, isSendOTPLoading } = usePhoneLoginForm({
     onSendOTPSuccess,
     onError,
