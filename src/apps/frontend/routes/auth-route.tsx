@@ -1,5 +1,7 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+
+import constant from '../constants';
+import { Config } from '../helpers';
 
 interface AuthRouteProps {
   authPage: React.FC;
@@ -10,11 +12,15 @@ const AuthRoute: React.FC<AuthRouteProps> = ({
   authPage: AuthPage,
   otpAuthPage: OTPAuthPage,
 }) => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const authMode = queryParams.get('auth_mode');
+  const currentAuthMechanism = Config.getConfigValue<string>(
+    'authenticationMechanism',
+  );
 
-  return authMode === 'otp' ? <OTPAuthPage /> : <AuthPage />;
+  return currentAuthMechanism === constant.PHONE_NUMBER_BASED_AUTHENTICATION ? (
+    <OTPAuthPage />
+  ) : (
+    <AuthPage />
+  );
 };
 
 export default AuthRoute;

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -12,6 +12,7 @@ import {
 import constant from '../../../constants';
 import COUNTRY_SELECT_OPTIONS from '../../../constants/countries';
 import routes from '../../../constants/routes';
+import { Config } from '../../../helpers';
 import { AsyncError } from '../../../types';
 import { ButtonKind, ButtonType } from '../../../types/button';
 
@@ -26,7 +27,9 @@ const PhoneLoginForm: React.FC<PhoneLoginFormProps> = ({
   onError,
   onSendOTPSuccess,
 }) => {
-  const currentLoginMethod = constant.CURRENT_LOGIN_MECHANISM;
+  const currentLoginMethod = Config.getConfigValue<string>(
+    'authenticationMechanism',
+  );
   const navigate = useNavigate();
   useEffect(() => {
     if (currentLoginMethod === constant.EMAIL_BASED_AUTHENTICATION) {
@@ -102,15 +105,6 @@ const PhoneLoginForm: React.FC<PhoneLoginFormProps> = ({
               />
             </FormControl>
           </div>
-        </Flex>
-
-        <Flex justifyContent="end">
-          <Link
-            to={routes.LOGIN}
-            className="text-sm text-primary hover:underline"
-          >
-            Login with email
-          </Link>
         </Flex>
 
         <Button

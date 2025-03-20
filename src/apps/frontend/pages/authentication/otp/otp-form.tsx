@@ -45,7 +45,7 @@ const OTPForm: React.FC<OTPFormProps> = ({
 
   useEffect(() => {
     if (!phoneNumber || !countryCode) {
-      navigate(routes.PHONE_LOGIN);
+      navigate(routes.SIGNUP);
     }
   }, [phoneNumber, countryCode, navigate]);
 

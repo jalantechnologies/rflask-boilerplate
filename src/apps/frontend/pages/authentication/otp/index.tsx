@@ -36,7 +36,7 @@ export const OTPPage: React.FC = () => {
   };
 
   const handleBackButtonClick = () => {
-    navigate(routes.PHONE_LOGIN);
+    navigate(routes.SIGNUP);
   };
 
   return (
