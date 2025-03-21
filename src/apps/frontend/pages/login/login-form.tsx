@@ -41,7 +41,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   const navigate = useNavigate();
   useEffect(() => {
     if (currentLoginMethod === constant.PHONE_NUMBER_BASED_AUTHENTICATION) {
-      navigate(routes.SIGNUP);
+      navigate(routes.PHONE_LOGIN);
     }
   }, [currentLoginMethod, navigate]);
 

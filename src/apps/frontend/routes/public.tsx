@@ -18,7 +18,11 @@ import AuthRoute from './auth-route';
 export const publicRoutes = [
   {
     path: routes.LOGIN,
-    element: <AuthRoute authPage={Login} otpAuthPage={OTPPage} />,
+    element: <AuthRoute authPage={Login} otpAuthPage={PhoneLogin} />,
+  },
+  {
+    path: routes.OTP,
+    element: <OTPPage />,
   },
   {
     path: routes.FORGOT_PASSWORD,
@@ -38,7 +42,7 @@ export const publicRoutes = [
   },
   {
     path: routes.SIGNUP,
-    element: <AuthRoute authPage={Signup} otpAuthPage={PhoneLogin} />,
+    element: <Signup />,
   },
   { path: routes.ABOUT, element: <About /> },
   { path: '*', element: <Navigate to={routes.LOGIN} /> },
