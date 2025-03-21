@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -11,7 +11,9 @@ import {
 } from '../../../components';
 import { CustomLayout } from '../../../components/layouts/custom-layout.component';
 import { LayoutType } from '../../../components/layouts/layout-config';
+import constant from '../../../constants';
 import routes from '../../../constants/routes';
+import { Config } from '../../../helpers';
 import { AsyncError } from '../../../types';
 import { ButtonKind, ButtonType } from '../../../types/button';
 
@@ -36,6 +38,15 @@ const SignupForm: React.FC<SignupFormProps> = ({
   layoutType = LayoutType.Default,
 }) => {
   const { formik, isSignupLoading } = useSignupForm({ onSuccess, onError });
+  const currentLoginMethod = Config.getConfigValue<string>(
+    'authenticationMechanism',
+  );
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (currentLoginMethod === constant.PHONE_NUMBER_BASED_AUTHENTICATION) {
+      navigate(routes.PHONE_LOGIN);
+    }
+  }, [currentLoginMethod, navigate]);
 
   const getFormikError = (field: SignupFields) =>
     formik.touched[field] ? formik.errors[field] : '';
