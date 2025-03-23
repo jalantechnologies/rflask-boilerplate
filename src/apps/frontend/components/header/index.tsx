@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import logoutSVG from '../../../../assets/img/icon/logout.svg';
 import routes from '../../constants/routes';
 import { useAccountContext, useAuthContext } from '../../contexts';
 
 import HamburgerToggleButton from './hamburger-toggle-button';
 import UserProfileSnippet from './user-profile-snippet.component';
-
-import logoutSVG from '../../../../assets/img/icon/logout.svg';
 
 export type UserMenuDropdownItem = {
   iconPath: string;

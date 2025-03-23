@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import emailSVG from '../../../../../assets/img/icon/email.svg';
 import {
   Button,
   Flex,
@@ -16,8 +17,6 @@ import { AsyncError } from '../../../types';
 import { ButtonKind, ButtonType } from '../../../types/button';
 
 import useSignupForm from './signup-form.hook';
-
-import emailSVG from '../../../../../assets/img/icon/email.svg';
 
 type SignupFields =
   | 'firstName'

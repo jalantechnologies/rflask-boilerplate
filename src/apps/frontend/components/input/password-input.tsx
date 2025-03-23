@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
+import eyeClosedSVG from '../../../../assets/img/icon/eye-closed.svg';
+import eyeOpenSVG from '../../../../assets/img/icon/eye-open.svg';
 import { ButtonKind } from '../../types/button';
 import Button from '../button';
 
 import Input from '.';
-
-import eyeClosedSVG from '../../../../assets/img/icon/eye-closed.svg';
-import eyeOpenSVG from '../../../../assets/img/icon/eye-open.svg';
 
 interface PasswordInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {

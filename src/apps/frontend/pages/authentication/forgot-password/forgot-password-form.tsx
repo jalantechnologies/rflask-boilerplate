@@ -1,5 +1,6 @@
 import React from 'react';
 
+import emailSVG from '../../../../../assets/img/icon/email.svg';
 import {
   Button,
   FormControl,
@@ -11,7 +12,6 @@ import { AsyncError } from '../../../types';
 import { ButtonType } from '../../../types/button';
 
 import useForgotPasswordForm from './forgot-password-form.hook';
-import emailSVG from '../../../../../assets/img/icon/email.svg';
 
 interface ForgotPasswordFormProps {
   onError: (error: AsyncError) => void;

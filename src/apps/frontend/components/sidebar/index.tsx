@@ -1,12 +1,11 @@
 import React, { useRef } from 'react';
 
+import dashboardSidebarIconSVG from '../../../../assets/img/icon/dashboard-sidebar-icon.svg';
+import sidebarArrowIconSVG from '../../../../assets/img/icon/sidebar-arrow-icon.svg';
+import tasksSidebarIconSVG from '../../../../assets/img/icon/tasks-sidebar-icon.svg';
 import routes from '../../constants/routes';
 
 import SidebarMenuItem from './sidebar-menu-item';
-
-import sidebarArrowIconSVG from '../../../../assets/img/icon/sidebar-arrow-icon.svg';
-import dashboardSidebarIconSVG from '../../../../assets/img/icon/dashboard-sidebar-icon.svg';
-import tasksSidebarIconSVG from '../../../../assets/img/icon/tasks-sidebar-icon.svg';
 
 type SidebarProps = {
   isSidebarOpen: boolean;

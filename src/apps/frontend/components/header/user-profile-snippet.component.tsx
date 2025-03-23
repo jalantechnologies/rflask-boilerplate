@@ -2,13 +2,12 @@ import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import dropDownArrowSVG from '../../../../assets/img/icon/drop-down-arrow.svg';
 import { Account } from '../../types';
 
 import UserMenuDropdown from './user-menu-dropdown.component';
 
 import { UserMenuDropdownItem } from '.';
-
-import dropDownArrowSVG from '../../../../assets/img/icon/drop-down-arrow.svg';
 
 interface DropdownUserProps {
   account: Account;

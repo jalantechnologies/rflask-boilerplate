@@ -1,4 +1,5 @@
 import React from 'react';
+
 import formCheckboxCheckmarkSVG from '../../../../assets/img/icon/form-checkbox-checkmark.svg';
 
 const LoginFormCheckbox: React.FC = () => (

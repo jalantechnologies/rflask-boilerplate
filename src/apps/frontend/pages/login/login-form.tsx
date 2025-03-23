@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import emailIcon from '../../../../assets/img/icon/email.svg';
 import {
   VerticalStackLayout,
   FormControl,
@@ -19,8 +20,6 @@ import { ButtonType, ButtonKind } from '../../types/button';
 
 import LoginFormCheckbox from './login-form-checkbox';
 import useLoginForm from './login-form.hook';
-
-import emailIcon from '../../../../assets/img/icon/email.svg';
 
 type LoginFields = 'username' | 'password';
 
