@@ -78,6 +78,7 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tailwindcss": "^3.14.2",
+    "file-loader": "^6.2.0",
     "forever": "^4.0.3",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^9.1.4",

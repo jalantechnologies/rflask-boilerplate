@@ -1,4 +1,5 @@
 import React from 'react';
+import formCheckboxCheckmarkSVG from '../../../../assets/img/icon/form-checkbox-checkmark.svg';
 
 const LoginFormCheckbox: React.FC = () => (
   <div className="relative pt-0.5">
@@ -8,7 +9,7 @@ const LoginFormCheckbox: React.FC = () => (
         <img
           alt="checkbox tick mark icon"
           className="size-3"
-          src="/assets/img/icon/form-checkbox-checkmark.svg"
+          src={formCheckboxCheckmarkSVG}
         />
       </span>
     </div>

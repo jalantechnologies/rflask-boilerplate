@@ -11,6 +11,7 @@ import { AsyncError } from '../../../types';
 import { ButtonType } from '../../../types/button';
 
 import useForgotPasswordForm from './forgot-password-form.hook';
+import emailSVG from '../../../../../assets/img/icon/email.svg';
 
 interface ForgotPasswordFormProps {
   onError: (error: AsyncError) => void;
@@ -45,7 +46,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
                 <img
                   alt="email icon"
                   className="fill-current opacity-50"
-                  src="assets/img/icon/email.svg"
+                  src={emailSVG}
                 />
               }
               onBlur={formik.handleBlur}

@@ -20,6 +20,8 @@ import { ButtonType, ButtonKind } from '../../types/button';
 import LoginFormCheckbox from './login-form-checkbox';
 import useLoginForm from './login-form.hook';
 
+import emailIcon from '../../../../assets/img/icon/email.svg';
+
 type LoginFields = 'username' | 'password';
 
 interface LoginFormProps {
@@ -59,7 +61,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
               endEnhancer={
                 <img
                   className="fill-current opacity-50"
-                  src="/assets/img/icon/email.svg"
+                  src={emailIcon}
                   alt="email icon"
                 />
               }

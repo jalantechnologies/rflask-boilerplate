@@ -7,6 +7,8 @@ import { useAccountContext, useAuthContext } from '../../contexts';
 import HamburgerToggleButton from './hamburger-toggle-button';
 import UserProfileSnippet from './user-profile-snippet.component';
 
+import logoutSVG from '../../../../assets/img/icon/logout.svg';
+
 export type UserMenuDropdownItem = {
   iconPath: string;
   label: string;
@@ -34,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
   const userMenuDropdownItems: UserMenuDropdownItem[] = [
     {
-      iconPath: '/assets/img/icon/logout.svg',
+      iconPath: logoutSVG,
       label: 'Log Out',
       onClick: handleSignOut,
     },

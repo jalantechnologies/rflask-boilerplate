@@ -5,6 +5,9 @@ import Button from '../button';
 
 import Input from '.';
 
+import eyeClosedSVG from '../../../../assets/img/icon/eye-closed.svg';
+import eyeOpenSVG from '../../../../assets/img/icon/eye-open.svg';
+
 interface PasswordInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -35,13 +38,13 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
           {isPasswordVisible ? (
             <img
               className="size-6.5 opacity-65"
-              src="/assets/img/icon/eye-closed.svg"
+              src={eyeClosedSVG}
               alt="hide password icon"
             />
           ) : (
             <img
               className="size-6.5 opacity-65"
-              src="/assets/img/icon/eye-open.svg"
+              src={eyeOpenSVG}
               alt="show password icon"
             />
           )}

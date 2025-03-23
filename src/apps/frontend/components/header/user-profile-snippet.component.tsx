@@ -8,6 +8,8 @@ import UserMenuDropdown from './user-menu-dropdown.component';
 
 import { UserMenuDropdownItem } from '.';
 
+import dropDownArrowSVG from '../../../../assets/img/icon/drop-down-arrow.svg';
+
 interface DropdownUserProps {
   account: Account;
   userMenuDropdownItems: UserMenuDropdownItem[];
@@ -70,7 +72,7 @@ const UserProfileSnippet: React.FC<DropdownUserProps> = ({
 
         <img
           className="hidden fill-current opacity-50 sm:block"
-          src="/assets/img/icon/drop-down-arrow.svg"
+          src={dropDownArrowSVG}
           alt="dropdown icon"
         />
       </Link>

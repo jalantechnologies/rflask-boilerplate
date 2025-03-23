@@ -4,6 +4,10 @@ import routes from '../../constants/routes';
 
 import SidebarMenuItem from './sidebar-menu-item';
 
+import sidebarArrowIconSVG from '../../../../assets/img/icon/sidebar-arrow-icon.svg';
+import dashboardSidebarIconSVG from '../../../../assets/img/icon/dashboard-sidebar-icon.svg';
+import tasksSidebarIconSVG from '../../../../assets/img/icon/tasks-sidebar-icon.svg';
+
 type SidebarProps = {
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           aria-expanded={isSidebarOpen}
           className="block lg:hidden"
         >
-          <img src="/assets/img/icon/sidebar-arrow-icon.svg" alt="arrow icon" />
+          <img src={sidebarArrowIconSVG} alt="arrow icon" />
         </button>
       </div>
 
@@ -44,13 +48,13 @@ const Sidebar: React.FC<SidebarProps> = ({
           </h3>
           <ul className="mb-6 flex flex-col gap-1.5">
             <SidebarMenuItem
-              iconPath="/assets/img/icon/dashboard-sidebar-icon.svg"
+              iconPath={dashboardSidebarIconSVG}
               path={routes.DASHBOARD}
               setIsSidebarOpen={setIsSidebarOpen}
               title="Dashboard"
             />
             <SidebarMenuItem
-              iconPath="/assets/img/icon/tasks-sidebar-icon.svg"
+              iconPath={tasksSidebarIconSVG}
               path={routes.TASKS}
               setIsSidebarOpen={setIsSidebarOpen}
               title="Tasks"

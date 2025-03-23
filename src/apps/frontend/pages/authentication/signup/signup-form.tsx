@@ -17,6 +17,8 @@ import { ButtonKind, ButtonType } from '../../../types/button';
 
 import useSignupForm from './signup-form.hook';
 
+import emailSVG from '../../../../../assets/img/icon/email.svg';
+
 type SignupFields =
   | 'firstName'
   | 'lastName'
@@ -85,7 +87,7 @@ const SignupForm: React.FC<SignupFormProps> = ({
                 <img
                   alt="email icon"
                   className="fill-current opacity-50"
-                  src="/assets/img/icon/email.svg"
+                  src={emailSVG}
                 />
               }
               error={getFormikError('username')}
