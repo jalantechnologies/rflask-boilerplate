@@ -13,9 +13,9 @@ from modules.account.account_service import AccountService
 from modules.account.internal.account_reader import AccountReader
 from modules.account.types import Account, AccountSearchParams
 from modules.config.config_service import ConfigService
-from modules.otp.errors import OtpIncorrectError
-from modules.otp.otp_service import OtpService
-from modules.otp.types import OtpStatus, VerifyOtpParams
+from modules.otp.errors import OTPIncorrectError
+from modules.otp.otp_service import OTPService
+from modules.otp.types import OTPStatus, VerifyOTPParams
 
 
 class AccessTokenService:
@@ -31,10 +31,10 @@ class AccessTokenService:
     def create_access_token_by_phone_number(*, params: OTPBasedAuthAccessTokenRequestParams) -> AccessToken:
         account = AccountService.get_account_by_phone_number(phone_number=params.phone_number)
 
-        otp = OtpService.verify_otp(params=VerifyOtpParams(phone_number=params.phone_number, otp_code=params.otp_code))
+        otp = OTPService.verify_otp(params=VerifyOTPParams(phone_number=params.phone_number, otp_code=params.otp_code))
 
-        if otp.status != OtpStatus.SUCCESS:
-            raise OtpIncorrectError()
+        if otp.status != OTPStatus.SUCCESS:
+            raise OTPIncorrectError()
 
         return AccessTokenService.__generate_access_token(account=account)
 

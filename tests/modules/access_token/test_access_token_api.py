@@ -8,8 +8,8 @@ from modules.account.types import (
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
 )
-from modules.otp.otp_service import OtpService
-from modules.otp.types import CreateOtpParams, OtpErrorCode, VerifyOtpParams
+from modules.otp.otp_service import OTPService
+from modules.otp.types import CreateOTPParams, OTPErrorCode, VerifyOTPParams
 from server import app
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
@@ -78,7 +78,7 @@ class TestAccessTokenApi(BaseTestAccessToken):
             params=CreateAccountByPhoneNumberParams(phone_number=PhoneNumber(**phone_number))
         )
 
-        otp = OtpService.create_otp(params=CreateOtpParams(phone_number=PhoneNumber(**phone_number)))
+        otp = OTPService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
 
         with app.test_client() as client:
             response = client.post(
@@ -102,7 +102,7 @@ class TestAccessTokenApi(BaseTestAccessToken):
             )
             assert response.status_code == 400
             assert response.json
-            assert response.json.get("code") == OtpErrorCode.INCORRECT_OTP
+            assert response.json.get("code") == OTPErrorCode.INCORRECT_OTP
         assert response.json.get("message") == "Please provide the correct OTP to login."
 
     def test_get_access_token_with_invalid_phone_number(self) -> None:
@@ -124,9 +124,9 @@ class TestAccessTokenApi(BaseTestAccessToken):
             params=CreateAccountByPhoneNumberParams(phone_number=PhoneNumber(**phone_number))
         )
 
-        otp = OtpService.create_otp(params=CreateOtpParams(phone_number=PhoneNumber(**phone_number)))
+        otp = OTPService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
 
-        OtpService.verify_otp(params=VerifyOtpParams(phone_number=PhoneNumber(**phone_number), otp_code=otp.otp_code))
+        OTPService.verify_otp(params=VerifyOTPParams(phone_number=PhoneNumber(**phone_number), otp_code=otp.otp_code))
 
         with app.test_client() as client:
             response = client.post(
@@ -134,5 +134,5 @@ class TestAccessTokenApi(BaseTestAccessToken):
             )
             assert response.status_code == 400
             assert response.json
-            assert response.json.get("code") == OtpErrorCode.OTP_EXPIRED
+            assert response.json.get("code") == OTPErrorCode.OTP_EXPIRED
             assert response.json.get("message") == "The OTP has expired. Please request a new OTP."

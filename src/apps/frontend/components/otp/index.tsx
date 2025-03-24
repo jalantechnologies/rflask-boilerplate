@@ -14,7 +14,7 @@ interface OTPProps {
 }
 
 const OTP: React.FC<OTPProps> = ({ error, isLoading, onBlur, onChange }) => {
-  const [otp, setOtp] = useState<string[]>(Array(constant.OTP_LENGTH).fill(''));
+  const [otp, setOTP] = useState<string[]>(Array(constant.OTP_LENGTH).fill(''));
 
   const inputRef = useRef<HTMLInputElement[]>([]);
 
@@ -28,7 +28,7 @@ const OTP: React.FC<OTPProps> = ({ error, isLoading, onBlur, onChange }) => {
     if (inputValue.length >= constant.OTP_INPUT_MAX_LENGTH) return;
 
     otpInputs[index] = inputValue;
-    setOtp(otpInputs);
+    setOTP(otpInputs);
 
     if (inputValue.length === 1 && index < constant.OTP_LENGTH - 1) {
       inputRef.current[index + 1]?.focus();

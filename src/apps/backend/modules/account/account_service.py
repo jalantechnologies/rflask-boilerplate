@@ -8,8 +8,8 @@ from modules.account.types import (
     PhoneNumber,
     ResetPasswordParams,
 )
-from modules.otp.otp_service import OtpService
-from modules.otp.types import CreateOtpParams
+from modules.otp.otp_service import OTPService
+from modules.otp.types import CreateOTPParams
 from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
 
 
@@ -29,8 +29,8 @@ class AccountService:
         if account is None:
             account = AccountWriter.create_account_by_phone_number(params=params)
 
-        create_otp_params = CreateOtpParams(phone_number=params.phone_number)
-        OtpService.create_otp(params=create_otp_params)
+        create_otp_params = CreateOTPParams(phone_number=params.phone_number)
+        OTPService.create_otp(params=create_otp_params)
 
         return account
 

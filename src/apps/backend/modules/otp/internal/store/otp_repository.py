@@ -2,7 +2,7 @@ from pymongo.collection import Collection
 
 from modules.application.repository import ApplicationRepository
 from modules.logger.logger import Logger
-from modules.otp.internal.store.otp_model import OtpModel
+from modules.otp.internal.store.otp_model import OTPModel
 from pymongo.errors import OperationFailure
 
 
@@ -31,8 +31,8 @@ OTP_VALIDATION_SCHEMA = {
 }
 
 
-class OtpRepository(ApplicationRepository):
-    collection_name = OtpModel.get_collection_name()
+class OTPRepository(ApplicationRepository):
+    collection_name = OTPModel.get_collection_name()
 
     @classmethod
     def on_init_collection(cls, collection: Collection) -> bool:
