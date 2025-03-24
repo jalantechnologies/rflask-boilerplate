@@ -1,13 +1,15 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
+import constant from '../constants';
 import routes from '../constants/routes';
 import { ResetPasswordProvider } from '../contexts';
+import { Config } from '../helpers';
 import {
   About,
   ForgotPassword,
   Login,
-  OTPPage,
+  OTPVerificationPage,
   PhoneLogin,
   ResetPassword,
   Signup,
@@ -15,14 +17,14 @@ import {
 
 import AuthRoute from './auth-route';
 
+const currentAuthMechanism = Config.getConfigValue<string>(
+  'authenticationMechanism',
+);
+
 export const publicRoutes = [
   {
     path: routes.LOGIN,
     element: <AuthRoute authPage={Login} otpAuthPage={PhoneLogin} />,
-  },
-  {
-    path: routes.OTP,
-    element: <OTPPage />,
   },
   {
     path: routes.FORGOT_PASSWORD,
@@ -40,10 +42,20 @@ export const publicRoutes = [
       </ResetPasswordProvider>
     ),
   },
-  {
-    path: routes.SIGNUP,
-    element: <Signup />,
-  },
   { path: routes.ABOUT, element: <About /> },
   { path: '*', element: <Navigate to={routes.LOGIN} /> },
 ];
+
+if (currentAuthMechanism === constant.PHONE_NUMBER_BASED_AUTHENTICATION) {
+  publicRoutes.push({
+    path: routes.VERIFY_OTP,
+    element: <OTPVerificationPage />,
+  });
+}
+
+if (currentAuthMechanism === constant.EMAIL_BASED_AUTHENTICATION) {
+  publicRoutes.push({
+    path: routes.SIGNUP,
+    element: <Signup />,
+  });
+}

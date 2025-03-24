@@ -1,6 +1,6 @@
 import About from './about/about.page';
 import ForgotPassword from './authentication/forgot-password';
-import OTPPage from './authentication/otp';
+import OTPVerificationPage from './authentication/otp';
 import PhoneLogin from './authentication/phone-login';
 import ResetPassword from './authentication/reset-password';
 import Signup from './authentication/signup';
@@ -15,7 +15,7 @@ export {
   NotFound,
   ResetPassword,
   Signup,
-  OTPPage,
+  OTPVerificationPage,
   PhoneLogin,
   Login,
 };

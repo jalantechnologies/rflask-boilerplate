@@ -13,7 +13,7 @@ import AuthenticationPageLayout from '../authentication-page-layout';
 
 import OTPForm from './otp-form';
 
-export const OTPPage: React.FC = () => {
+export const OTPVerificationPage: React.FC = () => {
   const { startTimer, remaininingSecondsStr, isResendEnabled } = useTimer({
     delayInMilliseconds: constant.SEND_OTP_DELAY_IN_MS,
   });
@@ -36,7 +36,7 @@ export const OTPPage: React.FC = () => {
   };
 
   const handleBackButtonClick = () => {
-    navigate(routes.PHONE_LOGIN);
+    navigate(routes.LOGIN);
   };
 
   return (
@@ -60,4 +60,4 @@ export const OTPPage: React.FC = () => {
   );
 };
 
-export default OTPPage;
+export default OTPVerificationPage;
