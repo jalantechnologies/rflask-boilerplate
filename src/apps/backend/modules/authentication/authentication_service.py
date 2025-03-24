@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 
 import jwt
 
-from modules.access_token.errors import AccessTokenExpiredError, AccessTokenInvalidError
-from modules.access_token.types import (
+from modules.authentication.errors import AccessTokenExpiredError, AccessTokenInvalidError
+from modules.authentication.types import (
     AccessToken,
     AccessTokenPayload,
     EmailBasedAuthAccessTokenRequestParams,
@@ -18,14 +18,14 @@ from modules.otp.otp_service import OTPService
 from modules.otp.types import OTPStatus, VerifyOTPParams
 
 
-class AccessTokenService:
+class AuthenticationService:
     @staticmethod
     def create_access_token_by_username_and_password(*, params: EmailBasedAuthAccessTokenRequestParams) -> AccessToken:
         account = AccountReader.get_account_by_username_and_password(
             params=AccountSearchParams(username=params.username, password=params.password)
         )
 
-        return AccessTokenService.__generate_access_token(account=account)
+        return AuthenticationService.__generate_access_token(account=account)
 
     @staticmethod
     def create_access_token_by_phone_number(*, params: OTPBasedAuthAccessTokenRequestParams) -> AccessToken:
@@ -36,7 +36,7 @@ class AccessTokenService:
         if otp.status != OTPStatus.SUCCESS:
             raise OTPIncorrectError()
 
-        return AccessTokenService.__generate_access_token(account=account)
+        return AuthenticationService.__generate_access_token(account=account)
 
     @staticmethod
     def __generate_access_token(*, account: Account) -> AccessToken:

@@ -1,5 +1,5 @@
-from modules.access_token.access_token_service import AccessTokenService
-from modules.access_token.types import EmailBasedAuthAccessTokenRequestParams, OTPBasedAuthAccessTokenRequestParams
+from modules.authentication.authentication_service import AuthenticationService
+from modules.authentication.types import EmailBasedAuthAccessTokenRequestParams, OTPBasedAuthAccessTokenRequestParams
 from modules.account.account_service import AccountService
 from modules.account.internal.account_writer import AccountWriter
 from modules.account.types import (
@@ -12,7 +12,7 @@ from modules.otp.types import CreateOTPParams
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
 
-class TestAccessTokenService(BaseTestAccessToken):
+class TestAuthenticationService(BaseTestAccessToken):
     def test_get_access_token_by_username_and_password(self) -> None:
         account = AccountService.create_account_by_username_and_password(
             params=CreateAccountByUsernameAndPasswordParams(
@@ -20,7 +20,7 @@ class TestAccessTokenService(BaseTestAccessToken):
             )
         )
 
-        access_token = AccessTokenService.create_access_token_by_username_and_password(
+        access_token = AuthenticationService.create_access_token_by_username_and_password(
             params=EmailBasedAuthAccessTokenRequestParams(username=account.username, password="password")
         )
 
@@ -35,11 +35,11 @@ class TestAccessTokenService(BaseTestAccessToken):
             )
         )
 
-        access_token = AccessTokenService.create_access_token_by_username_and_password(
+        access_token = AuthenticationService.create_access_token_by_username_and_password(
             params=EmailBasedAuthAccessTokenRequestParams(username=account.username, password="password")
         )
 
-        verified_access_token = AccessTokenService.verify_access_token(token=access_token.token)
+        verified_access_token = AuthenticationService.verify_access_token(token=access_token.token)
 
         assert verified_access_token.account_id == account.id
 
@@ -50,7 +50,7 @@ class TestAccessTokenService(BaseTestAccessToken):
         )
         otp = OTPService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
 
-        access_token = AccessTokenService.create_access_token_by_phone_number(
+        access_token = AuthenticationService.create_access_token_by_phone_number(
             params=OTPBasedAuthAccessTokenRequestParams(otp_code=otp.otp_code, phone_number=PhoneNumber(**phone_number))
         )
 
@@ -65,10 +65,10 @@ class TestAccessTokenService(BaseTestAccessToken):
         )
         otp = OTPService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
 
-        access_token = AccessTokenService.create_access_token_by_phone_number(
+        access_token = AuthenticationService.create_access_token_by_phone_number(
             params=OTPBasedAuthAccessTokenRequestParams(phone_number=PhoneNumber(**phone_number), otp_code=otp.otp_code)
         )
 
-        verified_access_token = AccessTokenService.verify_access_token(token=access_token.token)
+        verified_access_token = AuthenticationService.verify_access_token(token=access_token.token)
 
         assert verified_access_token.account_id == account.id

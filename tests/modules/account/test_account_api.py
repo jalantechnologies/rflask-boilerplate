@@ -4,7 +4,7 @@ from unittest import mock
 
 import jwt
 
-from modules.access_token.types import AccessTokenErrorCode
+from modules.authentication.types import AccessTokenErrorCode
 from modules.account.account_service import AccountService
 from modules.account.types import (
     AccountErrorCode,

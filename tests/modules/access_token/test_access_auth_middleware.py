@@ -3,21 +3,21 @@ from unittest.mock import MagicMock, patch
 
 from flask import request
 
-from modules.access_token.errors import (
+from modules.authentication.errors import (
     AccessTokenExpiredError,
     AccessTokenInvalidError,
     AuthorizationHeaderNotFoundError,
     InvalidAuthorizationHeaderError,
     UnauthorizedAccessError,
 )
-from modules.access_token.rest_api.access_auth_middleware import access_auth_middleware
+from modules.authentication.rest_api.access_auth_middleware import access_auth_middleware
 from server import app
 
 TEST_TOKEN = "your_test_token"
 
 
 class TestAccessAuthMiddleware(unittest.TestCase):
-    @patch("modules.access_token.access_token_service.AccessTokenService.verify_access_token")
+    @patch("modules.authentication.authentication_service.AuthenticationService.verify_access_token")
     def test_missing_authorization_header(self, mock_verify_access_token):
         mock_next_func = MagicMock()
 
@@ -27,7 +27,7 @@ class TestAccessAuthMiddleware(unittest.TestCase):
 
         mock_next_func.assert_not_called()
 
-    @patch("modules.access_token.access_token_service.AccessTokenService.verify_access_token")
+    @patch("modules.authentication.authentication_service.AuthenticationService.verify_access_token")
     def test_invalid_authorization_header(self, mock_verify_access_token):
         mock_next_func = MagicMock()
 
@@ -38,7 +38,7 @@ class TestAccessAuthMiddleware(unittest.TestCase):
 
         mock_next_func.assert_not_called()
 
-    @patch("modules.access_token.access_token_service.AccessTokenService.verify_access_token")
+    @patch("modules.authentication.authentication_service.AuthenticationService.verify_access_token")
     def test_invalid_access_token(self, mock_verify_access_token):
         mock_next_func = MagicMock()
         mock_verify_access_token.side_effect = AccessTokenInvalidError("Invalid access token.")
@@ -50,7 +50,7 @@ class TestAccessAuthMiddleware(unittest.TestCase):
 
         mock_next_func.assert_not_called()
 
-    @patch("modules.access_token.access_token_service.AccessTokenService.verify_access_token")
+    @patch("modules.authentication.authentication_service.AuthenticationService.verify_access_token")
     def test_unauthorized_access(self, mock_verify_access_token):
         mock_verify_access_token.return_value = MagicMock(account_id="12345")
 
@@ -62,7 +62,7 @@ class TestAccessAuthMiddleware(unittest.TestCase):
             with self.assertRaises(UnauthorizedAccessError):
                 test_view_func(account_id="67890")
 
-    @patch("modules.access_token.access_token_service.AccessTokenService.verify_access_token")
+    @patch("modules.authentication.authentication_service.AuthenticationService.verify_access_token")
     def test_expired_access_token(self, mock_verify_access_token):
         mock_next_func = MagicMock()
         mock_verify_access_token.side_effect = AccessTokenExpiredError("Access token has expired. Please login again.")

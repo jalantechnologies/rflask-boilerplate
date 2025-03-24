@@ -4,8 +4,8 @@ from flask import jsonify, request
 from flask.typing import ResponseReturnValue
 from flask.views import MethodView
 
-from modules.access_token.access_token_service import AccessTokenService
-from modules.access_token.types import (
+from modules.authentication.authentication_service import AuthenticationService
+from modules.authentication.types import (
     CreateAccessTokenParams,
     EmailBasedAuthAccessTokenRequestParams,
     OTPBasedAuthAccessTokenRequestParams,
@@ -23,9 +23,9 @@ class AccessTokenView(MethodView):
             access_token_params = OTPBasedAuthAccessTokenRequestParams(
                 otp_code=request_data["otp_code"], phone_number=phone_number_obj
             )
-            access_token = AccessTokenService.create_access_token_by_phone_number(params=access_token_params)
+            access_token = AuthenticationService.create_access_token_by_phone_number(params=access_token_params)
         elif "username" in request_data and "password" in request_data:
             access_token_params = EmailBasedAuthAccessTokenRequestParams(**request_data)
-            access_token = AccessTokenService.create_access_token_by_username_and_password(params=access_token_params)
+            access_token = AuthenticationService.create_access_token_by_username_and_password(params=access_token_params)
         access_token_dict = asdict(access_token)
         return jsonify(access_token_dict), 201

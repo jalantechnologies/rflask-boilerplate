@@ -1,4 +1,4 @@
-from modules.access_token.types import AccessTokenErrorCode
+from modules.authentication.types import AccessTokenErrorCode
 from modules.error.custom_errors import AppError
 
 

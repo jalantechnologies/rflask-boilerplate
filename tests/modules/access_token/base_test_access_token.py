@@ -1,7 +1,7 @@
 import unittest
 from typing import Callable
 
-from modules.access_token.rest_api.access_token_rest_api_server import AccessTokenRestApiServer
+from modules.authentication.rest_api.authentication_rest_api_server import AuthenticationRestApiServer
 from modules.account.internal.store.account_repository import AccountRepository
 from modules.otp.internal.store.otp_repository import OTPRepository
 
@@ -9,7 +9,7 @@ from modules.otp.internal.store.otp_repository import OTPRepository
 class BaseTestAccessToken(unittest.TestCase):
     def setup_method(self, method: Callable) -> None:
         print(f"Executing:: {method.__name__}")
-        AccessTokenRestApiServer.create()
+        AuthenticationRestApiServer.create()
 
     def teardown_method(self, method: Callable) -> None:
         print(f"Executed:: {method.__name__}")
