@@ -15,17 +15,11 @@ import {
   Signup,
 } from '../pages';
 
-import AuthRoute from './auth-route';
-
 const currentAuthMechanism = Config.getConfigValue<string>(
   'authenticationMechanism',
 );
 
 export const publicRoutes = [
-  {
-    path: routes.LOGIN,
-    element: <AuthRoute authPage={Login} otpAuthPage={PhoneLogin} />,
-  },
   {
     path: routes.FORGOT_PASSWORD,
     element: (
@@ -47,15 +41,27 @@ export const publicRoutes = [
 ];
 
 if (currentAuthMechanism === constant.PHONE_NUMBER_BASED_AUTHENTICATION) {
-  publicRoutes.push({
-    path: routes.VERIFY_OTP,
-    element: <OTPVerificationPage />,
-  });
+  publicRoutes.push(
+    {
+      path: routes.LOGIN,
+      element: <PhoneLogin />,
+    },
+    {
+      path: routes.VERIFY_OTP,
+      element: <OTPVerificationPage />,
+    },
+  );
 }
 
 if (currentAuthMechanism === constant.EMAIL_BASED_AUTHENTICATION) {
-  publicRoutes.push({
-    path: routes.SIGNUP,
-    element: <Signup />,
-  });
+  publicRoutes.push(
+    {
+      path: routes.LOGIN,
+      element: <Login />,
+    },
+    {
+      path: routes.SIGNUP,
+      element: <Signup />,
+    },
+  );
 }
