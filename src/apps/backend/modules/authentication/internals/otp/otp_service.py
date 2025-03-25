@@ -3,9 +3,9 @@ from dataclasses import asdict
 from modules.account.types import PhoneNumber
 from modules.communication.sms_service import SMSService
 from modules.communication.types import SendSMSParams
-from modules.otp.internal.otp_util import OTPUtil
-from modules.otp.internal.otp_writer import OTPWriter
-from modules.otp.types import CreateOTPParams, OTP, VerifyOTPParams
+from modules.authentication.internals.otp.internal.otp_util import OTPUtil
+from modules.authentication.internals.otp.internal.otp_writer import OTPWriter
+from modules.authentication.internals.otp.types import CreateOTPParams, OTP, VerifyOTPParams
 
 
 class OTPService:

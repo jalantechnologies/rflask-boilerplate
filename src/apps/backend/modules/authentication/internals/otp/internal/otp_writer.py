@@ -3,11 +3,11 @@ from dataclasses import asdict
 from pymongo import ReturnDocument
 
 from modules.account.types import PhoneNumber
-from modules.otp.errors import OTPExpiredError, OTPIncorrectError
-from modules.otp.internal.otp_util import OTPUtil
-from modules.otp.internal.store.otp_model import OTPModel
-from modules.otp.internal.store.otp_repository import OTPRepository
-from modules.otp.types import CreateOTPParams, OTP, OTPStatus, VerifyOTPParams
+from modules.authentication.internals.otp.errors import OTPExpiredError, OTPIncorrectError
+from modules.authentication.internals.otp.internal.otp_util import OTPUtil
+from modules.authentication.internals.otp.internal.store.otp_model import OTPModel
+from modules.authentication.internals.otp.internal.store.otp_repository import OTPRepository
+from modules.authentication.internals.otp.types import CreateOTPParams, OTP, OTPStatus, VerifyOTPParams
 
 
 class OTPWriter:

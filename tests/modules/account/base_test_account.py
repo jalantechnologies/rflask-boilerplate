@@ -5,7 +5,7 @@ from modules.account.internal.store.account_repository import AccountRepository
 from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
 from modules.config.config_service import ConfigService
 from modules.logger.logger_manager import LoggerManager
-from modules.otp.internal.store.otp_repository import OTPRepository
+from modules.authentication.internals.otp.internal.store.otp_repository import OTPRepository
 
 
 class BaseTestAccount(unittest.TestCase):

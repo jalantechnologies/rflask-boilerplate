@@ -7,8 +7,8 @@ from modules.account.types import (
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
 )
-from modules.otp.otp_service import OTPService
-from modules.otp.types import CreateOTPParams
+from modules.authentication.internals.otp.otp_service import OTPService
+from modules.authentication.internals.otp.types import CreateOTPParams
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
 

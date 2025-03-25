@@ -9,8 +9,8 @@ from modules.account.types import (
     ResetPasswordParams,
 )
 from modules.authentication.authentication_service import AuthenticationService
-from modules.otp.otp_service import OTPService
-from modules.otp.types import CreateOTPParams
+from modules.authentication.internals.otp.otp_service import OTPService
+from modules.authentication.internals.otp.types import CreateOTPParams
 
 
 class AccountService:

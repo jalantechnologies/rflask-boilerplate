@@ -1,5 +1,5 @@
 from modules.error.custom_errors import AppError
-from modules.otp.types import OTPErrorCode
+from modules.authentication.internals.otp.types import OTPErrorCode
 
 
 class OTPIncorrectError(AppError):

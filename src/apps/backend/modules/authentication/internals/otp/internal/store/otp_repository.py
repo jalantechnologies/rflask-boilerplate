@@ -2,7 +2,7 @@ from pymongo.collection import Collection
 
 from modules.application.repository import ApplicationRepository
 from modules.logger.logger import Logger
-from modules.otp.internal.store.otp_model import OTPModel
+from modules.authentication.internals.otp.internal.store.otp_model import OTPModel
 from pymongo.errors import OperationFailure
 
 

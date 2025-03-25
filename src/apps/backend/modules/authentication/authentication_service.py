@@ -22,9 +22,9 @@ from modules.authentication.types import (
 from modules.account.internal.account_reader import AccountReader
 from modules.account.types import Account, AccountSearchParams
 from modules.config.config_service import ConfigService
-from modules.otp.errors import OTPIncorrectError
-from modules.otp.otp_service import OTPService
-from modules.otp.types import OTPStatus, VerifyOTPParams
+from modules.authentication.internals.otp.errors import OTPIncorrectError
+from modules.authentication.internals.otp.otp_service import OTPService
+from modules.authentication.internals.otp.types import OTPStatus, VerifyOTPParams
 
 
 class AuthenticationService:
