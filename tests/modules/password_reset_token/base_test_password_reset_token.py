@@ -3,8 +3,8 @@ from typing import Callable
 
 from modules.account.internal.store.account_repository import AccountRepository
 from modules.config.config_service import ConfigService
-from modules.password_reset_token.internal.store.password_reset_token_repository import PasswordResetTokenRepository
-from modules.password_reset_token.rest_api.password_reset_token_rest_api_server import PasswordResetTokenRestApiServer
+from modules.authentication.internals.password_reset_token.store.password_reset_token_repository import PasswordResetTokenRepository
+from modules.authentication.rest_api.authentication_rest_api_server import AuthenticationRestApiServer
 
 
 class BaseTestPasswordResetToken(unittest.TestCase):

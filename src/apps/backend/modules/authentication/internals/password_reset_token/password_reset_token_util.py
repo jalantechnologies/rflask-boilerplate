@@ -6,8 +6,8 @@ from typing import Any
 import bcrypt
 
 from modules.config.config_service import ConfigService
-from modules.password_reset_token.types import PasswordResetToken
-from modules.password_reset_token.internal.store.password_reset_token_model import PasswordResetTokenModel
+from modules.authentication.types import PasswordResetToken
+from modules.authentication.internals.password_reset_token.store.password_reset_token_model import PasswordResetTokenModel
 
 class PasswordResetTokenUtil:
 

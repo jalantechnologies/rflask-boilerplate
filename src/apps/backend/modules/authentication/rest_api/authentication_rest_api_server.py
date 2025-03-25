@@ -6,5 +6,5 @@ from modules.authentication.rest_api.authentication_router import Authentication
 class AuthenticationRestApiServer:
     @staticmethod
     def create() -> Blueprint:
-        access_token_api_blueprint = Blueprint("access_token", __name__)
-        return AuthenticationRouter.create_route(blueprint=access_token_api_blueprint)
+        authentication_api_blueprint = Blueprint("authentication", __name__)
+        return AuthenticationRouter.create_route(blueprint=authentication_api_blueprint)

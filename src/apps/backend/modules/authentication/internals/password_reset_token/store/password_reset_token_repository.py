@@ -1,7 +1,7 @@
 from pymongo.collection import Collection
 from pymongo.errors import OperationFailure
 from modules.application.repository import ApplicationRepository
-from modules.password_reset_token.internal.store.password_reset_token_model import PasswordResetTokenModel
+from modules.authentication.internals.password_reset_token.store.password_reset_token_model import PasswordResetTokenModel
 from modules.logger.logger import Logger
 
 PASSWORD_RESET_TOKEN_VALIDATION_SCHEMA = {

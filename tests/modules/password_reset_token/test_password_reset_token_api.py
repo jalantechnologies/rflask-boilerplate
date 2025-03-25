@@ -5,11 +5,11 @@ from modules.account.account_service import AccountService
 from modules.account.errors import AccountBadRequestError, AccountNotFoundError
 from modules.account.types import CreateAccountByUsernameAndPasswordParams
 from modules.communication.email_service import EmailService
-from modules.password_reset_token.errors import PasswordResetTokenNotFoundError
-from modules.password_reset_token.internal.password_reset_token_util import PasswordResetTokenUtil
-from modules.password_reset_token.internal.password_reset_token_writer import PasswordResetTokenWriter
-from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
-from modules.password_reset_token.types import CreatePasswordResetTokenParams
+from modules.authentication.errors import PasswordResetTokenNotFoundError
+from modules.authentication.internals.password_reset_token.password_reset_token_util import PasswordResetTokenUtil
+from modules.authentication.internals.password_reset_token.password_reset_token_writer import PasswordResetTokenWriter
+from modules.authentication.authentication_service import AuthenticationService
+from modules.authentication.types import CreatePasswordResetTokenParams
 from server import app
 from tests.modules.password_reset_token.base_test_password_reset_token import BaseTestPasswordResetToken
 
@@ -70,7 +70,7 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
 
         token = PasswordResetTokenUtil.generate_password_reset_token()
         PasswordResetTokenWriter.create_password_reset_token(account.id, token)
-        PasswordResetTokenService.send_password_reset_email(account.id, account.first_name, account.username, token)
+        AuthenticationService.send_password_reset_email(account.id, account.first_name, account.username, token)
 
         new_password = "new_password"
 
@@ -88,7 +88,7 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
             self.assertEqual(response.json["username"], account.username)
 
             # Check if password reset token is marked as used.
-            updated_password_reset_token = PasswordResetTokenService.get_password_reset_token_by_account_id(account.id)
+            updated_password_reset_token = AuthenticationService.get_password_reset_token_by_account_id(account.id)
             self.assertTrue(updated_password_reset_token.is_used)
             self.assertTrue(mock_send_email.called)
 
@@ -143,11 +143,11 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
             )
         )
 
-        password_reset_token = PasswordResetTokenService.create_password_reset_token(
+        password_reset_token = AuthenticationService.create_password_reset_token(
             params=CreatePasswordResetTokenParams(username=account.username)
         )
 
-        PasswordResetTokenService.set_password_reset_token_as_used_by_id(password_reset_token.id)
+        AuthenticationService.set_password_reset_token_as_used_by_id(password_reset_token.id)
 
         new_password = "new_password"
 
@@ -176,7 +176,7 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
             )
         )
 
-        PasswordResetTokenService.create_password_reset_token(
+        AuthenticationService.create_password_reset_token(
             params=CreatePasswordResetTokenParams(username=account.username)
         )
 
@@ -208,7 +208,7 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
             )
         )
 
-        password_reset_token = PasswordResetTokenService.create_password_reset_token(
+        password_reset_token = AuthenticationService.create_password_reset_token(
             params=CreatePasswordResetTokenParams(username=account.username)
         )
 

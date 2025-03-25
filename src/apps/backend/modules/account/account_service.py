@@ -8,9 +8,9 @@ from modules.account.types import (
     PhoneNumber,
     ResetPasswordParams,
 )
+from modules.authentication.authentication_service import AuthenticationService
 from modules.otp.otp_service import OTPService
 from modules.otp.types import CreateOTPParams
-from modules.password_reset_token.password_reset_token_service import PasswordResetTokenService
 
 
 class AccountService:
@@ -36,10 +36,9 @@ class AccountService:
 
     @staticmethod
     def reset_account_password(*, params: ResetPasswordParams) -> Account:
-
         account = AccountReader.get_account_by_id(params=AccountSearchByIdParams(id=params.account_id))
 
-        password_reset_token = PasswordResetTokenService.verify_password_reset_token(
+        password_reset_token = AuthenticationService.verify_password_reset_token(
             account_id=account.id, token=params.token
         )
 
@@ -47,9 +46,7 @@ class AccountService:
             account_id=params.account_id, password=params.new_password
         )
 
-        PasswordResetTokenService.set_password_reset_token_as_used_by_id(
-            password_reset_token_id=password_reset_token.id
-        )
+        AuthenticationService.set_password_reset_token_as_used_by_id(password_reset_token_id=password_reset_token.id)
 
         return updated_account
 
