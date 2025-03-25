@@ -9,14 +9,14 @@ const logErrorToDatadog = (
   errorInfo: { componentStack: string },
 ): void => {
   console.log(':  Error Sent  :', error, errorInfo);
-  if (datadogConfig()?.key != undefined) {
+  if (datadogConfig()?.key !== undefined) {
     sendLogs(error, errorInfo);
   }
 };
 
 const ErrorFallback: React.FC<{
-  error: Error;
   componentRef?: React.RefObject<HTMLElement>;
+  error: Error;
 }> = ({ error, componentRef }) => {
   const width = componentRef?.current?.getBoundingClientRect().width || 'auto';
   const height =

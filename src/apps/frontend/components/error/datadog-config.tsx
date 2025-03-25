@@ -1,6 +1,6 @@
 import { Config } from '../../helpers';
 
-const datadogConfig = (): { key: string; app_name: string } | undefined => {
+const datadogConfig = (): { app_name: string; key: string } | undefined => {
   const logTransports = Config.getConfigValue<string[]>('logger.transports');
   if (logTransports?.includes('datadog')) {
     const Key: string =
