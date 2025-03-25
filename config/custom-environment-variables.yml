@@ -19,6 +19,7 @@ datadog:
   site_name: 'DATADOG_SITE'
   app_name: 'DATADOG_APP_NAME'
   log_level: 'DATADOG_LOG_LEVEL'
+  client_key: 'DATADOG_CLIENT_KEY'
 
 sendgrid:
   api_key: 'SENDGRID_API_KEY'

@@ -1,12 +1,14 @@
 import { datadogLogs } from '@datadog/browser-logs';
 import '@datadog/browser-logs/bundle/datadog-logs';
 import { ErrorInfo } from 'react';
+import datadogConfig from './datadog-config';
 
 datadogLogs.init({
-  clientToken: '<CLIENT_TOKEN>',
+  clientToken: datadogConfig()?.key ?? '',
   site: 'us5.datadoghq.com',
   forwardErrorsToLogs: true,
   sessionSampleRate: 100,
+  service: datadogConfig()?.app_name ?? '',
 });
 
 const sendLogs = (error: Error, errorInfo: ErrorInfo) => {
