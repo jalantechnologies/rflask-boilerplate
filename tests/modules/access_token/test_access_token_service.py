@@ -7,8 +7,8 @@ from modules.account.types import (
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
 )
-from modules.authentication.internals.otp.otp_service import OTPService
-from modules.authentication.internals.otp.types import CreateOTPParams
+from modules.authentication.authentication_service import AuthenticationService
+from modules.authentication.types import CreateOTPParams
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
 
@@ -48,7 +48,7 @@ class TestAuthenticationService(BaseTestAccessToken):
         account = AccountWriter.create_account_by_phone_number(
             params=CreateAccountByPhoneNumberParams(phone_number=PhoneNumber(**phone_number))
         )
-        otp = OTPService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
+        otp = AuthenticationService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
 
         access_token = AuthenticationService.create_access_token_by_phone_number(
             params=OTPBasedAuthAccessTokenRequestParams(otp_code=otp.otp_code, phone_number=PhoneNumber(**phone_number))
@@ -63,7 +63,7 @@ class TestAuthenticationService(BaseTestAccessToken):
         account = AccountWriter.create_account_by_phone_number(
             params=CreateAccountByPhoneNumberParams(phone_number=PhoneNumber(**phone_number))
         )
-        otp = OTPService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
+        otp = AuthenticationService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
 
         access_token = AuthenticationService.create_access_token_by_phone_number(
             params=OTPBasedAuthAccessTokenRequestParams(phone_number=PhoneNumber(**phone_number), otp_code=otp.otp_code)

@@ -8,8 +8,8 @@ from modules.account.types import (
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
 )
-from modules.authentication.internals.otp.otp_service import OTPService
-from modules.authentication.internals.otp.types import CreateOTPParams, OTPErrorCode, VerifyOTPParams
+from modules.authentication.authentication_service import AuthenticationService
+from modules.authentication.types import CreateOTPParams, OTPErrorCode, VerifyOTPParams
 from server import app
 from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
 
@@ -78,7 +78,7 @@ class TestAccessTokenApi(BaseTestAccessToken):
             params=CreateAccountByPhoneNumberParams(phone_number=PhoneNumber(**phone_number))
         )
 
-        otp = OTPService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
+        otp = AuthenticationService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
 
         with app.test_client() as client:
             response = client.post(
@@ -124,9 +124,9 @@ class TestAccessTokenApi(BaseTestAccessToken):
             params=CreateAccountByPhoneNumberParams(phone_number=PhoneNumber(**phone_number))
         )
 
-        otp = OTPService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
+        otp = AuthenticationService.create_otp(params=CreateOTPParams(phone_number=PhoneNumber(**phone_number)))
 
-        OTPService.verify_otp(params=VerifyOTPParams(phone_number=PhoneNumber(**phone_number), otp_code=otp.otp_code))
+        AuthenticationService.verify_otp(params=VerifyOTPParams(phone_number=PhoneNumber(**phone_number), otp_code=otp.otp_code))
 
         with app.test_client() as client:
             response = client.post(

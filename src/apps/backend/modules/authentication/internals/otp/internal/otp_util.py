@@ -4,7 +4,7 @@ from typing import Any
 
 from modules.authentication.internals.otp.internal.store.otp_model import OTPModel
 from modules.config.config_service import ConfigService
-from modules.authentication.internals.otp.types import OTP
+from modules.authentication.types import OTP
 
 
 class OTPUtil:

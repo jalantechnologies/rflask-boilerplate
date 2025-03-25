@@ -10,7 +10,7 @@ from modules.authentication.rest_api.authentication_rest_api_server import Authe
 class BaseTestPasswordResetToken(unittest.TestCase):
     def setup_method(self, method: Callable) -> None:
         print(f"Executing:: {method.__name__}")
-        PasswordResetTokenRestApiServer.create()
+        AuthenticationRestApiServer.create()
 
     def teardown_method(self, method: Callable) -> None:
         print(f"Executed:: {method.__name__}")

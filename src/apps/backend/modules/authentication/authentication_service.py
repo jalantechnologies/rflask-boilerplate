@@ -3,6 +3,14 @@ from datetime import datetime, timedelta
 import jwt
 import urllib.parse
 
+from dataclasses import asdict
+
+from modules.account.types import PhoneNumber
+from modules.communication.sms_service import SMSService
+from modules.communication.types import SendSMSParams
+from modules.authentication.internals.otp.internal.otp_util import OTPUtil
+from modules.authentication.internals.otp.internal.otp_writer import OTPWriter
+from modules.authentication.types import CreateOTPParams, OTP, VerifyOTPParams
 from modules.account.errors import AccountBadRequestError
 from modules.account.internal.account_reader import AccountReader
 from modules.communication.email_service import EmailService
@@ -22,9 +30,8 @@ from modules.authentication.types import (
 from modules.account.internal.account_reader import AccountReader
 from modules.account.types import Account, AccountSearchParams
 from modules.config.config_service import ConfigService
-from modules.authentication.internals.otp.errors import OTPIncorrectError
-from modules.authentication.internals.otp.otp_service import OTPService
-from modules.authentication.internals.otp.types import OTPStatus, VerifyOTPParams
+from modules.authentication.errors import OTPIncorrectError
+from modules.authentication.types import OTPStatus, VerifyOTPParams
 
 
 class AuthenticationService:
@@ -40,7 +47,7 @@ class AuthenticationService:
     def create_access_token_by_phone_number(*, params: OTPBasedAuthAccessTokenRequestParams) -> AccessToken:
         account = AccountReader.get_account_by_phone_number(phone_number=params.phone_number)
 
-        otp = OTPService.verify_otp(params=VerifyOTPParams(phone_number=params.phone_number, otp_code=params.otp_code))
+        otp = AuthenticationService.verify_otp(params=VerifyOTPParams(phone_number=params.phone_number, otp_code=params.otp_code))
 
         if otp.status != OTPStatus.SUCCESS:
             raise OTPIncorrectError()
@@ -136,3 +143,21 @@ class AuthenticationService:
         )
 
         EmailService.send_email(params=password_reset_email_params)
+
+    @staticmethod
+    def create_otp(*, params: CreateOTPParams) -> OTP:
+        recipient_phone_number = PhoneNumber(**asdict(params)["phone_number"])
+        otp = OTPWriter.create_new_otp(params=params)
+
+        send_sms_params = SendSMSParams(
+            message_body=f"{otp.otp_code} is your One Time Password (OTP) for verification.",
+            recipient_phone=recipient_phone_number,
+        )
+        if not OTPUtil.is_default_phone_number(phone_number=recipient_phone_number.phone_number):
+            SMSService.send_sms(params=send_sms_params)
+
+        return otp
+
+    @staticmethod
+    def verify_otp(*, params: VerifyOTPParams) -> OTP:
+        return OTPWriter.verify_otp(params=params)

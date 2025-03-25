@@ -15,7 +15,7 @@ from modules.account.types import (
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
 )
-from modules.authentication.internals.otp.errors import OTPRequestFailedError
+from modules.authentication.errors import OTPRequestFailedError
 
 
 class AccountWriter:

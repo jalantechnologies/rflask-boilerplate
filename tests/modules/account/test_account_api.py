@@ -14,7 +14,7 @@ from modules.account.types import (
 )
 from modules.communication.sms_service import SMSService
 from modules.config.config_service import ConfigService
-from modules.authentication.internals.otp.types import OTPErrorCode
+from modules.authentication.types import OTPErrorCode
 from server import app
 from tests.modules.account.base_test_account import BaseTestAccount
 
