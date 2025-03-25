@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-deployment
+  namespace: temporal-production
+  labels:
+    app: temporal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal
+  template:
+    metadata:
+      labels:
+        app: temporal
+    spec:
+      containers:
+        - name: temporal-server
+          image: temporalio/auto-setup:latest
+          ports:
+            - containerPort: 7233
+
+        - name: temporal-ui
+          image: temporalio/ui:latest
+          ports:
+            - containerPort: 8080
+
+        - name: python-worker
+          image: $KUBE_DEPLOYMENT_IMAGE
+          command: ["python3", "/app/temporal_server.py"]
+          env:
+            - name: TEMPORAL_SERVER
+              value: "temporal-service:7233"
