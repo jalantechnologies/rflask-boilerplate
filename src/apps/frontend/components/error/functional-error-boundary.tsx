@@ -1,7 +1,8 @@
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import sendLogs from './datadog-logger';
+
 import datadogConfig from './datadog-config';
+import sendLogs from './datadog-logger';
 
 const logErrorToDatadog = (
   error: Error,
@@ -30,8 +31,8 @@ const ErrorFallback: React.FC<{
   return (
     <div
       className={`
-        text-sm font-large leading-snug border rounded-lg px-3 py-1 transition
-        ${isCritical ? 'bg-red-600 text-red-50 border-red-500' : 'bg-red-200  text-red-700 border-red-500'}
+        font-large rounded-lg border px-3 py-1 text-sm leading-snug transition
+        ${isCritical ? 'border-red-500 bg-red-600 text-red-50' : 'border-red-500  bg-red-200 text-red-700'}
       `}
       style={{ width, height, whiteSpace: 'nowrap' }}
       role="alert"

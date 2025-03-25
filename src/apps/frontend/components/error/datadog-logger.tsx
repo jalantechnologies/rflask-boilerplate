@@ -1,6 +1,7 @@
 import { datadogLogs } from '@datadog/browser-logs';
 import '@datadog/browser-logs/bundle/datadog-logs';
 import { ErrorInfo } from 'react';
+
 import datadogConfig from './datadog-config';
 
 datadogLogs.init({
