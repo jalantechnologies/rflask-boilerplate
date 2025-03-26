@@ -1,4 +1,4 @@
-import random
+import secrets
 import string
 from typing import Any
 
@@ -22,7 +22,7 @@ class OTPUtil:
         if OTPUtil.is_default_phone_number(phone_number):
             default_otp = ConfigService[str].get_value(key="otp.default_otp")
             return default_otp
-        return "".join(random.choices(string.digits, k=length))
+        return "".join(secrets.choice(string.digits) for _ in range(length))
 
     @staticmethod
     def convert_otp_bson_to_otp(otp_bson: dict[str, Any]) -> OTP:
