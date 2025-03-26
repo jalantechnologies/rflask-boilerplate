@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal-${{ github.event.number }}-service
+  namespace: $KUBE_NS
+spec:
+  selector:
+    app: temporal
+    pr: ${{ github.event.number }}
+  ports:
+    - name: temporal-grpc
+      protocol: TCP
+      port: 7233
+      targetPort: 7233
+    - name: temporal-ui
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer

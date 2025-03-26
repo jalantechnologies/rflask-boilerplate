@@ -20,3 +20,21 @@ jobs:
     secrets:
       docker_password: ${{ secrets.DOCKER_PASSWORD }}
       do_access_token: ${{ secrets.DO_ACCESS_TOKEN }}
+ 
+  clean_temporal:
+    needs: clean  # Ensure Temporal cleanup happens after app cleanup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate with DigitalOcean Kubernetes
+        env:
+          DO_ACCESS_TOKEN: ${{ secrets.DO_ACCESS_TOKEN }}
+        run: |
+          echo "$DO_ACCESS_TOKEN" | doctl auth init
+          doctl kubernetes cluster kubeconfig save ${{ vars.DO_CLUSTER_ID }}
+
+      - name: Delete PR-Specific Temporal Deployment
+        env:
+          DO_ACCESS_TOKEN: ${{ secrets.DO_ACCESS_TOKEN }}
+        run: |
+          kubectl delete deployment temporal-${{ github.event.pull_request.number }} -n $KUBE_NS || true
+          kubectl delete service temporal-${{ github.event.pull_request.number }}-service -n $KUBE_NS || true
