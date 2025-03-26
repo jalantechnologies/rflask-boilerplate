@@ -39,6 +39,7 @@ class AccessTokenErrorCode:
     INVALID_AUTHORIZATION_HEADER: str = "ACCESS_TOKEN_ERR_04"
     ACCESS_TOKEN_INVALID: str = "ACCESS_TOKEN_ERR_05"
 
+
 from dataclasses import dataclass
 
 
@@ -60,6 +61,7 @@ class CreatePasswordResetTokenParams:
 @dataclass(frozen=True)
 class PasswordResetTokenErrorCode:
     PASSWORD_RESET_TOKEN_NOT_FOUND: str = "PASSWORD_RESET_TOKEN_ERR_01"
+
 
 @dataclass(frozen=True)
 class OTPStatus(StrEnum):

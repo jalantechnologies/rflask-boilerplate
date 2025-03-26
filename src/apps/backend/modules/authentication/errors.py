@@ -1,11 +1,5 @@
-from modules.authentication.types import AccessTokenErrorCode
+from modules.authentication.types import AccessTokenErrorCode, PasswordResetTokenErrorCode, OTPErrorCode
 from modules.error.custom_errors import AppError
-from modules.authentication.types import PasswordResetTokenErrorCode
-from modules.error.custom_errors import AppError
-from modules.authentication.types import PasswordResetTokenErrorCode
-
-from modules.error.custom_errors import AppError
-from modules.authentication.types import OTPErrorCode
 
 
 class AccessTokenInvalidError(AppError):
@@ -34,6 +28,7 @@ class InvalidAuthorizationHeaderError(AppError):
     def __init__(self, message: str) -> None:
         super().__init__(code=AccessTokenErrorCode.INVALID_AUTHORIZATION_HEADER, http_status_code=401, message=message)
 
+
 class PasswordResetTokenNotFoundError(AppError):
 
     def __init__(self) -> None:
@@ -42,6 +37,7 @@ class PasswordResetTokenNotFoundError(AppError):
             http_status_code=404,
             message=f"System is unable to find a token with this account",
         )
+
 
 class OTPIncorrectError(AppError):
     def __init__(self) -> None:

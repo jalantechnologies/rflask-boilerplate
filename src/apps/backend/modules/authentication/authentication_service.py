@@ -1,37 +1,38 @@
 from datetime import datetime, timedelta
+import urllib.parse
 
 import jwt
-import urllib.parse
 
 from dataclasses import asdict
 
-from modules.account.types import PhoneNumber
-from modules.communication.sms_service import SMSService
-from modules.communication.types import SendSMSParams
-from modules.authentication.internals.otp.internal.otp_util import OTPUtil
-from modules.authentication.internals.otp.internal.otp_writer import OTPWriter
-from modules.authentication.types import CreateOTPParams, OTP, VerifyOTPParams
 from modules.account.errors import AccountBadRequestError
 from modules.account.internal.account_reader import AccountReader
-from modules.communication.email_service import EmailService
-from modules.communication.types import EmailRecipient, EmailSender, SendEmailParams
-from modules.config.config_service import ConfigService
+from modules.account.types import Account, AccountSearchParams, PhoneNumber
+
+from modules.authentication.errors import AccessTokenExpiredError, AccessTokenInvalidError, OTPIncorrectError
+from modules.authentication.internals.otp.otp_util import OTPUtil
+from modules.authentication.internals.otp.otp_writer import OTPWriter
 from modules.authentication.internals.password_reset_token.password_reset_token_reader import PasswordResetTokenReader
 from modules.authentication.internals.password_reset_token.password_reset_token_util import PasswordResetTokenUtil
 from modules.authentication.internals.password_reset_token.password_reset_token_writer import PasswordResetTokenWriter
-from modules.authentication.types import CreatePasswordResetTokenParams, PasswordResetToken
-from modules.authentication.errors import AccessTokenExpiredError, AccessTokenInvalidError
 from modules.authentication.types import (
     AccessToken,
     AccessTokenPayload,
+    CreateOTPParams,
+    CreatePasswordResetTokenParams,
     EmailBasedAuthAccessTokenRequestParams,
+    OTP,
     OTPBasedAuthAccessTokenRequestParams,
+    OTPStatus,
+    VerifyOTPParams,
+    PasswordResetToken,
 )
-from modules.account.internal.account_reader import AccountReader
-from modules.account.types import Account, AccountSearchParams
+
+from modules.communication.email_service import EmailService
+from modules.communication.sms_service import SMSService
+from modules.communication.types import EmailRecipient, EmailSender, SendEmailParams, SendSMSParams
+
 from modules.config.config_service import ConfigService
-from modules.authentication.errors import OTPIncorrectError
-from modules.authentication.types import OTPStatus, VerifyOTPParams
 
 
 class AuthenticationService:
@@ -47,7 +48,9 @@ class AuthenticationService:
     def create_access_token_by_phone_number(*, params: OTPBasedAuthAccessTokenRequestParams) -> AccessToken:
         account = AccountReader.get_account_by_phone_number(phone_number=params.phone_number)
 
-        otp = AuthenticationService.verify_otp(params=VerifyOTPParams(phone_number=params.phone_number, otp_code=params.otp_code))
+        otp = AuthenticationService.verify_otp(
+            params=VerifyOTPParams(phone_number=params.phone_number, otp_code=params.otp_code)
+        )
 
         if otp.status != OTPStatus.SUCCESS:
             raise OTPIncorrectError()

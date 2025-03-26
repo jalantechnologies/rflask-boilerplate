@@ -1,9 +1,9 @@
 from pymongo.collection import Collection
+from pymongo.errors import OperationFailure
 
 from modules.application.repository import ApplicationRepository
 from modules.logger.logger import Logger
-from modules.authentication.internals.otp.internal.store.otp_model import OTPModel
-from pymongo.errors import OperationFailure
+from modules.authentication.internals.otp.store.otp_model import OTPModel
 
 
 OTP_VALIDATION_SCHEMA = {
@@ -46,7 +46,7 @@ class OTPRepository(ApplicationRepository):
         try:
             collection.database.command(add_validation_command)
         except OperationFailure as e:
-            if e.code == 26: # NamespaceNotFound MongoDB error code
+            if e.code == 26:  # NamespaceNotFound MongoDB error code
                 collection.database.create_collection(cls.collection_name, validator=OTP_VALIDATION_SCHEMA)
             else:
                 Logger.error(message=f"OperationFailure occurred for collection otp: {e.details}")
