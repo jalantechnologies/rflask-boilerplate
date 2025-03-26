@@ -7,7 +7,7 @@ const datadogConfig = (): { app_name: string; key: string } | null => {
     const Key: string = Config.getConfigValue<string>('datadogClientKey') ?? '';
     const appName: string =
       Config.getConfigValue<string>('datadogAppName') ?? '';
-    return { key: Key, app_name: appName + ':frontend' };
+    return { key: Key, app_name: `${appName}:frontend` };
   }
   return null;
 };
