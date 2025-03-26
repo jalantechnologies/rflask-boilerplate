@@ -4,9 +4,18 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const webpackBuildConfig = JSON.stringify(
-  config.util.toObject(config.has('public') ? config.get('public') : {}),
-);
+const webpackBuildConfig = JSON.stringify({
+  ...config.util.toObject(config.has('public') ? config.get('public') : {}),
+  loggerTransports: config.has('logger.transports')
+    ? config.get('logger.transports')
+    : [],
+  datadogClientKey: config.has('datadog.client_key')
+    ? config.get('datadog.client_key')
+    : '',
+  datadogAppName: config.has('datadog.app_name')
+    ? config.get('datadog.app_name')
+    : '',
+});
 
 module.exports = {
   target: 'web',

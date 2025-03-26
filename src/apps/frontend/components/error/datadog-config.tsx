@@ -1,15 +1,15 @@
 import { Config } from '../../helpers';
 
-const datadogConfig = (): { app_name: string; key: string } | undefined => {
-  const logTransports = Config.getConfigValue<string[]>('logger.transports');
+const datadogConfig = (): { app_name: string; key: string } | null => {
+  const logTransports =
+    Config.getConfigValue<string[]>('loggerTransports') ?? [];
   if (logTransports?.includes('datadog')) {
-    const Key: string =
-      Config.getConfigValue<string>('datadog.client_key') ?? '';
+    const Key: string = Config.getConfigValue<string>('datadogClientKey') ?? '';
     const appName: string =
-      Config.getConfigValue<string>('datadog.app_name') ?? '';
-    return { key: Key, app_name: appName };
+      Config.getConfigValue<string>('datadogAppName') ?? '';
+    return { key: Key, app_name: appName + ':frontend' };
   }
-  return undefined;
+  return null;
 };
 
 export default datadogConfig;

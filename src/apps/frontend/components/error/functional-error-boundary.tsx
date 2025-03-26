@@ -1,6 +1,5 @@
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-
 import datadogConfig from './datadog-config';
 import sendLogs from './datadog-logger';
 
@@ -8,8 +7,7 @@ const logErrorToDatadog = (
   error: Error,
   errorInfo: { componentStack: string },
 ): void => {
-  console.log(':  Error Sent  :', error, errorInfo);
-  if (datadogConfig()?.key !== undefined) {
+  if (datadogConfig() != null) {
     sendLogs(error, errorInfo);
   }
 };
