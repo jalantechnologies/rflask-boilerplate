@@ -3,7 +3,7 @@ kind: PriorityClass
 metadata:
   name: $KUBE_APP-$KUBE_DEPLOY_ID-priority
   namespace: $KUBE_NS
-value: 100000
+value: "$KUBE_DEPLOY_ID"
 globalDefault: false
 description: "This priority class is used for preview Temporal pods."
 ---
