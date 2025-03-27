@@ -5,7 +5,6 @@ metadata:
   namespace: $KUBE_NS
   labels:
     app: temporal
-    pr: "$KUBE_DEPLOY_ID"
 spec:
   replicas: 1
   strategy:
@@ -16,7 +15,6 @@ spec:
   selector:
     matchLabels:
       app: temporal
-      pr: "$KUBE_DEPLOY_ID"
   template:
     metadata:
       labels:
