@@ -45,11 +45,9 @@ jobs:
     steps:
     - name: Install doctl
       run: |
-        curl -fsSL "https://github.com/digitalocean/doctl/releases/latest/download/doctl-linux-amd64.tar.gz" -o doctl.tar.gz
-        tar -xvzf doctl.tar.gz
-        sudo mv doctl /usr/local/bin/
-        sudo chmod +x /usr/local/bin/doctl
-        doctl version
+          sudo apt update
+          sudo apt install -y doctl
+          doctl version
         
     - name: Authenticate with DigitalOcean Kubernetes
       run: |
