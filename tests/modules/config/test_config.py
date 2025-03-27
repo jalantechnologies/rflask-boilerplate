@@ -1,9 +1,9 @@
 import os
 from typing import List
 
-from modules.common.types import ErrorCode
+from modules.config.types import ErrorCode
 from modules.config.config_service import ConfigService
-from modules.error.custom_errors import MissingKeyError
+from modules.config.errors import MissingKeyError
 from tests.modules.config.base_test_config import BaseTestConfig
 
 

@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 from bson import ObjectId
 from dataclasses import dataclass
-from modules.common.base_model import BaseModel
+from modules.application.base_model import BaseModel
 
 
 @dataclass

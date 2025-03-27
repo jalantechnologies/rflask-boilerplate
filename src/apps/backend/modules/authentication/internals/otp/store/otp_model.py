@@ -3,7 +3,7 @@ from typing import Optional
 from bson import ObjectId
 from modules.account.types import PhoneNumber
 from dataclasses import dataclass
-from modules.common.base_model import BaseModel
+from modules.application.base_model import BaseModel
 
 
 @dataclass

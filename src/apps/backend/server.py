@@ -11,7 +11,7 @@ from modules.application.application_service import ApplicationService
 from modules.application.errors import WorkerClientConnectionError
 from modules.application.workers.health_check_worker import HealthCheckWorker
 from modules.config.config_service import ConfigService
-from modules.error.custom_errors import AppError
+from modules.application.errors import AppError
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
 

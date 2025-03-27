@@ -1,9 +1,8 @@
 from typing import Generic, Optional, cast
 
-from modules.common.types import ErrorCode
 from modules.config.internals.config_manager import ConfigManager
-from modules.config.types import ConfigType
-from modules.error.custom_errors import MissingKeyError
+from modules.config.types import ConfigType, ErrorCode
+from modules.config.errors import MissingKeyError
 
 
 class ConfigService(Generic[ConfigType]):

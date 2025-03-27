@@ -1,5 +1,5 @@
 from modules.account.types import AccountErrorCode, PhoneNumber
-from modules.error.custom_errors import AppError
+from modules.application.errors import AppError
 
 
 class AccountWithUserNameExistsError(AppError):

@@ -1,5 +1,5 @@
 from modules.authentication.types import AccessTokenErrorCode, PasswordResetTokenErrorCode, OTPErrorCode
-from modules.error.custom_errors import AppError
+from modules.application.errors import AppError
 
 
 class AccessTokenInvalidError(AppError):
