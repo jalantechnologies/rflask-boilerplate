@@ -1,7 +1,7 @@
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
-  name: temporal-${{ github.event.number }}-priority
+  name: temporal-priority-pr${{ github.event.number }}
   namespace: $KUBE_NS
 value: $KUBE_DEPLOY_ID
 globalDefault: false
@@ -32,7 +32,7 @@ spec:
         app: temporal
         pr: "pr-${{ github.event.number }}"
     spec:
-      priorityClassName: temporal-${{ github.event.number }}-priority
+      priorityClassName: temporal-priority-pr${{ github.event.number }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
