@@ -1,9 +1,8 @@
-from datetime import datetime, timedelta
 import urllib.parse
-
 import jwt
 
 from dataclasses import asdict
+from datetime import datetime, timedelta
 
 from modules.account.errors import AccountBadRequestError
 from modules.account.types import Account, PhoneNumber
