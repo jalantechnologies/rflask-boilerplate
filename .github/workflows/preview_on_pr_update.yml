@@ -45,8 +45,7 @@ jobs:
     steps:
     - name: Install doctl
       run: |
-          sudo apt update
-          sudo apt install -y doctl
+          sudo snap install doctl
           doctl version
         
     - name: Authenticate with DigitalOcean Kubernetes
