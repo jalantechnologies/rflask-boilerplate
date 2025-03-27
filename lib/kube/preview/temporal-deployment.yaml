@@ -14,7 +14,7 @@ metadata:
   namespace: $KUBE_NS
   labels:
     app: temporal
-    pr: ${{ github.event.number }}
+    pr: "pr-${{ github.event.number }}"
 spec:
   replicas: 1
   strategy:
@@ -25,12 +25,12 @@ spec:
   selector:
     matchLabels:
       app: temporal
-      pr: ${{ github.event.number }}
+      pr: "pr-${{ github.event.number }}"
   template:
     metadata:
       labels:
         app: temporal
-        pr: ${{ github.event.number }}
+        pr: "pr-${{ github.event.number }}"
     spec:
       priorityClassName: temporal-${{ github.event.number }}-priority
       affinity:
