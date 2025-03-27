@@ -46,7 +46,7 @@ jobs:
     - name: Install DigitalOcean CLI
       run: |
         sudo apt update && sudo apt install -y curl
-        curl -sL https://github.com/digitalocean/doctl/releases/latest/download/doctl-$(uname -s)-$(uname -m).tar.gz | tar -xzv
+        curl -fsSL "https://github.com/digitalocean/doctl/releases/latest/download/doctl-1.99.0-linux-amd64.tar.gz" -o doctl.tar.gz
         sudo mv doctl /usr/local/bin
         doctl version
         
