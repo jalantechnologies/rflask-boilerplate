@@ -33,40 +33,43 @@ jobs:
       sonar_token: ${{ secrets.SONAR_TOKEN }}
 
   deploy_temporal:
-   needs: preview
-   runs-on: ubuntu-latest
-   steps:
+    needs: preview
+    runs-on: ubuntu-latest
+    env:
+      DO_ACCESS_TOKEN: ${{ secrets.DO_ACCESS_TOKEN }}
+      PR_NUMBER: ${{ github.event.number }}
+      KUBE_APP: "temporal"
+      KUBE_DEPLOY_ID: "pr-${{ github.event.number }}"
+      KUBE_DEPLOYMENT_IMAGE: temporalio/auto-setup:latest
+      KUBE_NS: "frm-boilerplate-preview"
+    steps:
     - name: Authenticate with DigitalOcean Kubernetes
-      env:
-        DO_ACCESS_TOKEN: ${{ secrets.DO_ACCESS_TOKEN }}
       run: |
         echo "$DO_ACCESS_TOKEN" | doctl auth init
         doctl kubernetes cluster kubeconfig save ${{ vars.DO_CLUSTER_ID }}
-
     - name: Deploy PR-Specific Temporal Pod
       env:
         DO_ACCESS_TOKEN: ${{ secrets.DO_ACCESS_TOKEN }}
+        PR_NUMBER: "pr-${{ github.event.number }}"  
       run: |
-        # Check if the deployment already exists
-        if ! kubectl get deployment temporal-${{ github.event.number }} -n $KUBE_NS; then
-        echo "Creating new Temporal deployment..."
-        kubectl apply -f lib/kube/preview/temporal-deployment.yaml
-        kubectl apply -f lib/kube/preview/temporal-service.yaml
-        else
+       # Apply deployment only if it does not exist
+       if ! kubectl get deployment temporal-$PR_NUMBER -n $KUBE_NS; then
+       echo "Creating new Temporal deployment..."
+        kubectl apply -f lib/kube/preview/temporal-deployment.yaml --pr-number=$PR_NUMBER
+        kubectl apply -f lib/kube/preview/temporal-service.yaml --pr-number=$PR_NUMBER
+       else
         echo "Temporal deployment already exists. Skipping apply."
-        fi
+       fi
 
-        # Ensure the deployment is up before updating images
-        echo "Waiting for Temporal deployment to be ready..."
-        kubectl rollout status deployment/temporal-${{ github.event.number }} -n $KUBE_NS --timeout=100s || echo "Warning: Deployment rollout not complete."
+       # Ensure rollout is completed before updating images
+       kubectl rollout status deployment/temporal-$PR_NUMBER -n $KUBE_NS --timeout=80s || echo "Warning: Deployment rollout not complete."
 
-        # Update images only if the deployment exists
-        if kubectl get deployment temporal-${{ github.event.number }} -n $KUBE_NS; then
-         echo "Updating Temporal images..."
-         kubectl set image deployment/temporal-${{ github.event.number }} temporal-server=temporalio/auto-setup:latest --namespace=$KUBE_NS
-         kubectl set image deployment/temporal-${{ github.event.number }} temporal-ui=temporalio/ui:latest --namespace=$KUBE_NS
-         kubectl set image deployment/temporal-${{ github.event.number }} python-worker=$KUBE_DEPLOYMENT_IMAGE --namespace=$KUBE_NS
-        else
+       # Update images only if deployment exists
+       if kubectl get deployment temporal-$PR_NUMBER -n $KUBE_NS; then
+        echo "Updating Temporal images..."
+        kubectl set image deployment/temporal-$PR_NUMBER temporal-server=temporalio/auto-setup:latest --namespace=$KUBE_NS
+        kubectl set image deployment/temporal-$PR_NUMBER temporal-ui=temporalio/ui:latest --namespace=$KUBE_NS
+        kubectl set image deployment/temporal-$PR_NUMBER python-worker=$KUBE_DEPLOYMENT_IMAGE --namespace=$KUBE_NS
+       else
         echo "Deployment not found, skipping image update."
-        fi
-
+       fi

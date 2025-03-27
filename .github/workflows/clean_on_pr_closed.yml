@@ -22,7 +22,7 @@ jobs:
       do_access_token: ${{ secrets.DO_ACCESS_TOKEN }}
  
   clean_temporal:
-    needs: clean  # Ensure Temporal cleanup happens after app cleanup
+    needs: clean
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate with DigitalOcean Kubernetes
