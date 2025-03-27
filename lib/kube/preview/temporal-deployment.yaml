@@ -3,7 +3,7 @@ kind: PriorityClass
 metadata:
   name: $KUBE_APP-$KUBE_DEPLOY_ID-priority
   namespace: $KUBE_NS
-value: $KUBE_DEPLOY_ID
+value: 100000
 globalDefault: false
 description: "This priority class is used for preview Temporal pods."
 ---
@@ -14,7 +14,7 @@ metadata:
   namespace: $KUBE_NS
   labels:
     app: temporal
-    pr: $KUBE_DEPLOY_ID
+    pr: "$KUBE_DEPLOY_ID"
 spec:
   replicas: 1
   strategy:
@@ -25,12 +25,12 @@ spec:
   selector:
     matchLabels:
       app: temporal
-      pr: $KUBE_DEPLOY_ID
+      pr: "$KUBE_DEPLOY_ID"
   template:
     metadata:
       labels:
         app: temporal
-        pr: $KUBE_DEPLOY_ID
+        pr: "$KUBE_DEPLOY_ID"
     spec:
       priorityClassName: $KUBE_APP-$KUBE_DEPLOY_ID-priority
       affinity:
