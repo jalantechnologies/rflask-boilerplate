@@ -3,6 +3,7 @@ from modules.account.internal.account_writer import AccountWriter
 from modules.account.types import (
     Account,
     AccountSearchByIdParams,
+    AccountSearchParams,
     CreateAccountByPhoneNumberParams,
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
@@ -52,3 +53,11 @@ class AccountService:
     @staticmethod
     def get_account_by_id(*, params: AccountSearchByIdParams) -> Account:
         return AccountReader.get_account_by_id(params=params)
+    
+    @staticmethod
+    def get_account_by_username(*, username: str) -> Account:
+        return AccountReader.get_account_by_username(username=username)
+
+    @staticmethod
+    def get_account_by_username_and_password(*, params: AccountSearchParams) -> Account:
+        return AccountReader.get_account_by_username_and_password(params=params)

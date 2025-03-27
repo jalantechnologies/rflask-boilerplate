@@ -144,7 +144,7 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
         )
 
         password_reset_token = AuthenticationService.create_password_reset_token(
-            params=CreatePasswordResetTokenParams(username=account.username)
+            params=account
         )
 
         AuthenticationService.set_password_reset_token_as_used_by_id(password_reset_token.id)
@@ -177,7 +177,7 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
         )
 
         AuthenticationService.create_password_reset_token(
-            params=CreatePasswordResetTokenParams(username=account.username)
+            params=account
         )
 
         new_password = "new_password"
@@ -209,7 +209,7 @@ class TestAccountPasswordReset(BaseTestPasswordResetToken):
         )
 
         password_reset_token = AuthenticationService.create_password_reset_token(
-            params=CreatePasswordResetTokenParams(username=account.username)
+            params=account
         )
 
         mock_is_token_expired.return_value = True
