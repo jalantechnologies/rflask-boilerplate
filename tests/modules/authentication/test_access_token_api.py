@@ -11,7 +11,7 @@ from modules.account.types import (
 from modules.authentication.authentication_service import AuthenticationService
 from modules.authentication.types import CreateOTPParams, OTPErrorCode, VerifyOTPParams
 from server import app
-from tests.modules.access_token.base_test_access_token import BaseTestAccessToken
+from tests.modules.authentication.base_test_access_token import BaseTestAccessToken
 
 API_URL = "http://127.0.0.1:8080/api/access-tokens"
 HEADERS = {"Content-Type": "application/json"}

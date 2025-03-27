@@ -11,7 +11,7 @@ from modules.authentication.internals.password_reset_token.password_reset_token_
 from modules.authentication.authentication_service import AuthenticationService
 from modules.authentication.types import CreatePasswordResetTokenParams
 from server import app
-from tests.modules.password_reset_token.base_test_password_reset_token import BaseTestPasswordResetToken
+from tests.modules.authentication.base_test_password_reset_token import BaseTestPasswordResetToken
 
 ACCOUNT_API_URL = "http://127.0.0.1:8080/api/accounts"
 PASSWORD_RESET_TOKEN_URL = "http://127.0.0.1:8080/api/password-reset-tokens"
