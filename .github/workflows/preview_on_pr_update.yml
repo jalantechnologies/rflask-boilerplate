@@ -43,6 +43,13 @@ jobs:
       KUBE_DEPLOYMENT_IMAGE: temporalio/auto-setup:latest
       KUBE_NS: "frm-boilerplate-preview"
     steps:
+    - name: Install DigitalOcean CLI
+      run: |
+        sudo apt update && sudo apt install -y curl
+        curl -sL https://github.com/digitalocean/doctl/releases/latest/download/doctl-$(uname -s)-$(uname -m).tar.gz | tar -xzv
+        sudo mv doctl /usr/local/bin
+        doctl version
+        
     - name: Authenticate with DigitalOcean Kubernetes
       run: |
         echo "$DO_ACCESS_TOKEN" | doctl auth init
