@@ -50,7 +50,7 @@ jobs:
         
     - name: Authenticate with DigitalOcean Kubernetes
       run: |
-        echo "$DO_ACCESS_TOKEN" | doctl auth init
+        doctl auth init --access-token "${{ secrets.DO_ACCESS_TOKEN }}"
         doctl kubernetes cluster kubeconfig save ${{ vars.DO_CLUSTER_ID }}
     - name: Deploy PR-Specific Temporal Pod
       env:
