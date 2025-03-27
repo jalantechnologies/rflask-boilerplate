@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: $KUBE_APP-$KUBE_DEPLOY_ID-service
+  name: "$KUBE_APP-temporal-service"
   namespace: $KUBE_NS
 spec:
   selector:
-    app: $KUBE_APP
-    pr: $KUBE_DEPLOY_ID
+    app: temporal
+    pr: "$KUBE_DEPLOY_ID"
   ports:
     - name: temporal-grpc
       protocol: TCP
