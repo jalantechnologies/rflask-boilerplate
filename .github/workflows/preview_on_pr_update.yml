@@ -60,23 +60,23 @@ jobs:
     - name: Deploy PR-Specific Temporal Pod
       run: |
         # Apply deployment only if it does not exist
-        if ! kubectl get deployment temporal-$PR_NUMBER -n $KUBE_NS; then
-          echo "Creating new Temporal deployment..."
-          kubectl apply -f lib/kube/preview/temporal-deployment.yaml
-          kubectl apply -f lib/kube/preview/temporal-service.yaml
+        if ! kubectl get deployment $KUBE_APP-temporal -n $KUBE_NS; then
+         echo "Creating new Temporal deployment..."
+         kubectl apply -f lib/kube/preview/temporal-deployment.yaml
+         kubectl apply -f lib/kube/preview/temporal-service.yaml
         else
-          echo "Temporal deployment already exists. Skipping apply."
+         echo "Temporal deployment already exists. Skipping apply."
         fi
-
+    
         # Ensure rollout is completed before updating images
-        kubectl rollout status deployment/temporal-$PR_NUMBER -n $KUBE_NS --timeout=80s || echo "Warning: Deployment rollout not complete."
-
+        kubectl rollout status deployment/$KUBE_APP-temporal -n $KUBE_NS --timeout=80s || echo "Warning: Deployment rollout not complete."
+    
         # Update images only if deployment exists
-        if kubectl get deployment temporal-$PR_NUMBER -n $KUBE_NS; then
-          echo "Updating Temporal images..."
-          kubectl set image deployment/temporal-$PR_NUMBER temporal-server=temporalio/auto-setup:latest --namespace=$KUBE_NS
-          kubectl set image deployment/temporal-$PR_NUMBER temporal-ui=temporalio/ui:latest --namespace=$KUBE_NS
-          kubectl set image deployment/temporal-$PR_NUMBER python-worker=$KUBE_DEPLOYMENT_IMAGE --namespace=$KUBE_NS
+        if kubectl get deployment $KUBE_APP-temporal -n $KUBE_NS; then
+         echo "Updating Temporal images..."
+         kubectl set image deployment/$KUBE_APP-temporal temporal-server=temporalio/auto-setup:latest --namespace=$KUBE_NS
+         kubectl set image deployment/$KUBE_APP-temporal temporal-ui=temporalio/ui:latest --namespace=$KUBE_NS
+         kubectl set image deployment/$KUBE_APP-temporal python-worker=$KUBE_DEPLOYMENT_IMAGE --namespace=$KUBE_NS
         else
-          echo "Deployment not found, skipping image update."
+        echo "Deployment not found, skipping image update."
         fi
