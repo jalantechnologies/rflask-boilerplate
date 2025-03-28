@@ -9,19 +9,19 @@ from modules.config.config_service import ConfigService
 
 class OTPUtil:
     @staticmethod
-    def is_default_phone_number(phone_number: str) -> bool:
-        default_phone_number = None
-        if ConfigService[str].has_value(key="otp.default_phone_number"):
-            default_phone_number = ConfigService[str].get_value(key="otp.default_phone_number")
-            if default_phone_number and phone_number == default_phone_number:
+    def is_exempt_phone_number(phone_number: str) -> bool:
+        exempt_phone_number = None
+        if ConfigService[str].has_value(key="otp.exempt_phone_number"):
+            exempt_phone_number = ConfigService[str].get_value(key="otp.exempt_phone_number")
+            if exempt_phone_number and phone_number == exempt_phone_number:
                 return True
         return False
 
     @staticmethod
     def generate_otp(length: int, phone_number: str) -> str:
-        if OTPUtil.is_default_phone_number(phone_number):
-            default_otp = ConfigService[str].get_value(key="otp.default_otp")
-            return default_otp
+        if OTPUtil.is_exempt_phone_number(phone_number):
+            exempt_otp = ConfigService[str].get_value(key="otp.exempt_otp")
+            return exempt_otp
         return "".join(secrets.choice(string.digits) for _ in range(length))
 
     @staticmethod
