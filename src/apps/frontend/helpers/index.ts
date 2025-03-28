@@ -1,1 +1,1 @@
-export * as Config from './config';
+export * as Config from 'frontend/helpers/config';

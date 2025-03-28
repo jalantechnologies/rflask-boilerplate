@@ -1,6 +1,3 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
 import {
   Button,
   Flex,
@@ -8,14 +5,15 @@ import {
   Input,
   PasswordInput,
   VerticalStackLayout,
-} from '../../../components';
-import { CustomLayout } from '../../../components/layouts/custom-layout.component';
-import { LayoutType } from '../../../components/layouts/layout-config';
-import routes from '../../../constants/routes';
-import { AsyncError } from '../../../types';
-import { ButtonKind, ButtonType } from '../../../types/button';
-
-import useSignupForm from './signup-form.hook';
+} from 'frontend/components';
+import { CustomLayout } from 'frontend/components/layouts/custom-layout.component';
+import { LayoutType } from 'frontend/components/layouts/layout-config';
+import routes from 'frontend/constants/routes';
+import useSignupForm from 'frontend/pages/authentication/signup/signup-form.hook';
+import { AsyncError } from 'frontend/types';
+import { ButtonKind, ButtonType } from 'frontend/types/button';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 type SignupFields =
   | 'firstName'

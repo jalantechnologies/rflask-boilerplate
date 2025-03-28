@@ -1,7 +1,6 @@
-import { ResetPasswordParams } from '../pages/authentication/reset-password/reset-password-form.hook';
-import { ApiResponse } from '../types';
-
-import APIService from './api.service';
+import { ResetPasswordParams } from 'frontend/pages/authentication/reset-password/reset-password-form.hook';
+import APIService from 'frontend/services/api.service';
+import { ApiResponse } from 'frontend/types';
 
 export default class ResetPasswordService extends APIService {
   sendForgotPasswordEmail = async (

@@ -1,8 +1,7 @@
+import { UseAsyncResponse, AsyncResult, AsyncError } from 'frontend/types';
+import { AsyncOperationError } from 'frontend/types/async-operation';
+import { Nullable } from 'frontend/types/common-types';
 import { useCallback, useState } from 'react';
-
-import { UseAsyncResponse, AsyncResult, AsyncError } from '../types';
-import { AsyncOperationError } from '../types/async-operation';
-import { Nullable } from '../types/common-types';
 
 const useAsync = <T>(
   asyncFn: (...args: unknown[]) => Promise<AsyncResult<T>>,

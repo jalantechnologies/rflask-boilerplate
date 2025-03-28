@@ -1,12 +1,11 @@
 import { useFormik } from 'formik';
+import constant from 'frontend/constants';
+import routes from 'frontend/constants/routes';
+import { useAuthContext } from 'frontend/contexts';
+import { AsyncError, PhoneNumber } from 'frontend/types';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-
-import constant from '../../../constants';
-import routes from '../../../constants/routes';
-import { useAuthContext } from '../../../contexts';
-import { AsyncError, PhoneNumber } from '../../../types';
 
 interface PhoneLoginFormProps {
   onError: (err: AsyncError) => void;

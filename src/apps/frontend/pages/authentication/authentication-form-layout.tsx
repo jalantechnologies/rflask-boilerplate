@@ -1,7 +1,6 @@
+import { CustomLayout } from 'frontend/components/layouts/custom-layout.component';
+import { LayoutType } from 'frontend/components/layouts/layout-config';
 import React from 'react';
-
-import { CustomLayout } from '../../components/layouts/custom-layout.component';
-import { LayoutType } from '../../components/layouts/layout-config';
 
 interface AuthenticationFormLayoutProps {
   children: React.ReactNode;

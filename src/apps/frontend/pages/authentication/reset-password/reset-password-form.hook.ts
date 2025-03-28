@@ -1,10 +1,9 @@
 import { useFormik } from 'formik';
+import constant from 'frontend/constants';
+import { useResetPasswordContext } from 'frontend/contexts';
+import { AsyncError } from 'frontend/types';
 import { useLocation, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
-
-import constant from '../../../constants';
-import { useResetPasswordContext } from '../../../contexts';
-import { AsyncError } from '../../../types';
 
 export type ResetPasswordParams = {
   accountId: string;

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
   Button,
   Flex,
@@ -7,12 +5,12 @@ import {
   Input,
   Select,
   VerticalStackLayout,
-} from '../../../components';
-import COUNTRY_SELECT_OPTIONS from '../../../constants/countries';
-import { AsyncError } from '../../../types';
-import { ButtonKind, ButtonType } from '../../../types/button';
-
-import usePhoneLoginForm from './phone-login-form.hook';
+} from 'frontend/components';
+import COUNTRY_SELECT_OPTIONS from 'frontend/constants/countries';
+import usePhoneLoginForm from 'frontend/pages/authentication/phone-login/phone-login-form.hook';
+import { AsyncError } from 'frontend/types';
+import { ButtonKind, ButtonType } from 'frontend/types/button';
+import React from 'react';
 
 interface PhoneLoginFormProps {
   onSendOTPSuccess: () => void;

@@ -1,14 +1,12 @@
+import { H2, VerticalStackLayout } from 'frontend/components';
+import routes from 'frontend/constants/routes';
+import AuthenticationFormLayout from 'frontend/pages/authentication/authentication-form-layout';
+import AuthenticationPageLayout from 'frontend/pages/authentication/authentication-page-layout';
+import SignupForm from 'frontend/pages/authentication/signup/signup-form';
+import { AsyncError } from 'frontend/types';
 import React from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-
-import { H2, VerticalStackLayout } from '../../../components';
-import routes from '../../../constants/routes';
-import { AsyncError } from '../../../types';
-import AuthenticationFormLayout from '../authentication-form-layout';
-import AuthenticationPageLayout from '../authentication-page-layout';
-
-import SignupForm from './signup-form';
 
 export const Signup: React.FC = () => {
   const navigate = useNavigate();

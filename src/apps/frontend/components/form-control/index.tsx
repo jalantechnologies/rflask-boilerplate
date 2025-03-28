@@ -1,6 +1,5 @@
+import VerticalStackLayout from 'frontend/components/layouts/vertical-stack-layout';
 import React, { PropsWithChildren } from 'react';
-
-import VerticalStackLayout from '../layouts/vertical-stack-layout';
 
 interface FormControlProps {
   error?: string;

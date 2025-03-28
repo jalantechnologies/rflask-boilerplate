@@ -1,6 +1,5 @@
+import Input from 'frontend/components/input';
 import React, { FocusEventHandler } from 'react';
-
-import Input from '../input';
 
 type OTPInputProps = {
   disabled: boolean;

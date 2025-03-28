@@ -1,12 +1,9 @@
+import { UserMenuDropdownItem } from 'frontend/components/header';
+import UserMenuDropdown from 'frontend/components/header/user-menu-dropdown.component';
+import { Account } from 'frontend/types';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import { Account } from '../../types';
-
-import UserMenuDropdown from './user-menu-dropdown.component';
-
-import { UserMenuDropdownItem } from '.';
 
 interface DropdownUserProps {
   account: Account;

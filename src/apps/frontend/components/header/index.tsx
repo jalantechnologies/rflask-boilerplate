@@ -1,11 +1,9 @@
+import HamburgerToggleButton from 'frontend/components/header/hamburger-toggle-button';
+import UserProfileSnippet from 'frontend/components/header/user-profile-snippet.component';
+import routes from 'frontend/constants/routes';
+import { useAccountContext, useAuthContext } from 'frontend/contexts';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import routes from '../../constants/routes';
-import { useAccountContext, useAuthContext } from '../../contexts';
-
-import HamburgerToggleButton from './hamburger-toggle-button';
-import UserProfileSnippet from './user-profile-snippet.component';
 
 export type UserMenuDropdownItem = {
   iconPath: string;

@@ -1,12 +1,11 @@
+import { VerticalStackLayout, H2 } from 'frontend/components';
+import routes from 'frontend/constants/routes';
+import AuthenticationFormLayout from 'frontend/pages/authentication/authentication-form-layout';
+import AuthenticationPageLayout from 'frontend/pages/authentication/authentication-page-layout';
+import { AsyncError } from 'frontend/types';
 import React from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-
-import { VerticalStackLayout, H2 } from '../../components';
-import routes from '../../constants/routes';
-import { AsyncError } from '../../types';
-import AuthenticationFormLayout from '../authentication/authentication-form-layout';
-import AuthenticationPageLayout from '../authentication/authentication-page-layout';
 
 import LoginForm from './login-form';
 

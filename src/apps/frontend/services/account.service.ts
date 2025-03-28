@@ -1,6 +1,5 @@
-import { Account, AccessToken, ApiResponse } from '../types';
-
-import APIService from './api.service';
+import APIService from 'frontend/services/api.service';
+import { Account, AccessToken, ApiResponse } from 'frontend/types';
 
 export default class AccountService extends APIService {
   getAccountDetails = async (

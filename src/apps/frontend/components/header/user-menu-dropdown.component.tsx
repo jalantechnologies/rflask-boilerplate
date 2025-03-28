@@ -1,6 +1,5 @@
+import { UserMenuDropdownItem } from 'frontend/components/header';
 import React from 'react';
-
-import { UserMenuDropdownItem } from '.';
 
 type UserMenuDropdownProps = {
   dropdownOpen: boolean;

@@ -1,4 +1,4 @@
-import { JsonObject, Nullable } from './common-types';
+import { JsonObject, Nullable } from 'frontend/types/common-types';
 
 export interface AsyncError {
   code: string;

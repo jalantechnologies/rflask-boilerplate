@@ -1,16 +1,14 @@
-import React from 'react';
-
 import {
   Button,
   FormControl,
   Input,
   VerticalStackLayout,
-} from '../../../components';
-import ParagraphMedium from '../../../components/typography/paragraph-medium';
-import { AsyncError } from '../../../types';
-import { ButtonType } from '../../../types/button';
-
-import useForgotPasswordForm from './forgot-password-form.hook';
+} from 'frontend/components';
+import ParagraphMedium from 'frontend/components/typography/paragraph-medium';
+import useForgotPasswordForm from 'frontend/pages/authentication/forgot-password/forgot-password-form.hook';
+import { AsyncError } from 'frontend/types';
+import { ButtonType } from 'frontend/types/button';
+import React from 'react';
 
 interface ForgotPasswordFormProps {
   onError: (error: AsyncError) => void;

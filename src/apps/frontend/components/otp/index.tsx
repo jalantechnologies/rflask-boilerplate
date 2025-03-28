@@ -1,9 +1,7 @@
+import OTPInput from 'frontend/components/otp/otp-input';
+import constant from 'frontend/constants';
+import { AsyncError, KeyboardKeys } from 'frontend/types';
 import React, { useRef, useState, FocusEventHandler } from 'react';
-
-import constant from '../../constants';
-import { AsyncError, KeyboardKeys } from '../../types';
-
-import OTPInput from './otp-input';
 
 interface OTPProps {
   error?: string;

@@ -1,5 +1,5 @@
-import { AccessToken } from '../types';
-import { JsonObject, Nullable } from '../types/common-types';
+import { AccessToken } from 'frontend/types';
+import { JsonObject, Nullable } from 'frontend/types/common-types';
 
 const ACCESS_TOKEN_KEY = 'access-token';
 

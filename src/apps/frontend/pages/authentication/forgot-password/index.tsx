@@ -1,17 +1,15 @@
+import { Button, H2, VerticalStackLayout } from 'frontend/components';
+import routes from 'frontend/constants/routes';
+import AuthenticationPageLayout from 'frontend/pages/authentication//authentication-page-layout';
+import AuthenticationFormLayout from 'frontend/pages/authentication/authentication-form-layout';
+import ForgotPasswordForm from 'frontend/pages/authentication/forgot-password/forgot-password-form';
+import ForgotPasswordResendEmail from 'frontend/pages/authentication/forgot-password/forgot-password-resend-email';
+import { AsyncError } from 'frontend/types';
+import { ButtonKind } from 'frontend/types/button';
+import useTimer from 'frontend/utils/use-timer.hook';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-
-import { Button, H2, VerticalStackLayout } from '../../../components';
-import routes from '../../../constants/routes';
-import { AsyncError } from '../../../types';
-import { ButtonKind } from '../../../types/button';
-import useTimer from '../../../utils/use-timer.hook';
-import AuthenticationFormLayout from '../authentication-form-layout';
-import AuthenticationPageLayout from '../authentication-page-layout';
-
-import ForgotPasswordForm from './forgot-password-form';
-import ForgotPasswordResendEmail from './forgot-password-resend-email';
 
 export const ForgotPassword: React.FC = () => {
   const passwordResendDelayInSeconds = 60_000;

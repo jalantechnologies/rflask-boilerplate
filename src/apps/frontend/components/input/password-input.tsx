@@ -1,9 +1,7 @@
+import Button from 'frontend/components/button';
+import Input from 'frontend/components/input/';
+import { ButtonKind } from 'frontend/types/button';
 import React, { useState } from 'react';
-
-import { ButtonKind } from '../../types/button';
-import Button from '../button';
-
-import Input from '.';
 
 interface PasswordInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {

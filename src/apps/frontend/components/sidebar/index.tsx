@@ -1,8 +1,6 @@
+import SidebarMenuItem from 'frontend/components/sidebar/sidebar-menu-item';
+import routes from 'frontend/constants/routes';
 import React, { useRef } from 'react';
-
-import routes from '../../constants/routes';
-
-import SidebarMenuItem from './sidebar-menu-item';
 
 type SidebarProps = {
   isSidebarOpen: boolean;

@@ -1,9 +1,8 @@
 import { useFormik } from 'formik';
+import constant from 'frontend/constants';
+import { useAuthContext } from 'frontend/contexts';
+import { AsyncError } from 'frontend/types';
 import * as Yup from 'yup';
-
-import constant from '../../../constants';
-import { useAuthContext } from '../../../contexts';
-import { AsyncError } from '../../../types';
 
 interface SignupFormProps {
   onError: (err: AsyncError) => void;

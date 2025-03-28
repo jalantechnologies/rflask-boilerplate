@@ -1,10 +1,7 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-
-import constant from '../constants';
-import routes from '../constants/routes';
-import { ResetPasswordProvider } from '../contexts';
-import { Config } from '../helpers';
+import constant from 'frontend/constants';
+import routes from 'frontend/constants/routes';
+import { ResetPasswordProvider } from 'frontend/contexts';
+import { Config } from 'frontend/helpers';
 import {
   About,
   ForgotPassword,
@@ -13,7 +10,9 @@ import {
   PhoneLogin,
   ResetPassword,
   Signup,
-} from '../pages';
+} from 'frontend/pages';
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 
 const currentAuthMechanism = Config.getConfigValue<string>(
   'authenticationMechanism',

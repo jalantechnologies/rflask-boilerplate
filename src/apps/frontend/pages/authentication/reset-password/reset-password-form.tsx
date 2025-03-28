@@ -1,15 +1,13 @@
-import React from 'react';
-
 import {
   Button,
   FormControl,
   PasswordInput,
   VerticalStackLayout,
-} from '../../../components';
-import { AsyncError } from '../../../types';
-import { ButtonType } from '../../../types/button';
-
-import useResetPasswordForm from './reset-password-form.hook';
+} from 'frontend/components';
+import useResetPasswordForm from 'frontend/pages/authentication/reset-password/reset-password-form.hook';
+import { AsyncError } from 'frontend/types';
+import { ButtonType } from 'frontend/types/button';
+import React from 'react';
 
 interface ResetPasswordFormProps {
   onSuccess: () => void;

@@ -1,16 +1,14 @@
+import useAsync from 'frontend/contexts/async.hook';
+import { AccountService } from 'frontend/services';
+import { Account, ApiResponse, AsyncError } from 'frontend/types';
+import { Nullable } from 'frontend/types/common-types';
+import { getAccessTokenFromStorage } from 'frontend/utils/storage-util';
 import React, {
   createContext,
   PropsWithChildren,
   ReactNode,
   useContext,
 } from 'react';
-
-import { AccountService } from '../services';
-import { Account, ApiResponse, AsyncError } from '../types';
-import { Nullable } from '../types/common-types';
-import { getAccessTokenFromStorage } from '../utils/storage-util';
-
-import useAsync from './async.hook';
 
 type AccountContextType = {
   accountDetails: Account;
