@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $KUBE_APP-temporal
+  namespace: $KUBE_NS
+  labels:
+    app: temporal
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: temporal
+  template:
+    metadata:
+      labels:
+        app: temporal
+        pr: "$KUBE_DEPLOY_ID"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: doks.digitalocean.com/node-pool
+                    operator: In
+                    values:
+                      - platform-cluster-01-staging-pool
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: temporal-server
+          image: temporalio/auto-setup:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "256Mi"
+            limits:
+              memory: "512Mi"
+          ports:
+            - containerPort: 7233
+
+        - name: temporal-ui
+          image: temporalio/ui:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "256Mi"
+            limits:
+              memory: "512Mi"
+          ports:
+            - containerPort: 8080
+
+        - name: python-worker
+          image: $KUBE_DEPLOYMENT_IMAGE
+          command: ["python3", "/app/temporal_server.py"]
+          resources:
+            requests:
+              memory: "256Mi"
+            limits:
+              memory: "512Mi"
+          env:
+            - name: TEMPORAL_SERVER
+              value: "$KUBE_APP-temporal:7233"

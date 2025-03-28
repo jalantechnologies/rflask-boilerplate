@@ -31,3 +31,52 @@ jobs:
       doppler_token: ${{ secrets.DOPPLER_PREVIEW_TOKEN }}
       do_access_token: ${{ secrets.DO_ACCESS_TOKEN }}
       sonar_token: ${{ secrets.SONAR_TOKEN }}
+
+  deploy_temporal:
+    needs: preview
+    runs-on: ubuntu-latest
+    env:
+      DO_ACCESS_TOKEN: ${{ secrets.DO_ACCESS_TOKEN }}
+      PR_NUMBER: ${{ github.event.number }}
+      KUBE_APP: "temporal"
+      KUBE_DEPLOY_ID: "pr-${{ github.event.number }}"
+      KUBE_DEPLOYMENT_IMAGE: temporalio/auto-setup:latest
+      KUBE_NS: "frm-boilerplate-preview"
+    steps:
+    - name: Install DigitalOcean CLI (doctl)
+      run: |
+         curl -fsSL "https://github.com/digitalocean/doctl/releases/download/v1.98.0/doctl-1.98.0-linux-amd64.tar.gz" -o doctl.tar.gz
+         tar -xzf doctl.tar.gz
+         sudo mv doctl /usr/local/bin/
+         sudo chmod +x /usr/local/bin/doctl
+         doctl version
+
+        
+    - name: Authenticate with DigitalOcean Kubernetes
+      run: |
+        doctl auth init --access-token "${{ secrets.DO_ACCESS_TOKEN }}"
+        doctl kubernetes cluster kubeconfig save ${{ vars.DO_CLUSTER_ID }}
+
+    - name: Deploy PR-Specific Temporal Pod
+      run: |
+        # Apply deployment only if it does not exist
+        if ! kubectl get deployment $KUBE_APP-temporal -n $KUBE_NS; then
+         echo "Creating new Temporal deployment..."
+         kubectl apply -f lib/kube/preview/temporal-deployment.yaml
+         kubectl apply -f lib/kube/preview/temporal-service.yaml
+        else
+         echo "Temporal deployment already exists. Skipping apply."
+        fi
+    
+        # Ensure rollout is completed before updating images
+        kubectl rollout status deployment/$KUBE_APP-temporal -n $KUBE_NS --timeout=80s || echo "Warning: Deployment rollout not complete."
+    
+        # Update images only if deployment exists
+        if kubectl get deployment $KUBE_APP-temporal -n $KUBE_NS; then
+         echo "Updating Temporal images..."
+         kubectl set image deployment/$KUBE_APP-temporal temporal-server=temporalio/auto-setup:latest --namespace=$KUBE_NS
+         kubectl set image deployment/$KUBE_APP-temporal temporal-ui=temporalio/ui:latest --namespace=$KUBE_NS
+         kubectl set image deployment/$KUBE_APP-temporal python-worker=$KUBE_DEPLOYMENT_IMAGE --namespace=$KUBE_NS
+        else
+        echo "Deployment not found, skipping image update."
+        fi
