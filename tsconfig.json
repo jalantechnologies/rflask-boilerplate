@@ -18,6 +18,10 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "frontend/*": ["src/apps/frontend/*"],
+    }
   }
 }

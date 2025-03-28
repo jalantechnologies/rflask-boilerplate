@@ -1,8 +1,7 @@
 import clsx from 'clsx';
+import Spinner from 'frontend/components/spinner/spinner';
+import { ButtonKind, ButtonType } from 'frontend/types/button';
 import React, { PropsWithChildren } from 'react';
-
-import { ButtonKind, ButtonType } from '../../types/button';
-import Spinner from '../spinner/spinner';
 
 interface ButtonProps {
   disabled?: boolean;

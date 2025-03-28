@@ -69,5 +69,8 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      frontend: path.resolve(__dirname),
+    },
   },
 };
