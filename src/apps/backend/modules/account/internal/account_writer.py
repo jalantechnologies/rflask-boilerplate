@@ -15,7 +15,7 @@ from modules.account.types import (
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
 )
-from modules.otp.errors import OtpRequestFailedError
+from modules.authentication.errors import OTPRequestFailedError
 
 
 class AccountWriter:
@@ -45,7 +45,7 @@ class AccountWriter:
         is_valid_phone_number = is_valid_number(parse(str(phone_number)))
 
         if not is_valid_phone_number:
-            raise OtpRequestFailedError()
+            raise OTPRequestFailedError()
 
         AccountReader.check_phone_number_not_exist(phone_number=params.phone_number)
         account_bson = AccountModel(

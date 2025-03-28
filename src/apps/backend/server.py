@@ -5,16 +5,15 @@ from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
-from modules.access_token.rest_api.access_token_rest_api_server import AccessTokenRestApiServer
+from modules.authentication.rest_api.authentication_rest_api_server import AuthenticationRestApiServer
 from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
 from modules.application.application_service import ApplicationService
 from modules.application.errors import WorkerClientConnectionError
 from modules.application.workers.health_check_worker import HealthCheckWorker
 from modules.config.config_service import ConfigService
-from modules.error.custom_errors import AppError
+from modules.application.errors import AppError
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
-from modules.password_reset_token.rest_api.password_reset_token_rest_api_server import PasswordResetTokenRestApiServer
 
 load_dotenv()
 
@@ -43,13 +42,9 @@ if ConfigService.has_value("is_server_running_behind_proxy") and ConfigService[b
 ):
     app.wsgi_app = ProxyFix(app.wsgi_app)  # type: ignore
 
-# Register access token apis
-access_token_blueprint = AccessTokenRestApiServer.create()
-api_blueprint.register_blueprint(access_token_blueprint)
-
-# Register password reset token apis
-password_reset_token_blueprint = PasswordResetTokenRestApiServer.create()
-api_blueprint.register_blueprint(password_reset_token_blueprint)
+# Register authentication apis
+authentication_blueprint = AuthenticationRestApiServer.create()
+api_blueprint.register_blueprint(authentication_blueprint)
 
 # Register accounts apis
 account_blueprint = AccountRestApiServer.create()

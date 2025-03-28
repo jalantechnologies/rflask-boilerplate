@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from modules.communication.types import CommunicationErrorCode, ValidationFailure
-from modules.error.custom_errors import AppError
+from modules.application.errors import AppError
 
 
 class ValidationError(AppError):

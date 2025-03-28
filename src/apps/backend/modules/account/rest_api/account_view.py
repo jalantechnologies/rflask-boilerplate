@@ -4,7 +4,6 @@ from flask import jsonify, request
 from flask.typing import ResponseReturnValue
 from flask.views import MethodView
 
-from modules.access_token.rest_api.access_auth_middleware import access_auth_middleware
 from modules.account.account_service import AccountService
 from modules.account.types import (
     AccountSearchByIdParams,
@@ -14,6 +13,7 @@ from modules.account.types import (
     PhoneNumber,
     ResetPasswordParams,
 )
+from modules.authentication.rest_api.access_auth_middleware import access_auth_middleware
 
 
 class AccountView(MethodView):

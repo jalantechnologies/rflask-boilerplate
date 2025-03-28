@@ -2,19 +2,17 @@ import unittest
 from typing import Callable
 
 from modules.account.internal.store.account_repository import AccountRepository
-from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
 from modules.config.config_service import ConfigService
-from modules.logger.logger_manager import LoggerManager
-from modules.authentication.internals.otp.store.otp_repository import OTPRepository
+from modules.authentication.internals.password_reset_token.store.password_reset_token_repository import PasswordResetTokenRepository
+from modules.authentication.rest_api.authentication_rest_api_server import AuthenticationRestApiServer
 
 
-class BaseTestAccount(unittest.TestCase):
+class BaseTestPasswordResetToken(unittest.TestCase):
     def setup_method(self, method: Callable) -> None:
         print(f"Executing:: {method.__name__}")
-        LoggerManager.mount_logger()
-        AccountRestApiServer.create()
+        AuthenticationRestApiServer.create()
 
     def teardown_method(self, method: Callable) -> None:
         print(f"Executed:: {method.__name__}")
         AccountRepository.collection().delete_many({})
-        OTPRepository.collection().delete_many({})
+        PasswordResetTokenRepository.collection().delete_many({})

@@ -4,7 +4,7 @@ from unittest import mock
 
 import jwt
 
-from modules.access_token.types import AccessTokenErrorCode
+from modules.authentication.types import AccessTokenErrorCode
 from modules.account.account_service import AccountService
 from modules.account.types import (
     AccountErrorCode,
@@ -14,7 +14,7 @@ from modules.account.types import (
 )
 from modules.communication.sms_service import SMSService
 from modules.config.config_service import ConfigService
-from modules.otp.types import OtpErrorCode
+from modules.authentication.types import OTPErrorCode
 from server import app
 from tests.modules.account.base_test_account import BaseTestAccount
 
@@ -108,7 +108,7 @@ class TestAccountApi(BaseTestAccount):
             response = client.post(ACCOUNT_URL, headers=HEADERS, data=payload)
             self.assertEqual(response.status_code, 400)
             self.assertTrue(response.json)
-            self.assertEqual(response.json.get("code"), OtpErrorCode.REQUEST_FAILED)
+            self.assertEqual(response.json.get("code"), OTPErrorCode.REQUEST_FAILED)
             self.assertEqual(response.json.get("message"), "Please provide a valid phone number.")
             self.assertFalse(mock_send_sms.called)
 
