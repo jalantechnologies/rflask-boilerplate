@@ -22,6 +22,9 @@ class OTPUtil:
         if OTPUtil.is_exempt_phone_number(phone_number):
             exempt_otp = ConfigService[str].get_value(key="otp.exempt_otp")
             return exempt_otp
+        elif OTPUtil.is_default_otp_enabled():
+            default_otp = ConfigService[str].get_value(key="public.default_otp.code")
+            return default_otp
         return "".join(secrets.choice(string.digits) for _ in range(length))
 
     @staticmethod
@@ -33,3 +36,9 @@ class OTPUtil:
             phone_number=validated_otp_data.phone_number,
             status=validated_otp_data.status,
         )
+
+    @staticmethod
+    def is_default_otp_enabled() -> bool:
+        default_otp_enabled = ConfigService[bool].get_value(key="public.default_otp.enabled")
+        return default_otp_enabled
+    

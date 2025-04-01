@@ -5,7 +5,9 @@ import {
   OTP,
   VerticalStackLayout,
 } from 'frontend/components';
+import Tooltip from 'frontend/components/tooltip';
 import routes from 'frontend/constants/routes';
+import { Config } from 'frontend/helpers';
 import useOTPForm from 'frontend/pages/authentication/otp/otp-form-hook';
 import { AsyncError } from 'frontend/types';
 import { ButtonKind, ButtonType } from 'frontend/types/button';
@@ -19,6 +21,10 @@ interface OTPFormProps {
   onVerifyOTPSuccess: () => void;
   timerRemainingSeconds: string;
 }
+
+const defaultOTPConfig = Config.getConfigValue<{ code: string; enabled: boolean; }>('default_otp');
+const isOTPEnabled = defaultOTPConfig?.enabled;
+const defaultOTPCode = defaultOTPConfig?.code;
 
 const OTPForm: React.FC<OTPFormProps> = ({
   isResendEnabled,
@@ -63,13 +69,25 @@ const OTPForm: React.FC<OTPFormProps> = ({
           label={`Enter the 4 digit code sent to the mobile number ${countryCode} ${phoneNumber}`}
           error={formik.touched.otp ? (formik.errors.otp as string) : ''}
         >
-          <OTP
-            error={formik.touched.otp ? (formik.errors.otp as string) : ''}
-            isLoading={isVerifyOTPLoading}
-            onError={onError}
-            onBlur={formik.handleBlur}
-            onChange={handleChange}
-          />
+          {isOTPEnabled ? (
+            <Tooltip content={defaultOTPCode!} position="bottom">
+              <OTP
+                error={formik.touched.otp ? (formik.errors.otp as string) : ''}
+                isLoading={isVerifyOTPLoading}
+                onError={onError}
+                onBlur={formik.handleBlur}
+                onChange={handleChange}
+              />
+            </Tooltip>
+          ) : (
+            <OTP
+              error={formik.touched.otp ? (formik.errors.otp as string) : ''}
+              isLoading={isVerifyOTPLoading}
+              onError={onError}
+              onBlur={formik.handleBlur}
+              onChange={handleChange}
+            />
+          )}
         </FormControl>
 
         <Flex gap={2}>
