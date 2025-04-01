@@ -62,6 +62,8 @@ const OTPForm: React.FC<OTPFormProps> = ({
       });
   };
 
+  const otpError = formik.touched.otp ? (formik.errors.otp as string) : '';
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <VerticalStackLayout gap={5}>
@@ -72,7 +74,7 @@ const OTPForm: React.FC<OTPFormProps> = ({
           {isOTPEnabled ? (
             <Tooltip content={defaultOTPCode!} position="bottom">
               <OTP
-                error={formik.touched.otp ? (formik.errors.otp as string) : ''}
+                error={otpError}
                 isLoading={isVerifyOTPLoading}
                 onError={onError}
                 onBlur={formik.handleBlur}
@@ -81,7 +83,7 @@ const OTPForm: React.FC<OTPFormProps> = ({
             </Tooltip>
           ) : (
             <OTP
-              error={formik.touched.otp ? (formik.errors.otp as string) : ''}
+              error={otpError}
               isLoading={isVerifyOTPLoading}
               onError={onError}
               onBlur={formik.handleBlur}
