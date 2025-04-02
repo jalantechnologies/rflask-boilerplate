@@ -31,7 +31,7 @@ spec:
         - name: regcred
       containers:
         - name: temporal-server
-          image: temporalio/auto-setup:latest
+          image: temporalio/auto-setup:1.27.0
           imagePullPolicy: Always
           ports:
             - containerPort: 7233
@@ -42,7 +42,7 @@ spec:
               memory: '800Mi'
 
         - name: temporal-ui
-          image: temporalio/ui:latest
+          image: temporalio/ui:2.34.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -54,3 +54,15 @@ spec:
               memory: '400Mi'
             limits:
               memory: '800Mi'
+
+        - name: python-worker
+          image: $KUBE_DEPLOYMENT_IMAGE
+          command: ["python3", "/app/temporal_server.py"]
+          env:
+            - name: TEMPORAL_SERVER
+              value: "temporal-server-service:7233"  # Connects to Temporal Server
+          resources:
+            requests:
+              memory: "400Mi"
+            limits:
+              memory: "800Mi"
