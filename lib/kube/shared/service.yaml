@@ -11,3 +11,37 @@ spec:
     - port: 8080
   selector:
     app: $KUBE_APP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal-server-service
+  namespace: $KUBE_NS
+  labels:
+    app: temporal-server
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7233
+      targetPort: 7233
+  selector:
+    app: temporal
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal-ui-service
+  namespace: $KUBE_NS
+  labels:
+    app: temporal-ui
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: temporal
