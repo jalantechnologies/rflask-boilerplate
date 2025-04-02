@@ -60,7 +60,7 @@ spec:
           command: ["python3", "/app/temporal_server.py"]
           env:
             - name: TEMPORAL_SERVER
-              value: "temporal-server-service:7233"  # Connects to Temporal Server
+              value: "temporal-server-service:7233"
           resources:
             requests:
               memory: "400Mi"
