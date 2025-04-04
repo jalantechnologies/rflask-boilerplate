@@ -5,7 +5,7 @@ import {
   OTP,
   VerticalStackLayout,
 } from 'frontend/components';
-import Tooltip from 'frontend/components/tooltip';
+import OtpHint from 'frontend/components/otp/otp-hint';
 import routes from 'frontend/constants/routes';
 import { Config } from 'frontend/helpers';
 import useOTPForm from 'frontend/pages/authentication/otp/otp-form-hook';
@@ -71,27 +71,17 @@ const OTPForm: React.FC<OTPFormProps> = ({
           label={`Enter the 4 digit code sent to the mobile number ${countryCode} ${phoneNumber}`}
           error={formik.touched.otp ? (formik.errors.otp as string) : ''}
         >
-          {isOTPEnabled ? (
-            <Tooltip content={defaultOTPCode!} position="bottom">
-              <OTP
-                error={otpError}
-                isLoading={isVerifyOTPLoading}
-                onError={onError}
-                onBlur={formik.handleBlur}
-                onChange={handleChange}
-              />
-            </Tooltip>
-          ) : (
-            <OTP
-              error={otpError}
-              isLoading={isVerifyOTPLoading}
-              onError={onError}
-              onBlur={formik.handleBlur}
-              onChange={handleChange}
-            />
-          )}
+          <OTP
+            error={otpError}
+            isLoading={isVerifyOTPLoading}
+            onError={onError}
+            onBlur={formik.handleBlur}
+            onChange={handleChange}
+          />
         </FormControl>
-
+        {isOTPEnabled && (
+          <OtpHint otpCode={defaultOTPCode} />
+        )}
         <Flex gap={2}>
           <p className="text-lg text-black">Did not receive a code?</p>
           <Button
