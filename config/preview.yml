@@ -9,7 +9,7 @@ sms:
 is_server_running_behind_proxy : true
 
 public:
-  authenticationMechanism: 'PHONE' #or 'PHONE'
+  authenticationMechanism: 'EMAIL' #or 'PHONE'
   default_otp:
     enabled: true
     code: '1234'

@@ -62,8 +62,6 @@ const OTPForm: React.FC<OTPFormProps> = ({
       });
   };
 
-  const otpError = formik.touched.otp ? (formik.errors.otp as string) : '';
-
   return (
     <form onSubmit={formik.handleSubmit}>
       <VerticalStackLayout gap={5}>
@@ -72,7 +70,7 @@ const OTPForm: React.FC<OTPFormProps> = ({
           error={formik.touched.otp ? (formik.errors.otp as string) : ''}
         >
           <OTP
-            error={otpError}
+            error={formik.touched.otp ? (formik.errors.otp as string) : ''}
             isLoading={isVerifyOTPLoading}
             onError={onError}
             onBlur={formik.handleBlur}

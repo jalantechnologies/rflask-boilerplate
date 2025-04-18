@@ -17,7 +17,4 @@ accounts:
   token_expires_in_seconds: 3600
 
 public:
-  authenticationMechanism: 'PHONE' #or 'PHONE'
-  default_otp:
-    enabled: false
-    code: '1234'
+  authenticationMechanism: 'EMAIL' #or 'PHONE'
