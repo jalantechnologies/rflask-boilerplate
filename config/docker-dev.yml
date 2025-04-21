@@ -15,5 +15,5 @@ is_server_running_behind_proxy: false
 public:
   authenticationMechanism: 'EMAIL' #or 'PHONE'
   default_otp:
-    enabled: false
+    enabled: true
     code: '1234'
