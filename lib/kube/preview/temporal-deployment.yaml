@@ -38,6 +38,8 @@ spec:
           env:
             - name: DB
               value: "postgres12"
+            - name: POSTGRES_SEEDS
+              value: "db-postgresql-nyc1-20714-do-user-10955057-0.j.db.ondigitalocean.com"
             - name: POSTGRES_DB
               value: "defaultdb"
             - name: TEMPORAL_ADDRESS
