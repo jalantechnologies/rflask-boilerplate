@@ -13,6 +13,7 @@ spec:
   tls:
     - hosts:
         - $KUBE_INGRESS_HOSTNAME
+        - workers-dashboard.$KUBE_INGRESS_HOSTNAME
       secretName: $KUBE_APP-cert-key
   rules:
     - host: $KUBE_INGRESS_HOSTNAME
@@ -23,5 +24,15 @@ spec:
             backend:
               service:
                 name: $KUBE_APP-service
+                port:
+                  number: 8080
+    - host: workers-dashboard.$KUBE_INGRESS_HOSTNAME
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: temporal-ui-service
                 port:
                   number: 8080

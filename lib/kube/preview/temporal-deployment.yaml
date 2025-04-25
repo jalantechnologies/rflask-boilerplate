@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-deployment
+  namespace: $KUBE_NS
+  labels:
+    app: temporal
+    version: $GITHUB_SHA
+  annotations:
+    secrets.doppler.com/reload: 'true'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal
+  template:
+    metadata:
+      labels:
+        app: temporal
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: doks.digitalocean.com/node-pool
+                    operator: In
+                    values:
+                      - platform-cluster-01-staging-pool
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: temporal-server
+          image: temporalio/auto-setup:1.27.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7233
+          env:
+            - name: DB
+              value: "postgres12"
+            - name: POSTGRES_DB
+              value: "defaultdb"
+            - name: TEMPORAL_ADDRESS
+              value: "127.0.0.1:7233"
+            - name: POSTGRES_PORT
+              value: "25060"
+            - name: POSTGRES_SSL_MODE
+              value: "require"
+          resources:
+            requests:
+              memory: '400Mi'
+            limits:
+              memory: '800Mi'
+
+        - name: temporal-ui
+          image: temporalio/ui:2.34.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: TEMPORAL_ADDRESS
+              value: "temporal-server-service:7233"
+          resources:
+            requests:
+              memory: '400Mi'
+            limits:
+              memory: '800Mi'
+
+        - name: python-worker
+          image: $KUBE_DEPLOYMENT_IMAGE
+          command: ["python3", "/app/temporal_server.py"]
+          env:
+            - name: TEMPORAL_SERVER
+              value: "temporal-server-service:7233"
+          resources:
+            requests:
+              memory: "400Mi"
+            limits:
+              memory: "800Mi"
