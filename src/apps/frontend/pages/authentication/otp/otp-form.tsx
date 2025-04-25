@@ -5,7 +5,9 @@ import {
   OTP,
   VerticalStackLayout,
 } from 'frontend/components';
+import OtpHint from 'frontend/components/otp/otp-hint';
 import routes from 'frontend/constants/routes';
+import { Config } from 'frontend/helpers';
 import useOTPForm from 'frontend/pages/authentication/otp/otp-form-hook';
 import { AsyncError } from 'frontend/types';
 import { ButtonKind, ButtonType } from 'frontend/types/button';
@@ -19,6 +21,10 @@ interface OTPFormProps {
   onVerifyOTPSuccess: () => void;
   timerRemainingSeconds: string;
 }
+
+const defaultOTPConfig = Config.getConfigValue<{ code: string; enabled: boolean; }>('default_otp');
+const isOTPEnabled = defaultOTPConfig?.enabled;
+const defaultOTPCode = defaultOTPConfig?.code;
 
 const OTPForm: React.FC<OTPFormProps> = ({
   isResendEnabled,
@@ -71,7 +77,9 @@ const OTPForm: React.FC<OTPFormProps> = ({
             onChange={handleChange}
           />
         </FormControl>
-
+        {isOTPEnabled && (
+          <OtpHint otpCode={defaultOTPCode} />
+        )}
         <Flex gap={2}>
           <p className="text-lg text-black">Did not receive a code?</p>
           <Button

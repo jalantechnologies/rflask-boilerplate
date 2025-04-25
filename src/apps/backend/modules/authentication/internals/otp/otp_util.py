@@ -8,19 +8,11 @@ from modules.config.config_service import ConfigService
 
 
 class OTPUtil:
-    @staticmethod
-    def is_default_phone_number(phone_number: str) -> bool:
-        default_phone_number = None
-        if ConfigService[str].has_value(key="otp.default_phone_number"):
-            default_phone_number = ConfigService[str].get_value(key="otp.default_phone_number")
-            if default_phone_number and phone_number == default_phone_number:
-                return True
-        return False
 
     @staticmethod
     def generate_otp(length: int, phone_number: str) -> str:
-        if OTPUtil.is_default_phone_number(phone_number):
-            default_otp = ConfigService[str].get_value(key="otp.default_otp")
+        if OTPUtil.is_default_otp_enabled():
+            default_otp = ConfigService[str].get_value(key="public.default_otp.code")
             return default_otp
         return "".join(secrets.choice(string.digits) for _ in range(length))
 
@@ -33,3 +25,8 @@ class OTPUtil:
             phone_number=validated_otp_data.phone_number,
             status=validated_otp_data.status,
         )
+
+    @staticmethod
+    def is_default_otp_enabled() -> bool:
+        default_otp_enabled = ConfigService[bool].get_value(key="public.default_otp.enabled",default=False)
+        return default_otp_enabled

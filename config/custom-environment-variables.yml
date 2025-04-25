@@ -23,10 +23,6 @@ datadog:
 sendgrid:
   api_key: 'SENDGRID_API_KEY'
 
-otp:
-  default_phone_number: 'DEFAULT_PHONE_NUMBER'
-  default_otp: 'DEFAULT_OTP'
-
 twilio:
   account_sid: 'TWILIO_ACCOUNT_SID'
   auth_token: 'TWILIO_AUTH_TOKEN'
