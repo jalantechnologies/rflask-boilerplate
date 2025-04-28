@@ -1,5 +1,5 @@
 run-cyclic-check:
-	cd src/apps/backend \
+	cd src/apps/backend/modules \
 		&& pipenv run pycycle --here --verbose
 
 run-lint:
