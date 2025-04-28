@@ -1,5 +1,6 @@
 run-cyclic-check:
-	cd src/apps/backend && pipenv run pycycle --here --verbose
+	cd src/apps/backend \
+		&& pipenv run pycycle --here --verbose
 
 run-lint:
 	cd src/apps/backend \
