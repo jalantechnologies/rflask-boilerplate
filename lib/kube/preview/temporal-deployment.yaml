@@ -48,6 +48,16 @@ spec:
               value: "25060"
             - name: POSTGRES_SSL_MODE
               value: "require"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: doppler-frm-boilerplate-preview-managed-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: doppler-frm-boilerplate-preview-managed-secret
+                  key: POSTGRES_PWD
           resources:
             requests:
               memory: '400Mi'
