@@ -38,10 +38,12 @@ spec:
           env:
             - name: DB
               value: "postgres12"
-            - name: POSTGRES_DB
+            - name: DBNAME
               value: "defaultdb"
             - name: POSTGRES_SSL_MODE
               value: "require"
+            - name: TEMPORAL_ADDRESS
+              value: "temporal:7233"
           envFrom:
             - secretRef:
                 name: $DOPPLER_MANAGED_SECRET_NAME
