@@ -42,22 +42,13 @@ spec:
               value: "db-postgresql-nyc1-20714-do-user-10955057-0.j.db.ondigitalocean.com"
             - name: POSTGRES_DB
               value: "defaultdb"
-            - name: TEMPORAL_ADDRESS
-              value: "127.0.0.1:7233"
             - name: POSTGRES_PORT
               value: "25060"
             - name: POSTGRES_SSL_MODE
               value: "require"
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: doppler-frm-boilerplate-preview-managed-secret
-                  key: POSTGRES_USER
-            - name: POSTGRES_PWD
-              valueFrom:
-                secretKeyRef:
-                  name: doppler-frm-boilerplate-preview-managed-secret
-                  key: POSTGRES_PWD
+          envFrom:
+            - secretRef:
+                name: $DOPPLER_MANAGED_SECRET_NAME
           resources:
             requests:
               memory: '400Mi'

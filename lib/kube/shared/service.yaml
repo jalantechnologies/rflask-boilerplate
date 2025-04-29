@@ -20,9 +20,9 @@ metadata:
   name: temporal-server-service
   namespace: $KUBE_NS
   labels:
-    app: temporal-server
+    app: temporal
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - port: 7233
       targetPort: 7233
@@ -37,9 +37,9 @@ metadata:
   name: temporal-ui-service
   namespace: $KUBE_NS
   labels:
-    app: temporal-ui
+    app: temporal
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - port: 8080
       targetPort: 8080
