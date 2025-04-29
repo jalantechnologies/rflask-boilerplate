@@ -71,12 +71,13 @@ spec:
 
         - name: python-worker
           image: $KUBE_DEPLOYMENT_IMAGE
-          command: ["python3", "/app/src/apps/backend/temporal_server.py"]
+          workingDir: /app/src/apps/backend
+          command: ["python3", "temporal_server.py"]
           env:
-            - name: TEMPORAL_SERVER
-              value: "temporal-server-service:7233"
+          - name: TEMPORAL_SERVER
+            value: "temporal-server-service:7233"
           resources:
-            requests:
-              memory: "400Mi"
-            limits:
-              memory: "800Mi"
+          requests:
+            memory: "400Mi"
+          limits:
+            memory: "800Mi"
