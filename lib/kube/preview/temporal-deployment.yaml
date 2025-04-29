@@ -37,13 +37,9 @@ spec:
             - containerPort: 7233
           env:
             - name: DB
-              value: "postgres12"
-            - name: POSTGRES_SEEDS
-              value: "db-postgresql-nyc1-20714-do-user-10955057-0.j.db.ondigitalocean.com"
+              value: "postgres13"
             - name: POSTGRES_DB
               value: "defaultdb"
-            - name: POSTGRES_PORT
-              value: "25060"
             - name: POSTGRES_SSL_MODE
               value: "require"
           envFrom:
