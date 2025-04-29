@@ -37,7 +37,7 @@ spec:
             - containerPort: 7233
           env:
             - name: DB
-              value: "postgres13"
+              value: "postgres12"
             - name: POSTGRES_DB
               value: "defaultdb"
             - name: POSTGRES_SSL_MODE
