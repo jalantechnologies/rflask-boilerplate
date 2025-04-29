@@ -77,7 +77,7 @@ spec:
           - name: TEMPORAL_SERVER
             value: "temporal-server-service:7233"
           resources:
-          requests:
-            memory: "400Mi"
-          limits:
-            memory: "800Mi"
+            requests:
+              memory: '400Mi'
+            limits:
+              memory: '800Mi'
