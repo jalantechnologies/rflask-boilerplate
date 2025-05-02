@@ -40,8 +40,6 @@ spec:
               value: "postgres12"
             - name: DBNAME
               value: "postgres"
-            - name: POSTGRES_SSL_MODE
-              value: "require"
             - name: TEMPORAL_ADDRESS
               value: "temporal:7233"
           envFrom:
