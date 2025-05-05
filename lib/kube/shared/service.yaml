@@ -17,12 +17,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: temporal-server-service
+  name: temporal
   namespace: $KUBE_NS
   labels:
     app: temporal
 spec:
-  type: NodePort
   ports:
     - port: 7233
       targetPort: 7233
@@ -39,7 +38,6 @@ metadata:
   labels:
     app: temporal
 spec:
-  type: NodePort
   ports:
     - port: 8080
       targetPort: 8080

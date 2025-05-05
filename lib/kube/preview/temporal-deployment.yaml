@@ -41,7 +41,7 @@ spec:
             - name: DBNAME
               value: "postgres"
             - name: TEMPORAL_ADDRESS
-              value: "temporal-server-service:7233"
+              value: "temporal:7233"
           envFrom:
             - secretRef:
                 name: $DOPPLER_MANAGED_SECRET_NAME
@@ -58,7 +58,7 @@ spec:
             - containerPort: 8080
           env:
             - name: TEMPORAL_ADDRESS
-              value: "temporal-server-service:7233"
+              value: "temporal:7233"
           resources:
             requests:
               memory: '400Mi'
@@ -70,8 +70,8 @@ spec:
           workingDir: /app/src/apps/backend
           command: ["python3", "temporal_server.py"]
           env:
-          - name: TEMPORAL_SERVER
-            value: "temporal-server-service:7233"
+            - name: TEMPORAL_SERVER
+              value: "temporal:7233"
           resources:
             requests:
               memory: '400Mi'
