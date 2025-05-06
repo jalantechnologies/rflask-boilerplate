@@ -39,7 +39,7 @@ spec:
             - name: DB
               value: "postgres12"
             - name: DBNAME
-              value: "postgres"
+              value: "temporal"
             - name: TEMPORAL_ADDRESS
               value: "temporal:7233"
           envFrom:
