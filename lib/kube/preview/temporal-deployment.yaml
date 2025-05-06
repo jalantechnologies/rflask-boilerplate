@@ -47,9 +47,9 @@ spec:
                 name: $DOPPLER_MANAGED_SECRET_NAME
           resources:
             requests:
-              memory: '400Mi'
+              memory: '300Mi'
             limits:
-              memory: '800Mi'
+              memory: '600Mi'
 
         - name: temporal
           image: temporalio/ui:2.34.0
@@ -61,9 +61,9 @@ spec:
               value: "temporal:7233"
           resources:
             requests:
-              memory: '400Mi'
+              memory: '256Mi'
             limits:
-              memory: '800Mi'
+              memory: '400Mi'
 
         - name: python-worker
           image: $KUBE_DEPLOYMENT_IMAGE
@@ -77,6 +77,6 @@ spec:
                 name: $DOPPLER_MANAGED_SECRET_NAME
           resources:
             requests:
-              memory: '400Mi'
+              memory: '150Mi'
             limits:
-              memory: '800Mi'
+              memory: '350Mi'
