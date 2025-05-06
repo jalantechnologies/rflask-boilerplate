@@ -17,7 +17,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: temporal
+  name: temporal-server
   namespace: $KUBE_NS
   labels:
     app: temporal
@@ -34,7 +34,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: temporal-ui-service
+  name: temporal
   namespace: $KUBE_NS
   labels:
     app: temporal

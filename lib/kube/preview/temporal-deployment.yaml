@@ -51,7 +51,7 @@ spec:
             limits:
               memory: '800Mi'
 
-        - name: temporal-ui
+        - name: temporal
           image: temporalio/ui:2.34.0
           imagePullPolicy: Always
           ports:
