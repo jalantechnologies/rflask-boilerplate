@@ -67,7 +67,7 @@ spec:
 
         - name: python-worker
           image: $KUBE_DEPLOYMENT_IMAGE
-          workingDir: /app/src/apps/backend
+          workingDir: /opt/app/src/apps/backend
           command: ["python3", "temporal_server.py"]
           env:
             - name: TEMPORAL_SERVER
