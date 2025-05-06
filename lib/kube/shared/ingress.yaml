@@ -33,6 +33,6 @@ spec:
             path: "/"
             backend:
               service:
-                name: temporal-ui-service
+                name: temporal
                 port:
                   number: 8080
