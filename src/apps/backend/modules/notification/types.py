@@ -13,35 +13,35 @@ class NotificationType(str, Enum):
 
 class NotificationChannel(str, Enum):
     EMAIL = "EMAIL"
-    SMS = "SMS"
     PUSH = "PUSH"
+    SMS = "SMS"
 
 
 class NotificationStatus(str, Enum):
-    PENDING = "PENDING"
-    SCHEDULED = "SCHEDULED"
+    CANCELLED = "CANCELLED"
     DELIVERED = "DELIVERED"
     FAILED = "FAILED"
-    CANCELLED = "CANCELLED"
+    PENDING = "PENDING"
+    SCHEDULED = "SCHEDULED"
 
 
 @dataclass(frozen=True)
 class NotificationPayload:
     """Base class for notification payloads. Contains common fields for all notification types."""
 
-    subject: str
     body: str
     metadata: Optional[dict[str, Any]] = None
+    subject: str
 
 
 @dataclass(frozen=True)
 class EmailPayload(NotificationPayload):
     """Email specific payload"""
 
-    html_body: Optional[str] = None
-    from_email: Optional[str] = None
-    reply_to: Optional[str] = None
     attachments: Optional[list[dict[str, Any]]] = None
+    from_email: Optional[str] = None
+    html_body: Optional[str] = None
+    reply_to: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -55,11 +55,11 @@ class SMSPayload(NotificationPayload):
 class PushPayload(NotificationPayload):
     """Push notification specific payload"""
 
-    title: str
+    action_buttons: Optional[list[dict[str, str]]] = None
+    data: Optional[dict[str, Any]] = None
     icon: Optional[str] = None
     image: Optional[str] = None
-    data: Optional[dict[str, Any]] = None
-    action_buttons: Optional[list[dict[str, str]]] = None
+    title: str
 
 
 NotificationPayloadType = Union[EmailPayload, SMSPayload, PushPayload, NotificationPayload]
@@ -67,12 +67,12 @@ NotificationPayloadType = Union[EmailPayload, SMSPayload, PushPayload, Notificat
 
 @dataclass(frozen=True)
 class CreateNotificationParams:
-    user_id: str
-    type: NotificationType
+    bulk_ids: Optional[list[str]] = None  # For bulk notifications
     channels: list[NotificationChannel]
     payload: NotificationPayloadType
     schedule_at: Optional[datetime] = None
-    bulk_ids: Optional[list[str]] = None  # For bulk notifications
+    type: NotificationType
+    user_id: str
 
 
 @dataclass(frozen=True)
@@ -82,66 +82,66 @@ class NotificationSearchParams:
 
 @dataclass(frozen=True)
 class NotificationSearchByUserIdParams:
-    user_id: str
     limit: int = 20
     offset: int = 0
+    user_id: str
 
 
 @dataclass(frozen=True)
 class Notification:
-    id: str
-    user_id: str
-    type: NotificationType
     channels: list[NotificationChannel]
-    payload: NotificationPayloadType
-    status: NotificationStatus
     created_at: datetime
-    updated_at: datetime
-    schedule_at: Optional[datetime] = None
     delivered_at: Optional[datetime] = None
+    id: str
+    payload: NotificationPayloadType
+    schedule_at: Optional[datetime] = None
+    status: NotificationStatus
+    type: NotificationType
+    updated_at: datetime
+    user_id: str
     workflow_id: Optional[str] = None  # Temporal workflow ID if applicable
 
 
 @dataclass(frozen=True)
 class NotificationLog:
+    attempt: int
+    channel: NotificationChannel
+    created_at: datetime
+    error_message: Optional[str] = None
     id: str
     notification_id: str
-    user_id: str
-    channel: NotificationChannel
-    status: NotificationStatus
-    attempt: int
-    error_message: Optional[str] = None
     provider_response: Optional[dict[str, Any]] = None
-    created_at: datetime
+    status: NotificationStatus
+    user_id: str
 
 
 @dataclass(frozen=True)
 class NotificationPreference:
-    id: str
-    user_id: str
-    type: NotificationType
-    email_opt_in: bool = True
-    sms_opt_in: bool = True
-    push_opt_in: bool = True
     created_at: datetime = field(default_factory=datetime.utcnow)
+    email_opt_in: bool = True
+    id: str
+    push_opt_in: bool = True
+    sms_opt_in: bool = True
+    type: NotificationType
     updated_at: datetime = field(default_factory=datetime.utcnow)
+    user_id: str
 
 
 @dataclass(frozen=True)
 class UpdateNotificationPreferenceParams:
-    user_id: str
-    type: NotificationType
     email_opt_in: Optional[bool] = None
-    sms_opt_in: Optional[bool] = None
     push_opt_in: Optional[bool] = None
+    sms_opt_in: Optional[bool] = None
+    type: NotificationType
+    user_id: str
 
 
 @dataclass(frozen=True)
 class NotificationErrorCode:
-    NOT_FOUND: str = "NOTIFICATION_ERR_01"
-    INVALID_PARAMS: str = "NOTIFICATION_ERR_02"
+    BAD_REQUEST: str = "NOTIFICATION_ERR_07"
     CHANNEL_DISABLED: str = "NOTIFICATION_ERR_03"
+    INVALID_PARAMS: str = "NOTIFICATION_ERR_02"
+    NOT_FOUND: str = "NOTIFICATION_ERR_01"
     PROVIDER_ERROR: str = "NOTIFICATION_ERR_04"
     SCHEDULING_ERROR: str = "NOTIFICATION_ERR_05"
     USER_NOT_FOUND: str = "NOTIFICATION_ERR_06"
-    BAD_REQUEST: str = "NOTIFICATION_ERR_07"
