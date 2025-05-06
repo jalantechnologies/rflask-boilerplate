@@ -72,6 +72,9 @@ spec:
           env:
             - name: TEMPORAL_SERVER
               value: "temporal:7233"
+          envFrom:
+            - secretRef:
+              name: $DOPPLER_MANAGED_SECRET_NAME
           resources:
             requests:
               memory: '400Mi'
