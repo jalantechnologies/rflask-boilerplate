@@ -63,13 +63,10 @@ spec:
               memory: '200Mi'
 
         - name: temporal-ui
-          image: temporalio/ui:2.22.3
+          image: temporalio/ui:2.34.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080 # Web UI
-          envFrom:
-            - secretRef:
-                name: $DOPPLER_MANAGED_SECRET_NAME
           env:
             - name: TEMPORAL_ADDRESS
               value: 'temporal-grpc:7233'
