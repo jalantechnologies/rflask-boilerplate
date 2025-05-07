@@ -1,36 +1,22 @@
+# Internal gRPC API for workers/clients
 apiVersion: v1
 kind: Service
 metadata:
-  name: $KUBE_APP-service
-  namespace: $KUBE_NS
-  labels:
-    app: $KUBE_APP
-spec:
-  type: NodePort
-  ports:
-    - port: 8080
-  selector:
-    app: $KUBE_APP
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: temporal
+  name: temporal-grpc
   namespace: $KUBE_NS
   labels:
     app: temporal
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
-    - port: 7233
+    - name: grpc
+      port: 7233
       targetPort: 7233
   selector:
     app: temporal
 
 ---
-
+# Browser UI (exposed via Ingress at workers-dashboard.$KUBE_INGRESS_HOSTNAME)
 apiVersion: v1
 kind: Service
 metadata:
@@ -39,9 +25,10 @@ metadata:
   labels:
     app: temporal
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
   selector:
     app: temporal

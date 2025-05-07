@@ -18,64 +18,79 @@ spec:
       labels:
         app: temporal
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: doks.digitalocean.com/node-pool
-                    operator: In
-                    values:
-                      - platform-cluster-01-staging-pool
       imagePullSecrets:
         - name: regcred
+
       containers:
         - name: temporal-server
-          image: temporalio/auto-setup:1.27.0
+          image: temporalio/auto-setup:1.22.4
           imagePullPolicy: Always
           ports:
-            - containerPort: 7233
-            - containerPort: 8080
-          env:
-            - name: DB
-              value: "postgres12"
-            - name: DBNAME
-              value: "temporal"
-            - name: TEMPORAL_ADDRESS
-              value: "temporal:7233"
+            - containerPort: 7233 # gRPC
           envFrom:
             - secretRef:
                 name: $DOPPLER_MANAGED_SECRET_NAME
+          env:
+            - name: DB
+              value: 'postgres12'
+            - name: TEMPORAL_ADDRESS
+              value: 'temporal-grpc:7233'
+            - name: TEMPORAL_CLI_ADDRESS
+              value: 'temporal:7233'
           resources:
             requests:
               memory: '300Mi'
             limits:
               memory: '600Mi'
 
-    # #    - name: temporal
-    # #     image: temporalio/ui:2.34.0
-    # #     imagePullPolicy: Always
-    # #     ports:
-    # #       - containerPort: 8080
-    # #     env:
-    #         - name: TEMPORAL_ADDRESS
-    #           value: "temporal:7233"
-    #       resources:
-    #         requests:
-    #           memory: '256Mi'
-    #         limits:
-    #           memory: '400Mi'
+        - name: temporal-admin-tools
+          image: temporalio/admin-tools:1.22.4
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: $DOPPLER_MANAGED_SECRET_NAME
+          env:
+            - name: TEMPORAL_ADDRESS
+              value: 'temporal-grpc:7233'
+            - name: TEMPORAL_CLI_ADDRESS
+              value: 'temporal-grpc:7233'
+          stdin: true
+          tty: true
+          resources:
+            requests:
+              memory: '100Mi'
+            limits:
+              memory: '200Mi'
+
+        - name: temporal-ui
+          image: temporalio/ui:2.22.3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080 # Web UI
+          envFrom:
+            - secretRef:
+                name: $DOPPLER_MANAGED_SECRET_NAME
+          env:
+            - name: TEMPORAL_ADDRESS
+              value: 'temporal-grpc:7233'
+            - name: TEMPORAL_CORS_ORIGINS
+              value: '*'
+          resources:
+            requests:
+              memory: '256Mi'
+            limits:
+              memory: '400Mi'
 
         - name: python-worker
           image: $KUBE_DEPLOYMENT_IMAGE
           workingDir: /opt/app/src/apps/backend
-          command: ["pipenv", "run", "python", "temporal_server.py"]
-          env:
-            - name: TEMPORAL_SERVER
-              value: "temporal:7233"
+          command: ['pipenv', 'run', 'python', 'temporal_server.py']
           envFrom:
             - secretRef:
                 name: $DOPPLER_MANAGED_SECRET_NAME
+          env:
+            - name: TEMPORAL_SERVER
+              value: 'temporal:7233'
           resources:
             requests:
               memory: '150Mi'
