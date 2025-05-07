@@ -1,3 +1,5 @@
+from typing import Any
+
 import requests
 
 from modules.application.types import BaseWorker
@@ -5,7 +7,8 @@ from modules.logger.logger import Logger
 
 
 class HealthCheckWorker(BaseWorker):
-    async def run(self) -> None:
+    @staticmethod
+    async def execute(*args: Any) -> None:
         try:
             res = requests.get("http://localhost:8080/api/")
 
@@ -17,3 +20,6 @@ class HealthCheckWorker(BaseWorker):
 
         except Exception as e:
             Logger.error(message=f"Backend is unhealthy: {e}")
+
+    async def run(self, *args: Any) -> None:
+        await super().run(*args)
