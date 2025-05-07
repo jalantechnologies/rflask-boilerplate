@@ -20,6 +20,8 @@ class BaseWorker(ABC):
     """
 
     priority: WorkerPriority = WorkerPriority.DEFAULT
+    max_execution_time_in_seconds: int = 600
+    max_retries: int = 3
 
     @staticmethod
     @abstractmethod
@@ -36,8 +38,10 @@ class BaseWorker(ABC):
         await workflow.execute_activity(
             self.execute,
             args=args,
-            start_to_close_timeout=timedelta(seconds=600),
-            retry_policy=RetryPolicy(maximum_attempts=5),
+            start_to_close_timeout=timedelta(
+                seconds=self.max_execution_time_in_seconds
+            ),
+            retry_policy=RetryPolicy(maximum_attempts=self.max_retries),
         )
 
 
