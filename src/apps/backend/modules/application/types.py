@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Optional, Type
 
+from temporalio import workflow
 from temporalio.client import WorkflowExecutionStatus
+from temporalio.common import RetryPolicy
 
 
 class WorkerPriority(Enum):
@@ -19,11 +21,24 @@ class BaseWorker(ABC):
 
     priority: WorkerPriority = WorkerPriority.DEFAULT
 
+    @staticmethod
     @abstractmethod
-    async def run(self, *args: Any, **kwargs: Any) -> None:
+    async def execute(*args: Any) -> None:
         """
-        Subclasses must implement the run() method, which is the application's entry point.
+        Subclasses must implement the execute() method, where the worker logic goes
         """
+
+    @abstractmethod
+    async def run(self, *args: Any) -> None:
+        """
+        Subclasses must implement the run() method, which is the application's entry point
+        """
+        await workflow.execute_activity(
+            self.execute,
+            args=args,
+            start_to_close_timeout=timedelta(seconds=600),
+            retry_policy=RetryPolicy(maximum_attempts=5),
+        )
 
 
 @dataclass(frozen=True)
