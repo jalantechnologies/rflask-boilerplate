@@ -35,6 +35,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 7233
+            - containerPort: 8080
           env:
             - name: DB
               value: "postgres12"
@@ -51,19 +52,19 @@ spec:
             limits:
               memory: '600Mi'
 
-        - name: temporal
-          image: temporalio/ui:2.34.0
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8080
-          env:
-            - name: TEMPORAL_ADDRESS
-              value: "temporal:7233"
-          resources:
-            requests:
-              memory: '256Mi'
-            limits:
-              memory: '400Mi'
+    # #    - name: temporal
+    # #     image: temporalio/ui:2.34.0
+    # #     imagePullPolicy: Always
+    # #     ports:
+    # #       - containerPort: 8080
+    # #     env:
+    #         - name: TEMPORAL_ADDRESS
+    #           value: "temporal:7233"
+    #       resources:
+    #         requests:
+    #           memory: '256Mi'
+    #         limits:
+    #           memory: '400Mi'
 
         - name: python-worker
           image: $KUBE_DEPLOYMENT_IMAGE
