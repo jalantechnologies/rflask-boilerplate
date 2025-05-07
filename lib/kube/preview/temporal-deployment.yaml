@@ -70,8 +70,6 @@ spec:
           env:
             - name: TEMPORAL_ADDRESS
               value: 'temporal-grpc:7233'
-            - name: TEMPORAL_CORS_ORIGINS
-              value: '*'
           resources:
             requests:
               memory: '256Mi'
