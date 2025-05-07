@@ -9,8 +9,10 @@ application up and running.
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
   - [Configuration](#configuration)
+  - [Custom Environment Variables](#custom-environment-variables)
   - [Scripts](#scripts)
   - [Workers](#workers)
+  - [Temporal Deployment](#temporal-deployment)
   - [Deployment](#deployment)
 
 ## Getting Started
@@ -62,51 +64,58 @@ In the `config` directory, we maintain environment-specific YAML files to manage
 - **`default.yml`** – Stores constant values that remain unchanged across deployments.
 
 ### Environment Selection
+
 The configuration schema is loaded based on the `APP_ENV` value provided when starting the server:
 `APP_ENV=<environment_name>`
 
 ### `default.yml` Guidelines
+
 - If a configuration value **varies across deployments**, set it to `null` in `default.yml` and define it in the respective environment-specific file.
 - If a configuration value **remains the same across all deployments**, define it directly in `default.yml`.
 
 ### `.env` Support
+
 For injecting environment variables, you can add a `.env` file in the application root directory.
 
 ## Custom Environment Variables
+
 Some deployment scenarios require environment variables for handling sensitive data or settings that should not be stored in the codebase.
 
 To facilitate this, we use `custom-environment-variables.yml` to map environment variables to configuration keys.
 
 ### Example Mapping:
-```yml
+
+```yaml
 mongodb:
-  uri: "MONGODB_URI"
+  uri: 'MONGODB_URI'
 
 inspectlet:
-  key: "INSPECTLET_KEY"
+  key: 'INSPECTLET_KEY'
 
 demo:
-  host: "DEMO_HOST"
+  host: 'DEMO_HOST'
   port:
-    __name: "DEMO_PORT"
-    __format: "number"
+    __name: 'DEMO_PORT'
+    __format: 'number'
 ```
 
 #### Behavior:
+
 - If the environment variable `MONGODB_URI` exists, it will override `mongodb.uri`.
 - If `INSPECTLET_KEY` is present, it will override `inspectlet.key`.
 - `DEMO_PORT` will be converted to a number before overriding `demo.port`.
 - Empty environment variables are ignored and do not affect the configuration.
 
 ### Available `__format` Types:
+
 - `boolean`
 - `number`
 
 ### Configuration Precedence:
+
 1. **Custom Environment Variables** (highest priority)
 2. **Environment-Specific Configuration Files** (e.g., `development.yml`, `production.yml`)
 3. **`default.yml`** (lowest priority, used as fallback)
-
 
 **UI Config:**
 
@@ -124,10 +133,10 @@ Steps:
 
 ## Workers
 
-This application supports queuing workers from the web application which are run independent of the web server by [Temporal](https://temporal.io/). 
+This application supports queuing workers from the web application which are run independent of the web server by [Temporal](https://temporal.io/).
 
 You can define workers in any module, preferably in a `/workers` directory. A worker needs to inherit from [`BaseWorker`](src/apps/backend/modules/application/types.py) and have a `run()` method.
-You can use the `HealthCheckWorker` inside the `application` module as a reference. 
+You can use the `HealthCheckWorker` inside the `application` module as a reference.
 
 ```python
 from modules.application.types import BaseWorker
@@ -137,9 +146,9 @@ class ExampleWorker(BaseWorker):
         ... # Your worker logic here
 ```
 
-Once a worker is defined, it needs to be imported in the [`temporal_config.py`](src/apps/backend/temporal_config.py) and added to the `WORKERS` list. 
+Once a worker is defined, it needs to be imported in the [`temporal_config.py`](src/apps/backend/temporal_config.py) and added to the `WORKERS` list.
 
-Hereafter, the system will take care of registering the worker with the Temporal server. 
+Hereafter, the system will take care of registering the worker with the Temporal server.
 
 The `ApplicationService` exposes various methods to interact with the workers:
 
@@ -151,7 +160,76 @@ The `ApplicationService` exposes various methods to interact with the workers:
 
 NOTE: Please refer to the [Temporal Python SDK documentation](https://docs.temporal.io/develop/python/cancellation) for detailed information on cancellation vs termination.
 
+## Temporal Deployment
+
+We deploy Temporal in a Kubernetes-native architecture to support scalable background task processing.
+
+### Key Details:
+
+- **Per Preview Deployment**:
+
+  - Each PR spawns **two pods**:
+    - **WebApp Pod** – Runs the React frontend and Flask backend.
+    - **Temporal Pod** – Runs:
+      - `python-worker` (executes `temporal_server.py`)
+      - `temporal-server`
+      - `temporal-ui`
+  - This ensures isolated, independent processing environments for each PR.
+
+- **Database**:
+
+  - A single PostgreSQL instance is used across all deployments.
+  - **Preview pods** share one database.
+  - **Production** uses a dedicated database.
+  - All database config is managed securely using [Doppler](https://www.doppler.com/).
+
+- **Access**:
+
+  - `temporal-server` is internal-only (cluster-only access).
+  - `temporal-ui` is exposed externally for both preview and production.
+
+- **Server Address Resolution**:
+  - `TEMPORAL_SERVER_ADDRESS` is injected from Doppler or resolved dynamically:
+    - If set in Doppler → uses that value.
+    - If not set → uses PR-specific (for preview) or production address.
+
+### Architecture Diagram:
+
+```
+                ┌─────────────────────────────┐
+                │    GitHub PR (Preview URL)  │
+                │   e.g., pr-123.example.com  │
+                └──────────────┬──────────────┘
+                               │
+         ┌────────────────────┴────────────────────┐
+         │       Kubernetes Namespace (pr-123)      │
+         └────────────────────┬────────────────────┘
+                              │
+        ┌─────────────────────┴──────────────────────┐
+        │                 Preview Pods               │
+        │                                            │
+        │  ┌───────────────────────────────┐         │
+        │  │        WebApp Pod             │         │
+        │  │  - React Frontend             │         │
+        │  │  - Flask Backend              │         │
+        │  └───────────────────────────────┘         │
+        │                                            │
+        │  ┌────────────────────────────────────────┐│
+        │  │         Temporal Services Pod          ││
+        │  │  - 🐍 `python-worker` (temporal_server.py) │
+        │  │  - ⚙️  `temporal-server`                ││
+        │  │  - 🖥️  `temporal-ui` (Externally Exposed)││
+        │  └────────────────────────────────────────┘│
+        │                                            │
+        └────────────────────────────────────────────┘
+
+Notes:
+- WebApp and Temporal pods run in parallel.
+- Internal Docker networking is used for inter-container communication in the Temporal Pod.
+```
+
+📚 More info: [Temporal Deployment Docs](https://docs.temporal.io/application-development/foundations/deployment)
+
 ## Deployment
 
-This project deploys on Kubernetes via GitHub actions using workflows defined
-in [GitHub CI](https://github.com/jalantechnologies/github-ci).
+This project deploys on Kubernetes via GitHub Actions using workflows defined in [GitHub CI](https://github.com/jalantechnologies/github-ci).
