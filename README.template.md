@@ -1,8 +1,8 @@
 # Boilerplate - FRM
 ![Build (Main)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/production_on_push.yml?branch=main&label=Build%20%26%20Deploy%20(Main))
 
-![Build (Preview)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/preview_on_pr_update.yml?branch={{BRANCH_NAME}}&label=Build%20%26%20Test%20(Preview))
-![Tests (Preview)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/preview_on_pr_update.yml?branch={{BRANCH_NAME}}&event=pull_request&label=Tests%20(Preview))
+![Build (Preview)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/preview_on_pr_update.yml?branch={{BRANCH_NAME}}&job=preview_build&label=Build%20(Preview))
+![compose:test (Preview)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/preview_on_pr_update.yml?branch={{BRANCH_NAME}}&job=preview_test&label=compose%3Atest%20(Preview))
 ![Coverage (Preview)](https://sonarqube.platform.jalantechnologies.com/api/project_badges/measure?project={{SONAR_PROJECT_KEY}}&metric=coverage&branch={{BRANCH_NAME}})
 
 
