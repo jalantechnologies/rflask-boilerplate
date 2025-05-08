@@ -1,11 +1,10 @@
 # Boilerplate - FRM
+![Build (Main)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/production_on_push.yml?branch=main&label=Build%20%26%20Deploy%20(Main))
 
-![Build (Main)](https://github.com/jalantechnologies/rflask-boilerplate/actions/workflows/production_on_push.yml/badge.svg?branch=main)
-
-
-![Build (Preview)](https://github.com/jalantechnologies/rflask-boilerplate/actions/workflows/preview_on_pr_update.yml/badge.svg?branch=govind/feat/workflow-badges)
-![Tests (Preview)](https://github.com/jalantechnologies/rflask-boilerplate/actions/workflows/preview_on_pr_update.yml/badge.svg?branch=govind/feat/workflow-badges&event=pull_request)
+![Build (Preview)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/preview_on_pr_update.yml?branch=govind/feat/workflow-badges&label=Build%20%26%20Test%20(Preview))
+![Tests (Preview)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/preview_on_pr_update.yml?branch=govind/feat/workflow-badges&event=pull_request&label=Tests%20(Preview))
 ![Coverage (Preview)](https://sonarcloud.io/api/project_badges/measure?project=jalantechnologies_rflask-boilerplate&metric=coverage&branch=govind/feat/workflow-badges)
+
 
 
 Boilerplate project for Flask, React & MongoDB based projects. This README documents the steps necessary to get your

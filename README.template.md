@@ -1,11 +1,10 @@
 # Boilerplate - FRM
+![Build (Main)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/production_on_push.yml?branch=main&label=Build%20%26%20Deploy%20(Main))
 
-![Build (Main)](https://github.com/{{REPO_NAME}}/actions/workflows/production_on_push.yml/badge.svg?branch=main)
-
-
-![Build (Preview)](https://github.com/{{REPO_NAME}}/actions/workflows/preview_on_pr_update.yml/badge.svg?branch={{BRANCH_NAME}})
-![Tests (Preview)](https://github.com/{{REPO_NAME}}/actions/workflows/preview_on_pr_update.yml/badge.svg?branch={{BRANCH_NAME}}&event=pull_request)
+![Build (Preview)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/preview_on_pr_update.yml?branch={{BRANCH_NAME}}&label=Build%20%26%20Test%20(Preview))
+![Tests (Preview)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/preview_on_pr_update.yml?branch={{BRANCH_NAME}}&event=pull_request&label=Tests%20(Preview))
 ![Coverage (Preview)](https://sonarcloud.io/api/project_badges/measure?project={{SONAR_PROJECT_KEY}}&metric=coverage&branch={{BRANCH_NAME}})
+
 
 
 Boilerplate project for Flask, React & MongoDB based projects. This README documents the steps necessary to get your
