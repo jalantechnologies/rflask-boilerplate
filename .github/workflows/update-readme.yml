@@ -1,0 +1,29 @@
+name: Update README with Repository Name
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Replace placeholders in README
+        run: |
+          REPO_NAME=$(basename $GITHUB_REPOSITORY)
+          BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')
+          sed -i "s/{{REPO_NAME}}/$REPO_NAME/g" README.md
+          sed -i "s/{{BRANCH_NAME}}/$BRANCH_NAME/g" README.md
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update README with repository name"
+          git push
