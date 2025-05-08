@@ -1,5 +1,9 @@
 # Boilerplate - FRM
-![Build (Main)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/production_on_push.yml?branch=main&label=Build%20%26%20Deploy%20(Main))
+
+## Workflow Badges
+![Build (Main)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/production_on_push.yml?branch=main&job=production_build&label=Build%20(Main))
+![compose:test (Main)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/production_on_push.yml?branch=main&job=production_test&label=compose%3Atest%20(Main))
+![Coverage (Main)](https://sonarqube.platform.jalantechnologies.com/api/project_badges/measure?project=jalantechnologies_rflask-boilerplate&metric=coverage&branch=main)
 
 ![Build (Preview)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/preview_on_pr_update.yml?branch=govind/feat/workflow-badges&job=preview_build&label=Build%20(Preview))
 ![compose:test (Preview)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/preview_on_pr_update.yml?branch=govind/feat/workflow-badges&job=preview_test&label=compose%3Atest%20(Preview))
