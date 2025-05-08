@@ -1,5 +1,8 @@
 # Boilerplate - FRM
 
+[![Build & Test Status](https://github.com/jalantechnologies/rflask-boilerplate/actions/workflows/production_on_push.yml/badge.svg?branch=main)](https://github.com/jalantechnologies/rflask-boilerplate/actions/workflows/production_on_push.yml)
+[![SonarQube Test Coverage](https://sonarcloud.io/api/project_badges/measure?project=jalantechnologies_rflask-boilerplate&metric=coverage)](https://sonarcloud.io/dashboard?id=jalantechnologies_rflask-boilerplate)
+
 Boilerplate project for Flask, React & MongoDB based projects. This README documents the steps necessary to get your
 application up and running.
 
