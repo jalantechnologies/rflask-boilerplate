@@ -158,4 +158,4 @@ NOTE: Please refer to the [Temporal Python SDK documentation](https://docs.tempo
 ## Deployment
 
 This project deploys on Kubernetes via GitHub actions using workflows defined
-in [GitHub CI](https://github.com/jalantechnologies/github-ci).
+in [GitHub CI](https://github.com/jalantechnologies/github-ci). 
