@@ -3,10 +3,11 @@ name: Update README with Repository Name
 on:
   push:
     branches:
-      - '*'
+      - '**'
 
 jobs:
   update-readme:
+    if: github.actor != 'github-actions[bot]'  # Prevent loop
     runs-on: ubuntu-latest
 
     steps:
@@ -20,10 +21,15 @@ jobs:
           sed -i "s/{{REPO_NAME}}/$REPO_NAME/g" README.md
           sed -i "s/{{BRANCH_NAME}}/$BRANCH_NAME/g" README.md
 
-      - name: Commit and push changes
+      - name: Commit and push changes (only if README changed)
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git commit -m "Update README with repository name"
-          git push
+
+          if ! git diff --quiet README.md; then
+            git add README.md
+            git commit -m "Update README with repository name and branch"
+            git push
+          else
+            echo "No changes to commit."
+          fi
