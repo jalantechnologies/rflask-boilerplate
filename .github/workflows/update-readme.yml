@@ -7,7 +7,7 @@ on:
 
 jobs:
   update-readme:
-    if: github.actor != 'github-actions[bot]'  # Prevent loop
+    if: github.actor != 'github-actions[bot]'  # Prevent infinite loop
     runs-on: ubuntu-latest
 
     steps:
@@ -16,10 +16,10 @@ jobs:
 
       - name: Replace placeholders in README
         run: |
-          REPO_NAME=$(basename $GITHUB_REPOSITORY)
-          BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')
-          sed -i "s/{{REPO_NAME}}/$REPO_NAME/g" README.md
-          sed -i "s/{{BRANCH_NAME}}/$BRANCH_NAME/g" README.md
+          REPO_NAME=$(basename "$GITHUB_REPOSITORY")
+          BRANCH_NAME=$(echo "$GITHUB_REF" | sed 's|refs/heads/||')
+          sed -i "s|{{REPO_NAME}}|$REPO_NAME|g" README.md
+          sed -i "s|{{BRANCH_NAME}}|$BRANCH_NAME|g" README.md
 
       - name: Commit and push changes (only if README changed)
         run: |
