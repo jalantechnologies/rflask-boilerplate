@@ -3,7 +3,7 @@
 
 ![Build (Preview)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/preview_on_pr_update.yml?branch=govind/feat/workflow-badges&label=Build%20%26%20Test%20(Preview))
 ![Tests (Preview)](https://img.shields.io/github/actions/workflow/status/jalantechnologies/rflask-boilerplate/preview_on_pr_update.yml?branch=govind/feat/workflow-badges&event=pull_request&label=Tests%20(Preview))
-![Coverage (Preview)](https://sonarcloud.io/api/project_badges/measure?project=jalantechnologies_rflask-boilerplate&metric=coverage&branch=govind/feat/workflow-badges)
+![Coverage (Preview)](https://sonarqube.platform.jalantechnologies.com/api/project_badges/measure?project=jalantechnologies_rflask-boilerplate&metric=coverage&branch=govind/feat/workflow-badges)
 
 
 

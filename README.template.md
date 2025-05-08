@@ -3,7 +3,7 @@
 
 ![Build (Preview)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/preview_on_pr_update.yml?branch={{BRANCH_NAME}}&label=Build%20%26%20Test%20(Preview))
 ![Tests (Preview)](https://img.shields.io/github/actions/workflow/status/{{REPO_NAME}}/preview_on_pr_update.yml?branch={{BRANCH_NAME}}&event=pull_request&label=Tests%20(Preview))
-![Coverage (Preview)](https://sonarcloud.io/api/project_badges/measure?project={{SONAR_PROJECT_KEY}}&metric=coverage&branch={{BRANCH_NAME}})
+![Coverage (Preview)](https://sonarqube.platform.jalantechnologies.com/api/project_badges/measure?project={{SONAR_PROJECT_KEY}}&metric=coverage&branch={{BRANCH_NAME}})
 
 
 
