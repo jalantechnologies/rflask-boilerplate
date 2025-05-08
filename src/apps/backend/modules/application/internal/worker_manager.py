@@ -1,8 +1,9 @@
 import asyncio
 import uuid
-from typing import Any, Optional, Tuple, Type
+from typing import Any, Optional, Tuple, Type, cast
 
 from temporalio.client import Client, WorkflowExecutionStatus, WorkflowHandle
+from temporalio.exceptions import WorkflowAlreadyStartedError
 from temporalio.service import RetryConfig, RPCError
 
 from modules.application.errors import (
@@ -21,7 +22,7 @@ from temporal_config import TemporalConfig
 
 
 class WorkerManager:
-    CLIENT: Client
+    CLIENT: Optional[Client] = None
 
     @staticmethod
     async def _connect_temporal_server() -> None:
@@ -37,6 +38,14 @@ class WorkerManager:
             raise WorkerClientConnectionError(server_address=server_address)
 
     @staticmethod
+    async def _get_client() -> Client:
+        if WorkerManager.CLIENT is None:
+            await WorkerManager._connect_temporal_server()
+        return cast(
+            Client, WorkerManager.CLIENT
+        )  # Safe to cast since _connect_temporal_server will throw if connection fails
+
+    @staticmethod
     async def _get_worker_status(
         handle: WorkflowHandle,
     ) -> Optional[WorkflowExecutionStatus]:
@@ -50,18 +59,33 @@ class WorkerManager:
         if not cls in TemporalConfig.WORKERS:
             raise WorkerNotRegisteredError(worker_name=cls.__name__)
 
-        handle: WorkflowHandle = await WorkerManager.CLIENT.start_workflow(
-            cls.__name__,
-            args=arguments,
-            id=f"{cls.__name__}-{str(uuid.uuid4())}",
-            task_queue=cls.priority.value,
-            cron_schedule=cron_schedule if cron_schedule else "",
+        worker_id = (
+            f"{cls.__name__}-cron"
+            if cron_schedule
+            else f"{cls.__name__}-{str(uuid.uuid4())}"
         )
+
+        client = await WorkerManager._get_client()
+        try:
+            handle: WorkflowHandle = await client.start_workflow(
+                cls.__name__,
+                args=arguments,
+                id=worker_id,
+                task_queue=cls.priority.value,
+                cron_schedule=cron_schedule if cron_schedule else "",
+            )
+        except WorkflowAlreadyStartedError:
+            Logger.info(
+                message=f"Worker {worker_id} already running, skipping starting new instance"
+            )
+            return worker_id
+
         return handle.id
 
     @staticmethod
     async def _get_worker_by_id(worker_id: str) -> Worker:
-        handle = WorkerManager.CLIENT.get_workflow_handle(worker_id)
+        client = await WorkerManager._get_client()
+        handle = client.get_workflow_handle(worker_id)
         info = await handle.describe()
 
         return Worker(
@@ -81,15 +105,14 @@ class WorkerManager:
 
     @staticmethod
     async def _schedule_worker_as_cron(
-        cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str
+        cls: Type[BaseWorker], cron_schedule: str
     ) -> str:
-        return await WorkerManager._start_worker(
-            cls, arguments, cron_schedule=cron_schedule
-        )
+        return await WorkerManager._start_worker(cls, (), cron_schedule)
 
     @staticmethod
     async def _cancel_worker(worker_id: str) -> None:
-        handle = WorkerManager.CLIENT.get_workflow_handle(worker_id)
+        client = await WorkerManager._get_client()
+        handle = client.get_workflow_handle(worker_id)
 
         status = await WorkerManager._get_worker_status(handle)
 
@@ -106,7 +129,8 @@ class WorkerManager:
 
     @staticmethod
     async def _terminate_worker(worker_id: str) -> None:
-        handle = WorkerManager.CLIENT.get_workflow_handle(worker_id)
+        client = await WorkerManager._get_client()
+        handle = client.get_workflow_handle(worker_id)
 
         status = await WorkerManager._get_worker_status(handle)
 
@@ -147,13 +171,11 @@ class WorkerManager:
         return worker_id
 
     @staticmethod
-    def schedule_worker_as_cron(
-        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str
-    ) -> str:
+    def schedule_worker_as_cron(*, cls: Type[BaseWorker], cron_schedule: str) -> str:
         try:
             worker_id = asyncio.run(
                 WorkerManager._schedule_worker_as_cron(
-                    cls=cls, arguments=arguments, cron_schedule=cron_schedule
+                    cls=cls, cron_schedule=cron_schedule
                 )
             )
 
