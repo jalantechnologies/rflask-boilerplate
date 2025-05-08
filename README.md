@@ -1,8 +1,8 @@
 # Boilerplate - FRM
 
-![Build Status](https://github.com/{{REPO_NAME}}/actions/workflows/production_on_push.yml/badge.svg?branch={{BRANCH_NAME}})
-![Tests Status](https://github.com/{{REPO_NAME}}/actions/workflows/production_on_push.yml/badge.svg?branch={{BRANCH_NAME}}&event=push)
-![Coverage](https://sonarcloud.io/api/project_badges/measure?project={{REPO_NAME}}&metric=coverage&branch={{BRANCH_NAME}})
+![Build Status](https://github.com/rflask-boilerplate/actions/workflows/production_on_push.yml/badge.svg?branch=govind/feat/workflow-badges)
+![Tests Status](https://github.com/rflask-boilerplate/actions/workflows/production_on_push.yml/badge.svg?branch=govind/feat/workflow-badges&event=push)
+![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rflask-boilerplate&metric=coverage&branch=govind/feat/workflow-badges)
 
 Boilerplate project for Flask, React & MongoDB based projects. This README documents the steps necessary to get your
 application up and running.
