@@ -16,11 +16,12 @@ jobs:
       analyze_base: main
       app_name: frm-boilerplate
       app_env: preview
-      app_hostname: '{1}.preview.platform.jalantechnologies.com'
+      app_hostname: ${{ github.event.pull_request.head.ref }}.preview.platform.jalantechnologies.com
       branch: ${{ github.event.pull_request.head.ref }}
       build_args: |
         APP_ENV=preview
-      checks: "['build']"
+      checks: |
+        ["build"]
       docker_registry: ${{ vars.DOCKER_REGISTRY }}
       docker_username: ${{ vars.DOCKER_USERNAME }}
       pull_request_number: ${{ github.event.number }}
@@ -43,11 +44,12 @@ jobs:
       analyze_base: main
       app_name: frm-boilerplate
       app_env: preview
-      app_hostname: '{1}.preview.platform.jalantechnologies.com'
+      app_hostname: ${{ github.event.pull_request.head.ref }}.preview.platform.jalantechnologies.com
       branch: ${{ github.event.pull_request.head.ref }}
       build_args: |
         APP_ENV=preview
-      checks: "['compose:test']"
+      checks: |
+        ["compose:test"]
       docker_registry: ${{ vars.DOCKER_REGISTRY }}
       docker_username: ${{ vars.DOCKER_USERNAME }}
       pull_request_number: ${{ github.event.number }}
