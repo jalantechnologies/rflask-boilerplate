@@ -36,7 +36,7 @@ spec:
             - name: TEMPORAL_ADDRESS
               value: 'temporal-grpc:7233'
             - name: TEMPORAL_CLI_ADDRESS
-              value: 'temporal:7233'
+              value: 'temporal-grpc:7233'
           resources:
             requests:
               memory: '300Mi'
@@ -84,8 +84,8 @@ spec:
             - secretRef:
                 name: $DOPPLER_MANAGED_SECRET_NAME
           env:
-            - name: TEMPORAL_SERVER
-              value: 'temporal:7233'
+            - name: TEMPORAL_SERVER_ADDRESS
+              value: 'temporal-grpc:7233'
           resources:
             requests:
               memory: '150Mi'
