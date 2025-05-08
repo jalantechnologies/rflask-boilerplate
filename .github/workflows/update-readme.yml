@@ -13,28 +13,34 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
       - name: Replace placeholders in README from template
         run: |
-          REPO_NAME=$(basename "$GITHUB_REPOSITORY")
-          ORG_NAME=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
+          REPO_NAME="$GITHUB_REPOSITORY"                         # org/repo
+          ORG_NAME=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)  # org
+          REPO_SLUG=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f2) # repo
           BRANCH_NAME=$(echo "$GITHUB_REF" | sed 's|refs/heads/||')
-          BRANCH_URL="/$ORG_NAME/$BRANCH_NAME"
+
+          SONAR_PROJECT_KEY="${ORG_NAME}_${REPO_SLUG}"
 
           cp README.template.md README.md
 
           sed -i "s|{{REPO_NAME}}|$REPO_NAME|g" README.md
-          sed -i "s|{{BRANCH_NAME}}|$BRANCH_URL|g" README.md
+          sed -i "s|{{BRANCH_NAME}}|$BRANCH_NAME|g" README.md
+          sed -i "s|{{SONAR_PROJECT_KEY}}|$SONAR_PROJECT_KEY|g" README.md
 
-      - name: Commit and push changes (only if README changed)
+      - name: Amend and push last commit (only if README changed)
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           if ! git diff --quiet README.md; then
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
             git add README.md
-            git commit -m "Update README from template with repo and branch"
-            git push
+            git commit --amend -m "$LAST_COMMIT_MSG"
+            git push --force
           else
             echo "No changes to commit."
           fi

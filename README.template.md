@@ -5,7 +5,7 @@
 
 ![Build (Preview)](https://github.com/{{REPO_NAME}}/actions/workflows/preview_on_pr_update.yml/badge.svg?branch={{BRANCH_NAME}})
 ![Tests (Preview)](https://github.com/{{REPO_NAME}}/actions/workflows/preview_on_pr_update.yml/badge.svg?branch={{BRANCH_NAME}}&event=pull_request)
-![Coverage (Preview)](https://sonarcloud.io/api/project_badges/measure?project={{REPO_NAME}}&metric=coverage&branch={{BRANCH_NAME}})
+![Coverage (Preview)](https://sonarcloud.io/api/project_badges/measure?project={{SONAR_PROJECT_KEY}}&metric=coverage&branch={{BRANCH_NAME}})
 
 
 Boilerplate project for Flask, React & MongoDB based projects. This README documents the steps necessary to get your
