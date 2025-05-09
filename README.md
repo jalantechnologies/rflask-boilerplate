@@ -49,7 +49,8 @@ application up and running.
 - Start Application (without HotReload) - `npm start`
 - Start Application (with HotReload enabled) - `npm run serve`
   - To disable opening up the browser automatically, set `WEBPACK_DEV_DISABLE_OPEN` to `true`.
-  - To disable starting temporal server use the flag `-- --no-temporal` e.g: `npm run serve -- --no-temporal`
+  - To disable starting the Temporal server, use the flag `-- --no-temporal` (e.g., `npm run serve -- --no-temporal`).
+  - **Note for Windows users:** You will need to use either [WSL (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/install) or Git Bash to run this command successfully.
 - Lint Check - `npm run lint`
 - Format Code - `npm run fmt`
 
