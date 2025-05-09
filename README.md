@@ -38,6 +38,8 @@ application up and running.
 - Python (v3.11)
 - Node (v22.13.1) - [Download](https://nodejs.org/download/release/v22.13.1/)
 - MongoDB (v5) - [Download](https://www.mongodb.com/docs/manual/installation/)
+- Temporal CLI - [Download](https://learn.temporal.io/getting_started/typescript/dev_environment/#set-up-a-local-temporal-service-for-development-with-temporal-cli)  
+  _Note: Temporal CLI is only required if you intend to use distributed workflows. If you run `npm run serve -- --no-temporal`, you can skip installing Temporal CLI, but distributed workflow features will not be available._
 
 **Scripts:**
 
@@ -47,6 +49,7 @@ application up and running.
 - Start Application (without HotReload) - `npm start`
 - Start Application (with HotReload enabled) - `npm run serve`
   - To disable opening up the browser automatically, set `WEBPACK_DEV_DISABLE_OPEN` to `true`.
+  - To disable starting temporal server use the flag `-- --no-temporal` e.g: `npm run serve -- --no-temporal`
 - Lint Check - `npm run lint`
 - Format Code - `npm run fmt`
 
