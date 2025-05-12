@@ -5,7 +5,7 @@ metadata:
   namespace: $KUBE_NS
   labels:
     app: $KUBE_APP-temporal
-  version: $GITHUB_SHA
+    version: $GITHUB_SHA
   annotations:
     secrets.doppler.com/reload: 'true'
 spec:
