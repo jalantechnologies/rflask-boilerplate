@@ -1,11 +1,13 @@
 import 'frontend/satoshi.css';
 import 'frontend/style.css';
-
 import App from 'frontend/app.component';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  ReactDOM.render(<App />, document.getElementById('app'));
+  const container = document.getElementById('app') as HTMLElement;
+
+  const root = ReactDOM.createRoot(container);
+
+  root.render(<App />);
 });
