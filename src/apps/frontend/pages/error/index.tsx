@@ -1,4 +1,4 @@
-import { Button } from 'frontend/components';
+import { Button, H2, ParagraphMedium } from 'frontend/components';
 import { ButtonKind } from 'frontend/types/button';
 import React from 'react';
 
@@ -8,11 +8,25 @@ type ErrorFallbackProps = {
 };
 
 export const ErrorFallback: React.FC<ErrorFallbackProps> = ({ resetError }) => (
-  <div data-testid="errorFallbackContainer" className="p-8 text-center">
-    <h1 className="mb-4 text-2xl font-bold">Something went wrong.</h1>
-    <p className="mb-6">We're sorry, but an unexpected error has occurred.</p>
-    <Button onClick={resetError} kind={ButtonKind.PRIMARY}>
-      Try Again
-    </Button>
-  </div>
+  <>
+    <div className="relative z-1 flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
+      <div className="mx-auto w-full max-w-[242px] text-center sm:max-w-[472px]">
+        <H2>ERROR</H2>
+
+        <img
+          src="/assets/img/icon/500-error-icon.svg"
+          alt="500"
+          className="dark:hidden"
+        />
+
+        <ParagraphMedium>
+          We're sorry, but an unexpected error has occurred.
+        </ParagraphMedium>
+
+        <Button kind={ButtonKind.PRIMARY} onClick={() => resetError()}>
+          Retry
+        </Button>
+      </div>
+    </div>
+  </>
 );
