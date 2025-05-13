@@ -1,18 +1,18 @@
 import useAsync from 'frontend/contexts/async.hook';
 import { AuthService } from 'frontend/services';
-import { AccessToken, ApiResponse, AsyncError, PhoneNumber } from 'frontend/types';
+import {
+  AccessToken,
+  ApiResponse,
+  AsyncError,
+  PhoneNumber,
+} from 'frontend/types';
 import { Nullable } from 'frontend/types/common-types';
 import {
   getAccessTokenFromStorage,
   removeAccessTokenFromStorage,
   setAccessTokenToStorage,
 } from 'frontend/utils/storage-util';
-import React, {
-  createContext,
-  PropsWithChildren,
-  ReactNode,
-  useContext,
-} from 'react';
+import React, { createContext, ReactNode, useContext } from 'react';
 
 type AuthContextType = {
   isLoginLoading: boolean;
@@ -39,6 +39,10 @@ type AuthContextType = {
   ) => Promise<Nullable<AccessToken>>;
   verifyOTPError: Nullable<AsyncError>;
   verifyOTPResult: Nullable<AccessToken>;
+};
+
+type AuthProviderProps = {
+  children: ReactNode;
 };
 
 const AuthContext = createContext<Nullable<AuthContextType>>(null);
@@ -86,9 +90,7 @@ const verifyOTPFn = async (
   return result;
 };
 
-export const AuthProvider: React.FC<PropsWithChildren<ReactNode>> = ({
-  children,
-}) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const {
     asyncCallback: signup,
     error: signupError,

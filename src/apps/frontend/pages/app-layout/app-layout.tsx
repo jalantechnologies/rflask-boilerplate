@@ -1,10 +1,12 @@
 import { Header } from 'frontend/components';
 import Sidebar from 'frontend/components/sidebar';
-import React, { PropsWithChildren, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
-export const AppLayout: React.FC<PropsWithChildren<ReactNode>> = ({
-  children,
-}) => {
+type AppLayoutProps = {
+  children: ReactNode;
+};
+
+export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   return (

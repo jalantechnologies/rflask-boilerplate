@@ -3,12 +3,7 @@ import { ResetPasswordParams } from 'frontend/pages/authentication/reset-passwor
 import { ResetPasswordService } from 'frontend/services';
 import { ApiResponse, AsyncError } from 'frontend/types';
 import { Nullable } from 'frontend/types/common-types';
-import React, {
-  createContext,
-  PropsWithChildren,
-  ReactNode,
-  useContext,
-} from 'react';
+import React, { createContext, ReactNode, useContext } from 'react';
 
 type ResetPasswordContextType = {
   isResetPasswordLoading: boolean;
@@ -17,6 +12,10 @@ type ResetPasswordContextType = {
   resetPasswordError: Nullable<AsyncError>;
   sendForgotPasswordEmail: (username: string) => Promise<Nullable<void>>;
   sendForgotPasswordEmailError: Nullable<AsyncError>;
+};
+
+type ResetPasswordProviderProps = {
+  children: ReactNode;
 };
 
 const ResetPasswordContext =
@@ -36,7 +35,7 @@ const sendForgotPasswordEmailFn = async (
 ): Promise<ApiResponse<void>> =>
   resetPasswordService.sendForgotPasswordEmail(username);
 
-export const ResetPasswordProvider: React.FC<PropsWithChildren<ReactNode>> = ({
+export const ResetPasswordProvider: React.FC<ResetPasswordProviderProps> = ({
   children,
 }) => {
   const {

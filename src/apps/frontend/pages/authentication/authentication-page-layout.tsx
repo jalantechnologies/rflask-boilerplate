@@ -1,6 +1,10 @@
-import React, { PropsWithChildren, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
-const AuthenticationPageLayout: React.FC<PropsWithChildren<ReactNode>> = ({
+type AuthenticationPageLayoutProps = {
+  children: ReactNode;
+};
+
+const AuthenticationPageLayout: React.FC<AuthenticationPageLayoutProps> = ({
   children,
 }) => (
   <div className="rounded-sm border border-stroke shadow-default dark:border-strokedark dark:bg-boxdark">
