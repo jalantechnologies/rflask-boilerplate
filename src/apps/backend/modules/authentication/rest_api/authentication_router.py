@@ -1,7 +1,7 @@
-from modules.authentication.rest_api.password_reset_token_view import PasswordResetTokenView
 from flask import Blueprint
 
 from modules.authentication.rest_api.access_token_view import AccessTokenView
+from modules.authentication.rest_api.password_reset_token_view import PasswordResetTokenView
 
 
 class AuthenticationRouter:

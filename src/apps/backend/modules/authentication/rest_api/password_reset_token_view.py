@@ -4,9 +4,9 @@ from flask import jsonify, request
 from flask.typing import ResponseReturnValue
 from flask.views import MethodView
 
+from modules.account.account_service import AccountService
 from modules.authentication.authentication_service import AuthenticationService
 from modules.authentication.types import CreatePasswordResetTokenParams
-from modules.account.account_service import AccountService
 
 
 class PasswordResetTokenView(MethodView):
