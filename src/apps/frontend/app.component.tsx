@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@datadog/browser-rum-react';
 import { AccountProvider } from 'frontend/contexts';
 import { AuthProvider } from 'frontend/contexts/auth.provider';
 import { Config } from 'frontend/helpers';
@@ -7,6 +8,7 @@ import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { ErrorFallback } from './pages/error';
 import { Logger } from './utils/logger';
 
 Logger.init();
@@ -21,13 +23,15 @@ export default function App(): React.ReactElement {
   }, []);
 
   return (
-    <AuthProvider>
-      <AccountProvider>
-        <Toaster />
-        <Router>
-          <AppRoutes />
-        </Router>
-      </AccountProvider>
-    </AuthProvider>
+    <ErrorBoundary fallback={ErrorFallback}>
+      <AuthProvider>
+        <AccountProvider>
+          <Toaster />
+          <Router>
+            <AppRoutes />
+          </Router>
+        </AccountProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
