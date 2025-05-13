@@ -7,6 +7,10 @@ import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { Logger } from './utils/logger';
+
+Logger.init();
+
 export default function App(): React.ReactElement {
   useEffect(() => {
     const inspectletKey = Config.getConfigValue('inspectletKey');
