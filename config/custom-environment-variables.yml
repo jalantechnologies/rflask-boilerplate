@@ -4,12 +4,12 @@ mailer:
   forgot_password_mail_template_id: 'FORGOT_PASSWORD_MAIL_TEMPLATE_ID'
 
 mongodb:
-  uri: "MONGODB_URI"
+  uri: 'MONGODB_URI'
 
 temporal:
-  server_address: "TEMPORAL_SERVER_ADDRESS"
+  server_address: 'TEMPORAL_SERVER_ADDRESS'
 
-web_app_host: "WEB_APP_HOST"
+web_app_host: 'WEB_APP_HOST'
 
 inspectlet:
   key: 'INSPECTLET_KEY'
@@ -27,3 +27,14 @@ twilio:
   account_sid: 'TWILIO_ACCOUNT_SID'
   auth_token: 'TWILIO_AUTH_TOKEN'
   messaging_service_sid: 'TWILIO_MESSAGING_SERVICE_SID'
+
+public:
+  datadog:
+    applicationId: 'DATADOG_APPLICATION_ID'
+    clientToken: 'DATADOG_CLIENT_TOKEN'
+    enabled: 'DATADOG_ENABLED'
+    env: 'DATADOG_ENV'
+    service: 'DATADOG_SERVICE'
+    sessionReplaySampleRate: 'DATADOG_SESSION_REPLAY_SAMPLE_RATE'
+    sessionSampleRate: 'DATADOG_SESSION_SAMPLE_RATE'
+    site: 'DATADOG_SITE'
