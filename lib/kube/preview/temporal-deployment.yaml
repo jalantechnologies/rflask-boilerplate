@@ -39,9 +39,9 @@ spec:
               value: 'temporal-grpc:7233'
           resources:
             requests:
-              memory: '300Mi'
+              memory: '200Mi'
             limits:
-              memory: '600Mi'
+              memory: '400Mi'
 
         - name: temporal-admin-tools
           image: temporalio/admin-tools:1.22.4
@@ -72,7 +72,7 @@ spec:
               value: 'temporal-grpc:7233'
           resources:
             requests:
-              memory: '256Mi'
+              memory: '200Mi'
             limits:
               memory: '400Mi'
 
@@ -90,4 +90,4 @@ spec:
             requests:
               memory: '150Mi'
             limits:
-              memory: '350Mi'
+              memory: '300Mi'
