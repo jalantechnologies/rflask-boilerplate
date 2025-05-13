@@ -6,7 +6,6 @@ import { AppRoutes } from 'frontend/routes';
 import InspectLet from 'frontend/vendor/inspectlet';
 import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 import { ErrorFallback } from './pages/error';
 import { Logger } from './utils/logger';
@@ -27,9 +26,7 @@ export default function App(): React.ReactElement {
       <AuthProvider>
         <AccountProvider>
           <Toaster />
-          <Router>
-            <AppRoutes />
-          </Router>
+          <AppRoutes />
         </AccountProvider>
       </AuthProvider>
     </ErrorBoundary>
