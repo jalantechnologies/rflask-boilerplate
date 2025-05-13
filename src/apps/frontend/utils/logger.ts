@@ -7,6 +7,7 @@ import {
 } from '@datadog/browser-rum';
 import { reactPlugin } from '@datadog/browser-rum-react';
 import getConfigValue from 'frontend/helpers/config';
+import { DatadogUser } from 'frontend/types';
 
 export class Logger {
   public static init() {
@@ -45,6 +46,18 @@ export class Logger {
       datadogLogs.logger.debug(message, context);
     } else {
       console.debug(message, context);
+    }
+  }
+
+  public static setRumUser(user: DatadogUser) {
+    if (this.isDatadogEnabled()) {
+      datadogRum.setUser(user);
+    }
+  }
+
+  public static setLogAccount(user: DatadogUser) {
+    if (this.isDatadogEnabled()) {
+      datadogLogs.setAccount(user);
     }
   }
 
