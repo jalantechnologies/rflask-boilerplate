@@ -3,12 +3,7 @@ import { AccountService } from 'frontend/services';
 import { Account, ApiResponse, AsyncError } from 'frontend/types';
 import { Nullable } from 'frontend/types/common-types';
 import { getAccessTokenFromStorage } from 'frontend/utils/storage-util';
-import React, {
-  createContext,
-  PropsWithChildren,
-  ReactNode,
-  useContext,
-} from 'react';
+import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 type AccountContextType = {
   accountDetails: Account;
@@ -32,9 +27,7 @@ const getAccountDetailsFn = async (): Promise<ApiResponse<Account>> => {
   throw new Error('Access token not found');
 };
 
-export const AccountProvider: React.FC<PropsWithChildren<ReactNode>> = ({
-  children,
-}) => {
+export const AccountProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const {
     isLoading: isAccountLoading,
     error: accountError,
