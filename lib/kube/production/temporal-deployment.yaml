@@ -27,9 +27,8 @@ spec:
                     operator: In
                     values:
                       - platform-cluster-01-production-pool
-        imagePullSecrets:
-          - name: regcred
-
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: temporal-server
           image: temporalio/auto-setup:1.22.4
