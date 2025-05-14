@@ -17,7 +17,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: $KUBE_APP-temporal-grpc
+  name: temporal-grpc
   namespace: $KUBE_NS
   labels:
     app: $KUBE_APP-temporal
@@ -34,7 +34,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: $KUBE_APP-temporal
+  name: temporal
   namespace: $KUBE_NS
   labels:
     app: $KUBE_APP-temporal
