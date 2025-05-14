@@ -33,6 +33,6 @@ spec:
             path: "/"
             backend:
               service:
-                name: $KUBE_APP-temporal
+                name: temporal
                 port:
                   number: 8080
