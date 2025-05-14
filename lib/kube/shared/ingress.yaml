@@ -36,3 +36,4 @@ spec:
                 name: $KUBE_APP-temporal
                 port:
                   number: 8080
+
