@@ -1,8 +1,9 @@
-from modules.logger.logger import Logger
 from pymongo.collection import Collection
 from pymongo.errors import OperationFailure
+
 from modules.account.internal.store.account_model import AccountModel
 from modules.application.repository import ApplicationRepository
+from modules.logger.logger import Logger
 
 ACCOUNT_VALIDATION_SCHEMA = {
     "$jsonSchema": {
@@ -43,7 +44,7 @@ class AccountRepository(ApplicationRepository):
         try:
             collection.database.command(add_validation_command)
         except OperationFailure as e:
-            if e.code == 26: # NamespaceNotFound MongoDB error code
+            if e.code == 26:  # NamespaceNotFound MongoDB error code
                 collection.database.create_collection(cls.collection_name, validator=ACCOUNT_VALIDATION_SCHEMA)
             else:
                 Logger.error(message=f"OperationFailure occurred for collection accounts: {e.details}")

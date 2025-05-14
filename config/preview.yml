@@ -1,12 +1,12 @@
 logger:
   transports:
-    - "console"
-    - "datadog"
+    - 'console'
+    - 'datadog'
 
 sms:
   enabled: true
 
-is_server_running_behind_proxy : true
+is_server_running_behind_proxy: true
 
 public:
   authenticationMechanism: 'EMAIL' #or 'PHONE'

@@ -1,4 +1,7 @@
-import { LayoutConfig, LayoutType } from 'frontend/components/layouts/layout-config';
+import {
+  LayoutConfig,
+  LayoutType,
+} from 'frontend/components/layouts/layout-config';
 import React from 'react';
 
 interface CustomLayoutProps {

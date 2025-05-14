@@ -28,5 +28,5 @@ class OTPUtil:
 
     @staticmethod
     def is_default_otp_enabled() -> bool:
-        default_otp_enabled = ConfigService[bool].get_value(key="public.default_otp.enabled",default=False)
+        default_otp_enabled = ConfigService[bool].get_value(key="public.default_otp.enabled", default=False)
         return default_otp_enabled

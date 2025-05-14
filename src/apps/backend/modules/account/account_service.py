@@ -53,7 +53,7 @@ class AccountService:
     @staticmethod
     def get_account_by_id(*, params: AccountSearchByIdParams) -> Account:
         return AccountReader.get_account_by_id(params=params)
-    
+
     @staticmethod
     def get_account_by_username(*, username: str) -> Account:
         return AccountReader.get_account_by_username(username=username)

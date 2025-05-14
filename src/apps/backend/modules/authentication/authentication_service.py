@@ -1,12 +1,11 @@
 import urllib.parse
-import jwt
-
 from dataclasses import asdict
 from datetime import datetime, timedelta
 
+import jwt
+
 from modules.account.errors import AccountBadRequestError
 from modules.account.types import Account, PhoneNumber
-
 from modules.authentication.errors import AccessTokenExpiredError, AccessTokenInvalidError, OTPIncorrectError
 from modules.authentication.internals.otp.otp_util import OTPUtil
 from modules.authentication.internals.otp.otp_writer import OTPWriter
@@ -14,20 +13,18 @@ from modules.authentication.internals.password_reset_token.password_reset_token_
 from modules.authentication.internals.password_reset_token.password_reset_token_util import PasswordResetTokenUtil
 from modules.authentication.internals.password_reset_token.password_reset_token_writer import PasswordResetTokenWriter
 from modules.authentication.types import (
+    OTP,
     AccessToken,
     AccessTokenPayload,
     CreateOTPParams,
-    OTP,
     OTPBasedAuthAccessTokenRequestParams,
     OTPStatus,
-    VerifyOTPParams,
     PasswordResetToken,
+    VerifyOTPParams,
 )
-
 from modules.communication.email_service import EmailService
 from modules.communication.sms_service import SMSService
 from modules.communication.types import EmailRecipient, EmailSender, SendEmailParams, SendSMSParams
-
 from modules.config.config_service import ConfigService
 
 
@@ -37,7 +34,9 @@ class AuthenticationService:
         return AuthenticationService.__generate_access_token(account=account)
 
     @staticmethod
-    def create_access_token_by_phone_number(*, params: OTPBasedAuthAccessTokenRequestParams, account: Account) -> AccessToken:
+    def create_access_token_by_phone_number(
+        *, params: OTPBasedAuthAccessTokenRequestParams, account: Account
+    ) -> AccessToken:
         otp = AuthenticationService.verify_otp(
             params=VerifyOTPParams(phone_number=params.phone_number, otp_code=params.otp_code)
         )
@@ -76,10 +75,8 @@ class AuthenticationService:
     def create_password_reset_token(params: Account) -> PasswordResetToken:
         token = PasswordResetTokenUtil.generate_password_reset_token()
         password_reset_token = PasswordResetTokenWriter.create_password_reset_token(params.id, token)
-        AuthenticationService.send_password_reset_email(
-            params.id, params.first_name, params.username, token
-        )
-        
+        AuthenticationService.send_password_reset_email(params.id, params.first_name, params.username, token)
+
         return password_reset_token
 
     @staticmethod

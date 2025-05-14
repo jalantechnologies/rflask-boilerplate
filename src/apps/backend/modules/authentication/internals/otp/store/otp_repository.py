@@ -2,9 +2,8 @@ from pymongo.collection import Collection
 from pymongo.errors import OperationFailure
 
 from modules.application.repository import ApplicationRepository
-from modules.logger.logger import Logger
 from modules.authentication.internals.otp.store.otp_model import OTPModel
-
+from modules.logger.logger import Logger
 
 OTP_VALIDATION_SCHEMA = {
     "$jsonSchema": {
