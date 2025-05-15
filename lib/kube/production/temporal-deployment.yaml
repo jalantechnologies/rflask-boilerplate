@@ -10,6 +10,11 @@ metadata:
     secrets.doppler.com/reload: 'true'
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: $KUBE_APP-temporal
@@ -50,6 +55,19 @@ spec:
               memory: '200Mi'
             limits:
               memory: '400Mi'
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 7233
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 7233
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 5
 
         - name: temporal-admin-tools
           image: temporalio/admin-tools:1.22.4
@@ -83,6 +101,19 @@ spec:
               memory: '200Mi'
             limits:
               memory: '400Mi'
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 5
 
         - name: python-worker
           image: $KUBE_DEPLOYMENT_IMAGE
