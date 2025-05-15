@@ -22,7 +22,10 @@ interface OTPFormProps {
   timerRemainingSeconds: string;
 }
 
-const defaultOTPConfig = Config.getConfigValue<{ code: string; enabled: boolean; }>('default_otp');
+const defaultOTPConfig = Config.getConfigValue<{
+  code: string;
+  enabled: boolean;
+}>('default_otp');
 const isOTPEnabled = defaultOTPConfig?.enabled;
 const defaultOTPCode = defaultOTPConfig?.code;
 
@@ -77,9 +80,7 @@ const OTPForm: React.FC<OTPFormProps> = ({
             onChange={handleChange}
           />
         </FormControl>
-        {isOTPEnabled && (
-          <OtpHint otpCode={defaultOTPCode} />
-        )}
+        {isOTPEnabled && <OtpHint otpCode={defaultOTPCode} />}
         <Flex gap={2}>
           <p className="text-lg text-black">Did not receive a code?</p>
           <Button

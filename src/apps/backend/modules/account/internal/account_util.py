@@ -1,8 +1,9 @@
 from typing import Any
-from modules.account.internal.store.account_model import AccountModel
+
 import bcrypt
 
-from modules.account.types import Account, PhoneNumber
+from modules.account.internal.store.account_model import AccountModel
+from modules.account.types import Account
 
 
 class AccountUtil:

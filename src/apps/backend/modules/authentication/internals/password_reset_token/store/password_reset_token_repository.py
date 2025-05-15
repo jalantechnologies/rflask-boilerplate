@@ -1,7 +1,10 @@
 from pymongo.collection import Collection
 from pymongo.errors import OperationFailure
+
 from modules.application.repository import ApplicationRepository
-from modules.authentication.internals.password_reset_token.store.password_reset_token_model import PasswordResetTokenModel
+from modules.authentication.internals.password_reset_token.store.password_reset_token_model import (
+    PasswordResetTokenModel,
+)
 from modules.logger.logger import Logger
 
 PASSWORD_RESET_TOKEN_VALIDATION_SCHEMA = {
@@ -33,7 +36,7 @@ class PasswordResetTokenRepository(ApplicationRepository):
         try:
             collection.database.command(add_validation_command)
         except OperationFailure as e:
-            if e.code == 26: # NamespaceNotFound MongoDB error code
+            if e.code == 26:  # NamespaceNotFound MongoDB error code
                 collection.database.create_collection(
                     cls.collection_name, validator=PASSWORD_RESET_TOKEN_VALIDATION_SCHEMA
                 )

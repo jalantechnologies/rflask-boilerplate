@@ -28,9 +28,7 @@ class WorkerManager:
     async def _connect_temporal_server() -> None:
         server_address = ConfigService[str].get_value(key="temporal.server_address")
         try:
-            WorkerManager.CLIENT = await Client.connect(
-                server_address, retry_config=RetryConfig(max_retries=3)
-            )
+            WorkerManager.CLIENT = await Client.connect(server_address, retry_config=RetryConfig(max_retries=3))
 
             Logger.info(message=f"Connected to temporal server at {server_address}")
 
@@ -46,24 +44,16 @@ class WorkerManager:
         )  # Safe to cast since _connect_temporal_server will throw if connection fails
 
     @staticmethod
-    async def _get_worker_status(
-        handle: WorkflowHandle,
-    ) -> Optional[WorkflowExecutionStatus]:
+    async def _get_worker_status(handle: WorkflowHandle) -> Optional[WorkflowExecutionStatus]:
         info = await handle.describe()
         return info.status
 
     @staticmethod
-    async def _start_worker(
-        cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str = ""
-    ) -> str:
+    async def _start_worker(cls: Type[BaseWorker], arguments: Tuple[Any, ...], cron_schedule: str = "") -> str:
         if not cls in TemporalConfig.WORKERS:
             raise WorkerNotRegisteredError(worker_name=cls.__name__)
 
-        worker_id = (
-            f"{cls.__name__}-cron"
-            if cron_schedule
-            else f"{cls.__name__}-{str(uuid.uuid4())}"
-        )
+        worker_id = f"{cls.__name__}-cron" if cron_schedule else f"{cls.__name__}-{str(uuid.uuid4())}"
 
         client = await WorkerManager._get_client()
         try:
@@ -75,9 +65,7 @@ class WorkerManager:
                 cron_schedule=cron_schedule if cron_schedule else "",
             )
         except WorkflowAlreadyStartedError:
-            Logger.info(
-                message=f"Worker {worker_id} already running, skipping starting new instance"
-            )
+            Logger.info(message=f"Worker {worker_id} already running, skipping starting new instance")
             return worker_id
 
         return handle.id
@@ -98,15 +86,11 @@ class WorkerManager:
         )
 
     @staticmethod
-    async def _run_worker_immediately(
-        cls: Type[BaseWorker], arguments: Tuple[Any, ...]
-    ) -> str:
+    async def _run_worker_immediately(cls: Type[BaseWorker], arguments: Tuple[Any, ...]) -> str:
         return await WorkerManager._start_worker(cls, arguments)
 
     @staticmethod
-    async def _schedule_worker_as_cron(
-        cls: Type[BaseWorker], cron_schedule: str
-    ) -> str:
+    async def _schedule_worker_as_cron(cls: Type[BaseWorker], cron_schedule: str) -> str:
         return await WorkerManager._start_worker(cls, (), cron_schedule)
 
     @staticmethod
@@ -157,13 +141,9 @@ class WorkerManager:
         return res
 
     @staticmethod
-    def run_worker_immediately(
-        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...]
-    ) -> str:
+    def run_worker_immediately(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...]) -> str:
         try:
-            worker_id = asyncio.run(
-                WorkerManager._run_worker_immediately(cls=cls, arguments=arguments)
-            )
+            worker_id = asyncio.run(WorkerManager._run_worker_immediately(cls=cls, arguments=arguments))
 
         except RPCError:
             raise WorkerStartError(worker_name=cls.__name__)
@@ -173,11 +153,7 @@ class WorkerManager:
     @staticmethod
     def schedule_worker_as_cron(*, cls: Type[BaseWorker], cron_schedule: str) -> str:
         try:
-            worker_id = asyncio.run(
-                WorkerManager._schedule_worker_as_cron(
-                    cls=cls, cron_schedule=cron_schedule
-                )
-            )
+            worker_id = asyncio.run(WorkerManager._schedule_worker_as_cron(cls=cls, cron_schedule=cron_schedule))
 
         except RPCError:
             raise WorkerStartError(worker_name=cls.__name__)

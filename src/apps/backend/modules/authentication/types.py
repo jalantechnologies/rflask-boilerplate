@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import Union
 from enum import StrEnum
+from typing import Union
+
 from modules.account.types import PhoneNumber
 
 

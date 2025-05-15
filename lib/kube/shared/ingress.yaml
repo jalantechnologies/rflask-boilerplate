@@ -13,7 +13,7 @@ spec:
   tls:
     - hosts:
         - $KUBE_INGRESS_HOSTNAME
-        - ${GITHUB_SHA}.workers-dashboard.preview.platform.jalantechnologies.com
+        - $KUBE_INGRESS_WORKER_HOSTNAME
       secretName: $KUBE_APP-cert-key
   rules:
     - host: $KUBE_INGRESS_HOSTNAME
@@ -26,14 +26,14 @@ spec:
                 name: $KUBE_APP-service
                 port:
                   number: 8080
-    - host: ${GITHUB_SHA}.workers-dashboard.preview.platform.jalantechnologies.com
+    - host: $KUBE_INGRESS_WORKER_HOSTNAME
       http:
         paths:
           - pathType: Prefix
             path: "/"
             backend:
               service:
-                name: $KUBE_APP-temporal
+                name: temporal
                 port:
                   number: 8080
 
