@@ -14,16 +14,12 @@ class ApplicationService:
         return WorkerManager.get_worker_by_id(worker_id=worker_id)
 
     @staticmethod
-    def run_worker_immediately(
-        *, cls: Type[BaseWorker], arguments: Tuple[Any, ...] = ()
-    ) -> str:
+    def run_worker_immediately(*, cls: Type[BaseWorker], arguments: Tuple[Any, ...] = ()) -> str:
         return WorkerManager.run_worker_immediately(cls=cls, arguments=arguments)
 
     @staticmethod
     def schedule_worker_as_cron(*, cls: Type[BaseWorker], cron_schedule: str) -> str:
-        return WorkerManager.schedule_worker_as_cron(
-            cls=cls, cron_schedule=cron_schedule
-        )
+        return WorkerManager.schedule_worker_as_cron(cls=cls, cron_schedule=cron_schedule)
 
     @staticmethod
     def cancel_worker(*, worker_id: str) -> None:

@@ -1,11 +1,11 @@
 logger:
-  transports: ["console"]
+  transports: ['console']
 
 mongodb:
-  uri: "mongodb://localhost:27017/frm-boilerplate-dev"
+  uri: 'mongodb://localhost:27017/frm-boilerplate-dev'
 
 temporal:
-  server_address: "localhost:7233"
+  server_address: 'localhost:7233'
 
 sms:
   enabled: false

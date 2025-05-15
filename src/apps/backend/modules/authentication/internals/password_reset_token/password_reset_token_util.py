@@ -5,9 +5,12 @@ from typing import Any
 
 import bcrypt
 
-from modules.config.config_service import ConfigService
+from modules.authentication.internals.password_reset_token.store.password_reset_token_model import (
+    PasswordResetTokenModel,
+)
 from modules.authentication.types import PasswordResetToken
-from modules.authentication.internals.password_reset_token.store.password_reset_token_model import PasswordResetTokenModel
+from modules.config.config_service import ConfigService
+
 
 class PasswordResetTokenUtil:
 
@@ -47,5 +50,5 @@ class PasswordResetTokenUtil:
             is_used=validated_password_reset_token_data.is_used,
             is_expired=PasswordResetTokenUtil.is_token_expired(validated_password_reset_token_data.expires_at),
             expires_at=str(validated_password_reset_token_data.expires_at),
-            token=validated_password_reset_token_data.token
+            token=validated_password_reset_token_data.token,
         )

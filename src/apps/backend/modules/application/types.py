@@ -38,9 +38,7 @@ class BaseWorker(ABC):
         await workflow.execute_activity(
             self.execute,
             args=args,
-            start_to_close_timeout=timedelta(
-                seconds=self.max_execution_time_in_seconds
-            ),
+            start_to_close_timeout=timedelta(seconds=self.max_execution_time_in_seconds),
             retry_policy=RetryPolicy(maximum_attempts=self.max_retries),
         )
 

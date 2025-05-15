@@ -5,13 +5,12 @@ from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from bin.blueprints import api_blueprint, img_assets_blueprint, react_blueprint
-from modules.authentication.rest_api.authentication_rest_api_server import AuthenticationRestApiServer
 from modules.account.rest_api.account_rest_api_server import AccountRestApiServer
 from modules.application.application_service import ApplicationService
-from modules.application.errors import WorkerClientConnectionError
+from modules.application.errors import AppError, WorkerClientConnectionError
 from modules.application.workers.health_check_worker import HealthCheckWorker
+from modules.authentication.rest_api.authentication_rest_api_server import AuthenticationRestApiServer
 from modules.config.config_service import ConfigService
-from modules.application.errors import AppError
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
 

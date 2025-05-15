@@ -8,6 +8,7 @@ application up and running.
 - [Boilerplate - FRM](#boilerplate---frm)
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
+  - [Frontend Logging](#frontend-logging)
   - [Configuration](#configuration)
   - [Custom Environment Variables](#custom-environment-variables)
   - [Scripts](#scripts)
@@ -53,6 +54,18 @@ application up and running.
   - **Note for Windows users:** You will need to use either [WSL (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/install) or Git Bash to run this command successfully.
 - Lint Check - `npm run lint`
 - Format Code - `npm run fmt`
+
+## Frontend Logging
+
+For frontend logging, we use **Datadog Logger** ([docs](https://docs.datadoghq.com/logs/log_collection/javascript/)) and **Datadog RUM** (Real User Monitoring) ([docs](https://docs.datadoghq.com/real_user_monitoring/browser/)). Both are critical for monitoring and observability.
+
+- **Datadog Logger**: Captures and forwards frontend logs to Datadog. See the [JavaScript log collection documentation](https://docs.datadoghq.com/logs/log_collection/javascript/) for setup and usage.
+- **Datadog RUM**: Automatically collects basic metrics (such as page views, errors, and performance data) and can also be used to send custom events for advanced monitoring. Refer to the [Browser RUM documentation](https://docs.datadoghq.com/real_user_monitoring/browser/) for more details.
+
+**Usage Notes:**
+
+- Both `console` and `Logger` methods are integrated to send logs to Datadog if logging is enabled.
+- Datadog RUM is set up to automatically collect essential metrics, but you can also use it to send custom events as needed for your application.
 
 ## Configuration
 

@@ -1,7 +1,9 @@
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
+
 from bson import ObjectId
-from dataclasses import dataclass
+
 from modules.account.types import PhoneNumber
 from modules.application.base_model import BaseModel
 
@@ -35,7 +37,7 @@ class AccountModel(BaseModel):
             created_at=bson_data.get("created_at"),
             updated_at=bson_data.get("updated_at"),
         )
-    
+
     @staticmethod
     def get_collection_name() -> str:
         return "accounts"

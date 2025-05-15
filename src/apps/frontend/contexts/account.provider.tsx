@@ -2,13 +2,9 @@ import useAsync from 'frontend/contexts/async.hook';
 import { AccountService } from 'frontend/services';
 import { Account, ApiResponse, AsyncError } from 'frontend/types';
 import { Nullable } from 'frontend/types/common-types';
+import { Logger } from 'frontend/utils/logger';
 import { getAccessTokenFromStorage } from 'frontend/utils/storage-util';
-import React, {
-  createContext,
-  PropsWithChildren,
-  ReactNode,
-  useContext,
-} from 'react';
+import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 type AccountContextType = {
   accountDetails: Account;
@@ -27,14 +23,26 @@ export const useAccountContext = (): AccountContextType =>
 const getAccountDetailsFn = async (): Promise<ApiResponse<Account>> => {
   const accessToken = getAccessTokenFromStorage();
   if (accessToken) {
-    return accountService.getAccountDetails(accessToken);
+    const accountDetails = await accountService.getAccountDetails(accessToken);
+    const accountData = accountDetails.data;
+
+    if (accountData) {
+      const loggerAccount = {
+        id: accountData.id,
+        name: `${accountData?.firstName} ${accountData?.lastName}`,
+        email: accountData.username,
+      };
+
+      Logger.setLogAccount(loggerAccount);
+      Logger.setRumUser(loggerAccount);
+    }
+
+    return accountDetails;
   }
   throw new Error('Access token not found');
 };
 
-export const AccountProvider: React.FC<PropsWithChildren<ReactNode>> = ({
-  children,
-}) => {
+export const AccountProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const {
     isLoading: isAccountLoading,
     error: accountError,

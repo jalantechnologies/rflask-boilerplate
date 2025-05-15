@@ -26,10 +26,9 @@ spec:
                   - key: doks.digitalocean.com/node-pool
                     operator: In
                     values:
-                      - platform-cluster-01-staging-pool
+                      - platform-cluster-01-production-pool
       imagePullSecrets:
         - name: regcred
-
       containers:
         - name: temporal-server
           image: temporalio/auto-setup:1.22.4
