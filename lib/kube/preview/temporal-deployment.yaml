@@ -56,20 +56,6 @@ spec:
               memory: '200Mi'
             limits:
               memory: '400Mi'
-          startupProbe:
-            httpGet:
-              path: /health
-              port: 7233
-            failureThreshold: 30
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 7233
-            initialDelaySeconds: 15
-            periodSeconds: 10
-            failureThreshold: 5
-
         - name: temporal-admin-tools
           image: temporalio/admin-tools:1.22.4
           imagePullPolicy: Always
