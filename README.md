@@ -154,6 +154,9 @@ Steps:
 - Create a python file under - `src/apps/backend/scripts` (ex - `my-script.py`)
 - Run the script using npm - `npm run script --file=example_worker_script`
 
+## Github Badges Configuration
+This project displays GitHub badges for SonarQube code coverage and the `production_on_push` workflow status, both referencing the `main` branch of the [`rflask-boilerplate`](https://github.com/jalantechnologies/rflask-boilerplate) repository. If you fork or host this project in a different GitHub repository, update the badge URLs to point to your repository to ensure accurate status and coverage reporting.
+
 ## Workers
 
 This application supports queuing workers from the web application which are run independent of the web server by [Temporal](https://temporal.io/).
