@@ -4,7 +4,7 @@ metadata:
   name: $KUBE_APP-temporal-deployment
   namespace: $KUBE_NS
   labels:
-    app: temporal
+    app: $KUBE_APP-temporal
     version: $GITHUB_SHA
   annotations:
     secrets.doppler.com/reload: 'true'
@@ -17,11 +17,11 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      app: temporal
+      app: $KUBE_APP-temporal
   template:
     metadata:
       labels:
-        app: temporal
+        app: $KUBE_APP-temporal
     spec:
       affinity:
         nodeAffinity:
