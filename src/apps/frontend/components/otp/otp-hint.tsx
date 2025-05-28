@@ -1,5 +1,6 @@
-import InfoIcon from 'frontend/components/icons/info-icon';
 import React from 'react';
+
+import InfoIcon from 'frontend/components/icons/info-icon';
 
 interface OtpHintProps {
   otpCode?: string;

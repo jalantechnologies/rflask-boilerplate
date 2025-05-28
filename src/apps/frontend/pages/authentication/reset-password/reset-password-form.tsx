@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Button,
   FormControl,
@@ -7,7 +9,6 @@ import {
 import useResetPasswordForm from 'frontend/pages/authentication/reset-password/reset-password-form.hook';
 import { AsyncError } from 'frontend/types';
 import { ButtonType } from 'frontend/types/button';
-import React from 'react';
 
 interface ResetPasswordFormProps {
   onSuccess: () => void;

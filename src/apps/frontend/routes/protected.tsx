@@ -1,11 +1,12 @@
+import React, { useEffect } from 'react';
+import toast from 'react-hot-toast';
+import { Outlet, useNavigate } from 'react-router-dom';
+
 import routes from 'frontend/constants/routes';
 import { useAccountContext, useAuthContext } from 'frontend/contexts';
 import { Dashboard, NotFound } from 'frontend/pages';
 import AppLayout from 'frontend/pages/app-layout/app-layout';
 import { AsyncError } from 'frontend/types';
-import React, { useEffect } from 'react';
-import toast from 'react-hot-toast';
-import { Outlet, useNavigate } from 'react-router-dom';
 
 const App = () => {
   const { getAccountDetails } = useAccountContext();

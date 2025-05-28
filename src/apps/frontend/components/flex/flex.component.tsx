@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import styles from 'frontend/components/flex/flex.styles';
 import React, { PropsWithChildren } from 'react';
+
+import styles from 'frontend/components/flex/flex.styles';
 
 interface FlexProps {
   alignItems?: keyof typeof styles.alignItems;

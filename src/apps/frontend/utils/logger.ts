@@ -6,6 +6,7 @@ import {
   RumInitConfiguration,
 } from '@datadog/browser-rum';
 import { reactPlugin } from '@datadog/browser-rum-react';
+
 import getConfigValue from 'frontend/helpers/config';
 import { DatadogUser } from 'frontend/types';
 

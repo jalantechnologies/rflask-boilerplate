@@ -1,3 +1,7 @@
+import React from 'react';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 import { H2, VerticalStackLayout } from 'frontend/components';
 import ParagraphMedium from 'frontend/components/typography/paragraph-medium';
 import routes from 'frontend/constants/routes';
@@ -5,9 +9,6 @@ import AuthenticationFormLayout from 'frontend/pages/authentication/authenticati
 import AuthenticationPageLayout from 'frontend/pages/authentication/authentication-page-layout';
 import ResetPasswordForm from 'frontend/pages/authentication/reset-password/reset-password-form';
 import { AsyncError } from 'frontend/types';
-import React from 'react';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 
 export const ResetPassword: React.FC = () => {
   const navigate = useNavigate();

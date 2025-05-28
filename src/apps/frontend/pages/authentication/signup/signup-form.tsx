@@ -1,3 +1,6 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   Button,
   Flex,
@@ -12,8 +15,6 @@ import routes from 'frontend/constants/routes';
 import useSignupForm from 'frontend/pages/authentication/signup/signup-form.hook';
 import { AsyncError } from 'frontend/types';
 import { ButtonKind, ButtonType } from 'frontend/types/button';
-import React from 'react';
-import { Link } from 'react-router-dom';
 
 type SignupFields =
   | 'firstName'
