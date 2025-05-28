@@ -28,7 +28,7 @@
   "overrides": [
     {
       "files": [
-        "*.js"
+        ".js"
       ],
       "extends": [
         "airbnb-base",
