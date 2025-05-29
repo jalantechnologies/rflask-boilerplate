@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { Button, H2, ParagraphMedium } from 'frontend/components';
 import { ButtonKind } from 'frontend/types/button';
-import React from 'react';
 
 type ErrorFallbackProps = {
   error: Error;

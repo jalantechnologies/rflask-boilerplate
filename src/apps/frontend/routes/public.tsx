@@ -1,3 +1,6 @@
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+
 import constant from 'frontend/constants';
 import routes from 'frontend/constants/routes';
 import { ResetPasswordProvider } from 'frontend/contexts';
@@ -11,8 +14,6 @@ import {
   ResetPassword,
   Signup,
 } from 'frontend/pages';
-import React from 'react';
-import { Navigate } from 'react-router-dom';
 
 const currentAuthMechanism = Config.getConfigValue<string>(
   'authenticationMechanism',

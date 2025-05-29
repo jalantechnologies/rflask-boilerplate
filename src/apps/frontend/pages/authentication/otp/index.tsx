@@ -1,3 +1,7 @@
+import React from 'react';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 import { Button, H2, VerticalStackLayout } from 'frontend/components';
 import constant from 'frontend/constants';
 import routes from 'frontend/constants/routes';
@@ -7,9 +11,6 @@ import OTPForm from 'frontend/pages/authentication/otp/otp-form';
 import { AsyncError } from 'frontend/types';
 import { ButtonKind } from 'frontend/types/button';
 import useTimer from 'frontend/utils/use-timer.hook';
-import React from 'react';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 
 export const OTPVerificationPage: React.FC = () => {
   const { startTimer, remaininingSecondsStr, isResendEnabled } = useTimer({

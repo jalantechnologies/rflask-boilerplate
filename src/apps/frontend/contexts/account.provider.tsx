@@ -1,10 +1,11 @@
+import React, { createContext, PropsWithChildren, useContext } from 'react';
+
 import useAsync from 'frontend/contexts/async.hook';
 import { AccountService } from 'frontend/services';
 import { Account, ApiResponse, AsyncError } from 'frontend/types';
 import { Nullable } from 'frontend/types/common-types';
 import { Logger } from 'frontend/utils/logger';
 import { getAccessTokenFromStorage } from 'frontend/utils/storage-util';
-import React, { createContext, PropsWithChildren, useContext } from 'react';
 
 type AccountContextType = {
   accountDetails: Account;

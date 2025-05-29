@@ -1,7 +1,8 @@
 import clsx from 'clsx';
+import * as React from 'react';
+
 import HorizontalStackLayout from 'frontend/components/layouts/horizontal-stack-layout';
 import { Nullable } from 'frontend/types/common-types';
-import * as React from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   endEnhancer?: React.ReactElement | string;

@@ -1,9 +1,10 @@
+import React from 'react';
+
 import { Button, Flex, VerticalStackLayout } from 'frontend/components';
 import ParagraphMedium from 'frontend/components/typography/paragraph-medium';
 import { useResetPasswordContext } from 'frontend/contexts';
 import { AsyncError } from 'frontend/types';
 import { ButtonType } from 'frontend/types/button';
-import React from 'react';
 
 interface ForgotPasswordResendEmailProps {
   isResendEnabled: boolean;

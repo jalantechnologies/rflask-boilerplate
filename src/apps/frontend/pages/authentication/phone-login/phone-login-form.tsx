@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Button,
   Flex,
@@ -10,7 +12,6 @@ import COUNTRY_SELECT_OPTIONS from 'frontend/constants/countries';
 import usePhoneLoginForm from 'frontend/pages/authentication/phone-login/phone-login-form.hook';
 import { AsyncError } from 'frontend/types';
 import { ButtonKind, ButtonType } from 'frontend/types/button';
-import React from 'react';
 
 interface PhoneLoginFormProps {
   onSendOTPSuccess: () => void;

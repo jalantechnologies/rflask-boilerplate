@@ -1,4 +1,5 @@
 import { AxiosInstance } from 'axios';
+
 import AppService from 'frontend/services/app.service';
 
 export default class APIService extends AppService {
