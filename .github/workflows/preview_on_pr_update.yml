@@ -16,7 +16,7 @@ jobs:
       analyze_base: main
       app_name: frm-boilerplate
       app_env: preview
-      app_hostname: '{1}.preview.platform.jalantechnologies.com'
+      app_hostname: '{1}.preview.platform.bettrhq.com'
       branch: ${{ github.event.pull_request.head.ref }}
       build_args: |
         APP_ENV=preview
