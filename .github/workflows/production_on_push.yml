@@ -14,7 +14,7 @@ jobs:
     with:
       app_name: frm-boilerplate
       app_env: production
-      app_hostname: frm-boilerplate.platform.jalantechnologies.com
+      app_hostname: flask-react-template.platform.bettrhq.com
       branch: ${{ github.event.ref }}
       checks: "['npm:coverage', 'npm:lint', 'compose:test']"
       docker_registry: ${{ vars.DOCKER_REGISTRY }}

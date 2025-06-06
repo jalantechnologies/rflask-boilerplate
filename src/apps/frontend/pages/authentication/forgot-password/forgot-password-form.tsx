@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Button,
   FormControl,
@@ -8,7 +10,6 @@ import ParagraphMedium from 'frontend/components/typography/paragraph-medium';
 import useForgotPasswordForm from 'frontend/pages/authentication/forgot-password/forgot-password-form.hook';
 import { AsyncError } from 'frontend/types';
 import { ButtonType } from 'frontend/types/button';
-import React from 'react';
 
 interface ForgotPasswordFormProps {
   onError: (error: AsyncError) => void;

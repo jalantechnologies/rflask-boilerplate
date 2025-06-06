@@ -1,15 +1,11 @@
+import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import HamburgerToggleButton from 'frontend/components/header/hamburger-toggle-button';
 import UserProfileSnippet from 'frontend/components/header/user-profile-snippet.component';
 import routes from 'frontend/constants/routes';
 import { useAccountContext, useAuthContext } from 'frontend/contexts';
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
-
-export type UserMenuDropdownItem = {
-  iconPath: string;
-  label: string;
-  onClick: () => void;
-};
+import { UserMenuDropdownItem } from 'frontend/types';
 
 type HeaderProps = {
   isSidebarOpen: boolean;

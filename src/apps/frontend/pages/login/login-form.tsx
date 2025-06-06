@@ -1,3 +1,6 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 import { AsyncError } from 'frontend//types';
 import {
   VerticalStackLayout,
@@ -13,8 +16,6 @@ import routes from 'frontend/constants/routes';
 import LoginFormCheckbox from 'frontend/pages/login/login-form-checkbox';
 import useLoginForm from 'frontend/pages/login/login-form.hook';
 import { ButtonType, ButtonKind } from 'frontend/types/button';
-import React from 'react';
-import { Link } from 'react-router-dom';
 
 type LoginFields = 'username' | 'password';
 

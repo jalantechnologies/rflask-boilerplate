@@ -3,6 +3,12 @@
 Boilerplate project for Flask, React & MongoDB based projects. This README documents the steps necessary to get your
 application up and running.
 
+## Badge Reports
+
+| Build Status | Code Coverage |
+| ------------ | ------------- |
+| [![Production Deploy](https://github.com/jalantechnologies/rflask-boilerplate/actions/workflows/production_on_push.yml/badge.svg?branch=main)](https://github.com/jalantechnologies/rflask-boilerplate/actions/workflows/production_on_push.yml) | [![Code Coverage](https://sonarqube.platform.jalantechnologies.com/api/project_badges/measure?project=jalantechnologies_rflask-boilerplate&metric=coverage&token=a4dd71c68afbb8da4b7ed1026329bf0933298f79)](https://sonarqube.platform.jalantechnologies.com/dashboard?id=jalantechnologies_rflask-boilerplate) |
+
 ## Table of Contents
 
 - [Boilerplate - FRM](#boilerplate---frm)
@@ -147,6 +153,9 @@ Steps:
 
 - Create a python file under - `src/apps/backend/scripts` (ex - `my-script.py`)
 - Run the script using npm - `npm run script --file=example_worker_script`
+
+## Github Badges Configuration
+This project displays GitHub badges for SonarQube code coverage and the `production_on_push` workflow status, both referencing the `main` branch of the [`rflask-boilerplate`](https://github.com/jalantechnologies/rflask-boilerplate) repository. If you fork or host this project in a different GitHub repository, update the badge URLs to point to your repository to ensure accurate status and coverage reporting.
 
 ## Workers
 

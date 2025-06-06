@@ -20,7 +20,7 @@ metadata:
   name: temporal-grpc
   namespace: $KUBE_NS
   labels:
-    app: $KUBE_APP-temporal
+    app: temporal
 spec:
   type: ClusterIP
   ports:
@@ -28,16 +28,16 @@ spec:
       port: 7233
       targetPort: 7233
   selector:
-    app: $KUBE_APP-temporal
+    app: temporal
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: temporal
+  name: $KUBE_APP-temporal-service
   namespace: $KUBE_NS
   labels:
-    app: $KUBE_APP-temporal
+    app: temporal
 spec:
   type: ClusterIP
   ports:
@@ -45,4 +45,4 @@ spec:
       port: 8080
       targetPort: 8080
   selector:
-    app: $KUBE_APP-temporal
+    app: temporal

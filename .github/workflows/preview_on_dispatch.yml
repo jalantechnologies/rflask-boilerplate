@@ -11,7 +11,7 @@ jobs:
     with:
       app_name: frm-boilerplate
       app_env: preview
-      app_hostname: '{1}.preview.platform.jalantechnologies.com'
+      app_hostname: '{1}.preview.platform.bettrhq.com'
       branch: ${{ github.event.ref }}
       build_args: |
         APP_ENV=preview

@@ -1,3 +1,6 @@
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
   Button,
   Flex,
@@ -11,8 +14,6 @@ import { Config } from 'frontend/helpers';
 import useOTPForm from 'frontend/pages/authentication/otp/otp-form-hook';
 import { AsyncError } from 'frontend/types';
 import { ButtonKind, ButtonType } from 'frontend/types/button';
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface OTPFormProps {
   isResendEnabled: boolean;

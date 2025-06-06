@@ -6,8 +6,22 @@
     "node": true
   },
   "plugins": [
-    "tailwindcss"
+    "tailwindcss",
+    "import"
   ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      "typescript": {}
+    }
+  },
   "parserOptions": {
     "ecmaVersion": 9
   },
@@ -41,6 +55,13 @@
             }
           }
         ],
+        "import/no-cycle": [
+          "error",
+          {
+            "maxDepth": 1,
+            "ignoreExternal": true
+          }
+        ],
         "no-underscore-dangle": "off",
         "sort-keys": [
           "error",
@@ -53,6 +74,8 @@
     },
     {
       "files": [
+        ".js",
+        ".jsx",
         "*.ts",
         "*.tsx"
       ],
@@ -109,6 +132,13 @@
               "order": "asc",
               "caseInsensitive": true
             }
+          }
+        ],
+        "import/no-cycle": [
+          "error",
+          {
+            "maxDepth": 1,
+            "ignoreExternal": true
           }
         ],
         "import/prefer-default-export": "off",

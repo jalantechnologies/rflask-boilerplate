@@ -1,3 +1,5 @@
+import { DatadogUser } from './logger';
+
 import { Account } from 'frontend/types/account';
 import {
   AsyncError,
@@ -6,8 +8,7 @@ import {
 } from 'frontend/types/async-operation';
 import { AccessToken, KeyboardKeys, PhoneNumber } from 'frontend/types/auth';
 import { ApiResponse, ApiError } from 'frontend/types/service-response';
-
-import { DatadogUser } from './logger';
+import { UserMenuDropdownItem } from 'frontend/types/user-menu-dropdown-item';
 
 export {
   AccessToken,
@@ -20,4 +21,5 @@ export {
   PhoneNumber,
   UseAsyncResponse,
   DatadogUser,
+  UserMenuDropdownItem,
 };

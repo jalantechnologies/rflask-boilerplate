@@ -1,6 +1,11 @@
 run-lint:
-	cd src/apps/backend \
-		&& pipenv run mypy --config-file mypy.ini .
+	cd src/apps/backend && \
+	pipenv run mypy --config-file mypy.ini . && \
+	pipenv run pylint \
+	  --disable=all \
+	  --reports=no \
+	  --enable=cyclic-import \
+	  ./
 
 run-format:
 	cd src/apps/backend \

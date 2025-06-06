@@ -1,8 +1,9 @@
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
 import constant from 'frontend/constants';
 import { useResetPasswordContext } from 'frontend/contexts';
 import { AsyncError } from 'frontend/types';
-import * as Yup from 'yup';
 
 interface UseForgotPasswordFormProps {
   onSuccess: (newUsername: string) => void;
