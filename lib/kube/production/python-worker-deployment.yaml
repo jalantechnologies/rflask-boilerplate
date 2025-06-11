@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $KUBE_APP-temporal-deployment
+  namespace: $KUBE_NS
+  labels:
+    app: temporal
+    version: $GITHUB_SHA
+  annotations:
+    secrets.doppler.com/reload: 'true'
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: temporal
+  template:
+    metadata:
+      labels:
+        app: temporal
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: doks.digitalocean.com/node-pool
+                    operator: In
+                    values:
+                      - platform-cluster-01-production-pool
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: python-worker
+          image: $KUBE_DEPLOYMENT_IMAGE
+          workingDir: /opt/app/src/apps/backend
+          command: ['pipenv', 'run', 'python', 'temporal_server.py']
+          envFrom:
+            - secretRef:
+                name: $DOPPLER_MANAGED_SECRET_NAME
+          env:
+            - name: TEMPORAL_SERVER_ADDRESS
+              value: 'temporal-grpc:7233'
+          resources:
+            requests:
+              memory: '150Mi'
+            limits:
+              memory: '300Mi'
