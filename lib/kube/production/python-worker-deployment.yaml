@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $KUBE_APP-temporal-deployment
+  name: $KUBE_APP-python-worker-deployment
   namespace: $KUBE_NS
   labels:
-    app: temporal
+    app: python-worker
     version: $GITHUB_SHA
   annotations:
     secrets.doppler.com/reload: 'true'
@@ -17,11 +17,11 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      app: temporal
+      app: python-worker
   template:
     metadata:
       labels:
-        app: temporal
+        app: python-worker
     spec:
       affinity:
         nodeAffinity:
