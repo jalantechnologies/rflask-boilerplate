@@ -53,10 +53,6 @@ spec:
           env:
             - name: WEB_APP_HOST
               value: $KUBE_INGRESS_HOSTNAME
-            - name: TEMPORAL_SERVER_ADDRESS
-              value: "temporal-grpc:7233"
-            - name: TEMPORAL_CLI_ADDRESS
-              value: "temporal-grpc:7233"
           envFrom:
             - secretRef:
                 name: $DOPPLER_MANAGED_SECRET_NAME
