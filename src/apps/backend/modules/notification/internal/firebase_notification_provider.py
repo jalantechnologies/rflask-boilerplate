@@ -40,20 +40,17 @@ class FirebaseNotificationProvider:
             return
 
         try:
-            # Option 1: Using service account key file
             if os.path.exists("firebase-service-account.json"):
                 cred = credentials.Certificate("firebase-service-account.json")
                 cls._app = firebase_admin.initialize_app(cred)
                 Logger.info(message="Firebase initialized with service account file")
 
-            # Option 2: Using environment variables (recommended for production)
             elif os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON"):
                 service_account_info = json.loads(os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON"))
                 cred = credentials.Certificate(service_account_info)
                 cls._app = firebase_admin.initialize_app(cred)
                 Logger.info(message="Firebase initialized with environment variables")
 
-            # Option 3: Using config service (specific to this application)
             elif ConfigService.has_value("firebase.service_account_json"):
                 service_account_json = ConfigService[str].get_value(key="firebase.service_account_json")
                 service_account_info = json.loads(service_account_json)
@@ -62,7 +59,6 @@ class FirebaseNotificationProvider:
                 Logger.info(message="Firebase initialized with configuration service")
 
             else:
-                # We need credentials to proceed - fail fast to prevent runtime errors
                 Logger.error(message="Firebase configuration is missing or invalid")
                 raise NotificationConfigurationError()
 
@@ -97,7 +93,6 @@ class FirebaseNotificationProvider:
         Returns:
             Response containing success status and message ID or error details
         """
-        # Make sure Firebase is initialized
         try:
             cls.lazy_initialize()
         except Exception as e:
@@ -105,7 +100,6 @@ class FirebaseNotificationProvider:
             return {"success": False, "error": "Firebase initialization failed", "message": str(e)}
 
         try:
-            # Basic token validation to fail fast before making API call
             if not params.recipient.fcm_token or len(params.recipient.fcm_token.strip()) < 10:
                 Logger.error(message=f"Invalid FCM token: {params.recipient.fcm_token}")
                 return {
@@ -114,17 +108,14 @@ class FirebaseNotificationProvider:
                     "message": "The provided FCM token is invalid",
                 }
 
-            # Create notification payload
             notification = messaging.Notification(title=params.content.title, body=params.content.body)
 
-            # Create message with platform-specific configurations
             message = messaging.Message(
                 notification=notification,
                 data=params.content.data or {},
                 token=params.recipient.fcm_token,
-                # Configure Android and iOS specific settings for better user experience
                 android=messaging.AndroidConfig(
-                    ttl=3600,  # Time to live in seconds
+                    ttl=3600,
                     priority="high",
                     notification=messaging.AndroidNotification(
                         icon="stock_ticker_update", color="#f45342", sound="default"
@@ -133,23 +124,19 @@ class FirebaseNotificationProvider:
                 apns=messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(badge=1, sound="default"))),
             )
 
-            # Send message and get message ID
             response = messaging.send(message)
             Logger.info(message=f"Successfully sent notification: {response}")
 
             return {"success": True, "message_id": response, "message": "Notification sent successfully"}
 
         except messaging.InvalidArgumentError as e:
-            # Handle invalid token or message format errors
             Logger.error(message=f"Invalid argument error: {str(e)}")
             return {"success": False, "error": "Invalid FCM token or message format", "message": str(e)}
 
         except messaging.UnregisteredError as e:
-            # Handle token no longer registered (app uninstalled, etc.)
             Logger.error(message=f"Unregistered token error: {str(e)}")
             return {"success": False, "error": "FCM token is not registered or expired", "message": str(e)}
 
         except Exception as e:
-            # Catch-all for unexpected errors
             Logger.error(message=f"Failed to send notification: {str(e)}")
             return {"success": False, "error": "Internal server error", "message": str(e)}
