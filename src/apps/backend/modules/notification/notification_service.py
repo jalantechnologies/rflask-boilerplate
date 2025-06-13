@@ -6,21 +6,28 @@ from modules.notification.types import SendNotificationParams
 
 
 class NotificationService:
+    """
+    Service responsible for sending notifications to end-users.
+    Acts as a facade to abstract different notification providers implementation details.
+    """
+
     _initialized = False
 
     @staticmethod
     def send_notification(*, params: SendNotificationParams) -> Dict[str, Any]:
         """
-        Send a notification to a specific recipient
+        Sends a notification to a specific recipient.
+
+        This method abstracts the underlying notification provider (Firebase)
+        to maintain a consistent interface if additional providers are added later.
 
         Args:
-            params: SendNotificationParams containing recipient and notification content
+            params: Contains recipient information and notification content
 
         Returns:
-            dict: Response with success status and message ID or error
+            Response containing success status and message ID or error details
         """
         try:
-            # Send notification via Firebase
             return FirebaseNotificationProvider.send_notification(params)
         except Exception as e:
             Logger.error(message=f"Error in notification service: {str(e)}")
@@ -29,10 +36,13 @@ class NotificationService:
     @staticmethod
     def initialize() -> bool:
         """
-        Initialize the notification service
+        Initializes the notification service and its providers.
+
+        Should be called during application startup to ensure the
+        notification infrastructure is ready before handling requests.
 
         Returns:
-            bool: True if initialization was successful
+            True if initialization was successful, False otherwise
         """
         try:
             FirebaseNotificationProvider.initialize()

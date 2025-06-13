@@ -8,9 +8,14 @@ from modules.notification.types import NotificationContent, NotificationRecipien
 
 
 class NotificationView(MethodView):
+    """View controller for notification-related HTTP endpoints"""
+
     def post(self) -> ResponseReturnValue:
         """
-        Send a notification to a single device
+        Endpoint to send a notification to a single device
+
+        Accepts a JSON payload and transforms it into the appropriate
+        domain objects before delegating to the notification service.
 
         Expected JSON payload:
         {
@@ -19,36 +24,33 @@ class NotificationView(MethodView):
             "body": "string",
             "data": {"key": "value"} // optional
         }
+
+        Returns:
+            JSON response with success status or error details
         """
         try:
-            # Validate request
             if not request.is_json:
                 return jsonify({"error": "Request must be JSON"}), 400
 
             request_data = request.get_json()
 
-            # Validate required fields
             required_fields = ["fcm_token", "title", "body"]
             missing_fields = [field for field in required_fields if field not in request_data]
 
             if missing_fields:
                 return jsonify({"error": "Missing required fields", "missing_fields": missing_fields}), 400
 
-            # Extract data
             fcm_token = request_data["fcm_token"]
             title = request_data["title"]
             body = request_data["body"]
             custom_data = request_data.get("data", {})
 
-            # Create params
             recipient = NotificationRecipient(fcm_token=fcm_token)
             content = NotificationContent(title=title, body=body, data=custom_data)
             params = SendNotificationParams(recipient=recipient, content=content)
 
-            # Log the attempt
             Logger.info(message=f"Sending notification to token: {fcm_token[:15]}... (title: {title})")
 
-            # Send notification
             result = NotificationService.send_notification(params=params)
 
             if result.get("success", False):

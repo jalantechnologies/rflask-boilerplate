@@ -3,6 +3,8 @@ from modules.notification.types import NotificationErrorCode
 
 
 class NotificationInvalidTokenError(AppError):
+    """Raised when an FCM token format is invalid or corrupted"""
+
     def __init__(self, token: str) -> None:
         super().__init__(
             code=NotificationErrorCode.INVALID_TOKEN,
@@ -12,6 +14,8 @@ class NotificationInvalidTokenError(AppError):
 
 
 class NotificationServiceError(AppError):
+    """Raised when the notification service encounters an unexpected error"""
+
     def __init__(self, message: str) -> None:
         super().__init__(
             code=NotificationErrorCode.SERVICE_ERROR,
@@ -21,6 +25,8 @@ class NotificationServiceError(AppError):
 
 
 class NotificationValidationError(AppError):
+    """Raised when notification parameters fail validation"""
+
     def __init__(self, message: str) -> None:
         super().__init__(
             code=NotificationErrorCode.VALIDATION_ERROR,
@@ -30,6 +36,13 @@ class NotificationValidationError(AppError):
 
 
 class NotificationConfigurationError(AppError):
+    """
+    Raised when Firebase configuration is missing or invalid
+
+    This typically happens when environment variables or config values
+    for Firebase credentials are missing or corrupted
+    """
+
     def __init__(self) -> None:
         super().__init__(
             code=NotificationErrorCode.CONFIGURATION_ERROR,
@@ -39,6 +52,12 @@ class NotificationConfigurationError(AppError):
 
 
 class NotificationTokenNotRegisteredError(AppError):
+    """
+    Raised when an FCM token is no longer registered with Firebase
+
+    This usually means the user has uninstalled the app or cleared app data
+    """
+
     def __init__(self, token: str) -> None:
         super().__init__(
             code=NotificationErrorCode.TOKEN_NOT_REGISTERED,
