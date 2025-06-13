@@ -23,4 +23,3 @@ public:
 
 firebase:
   service_account_json: null
-  
