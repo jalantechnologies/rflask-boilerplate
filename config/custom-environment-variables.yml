@@ -41,4 +41,3 @@ public:
 
 firebase:
   service_account_json: 'FIREBASE_SERVICE_ACCOUNT_JSON'
-  
