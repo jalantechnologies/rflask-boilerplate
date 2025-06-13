@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask.typing import ResponseReturnValue
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -78,21 +78,3 @@ app.register_blueprint(react_blueprint)
 @app.errorhandler(AppError)
 def handle_error(exc: AppError) -> ResponseReturnValue:
     return jsonify({"message": exc.message, "code": exc.code}), exc.http_code or 500
-
-
-@app.errorhandler(Exception)
-def handle_unexpected_error(error: Exception) -> ResponseReturnValue:
-    """Handle any unhandled exceptions"""
-    error_details = {"message": str(error), "type": error.__class__.__name__, "path": request.path}
-
-    Logger.error(message=f"Unhandled exception: {error_details['type']} - {error_details['message']}")
-
-    return (
-        jsonify(
-            {
-                "error": "Internal Server Error",
-                "message": "The server encountered an unexpected error. Please try again later.",
-            }
-        ),
-        500,
-    )
