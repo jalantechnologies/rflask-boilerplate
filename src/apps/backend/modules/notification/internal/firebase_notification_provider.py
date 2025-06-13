@@ -46,17 +46,21 @@ class FirebaseNotificationProvider:
                 Logger.info(message="Firebase initialized with service account file")
 
             elif os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON"):
-                service_account_info = json.loads(os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON"))
+                service_account_info = json.loads(os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON") or "")
                 cred = credentials.Certificate(service_account_info)
                 cls._app = firebase_admin.initialize_app(cred)
                 Logger.info(message="Firebase initialized with environment variables")
 
             elif ConfigService.has_value("firebase.service_account_json"):
                 service_account_json = ConfigService[str].get_value(key="firebase.service_account_json")
-                service_account_info = json.loads(service_account_json)
-                cred = credentials.Certificate(service_account_info)
-                cls._app = firebase_admin.initialize_app(cred)
-                Logger.info(message="Firebase initialized with configuration service")
+                if service_account_json is not None:
+                    service_account_info = json.loads(service_account_json)
+                    cred = credentials.Certificate(service_account_info)
+                    cls._app = firebase_admin.initialize_app(cred)
+                    Logger.info(message="Firebase initialized with configuration service")
+                else:
+                    Logger.error(message="Firebase configuration value is None")
+                    raise NotificationConfigurationError()
 
             else:
                 Logger.error(message="Firebase configuration is missing or invalid")
