@@ -63,3 +63,40 @@ class NotificationErrorCode:
     CONFIGURATION_ERROR: str = "NOTIFICATION_ERR_04"
     TOKEN_NOT_REGISTERED: str = "NOTIFICATION_ERR_05"
     INVALID_TOKENS: str = "NOTIFICATION_ERR_06"
+
+
+@dataclass(frozen=True)
+class FCMToken:
+    """Represents an FCM token with metadata"""
+
+    id: str
+    user_id: str
+    fcm_token: str
+    device_info: Optional[str]
+    active: bool
+    created_at: str
+    updated_at: str
+
+
+@dataclass(frozen=True)
+class AddFCMTokenParams:
+    """Parameters for adding a new FCM token"""
+
+    user_id: str
+    fcm_token: str
+    device_info: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class GetFCMTokensParams:
+    """Parameters for getting FCM tokens"""
+
+    user_id: str
+
+
+@dataclass(frozen=True)
+class DeleteFCMTokenParams:
+    """Parameters for deleting an FCM token"""
+
+    user_id: str
+    fcm_token: str
