@@ -17,5 +17,10 @@ class NotificationRouter:
         Returns:
             The updated blueprint with notification routes
         """
-        blueprint.add_url_rule("/notifications", view_func=NotificationView.as_view("notification_view"))
+        notification_view = NotificationView.as_view("notification_view")
+        blueprint.add_url_rule("/notifications", view_func=notification_view, methods=["POST"])
+
+        multiple_notification_view = NotificationView.as_view("multiple_notification_view")
+        blueprint.add_url_rule("/notifications/multiple", view_func=multiple_notification_view, methods=["POST"])
+
         return blueprint

@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import firebase_admin
 from firebase_admin import credentials, messaging
@@ -8,7 +8,7 @@ from firebase_admin import credentials, messaging
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 from modules.notification.errors import NotificationConfigurationError, NotificationServiceError
-from modules.notification.types import SendNotificationParams
+from modules.notification.types import SendMultipleNotificationsParams, SendNotificationParams
 
 
 class FirebaseNotificationProvider:
@@ -144,3 +144,174 @@ class FirebaseNotificationProvider:
         except Exception as e:
             Logger.error(message=f"Failed to send notification: {str(e)}")
             return {"success": False, "error": "Internal server error", "message": str(e)}
+
+    @classmethod
+    def _validate_tokens(cls, tokens: List[str]) -> tuple[List[str], List[str]]:
+        """
+        Validate a list of FCM tokens and separate valid from invalid ones
+
+        Args:
+            tokens: List of FCM tokens to validate
+
+        Returns:
+            Tuple of (valid_tokens, invalid_tokens)
+        """
+        valid_tokens = []
+        invalid_tokens = []
+
+        for token in tokens:
+            if not token or len(token.strip()) < 10:
+                Logger.warning(message=f"Invalid FCM token format: {token}")
+                invalid_tokens.append(token)
+            else:
+                valid_tokens.append(token)
+
+        return valid_tokens, invalid_tokens
+
+    @classmethod
+    def _create_notification_configs(
+        cls, title: str, body: str
+    ) -> tuple[messaging.Notification, messaging.AndroidConfig, messaging.APNSConfig]:
+        """
+        Create common notification configurations
+
+        Args:
+            title: Notification title
+            body: Notification body
+
+        Returns:
+            Tuple of (notification, android_config, apns_config)
+        """
+        notification = messaging.Notification(title=title, body=body)
+
+        android_config = messaging.AndroidConfig(
+            ttl=3600,
+            priority="high",
+            notification=messaging.AndroidNotification(icon="stock_ticker_update", color="#f45342", sound="default"),
+        )
+
+        apns_config = messaging.APNSConfig(payload=messaging.APNSPayload(aps=messaging.Aps(badge=1, sound="default")))
+
+        return notification, android_config, apns_config
+
+    @classmethod
+    def _send_to_token(
+        cls,
+        token: str,
+        notification: messaging.Notification,
+        data: Dict[str, str],
+        android_config: messaging.AndroidConfig,
+        apns_config: messaging.APNSConfig,
+    ) -> Dict[str, Any]:
+        """
+        Send notification to a single token and handle errors
+
+        Args:
+            token: FCM token to send to
+            notification: Prepared notification object
+            data: Custom data to include
+            android_config: Android specific configuration
+            apns_config: APNS specific configuration
+
+        Returns:
+            Dict with result info for this token
+        """
+        try:
+            message = messaging.Message(
+                notification=notification, data=data or {}, token=token, android=android_config, apns=apns_config
+            )
+
+            response = messaging.send(message)
+            Logger.info(message=f"Successfully sent notification to token {token[:15]}...: {response}")
+
+            return {"token": token, "success": True, "message_id": response}
+
+        except messaging.InvalidArgumentError as e:
+            Logger.error(message=f"Invalid argument error for token {token[:15]}...: {str(e)}")
+            return {"token": token, "success": False, "error": "Invalid FCM token or message format", "message": str(e)}
+
+        except messaging.UnregisteredError as e:
+            Logger.error(message=f"Unregistered token error for token {token[:15]}...: {str(e)}")
+            return {
+                "token": token,
+                "success": False,
+                "error": "FCM token is not registered or expired",
+                "message": str(e),
+            }
+
+        except Exception as e:
+            Logger.error(message=f"Failed to send notification to token {token[:15]}...: {str(e)}")
+            return {"token": token, "success": False, "error": "Internal server error", "message": str(e)}
+
+    @classmethod
+    def send_multiple_notifications(cls, params: SendMultipleNotificationsParams) -> Dict[str, Any]:
+        """
+        Send the same notification to multiple FCM tokens
+
+        Performs basic validation and handles common FCM error cases
+        with appropriate error responses. Will attempt to send to all tokens
+        even if some fail.
+
+        Args:
+            params: Contains list of recipient FCM tokens and notification content
+
+        Returns:
+            Response containing success status, succeeded and failed tokens details
+        """
+        try:
+            cls.lazy_initialize()
+        except Exception as e:
+            Logger.error(message=f"Firebase initialization failed: {str(e)}")
+            return {"success": False, "error": "Firebase initialization failed", "message": str(e)}
+
+        if not params.recipients.fcm_tokens or len(params.recipients.fcm_tokens) == 0:
+            Logger.error(message="No FCM tokens provided")
+            return {
+                "success": False,
+                "error": "No FCM tokens provided",
+                "message": "At least one FCM token must be provided",
+            }
+
+        valid_tokens, invalid_tokens = cls._validate_tokens(params.recipients.fcm_tokens)
+
+        if not valid_tokens:
+            Logger.error(message="All provided FCM tokens are invalid")
+            return {
+                "success": False,
+                "error": "All FCM tokens are invalid",
+                "message": "All provided FCM tokens have invalid format",
+                "invalid_tokens": invalid_tokens,
+            }
+
+        results = {
+            "success": True,
+            "total_tokens": len(params.recipients.fcm_tokens),
+            "successful_tokens": 0,
+            "failed_tokens": 0,
+            "token_results": [],
+        }
+
+        notification, android_config, apns_config = cls._create_notification_configs(
+            params.content.title, params.content.body
+        )
+
+        for token in valid_tokens:
+            token_result = cls._send_to_token(
+                token, notification, params.content.data or {}, android_config, apns_config
+            )
+
+            results["token_results"].append(token_result)
+
+            if token_result["success"]:
+                results["successful_tokens"] += 1
+            else:
+                results["failed_tokens"] += 1
+
+        if results["successful_tokens"] == 0:
+            results["success"] = False
+            results["error"] = "All notifications failed to send"
+
+        if invalid_tokens:
+            results["invalid_tokens"] = invalid_tokens
+
+        return results

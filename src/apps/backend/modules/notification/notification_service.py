@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from modules.logger.logger import Logger
 from modules.notification.internal.firebase_notification_provider import FirebaseNotificationProvider
-from modules.notification.types import SendNotificationParams
+from modules.notification.types import SendMultipleNotificationsParams, SendNotificationParams
 
 
 class NotificationService:
@@ -51,3 +51,16 @@ class NotificationService:
         except Exception as e:
             Logger.error(message=f"Failed to initialize notification service: {str(e)}")
             return False
+
+    @classmethod
+    def send_multiple_notifications(cls, params: SendMultipleNotificationsParams) -> Dict[str, Any]:
+        """
+        Send the same notification to multiple devices
+
+        Args:
+            params: Parameters for sending notifications to multiple recipients
+
+        Returns:
+            Dict containing success status and details of succeeded/failed tokens
+        """
+        return FirebaseNotificationProvider.send_multiple_notifications(params=params)

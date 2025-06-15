@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 
 @dataclass(frozen=True)
@@ -7,6 +7,13 @@ class NotificationRecipient:
     """Represents a notification recipient identified by FCM token"""
 
     fcm_token: str
+
+
+@dataclass(frozen=True)
+class MultipleNotificationRecipients:
+    """Represents multiple notification recipients identified by FCM tokens"""
+
+    fcm_tokens: List[str]
 
 
 @dataclass(frozen=True)
@@ -32,6 +39,14 @@ class SendNotificationParams:
 
 
 @dataclass(frozen=True)
+class SendMultipleNotificationsParams:
+    """Parameters for sending a notification to multiple recipients"""
+
+    recipients: MultipleNotificationRecipients
+    content: NotificationContent
+
+
+@dataclass(frozen=True)
 class NotificationErrorCode:
     """
     Standardized error codes for notification-related errors
@@ -47,3 +62,4 @@ class NotificationErrorCode:
     VALIDATION_ERROR: str = "NOTIFICATION_ERR_03"
     CONFIGURATION_ERROR: str = "NOTIFICATION_ERR_04"
     TOKEN_NOT_REGISTERED: str = "NOTIFICATION_ERR_05"
+    INVALID_TOKENS: str = "NOTIFICATION_ERR_06"
