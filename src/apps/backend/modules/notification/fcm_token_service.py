@@ -104,3 +104,22 @@ class FCMTokenService:
             created_at=token_bson["created_at"].isoformat(),
             updated_at=token_bson["updated_at"].isoformat(),
         )
+
+    @staticmethod
+    def get_all_active_tokens() -> Dict[str, Any]:
+        """Get all active FCM tokens across all users
+
+        Returns:
+            Dictionary containing success status and a list of active tokens
+        """
+        try:
+            tokens_cursor = FCMTokenRepository.collection().find({"active": True}).sort("created_at", -1)
+
+            tokens = []
+            for token_bson in tokens_cursor:
+                tokens.append(token_bson["fcm_token"])
+
+            return {"success": True, "tokens": tokens, "count": len(tokens)}
+        except Exception as e:
+            Logger.error(message=f"Error getting all active FCM tokens: {str(e)}")
+            return {"success": False, "error": "Failed to get all active tokens", "message": str(e)}

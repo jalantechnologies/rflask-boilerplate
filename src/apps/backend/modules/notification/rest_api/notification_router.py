@@ -18,6 +18,9 @@ class NotificationRouter:
         multiple_notification_view = NotificationView.as_view("multiple_notification_view")
         blueprint.add_url_rule("/notifications/multiple", view_func=multiple_notification_view, methods=["POST"])
 
+        all_devices_notification_view = NotificationView.as_view("all_devices_notification_view")
+        blueprint.add_url_rule("/notifications/all-devices", view_func=all_devices_notification_view, methods=["POST"])
+
         fcm_token_view = FCMTokenView.as_view("fcm_token_view")
         blueprint.add_url_rule("/fcm-tokens", view_func=fcm_token_view, methods=["GET", "POST", "DELETE"])
 

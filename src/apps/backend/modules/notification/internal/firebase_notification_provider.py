@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional
 
 import firebase_admin
 from firebase_admin import credentials, messaging
+from firebase_admin.exceptions import FirebaseError, InvalidArgumentError
 
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
@@ -133,13 +134,17 @@ class FirebaseNotificationProvider:
 
             return {"success": True, "message_id": response, "message": "Notification sent successfully"}
 
-        except messaging.InvalidArgumentError as e:
+        except InvalidArgumentError as e:
             Logger.error(message=f"Invalid argument error: {str(e)}")
             return {"success": False, "error": "Invalid FCM token or message format", "message": str(e)}
 
         except messaging.UnregisteredError as e:
             Logger.error(message=f"Unregistered token error: {str(e)}")
             return {"success": False, "error": "FCM token is not registered or expired", "message": str(e)}
+
+        except FirebaseError as e:
+            Logger.error(message=f"Firebase error: {str(e)}")
+            return {"success": False, "error": "Firebase service error", "message": str(e)}
 
         except Exception as e:
             Logger.error(message=f"Failed to send notification: {str(e)}")
@@ -226,7 +231,7 @@ class FirebaseNotificationProvider:
 
             return {"token": token, "success": True, "message_id": response}
 
-        except messaging.InvalidArgumentError as e:
+        except InvalidArgumentError as e:
             Logger.error(message=f"Invalid argument error for token {token[:15]}...: {str(e)}")
             return {"token": token, "success": False, "error": "Invalid FCM token or message format", "message": str(e)}
 
@@ -238,6 +243,10 @@ class FirebaseNotificationProvider:
                 "error": "FCM token is not registered or expired",
                 "message": str(e),
             }
+
+        except FirebaseError as e:
+            Logger.error(message=f"Firebase error for token {token[:15]}...: {str(e)}")
+            return {"token": token, "success": False, "error": "Firebase service error", "message": str(e)}
 
         except Exception as e:
             Logger.error(message=f"Failed to send notification to token {token[:15]}...: {str(e)}")

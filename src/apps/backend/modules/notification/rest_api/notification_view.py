@@ -32,6 +32,8 @@ class NotificationView(MethodView):
 
         if endpoint and endpoint.endswith("multiple_notification_view"):
             return self.handle_multiple_notifications()
+        elif endpoint and endpoint.endswith("all_devices_notification_view"):
+            return self.handle_all_devices_notification()
         else:
             return self.handle_single_notification()
 
@@ -196,4 +198,46 @@ class NotificationView(MethodView):
 
         except Exception as e:
             Logger.error(message=f"Error in multiple notification endpoint: {str(e)}")
+            return jsonify({"success": False, "error": "Internal server error", "message": str(e)}), 500
+
+    def handle_all_devices_notification(self) -> ResponseReturnValue:
+        """
+        Process a request to send a notification to all devices with active FCM tokens
+        """
+        try:
+            if not request.is_json:
+                return jsonify({"error": "Request must be JSON"}), 400
+
+            request_data = request.get_json()
+
+            required_fields = ["title", "body"]
+            missing_fields = [field for field in required_fields if field not in request_data]
+
+            if missing_fields:
+                return jsonify({"error": "Missing required fields", "missing_fields": missing_fields}), 400
+
+            try:
+                account_id = self._get_account_id_from_token()
+                Logger.info(message=f"User {account_id} requesting to send notification to all devices")
+
+            except (AuthorizationHeaderNotFoundError, InvalidAuthorizationHeaderError) as e:
+                return jsonify({"success": False, "error": "Authentication required", "message": str(e)}), 401
+
+            title = request_data["title"]
+            body = request_data["body"]
+            custom_data = request_data.get("data", {})
+
+            content = NotificationContent(title=title, body=body, data=custom_data)
+
+            Logger.info(message=f"Sending notification to all devices (title: {title})")
+
+            result = NotificationService.send_notification_to_all_devices(content=content)
+
+            if result.get("success", False):
+                return jsonify(result), 200
+            else:
+                return jsonify(result), 400
+
+        except Exception as e:
+            Logger.error(message=f"Error in all devices notification endpoint: {str(e)}")
             return jsonify({"success": False, "error": "Internal server error", "message": str(e)}), 500
