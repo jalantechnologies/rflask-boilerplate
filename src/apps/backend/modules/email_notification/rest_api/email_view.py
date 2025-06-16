@@ -3,6 +3,10 @@ from typing import Any, Dict, List, Optional, Union
 from flask import request
 from flask.views import MethodView
 
+from modules.account.account_service import AccountService
+from modules.account.types import AccountSearchByIdParams
+from modules.authentication.authentication_service import AuthenticationService
+from modules.authentication.errors import AuthorizationHeaderNotFoundError, InvalidAuthorizationHeaderError
 from modules.email_notification.email_service import EmailService
 from modules.email_notification.errors import EmailError
 from modules.email_notification.types import EmailContent, EmailRecipient, EmailSender, SendEmailParams
@@ -64,6 +68,51 @@ class EmailView(MethodView):
             Logger.error(message=f"Unexpected error in email API: {str(e)}")
             return {"success": False, "error": "Internal server error"}, 500
 
+    def _check_email_notification_preference(self, account_id: str) -> bool:
+        """
+        Check if the user has enabled email notifications
+
+        Args:
+            account_id: The ID of the account to check
+
+        Returns:
+            True if email notifications are enabled, False otherwise
+        """
+        try:
+            account_params = AccountSearchByIdParams(id=account_id)
+            account = AccountService.get_account_by_id(params=account_params)
+
+            if account.notification_preferences is None:
+                return True
+
+            return account.notification_preferences.email
+        except Exception as e:
+            Logger.error(message=f"Error checking email notification preferences: {str(e)}")
+            return True
+
+    def _get_account_id_from_token(self) -> str:
+        """
+        Extract account_id from the authorization token
+
+        Returns:
+            The account ID from the token
+
+        Raises:
+            AuthorizationHeaderNotFoundError: If the Authorization header is missing
+            InvalidAuthorizationHeaderError: If the Authorization header format is invalid
+        """
+        auth_header = request.headers.get("Authorization")
+        if not auth_header:
+            raise AuthorizationHeaderNotFoundError("Authorization header is missing.")
+
+        parts = auth_header.split(" ")
+        if len(parts) != 2 or parts[0] != "Bearer" or not parts[1]:
+            raise InvalidAuthorizationHeaderError("Invalid authorization header.")
+
+        auth_token = parts[1]
+        auth_payload = AuthenticationService.verify_access_token(token=auth_token)
+        return auth_payload.account_id
+
     def _handle_regular_email(self, data: Dict[str, Any]) -> tuple[Dict[str, Any], int]:
         """
         Process a regular email request
@@ -80,6 +129,22 @@ class EmailView(MethodView):
             return {"error": "Missing required field: subject"}, 400
         if "body" not in data:
             return {"error": "Missing required field: body"}, 400
+
+        try:
+            account_id = self._get_account_id_from_token()
+            email_enabled = self._check_email_notification_preference(account_id)
+
+            if not email_enabled:
+                return (
+                    {
+                        "success": False,
+                        "error": "Email notifications are disabled for this user",
+                        "message": "The user has disabled email notifications in their preferences",
+                    },
+                    403,
+                )
+        except (AuthorizationHeaderNotFoundError, InvalidAuthorizationHeaderError) as e:
+            Logger.warning(message=f"Proceeding without checking email notification preferences: {str(e)}")
 
         to_recipients = self._process_recipients(data["to"])
 
@@ -98,6 +163,8 @@ class EmailView(MethodView):
             bcc=bcc_recipients if bcc_recipients else None,
             reply_to=reply_to,
         )
+
+        Logger.info(message=f"Sending email with subject: {data['subject']}")
 
         result = EmailService.send_email(params=params)
 
@@ -123,6 +190,22 @@ class EmailView(MethodView):
         if "template_data" not in data:
             return {"error": "Missing required field: template_data"}, 400
 
+        try:
+            account_id = self._get_account_id_from_token()
+            email_enabled = self._check_email_notification_preference(account_id)
+
+            if not email_enabled:
+                return (
+                    {
+                        "success": False,
+                        "error": "Email notifications are disabled for this user",
+                        "message": "The user has disabled email notifications in their preferences",
+                    },
+                    403,
+                )
+        except (AuthorizationHeaderNotFoundError, InvalidAuthorizationHeaderError) as e:
+            Logger.warning(message=f"Proceeding without checking email notification preferences: {str(e)}")
+
         to_recipients = self._process_recipients(data["to"])
 
         from_sender = self._process_sender(data.get("from"))
@@ -146,6 +229,8 @@ class EmailView(MethodView):
             bcc=bcc_recipients if bcc_recipients else None,
             reply_to=reply_to,
         )
+
+        Logger.info(message=f"Sending template email with template_id: {data['template_id']}")
 
         result = EmailService.send_email(params=params)
 
