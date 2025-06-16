@@ -11,6 +11,8 @@ from modules.application.errors import AppError, WorkerClientConnectionError
 from modules.application.workers.health_check_worker import HealthCheckWorker
 from modules.authentication.rest_api.authentication_rest_api_server import AuthenticationRestApiServer
 from modules.config.config_service import ConfigService
+from modules.email_notification.email_service import EmailService
+from modules.email_notification.rest_api.email_router import EmailRouter
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
 from modules.notification.notification_service import NotificationService
@@ -32,6 +34,15 @@ try:
         Logger.warn(message="Notification service initialization failed - some features may be unavailable")
 except Exception as e:
     Logger.error(message=f"Error initializing notification service: {str(e)}")
+
+try:
+    email_initialized = EmailService.initialize()
+    if email_initialized:
+        Logger.info(message="Email service initialized successfully")
+    else:
+        Logger.warn(message="Email service initialization failed - some features may be unavailable")
+except Exception as e:
+    Logger.error(message=f"Error initializing email service: {str(e)}")
 
 # Connect to Temporal Server
 try:
@@ -67,6 +78,12 @@ try:
     Logger.info(message="Notification APIs registered successfully")
 except Exception as e:
     Logger.error(message=f"Failed to register notification APIs: {str(e)}")
+
+try:
+    api_blueprint = EmailRouter.create_route(blueprint=api_blueprint)
+    Logger.info(message="Email notification APIs registered successfully")
+except Exception as e:
+    Logger.error(message=f"Failed to register email notification APIs: {str(e)}")
 
 app.register_blueprint(api_blueprint)
 

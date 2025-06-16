@@ -21,3 +21,9 @@ public:
 firebase:
   enabled: true
 
+email:
+  sendgrid:
+    api_key: "SENDSENDGRID_API_KEY"
+    default_sender:
+      email: "sarthak.gaikwad@bettrhq.com"
+      name: "Better Software"

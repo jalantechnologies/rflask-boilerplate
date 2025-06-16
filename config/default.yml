@@ -23,3 +23,10 @@ public:
 
 firebase:
   service_account_json: null
+
+email:
+  sendgrid:
+    api_key: null
+    default_sender:
+      email: null
+      name: null
