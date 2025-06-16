@@ -17,6 +17,7 @@ from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
 from modules.notification.notification_service import NotificationService
 from modules.notification.rest_api.notification_rest_api_server import NotificationRestApiServer
+from modules.sms_notification.rest_api.sms_router import SMSNotificationRouter
 
 load_dotenv()
 
@@ -84,6 +85,12 @@ try:
     Logger.info(message="Email notification APIs registered successfully")
 except Exception as e:
     Logger.error(message=f"Failed to register email notification APIs: {str(e)}")
+
+try:
+    api_blueprint = SMSNotificationRouter.create_route(blueprint=api_blueprint)
+    Logger.info(message="SMS notification APIs registered successfully")
+except Exception as e:
+    Logger.error(message=f"Failed to register SMS notification APIs: {str(e)}")
 
 app.register_blueprint(api_blueprint)
 
