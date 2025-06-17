@@ -4,7 +4,7 @@ metadata:
   name: $KUBE_APP-python-worker-deployment
   namespace: $KUBE_NS
   labels:
-    app: python-worker
+    app: temporal-python-worker
     version: $GITHUB_SHA
   annotations:
     secrets.doppler.com/reload: 'true'
@@ -17,11 +17,11 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      app: python-worker
+      app: temporal-python-worker
   template:
     metadata:
       labels:
-        app: python-worker
+        app: temporal-python-worker
     spec:
       affinity:
         nodeAffinity:
@@ -47,6 +47,6 @@ spec:
               value: 'temporal-grpc:7233'
           resources:
             requests:
-              memory: '150Mi'
+              memory: '500Mi'
             limits:
-              memory: '300Mi'
+              memory: '750Mi'
