@@ -1,5 +1,6 @@
 from typing import Any, Dict, List, Optional
 
+from bson import ObjectId
 from pymongo.collection import Collection
 from pymongo.errors import OperationFailure
 
@@ -107,7 +108,25 @@ class EmailLogRepository(ApplicationRepository):
         Returns:
             Email log or None if not found
         """
-        return cls.collection().find_one({cls.MESSAGE_ID_FIELD: message_id})
+        result = cls.collection().find_one({cls.MESSAGE_ID_FIELD: message_id})
+        return result if result is not None else None
+
+    @classmethod
+    def find_by_id(cls, log_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Find email log by ID
+
+        Args:
+            log_id: Unique log ID
+
+        Returns:
+            Email log or None if not found
+        """
+        try:
+            result = cls.collection().find_one({"_id": ObjectId(log_id)})
+            return result if result is not None else None
+        except Exception:
+            return None
 
     @classmethod
     def update_status(cls, message_id: str, status: str, error: Optional[str] = None) -> bool:
@@ -128,4 +147,22 @@ class EmailLogRepository(ApplicationRepository):
 
         result = cls.collection().update_one({cls.MESSAGE_ID_FIELD: message_id}, {"$set": update_data})
 
-        return result.modified_count > 0
+        return bool(result.modified_count > 0)
+
+    @classmethod
+    def update_log(cls, log_id: str, update_data: Dict[str, Any]) -> bool:
+        """
+        Update email log with arbitrary data
+
+        Args:
+            log_id: Unique log ID
+            update_data: Data to update
+
+        Returns:
+            True if update was successful, False otherwise
+        """
+        try:
+            result = cls.collection().update_one({"_id": ObjectId(log_id)}, {"$set": update_data})
+            return bool(result.modified_count > 0)
+        except Exception:
+            return False

@@ -103,7 +103,7 @@ class SMSNotificationView(MethodView):
                         403,
                     )
             except (AuthorizationHeaderNotFoundError, InvalidAuthorizationHeaderError) as e:
-                Logger.warning(message=f"Proceeding without checking SMS notification preferences: {str(e)}")
+                Logger.warn(message=f"Proceeding without checking SMS notification preferences: {str(e)}")
 
             try:
                 phone_data = data["recipient_phone"]

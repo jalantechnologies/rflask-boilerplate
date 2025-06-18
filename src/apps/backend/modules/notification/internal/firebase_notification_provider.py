@@ -161,12 +161,12 @@ class FirebaseNotificationProvider:
         Returns:
             Tuple of (valid_tokens, invalid_tokens)
         """
-        valid_tokens = []
-        invalid_tokens = []
+        valid_tokens: List[str] = []
+        invalid_tokens: List[str] = []
 
         for token in tokens:
             if not token or len(token.strip()) < 10:
-                Logger.warning(message=f"Invalid FCM token format: {token}")
+                Logger.warn(message=f"Invalid FCM token format: {token}")
                 invalid_tokens.append(token)
             else:
                 valid_tokens.append(token)
@@ -292,7 +292,7 @@ class FirebaseNotificationProvider:
                 "invalid_tokens": invalid_tokens,
             }
 
-        results = {
+        results: Dict[str, Any] = {
             "success": True,
             "total_tokens": len(params.recipients.fcm_tokens),
             "successful_tokens": 0,
@@ -312,9 +312,9 @@ class FirebaseNotificationProvider:
             results["token_results"].append(token_result)
 
             if token_result["success"]:
-                results["successful_tokens"] += 1
+                results["successful_tokens"] = results["successful_tokens"] + 1
             else:
-                results["failed_tokens"] += 1
+                results["failed_tokens"] = results["failed_tokens"] + 1
 
         if results["successful_tokens"] == 0:
             results["success"] = False

@@ -114,8 +114,11 @@ class SendGridEmailProvider:
             except Exception as e:
                 raise EmailConfigurationError(f"SendGrid provider not initialized: {str(e)}")
 
-        try:
+        # Ensure _client is not None after initialization
+        if cls._client is None:
+            raise EmailConfigurationError("SendGrid client is not properly initialized")
 
+        try:
             sender = params.sender or cls._default_sender
             if not sender:
                 raise EmailValidationError("No sender specified and no default sender configured")
@@ -147,7 +150,7 @@ class SendGridEmailProvider:
             raise EmailServiceError(error_message)
 
     @classmethod
-    def _process_recipients(cls, recipient_data) -> List[To]:
+    def _process_recipients(cls, recipient_data: Any) -> List[To]:
         """
         Process recipient data into SendGrid To objects
 
@@ -218,7 +221,7 @@ class SendGridEmailProvider:
         return mail
 
     @classmethod
-    def _add_cc_recipients(cls, mail: Mail, cc_recipients: List[EmailRecipient]) -> None:
+    def _add_cc_recipients(cls, mail: Mail, cc_recipients: Optional[List[EmailRecipient]]) -> None:
         """
         Add CC recipients to mail object
 
@@ -233,7 +236,7 @@ class SendGridEmailProvider:
             mail.cc = Cc(cc_recipient.email, cc_recipient.name)
 
     @classmethod
-    def _add_bcc_recipients(cls, mail: Mail, bcc_recipients: List[EmailRecipient]) -> None:
+    def _add_bcc_recipients(cls, mail: Mail, bcc_recipients: Optional[List[EmailRecipient]]) -> None:
         """
         Add BCC recipients to mail object
 
@@ -248,7 +251,7 @@ class SendGridEmailProvider:
             mail.bcc = Bcc(bcc_recipient.email, bcc_recipient.name)
 
     @classmethod
-    def _add_attachments(cls, mail: Mail, attachments: List[Dict[str, str]]) -> None:
+    def _add_attachments(cls, mail: Mail, attachments: Optional[List[Dict[str, str]]]) -> None:
         """
         Add attachments to mail object
 
@@ -306,7 +309,7 @@ class SendGridEmailProvider:
             raise EmailValidationError(f"Error building email message: {str(e)}")
 
     @classmethod
-    def _prepare_recipient_data(cls, params: SendEmailParams) -> List[Dict[str, str]]:
+    def _prepare_recipient_data(cls, params: SendEmailParams) -> List[Dict[str, Optional[str]]]:
         """
         Extract recipient information from email parameters for logging
 
@@ -316,7 +319,7 @@ class SendGridEmailProvider:
         Returns:
             List of recipient data dictionaries
         """
-        recipient_emails = []
+        recipient_emails: List[Dict[str, Optional[str]]] = []
 
         if isinstance(params.to, EmailRecipient):
             recipient_emails.append({"email": params.to.email, "name": params.to.name})
@@ -387,12 +390,23 @@ class SendGridEmailProvider:
 
             body = cls._get_body_content(params)
 
+            # Convert recipient data to match expected format
+            formatted_recipients: List[Dict[str, str]] = []
+            for recipient in recipient_emails:
+                formatted_recipient: Dict[str, str] = {
+                    "email": recipient["email"] or "",
+                    "name": recipient["name"] or "",
+                }
+                if "type" in recipient and recipient["type"]:
+                    formatted_recipient["type"] = recipient["type"]
+                formatted_recipients.append(formatted_recipient)
+
             log_entry = EmailLogModel(
                 id=None,
                 message_id=message_id,
                 sender_email=sender.email,
                 sender_name=sender.name,
-                recipient_emails=recipient_emails,
+                recipient_emails=formatted_recipients,
                 subject=params.content.subject,
                 body=body,
                 content_type=content_type,

@@ -1,3 +1,5 @@
+from typing import Any
+
 from flask import jsonify, request
 from flask.typing import ResponseReturnValue
 from flask.views import MethodView
@@ -22,7 +24,7 @@ class NotificationView(MethodView):
 
     methods = ["POST"]
 
-    def dispatch_request(self, *args, **kwargs):
+    def dispatch_request(self, *args: Any, **kwargs: Any) -> ResponseReturnValue:
         """
         Override dispatch to handle different endpoints with the same view class
 
@@ -114,7 +116,7 @@ class NotificationView(MethodView):
                         403,
                     )
             except (AuthorizationHeaderNotFoundError, InvalidAuthorizationHeaderError) as e:
-                Logger.warning(message=f"Proceeding without checking notification preferences: {str(e)}")
+                Logger.warn(message=f"Proceeding without checking notification preferences: {str(e)}")
 
             fcm_token = request_data["fcm_token"]
             title = request_data["title"]
@@ -170,7 +172,7 @@ class NotificationView(MethodView):
                         403,
                     )
             except (AuthorizationHeaderNotFoundError, InvalidAuthorizationHeaderError) as e:
-                Logger.warning(message=f"Proceeding without checking notification preferences: {str(e)}")
+                Logger.warn(message=f"Proceeding without checking notification preferences: {str(e)}")
 
             fcm_tokens = request_data["fcm_tokens"]
             title = request_data["title"]
@@ -202,7 +204,7 @@ class NotificationView(MethodView):
 
     def handle_all_devices_notification(self) -> ResponseReturnValue:
         """
-        Process a request to send a notification to all devices with active FCM tokens
+        Process a request to send a notification to all devices
         """
         try:
             if not request.is_json:
@@ -218,10 +220,21 @@ class NotificationView(MethodView):
 
             try:
                 account_id = self._get_account_id_from_token()
-                Logger.info(message=f"User {account_id} requesting to send notification to all devices")
+                push_enabled = self._check_push_notification_preference(account_id)
 
+                if not push_enabled:
+                    return (
+                        jsonify(
+                            {
+                                "success": False,
+                                "error": "Push notifications are disabled for this user",
+                                "message": "The user has disabled push notifications in their preferences",
+                            }
+                        ),
+                        403,
+                    )
             except (AuthorizationHeaderNotFoundError, InvalidAuthorizationHeaderError) as e:
-                return jsonify({"success": False, "error": "Authentication required", "message": str(e)}), 401
+                Logger.warn(message=f"Proceeding without checking notification preferences: {str(e)}")
 
             title = request_data["title"]
             body = request_data["body"]

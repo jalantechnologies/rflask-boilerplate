@@ -7,7 +7,7 @@ from modules.logger.logger import Logger
 
 class EmailService:
     """
-    Service responsible for sending emails to users.
+    Service responsible for sending emails to recipients.
     Acts as a facade to abstract different email provider implementation details.
     """
 
@@ -16,7 +16,7 @@ class EmailService:
     @staticmethod
     def send_email(*, params: SendEmailParams) -> Dict[str, Any]:
         """
-        Sends an email to recipients.
+        Sends an email using the configured email provider.
 
         This method abstracts the underlying email provider (SendGrid)
         to maintain a consistent interface if additional providers are added later.
@@ -64,7 +64,7 @@ class EmailService:
         bcc: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """
-        Simplified method to send an email without creating complex parameter objects.
+        Sends a simple email with text or HTML body.
 
         This is a convenience method that constructs the necessary objects
         from simple parameters and then calls the main send_email method.
@@ -82,11 +82,13 @@ class EmailService:
         Returns:
             Response containing success status and message ID or error details
         """
-        recipients = []
+        recipients: Union[EmailRecipient, List[EmailRecipient]]
         if isinstance(to, str):
             recipients = EmailRecipient(email=to)
         elif isinstance(to, list):
             recipients = [EmailRecipient(email=email) for email in to]
+        else:
+            recipients = []
 
         sender = None
         if from_email:
@@ -136,11 +138,13 @@ class EmailService:
         Returns:
             Response containing success status and message ID or error details
         """
-        recipients = []
+        recipients: Union[EmailRecipient, List[EmailRecipient]]
         if isinstance(to, str):
             recipients = EmailRecipient(email=to)
         elif isinstance(to, list):
             recipients = [EmailRecipient(email=email) for email in to]
+        else:
+            recipients = []
 
         sender = None
         if from_email:
