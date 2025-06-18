@@ -304,3 +304,45 @@ For `.env` file users, add the following to your `custom-environment-variables.y
 firebase:
   service_account_json: 'FIREBASE_SERVICE_ACCOUNT_JSON'
 ```
+
+## Email Notifications (SendGrid)
+
+The application can send email notifications via **SendGrid**, supporting both template-driven and direct-message workflows.
+
+**Prerequisites**
+
+1. A SendGrid account with API access.
+2. An active SendGrid API Key with **Mail Send** permissions.
+3. *(Optional)* One or more SendGrid Dynamic Templates for advanced, template-based emails.
+
+**Configuration**
+
+Set the following environment variables to enable email notifications:
+
+* `SENDGRID_API_KEY` — Your SendGrid API Key (required).
+* `EMAIL_DEFAULT_SENDER_EMAIL` — Default "From" address for outgoing emails (optional; e.g., `noreply@yourdomain.com`).
+* `EMAIL_DEFAULT_SENDER_NAME` — Default sender name displayed in recipients’ inboxes (optional; e.g., `Your App Name`).
+
+After configuration, the email service automatically picks up these values at runtime to authenticate and dispatch messages through SendGrid’s API.
+
+---
+
+## SMS Notifications (Twilio)
+
+The application also supports sending SMS messages using **Twilio**, with full international phone-number compatibility.
+
+**Prerequisites**
+
+1. A Twilio account with SMS capabilities enabled.
+2. A valid Twilio **Account SID** and **Auth Token**.
+3. *(Optional)* A Twilio phone number or a Messaging Service SID for sending messages.
+
+**Configuration**
+
+Define the following environment variables to configure SMS notifications:
+
+* `TWILIO_ACCOUNT_SID` — Your Twilio Account SID (required).
+* `TWILIO_AUTH_TOKEN` — Your Twilio Auth Token (required).
+* `TWILIO_MESSAGING_SERVICE_SID` — Messaging Service SID or phone number SID (optional; recommended for advanced routing).
+
+Once configured, the SMS service uses these credentials to authenticate requests and deliver messages through Twilio’s REST API.
