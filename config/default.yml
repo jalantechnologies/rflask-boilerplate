@@ -30,3 +30,4 @@ email:
     default_sender:
       email: null
       name: null
+      
