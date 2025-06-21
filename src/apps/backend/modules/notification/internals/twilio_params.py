@@ -2,8 +2,8 @@ from typing import List
 
 from phonenumbers import NumberParseException, is_valid_number, parse
 
-from modules.communication.errors import ValidationError
-from modules.communication.types import SendSMSParams, ValidationFailure
+from modules.notification.errors import ValidationError
+from modules.notification.types import SendSMSParams, ValidationFailure
 
 
 class SMSParams:
