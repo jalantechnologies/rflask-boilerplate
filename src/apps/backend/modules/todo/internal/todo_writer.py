@@ -4,7 +4,7 @@ from datetime import datetime
 from bson import ObjectId
 from pymongo import ReturnDocument
 
-from modules.todo.errors import TodoNotFoundError
+from modules.todo.errors import InvalidDueDateFormatError, TodoNotFoundError
 from modules.todo.internal.store.todo_model import TodoModel
 from modules.todo.internal.store.todo_repository import TodoRepository
 from modules.todo.types import CreateTodoParams, Todo, UpdateTodoParams
@@ -16,8 +16,8 @@ class TodoWriter:
         if isinstance(params.due_date, str):
             try:
                 params.due_date = datetime.fromisoformat(params.due_date)
-            except ValueError as e:
-                raise ValueError(f"Invalid due_date format: {params.due_date}. Expected ISO format.") from e
+            except ValueError:
+                raise InvalidDueDateFormatError(params.due_date)
 
         todo_bson = TodoModel(
             id=None,

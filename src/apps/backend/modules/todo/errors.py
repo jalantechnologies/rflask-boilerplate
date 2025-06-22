@@ -14,8 +14,3 @@ class TodoNotFoundError(TodoError):
 class InvalidDueDateFormatError(TodoError):
     def __init__(self, date_str: str):
         super().__init__(f"Due date '{date_str}' is not in a valid ISO format.", code="INVALID_DUE_DATE_FORMAT")
-
-
-class UnauthorizedTodoAccessError(TodoError):
-    def __init__(self):
-        super().__init__("You are not authorized to access this TODO.", code="UNAUTHORIZED_TODO_ACCESS")
