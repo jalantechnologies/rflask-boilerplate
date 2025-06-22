@@ -1,5 +1,6 @@
 // src/apps/frontend/contexts/TodoContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Todo } from '../types/todo';
 import {
   fetchTodos,
   updateTodo,
@@ -10,7 +11,7 @@ import {
 const TodoContext = createContext<any>(null);
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const loadTodos = async () => {
     const data = await fetchTodos();
