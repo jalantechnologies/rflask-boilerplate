@@ -7,26 +7,26 @@ from typing import Literal, Optional
 
 @dataclass
 class Todo:
-    id: str
-    title: str
     description: Optional[str]
-    status: str
     due_date: Optional[datetime]
+    id: str
+    status: str
+    title: str
     type: Optional[str] = None
 
 
-@dataclass
+@dataclass(kw_only=True)
 class CreateTodoParams:
-    title: str
     description: Optional[str]
-    status: str = "todo"
     due_date: Optional[datetime] = None
+    status: str = "todo"
+    title: str
     type: Optional[Literal["Personal", "Official", "Hobby"]] = None
 
 
-@dataclass
+@dataclass(kw_only=True)
 class UpdateTodoParams:
-    title: Optional[str] = None
     description: Optional[str] = None
-    status: Optional[str] = None
     due_date: Optional[datetime] = None
+    status: Optional[str] = None
+    title: Optional[str] = None
