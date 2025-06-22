@@ -17,8 +17,8 @@ class TodoWriter:
         if isinstance(params.due_date, str):
             try:
                 params.due_date = datetime.fromisoformat(params.due_date)
-            except ValueError:
-                params.due_date = None
+            except ValueError as e:
+                raise ValueError(f"Invalid due_date format: {params.due_date}. Expected ISO format.") from e
 
         todo_bson = TodoModel(
             id=None,
