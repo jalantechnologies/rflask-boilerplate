@@ -1,11 +1,10 @@
-# modules/todo/internal/todo_writer.py
-
 from dataclasses import asdict
 from datetime import datetime
 
 from bson import ObjectId
 from pymongo import ReturnDocument
 
+from modules.todo.errors import TodoNotFoundError
 from modules.todo.internal.store.todo_model import TodoModel
 from modules.todo.internal.store.todo_repository import TodoRepository
 from modules.todo.types import CreateTodoParams, Todo, UpdateTodoParams
@@ -53,7 +52,7 @@ class TodoWriter:
                 status=model.status,
                 due_date=model.due_date,
             )
-        raise Exception("Todo not found")
+        raise TodoNotFoundError(todo_id)
 
     @staticmethod
     def delete_todo(todo_id: str):
