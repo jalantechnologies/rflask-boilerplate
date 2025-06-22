@@ -19,6 +19,7 @@ class TodoModel(BaseModel):
     account_id: str
     created_at: datetime = datetime.now()
     updated_at: datetime = datetime.now()
+    type: Optional[str] = None
 
     @classmethod
     def from_bson(cls, bson_data: dict) -> "TodoModel":

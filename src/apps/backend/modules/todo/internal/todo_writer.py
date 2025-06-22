@@ -52,6 +52,7 @@ class TodoWriter:
                 description=model.description,
                 status=model.status,
                 due_date=model.due_date,
+                type=model.type,
             )
         raise TodoNotFoundError(todo_id)
 

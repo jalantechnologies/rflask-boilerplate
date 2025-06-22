@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { createTodo } from '../../services/todo.service';
+import { TodoType } from '../../types/todo';
+
 type Props = {
   onCreate: () => void;
 };
@@ -7,22 +9,24 @@ type Props = {
 const TodoForm: React.FC<Props> = ({ onCreate }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [type, setType] = useState('Personal');
+  const [type, setType] = useState<TodoType>(TodoType.Personal);
   const [dueDate, setDueDate] = useState('');
 
   const handleSubmit = async () => {
     await createTodo({
       title,
       description,
-      type: type as 'Personal' | 'Official' | 'Hobby',
-      due_date: `${dueDate}T00:00:00`,
+      type,
+      due_date: dueDate ? `${dueDate}T00:00:00` : null,
     });
 
     setTitle('');
     setDescription('');
+    setType(TodoType.Personal);
     setDueDate('');
     onCreate();
   };
+
   return (
     <div className="mb-4 bg-gray-50 p-4 rounded shadow">
       <h2 className="text-lg font-semibold mb-2">Create TODO</h2>
@@ -41,11 +45,13 @@ const TodoForm: React.FC<Props> = ({ onCreate }) => {
       <select
         className="input"
         value={type}
-        onChange={(e) => setType(e.target.value)}
+        onChange={(e) => setType(e.target.value as TodoType)}
       >
-        <option>Personal</option>
-        <option>Official</option>
-        <option>Hobby</option>
+        {Object.values(TodoType).map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
       </select>
       <input
         className="input"
