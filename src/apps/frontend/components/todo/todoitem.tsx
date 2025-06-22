@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTodo } from '../../contexts/todocontext';
+import { TodoStatus } from '../../types/todo';
 
 type Props = {
   todo: any;
@@ -34,16 +35,14 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
         <p className="text-xs italic text-gray-400">Status: {todo.status}</p>
       </div>
       <div className="flex flex-col gap-1 items-end">
-        <button
-          onClick={() =>
-            handleUpdate(todo.id, {
-              status: isDone ? 'todo' : 'done',
-            })
-          }
-          className={`text-sm ${isDone ? 'text-yellow-600' : 'text-green-600'}`}
-        >
-          {isDone ? 'Undo' : 'Complete'}
-        </button>
+        {!isDone && (
+          <button
+            className="btn btn-sm btn-success"
+            onClick={() => handleUpdate(todo.id, { status: TodoStatus.Done })}
+          >
+            Mark Done
+          </button>
+        )}
         <button
           onClick={() => handleDelete(todo.id)}
           className="text-sm text-red-500"
