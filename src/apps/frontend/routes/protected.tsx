@@ -7,8 +7,8 @@ import { useAccountContext, useAuthContext } from 'frontend/contexts';
 import { Dashboard, NotFound } from 'frontend/pages';
 import AppLayout from 'frontend/pages/app-layout/app-layout';
 import { AsyncError } from 'frontend/types';
-import TodoPage from '../pages/todo/TodoPage';
-import { TodoProvider } from 'frontend/contexts/TodoContext';
+import TodoPage from '../pages/todo/todopage';
+import { TodoProvider } from 'frontend/contexts/todocontext';
 
 const App = () => {
   const { getAccountDetails } = useAccountContext();
