@@ -1,4 +1,4 @@
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from datetime import datetime
 
 from bson import ObjectId
@@ -15,9 +15,10 @@ class TodoWriter:
     def create_todo(account_id: str, params: CreateTodoParams) -> Todo:
         if isinstance(params.due_date, str):
             try:
-                params.due_date = datetime.fromisoformat(params.due_date)
+                parsed_due_date = datetime.fromisoformat(params.due_date)
             except ValueError:
                 raise InvalidDueDateFormatError(params.due_date)
+            params = replace(params, due_date=parsed_due_date)
 
         todo_bson = TodoModel(
             id=None,

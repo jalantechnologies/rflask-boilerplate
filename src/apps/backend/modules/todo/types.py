@@ -5,7 +5,7 @@ from datetime import date
 from typing import Literal, Optional
 
 
-@dataclass
+@dataclass(frozen=True, kw_only=True)
 class Todo:
     description: Optional[str]
     due_date: Optional[date]
@@ -15,7 +15,7 @@ class Todo:
     type: Optional[str] = None
 
 
-@dataclass(kw_only=True)
+@dataclass(frozen=True, kw_only=True)
 class CreateTodoParams:
     description: Optional[str]
     due_date: Optional[date] = None
@@ -24,7 +24,7 @@ class CreateTodoParams:
     type: Optional[Literal["Personal", "Official", "Hobby"]] = None
 
 
-@dataclass(kw_only=True)
+@dataclass(frozen=True, kw_only=True)
 class UpdateTodoParams:
     description: Optional[str] = None
     due_date: Optional[date] = None
