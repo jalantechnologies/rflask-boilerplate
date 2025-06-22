@@ -1,33 +1,24 @@
-// src/services/todo.service.ts
+// src/apps/frontend/services/todo.service.ts
 import APIService from './api.service';
 
-const api = new APIService();
+const api = new APIService(); // uses the configured axios instance with auth header
+const API_BASE_URL = '/todos'; // baseURL is already set to /api in APIService
 
-export const getTodo = async () => {
-  const response = await api.apiClient.get('/todos');
-
-  // Transform MongoDB _id → id
-  return response.data.map((todo: any) => ({
-    ...todo,
-    id: todo._id,
-  }));
-};
-export const createTodo = async (data: {
-  title: string;
-  description: string;
-  type: 'Official' | 'Personal' | 'Hobby';
-  due_date: string;
-}) => {
-  return await api.apiClient.post('/todos', data);
+export const fetchTodos = async () => {
+  const response = await api.apiClient.get(API_BASE_URL);
+  return response.data;
 };
 
-export const updateTodo = async (
-  id: string,
-  data: { status?: 'To Do' | 'Done' },
-) => {
-  return await api.apiClient.put(`/todos/${id}`, data);
+export const updateTodo = async (id: string, data: any) => {
+  const response = await api.apiClient.patch(`${API_BASE_URL}/${id}`, data);
+  return response.data;
 };
 
 export const deleteTodo = async (id: string) => {
-  return await api.apiClient.delete(`/todos/${id}`);
+  await api.apiClient.delete(`${API_BASE_URL}/${id}`);
+};
+
+export const createTodo = async (data: any) => {
+  const response = await api.apiClient.post(API_BASE_URL, data);
+  return response.data;
 };
