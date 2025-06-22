@@ -22,7 +22,14 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
           {todo.description}
         </p>
         <p className="text-xs text-gray-400">
-          Due: {todo.due_date?.split('T')[0]}
+          Due:{' '}
+          {todo.due_date
+            ? new Intl.DateTimeFormat('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+              }).format(new Date(todo.due_date))
+            : ''}
         </p>
         <p className="text-xs italic text-gray-400">Status: {todo.status}</p>
       </div>
