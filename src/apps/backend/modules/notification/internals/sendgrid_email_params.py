@@ -32,7 +32,7 @@ class EmailParams:
             raise ValidationError("Bulk email cannot be sent, please check the params validity.", failures)
 
     @staticmethod
-    def _validate_recipients(recipients) -> List[ValidationFailure]:
+    def _validate_recipients(recipients: List) -> List[ValidationFailure]:
         failures = []
 
         if not recipients or len(recipients) == 0:
@@ -59,7 +59,7 @@ class EmailParams:
 
     @staticmethod
     def _validate_sender(sender) -> List[ValidationFailure]:
-        failures = []
+        failures: List[ValidationFailure] = []
 
         if not EmailParams.is_email_valid(sender.email):
             failures.append(
@@ -75,7 +75,7 @@ class EmailParams:
 
     @staticmethod
     def _validate_email_content(params: SendEmailParams) -> List[ValidationFailure]:
-        failures = []
+        failures: List[ValidationFailure] = []
 
         if params.template_id:
             failures.extend(EmailParams._validate_template_id(params.template_id))
@@ -86,7 +86,7 @@ class EmailParams:
 
     @staticmethod
     def _validate_template_id(template_id: str) -> List[ValidationFailure]:
-        failures = []
+        failures: List[ValidationFailure] = []
 
         if not isinstance(template_id, str) or len(template_id.strip()) == 0:
             failures.append(ValidationFailure(field="template_id", message="Template ID must be a non-empty string."))
@@ -95,7 +95,7 @@ class EmailParams:
 
     @staticmethod
     def _validate_direct_content(params: SendEmailParams) -> List[ValidationFailure]:
-        failures = []
+        failures: List[ValidationFailure] = []
 
         if not params.subject:
             failures.append(ValidationFailure(field="subject", message="Subject is required for non-template emails."))
@@ -111,7 +111,7 @@ class EmailParams:
 
     @staticmethod
     def _validate_bulk_template(params: BulkEmailParams) -> List[ValidationFailure]:
-        failures = []
+        failures: List[ValidationFailure] = []
 
         if not params.template_id or len(params.template_id.strip()) == 0:
             failures.append(ValidationFailure(field="template_id", message="Template ID is required for bulk emails."))
@@ -120,7 +120,7 @@ class EmailParams:
 
     @staticmethod
     def _validate_personalizations(params: BulkEmailParams) -> List[ValidationFailure]:
-        failures = []
+        failures: List[ValidationFailure] = []
 
         if params.personalizations is None:
             return failures

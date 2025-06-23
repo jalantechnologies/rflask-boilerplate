@@ -27,7 +27,7 @@ class SendEmailParams:
     text_content: str | None = None
 
     @property
-    def recipient(self) -> EmailRecipient:
+    def recipient(self) -> EmailRecipient | None:
         return self.recipients[0] if self.recipients else None
 
 
@@ -67,12 +67,6 @@ class ValidationFailure:
 
 
 @dataclass(frozen=True)
-class SendSMSParams:
-    message_body: str
-    recipient_phone: PhoneNumber
-
-
-@dataclass(frozen=True)
 class BulkSMSParams:
     message_body: str
     recipient_phones: List[PhoneNumber]
@@ -93,7 +87,7 @@ class SMSResponse:
     errors: Optional[List[str]] = None
     status_code: Optional[int] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.message_ids is None:
             object.__setattr__(self, "message_ids", [])
         if self.errors is None:

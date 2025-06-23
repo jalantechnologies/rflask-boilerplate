@@ -10,6 +10,11 @@ from modules.notification.errors import ServiceError
 from modules.notification.internals.sendgrid_email_params import EmailParams
 from modules.notification.types import BulkEmailParams, EmailResponse, SendEmailParams
 
+_DEFAULT_EMAIL = "noreply@example.com"
+_DEFAULT_NAME = "No Reply"
+_INVALID_EMAIL_LITERALS = {"DEFAULT_EMAIL", "MAILER_DEFAULT_EMAIL", ""}
+_INVALID_NAME_LITERALS = {"DEFAULT_EMAIL_NAME", "MAILER_DEFAULT_EMAIL_NAME", ""}
+
 
 class SendGridService:
     __client: Optional[sendgrid.SendGridAPIClient] = None
@@ -17,17 +22,14 @@ class SendGridService:
     @staticmethod
     def send_email(params: SendEmailParams) -> EmailResponse:
         EmailParams.validate(params)
-
         try:
             client = SendGridService.get_client()
-
             if len(params.recipients) == 1:
                 response = SendGridService._send_single_email(client, params)
             else:
                 response = SendGridService._send_bulk_email(client, params)
 
             message_id = SendGridService._extract_message_id(response)
-
             return EmailResponse(success=True, message_id=message_id, status_code=response.status_code)
 
         except sendgrid.SendGridException as err:
@@ -39,28 +41,22 @@ class SendGridService:
     def send_bulk_email(params: BulkEmailParams) -> EmailResponse:
         try:
             client = SendGridService.get_client()
-
             mail = Mail()
             mail.from_email = From(params.sender.email, params.sender.name)
             mail.template_id = TemplateId(params.template_id)
 
-            for i, recipient in enumerate(params.recipients):
+            for idx, recipient in enumerate(params.recipients):
                 personalization = Personalization()
+                to = To(recipient.email, recipient.name) if recipient.name else To(recipient.email)
+                personalization.add_to(to)
 
-                if recipient.name:
-                    personalization.add_to(To(recipient.email, recipient.name))
-                else:
-                    personalization.add_to(To(recipient.email))
-
-                if params.personalizations and i < len(params.personalizations):
-                    personalization.dynamic_template_data = params.personalizations[i]
+                if params.personalizations and idx < len(params.personalizations):
+                    personalization.dynamic_template_data = params.personalizations[idx]
 
                 mail.add_personalization(personalization)
 
             response = client.send(mail)
-
             message_id = SendGridService._extract_message_id(response)
-
             return EmailResponse(success=True, message_id=message_id, status_code=response.status_code)
 
         except sendgrid.SendGridException as err:
@@ -71,12 +67,7 @@ class SendGridService:
     @staticmethod
     def _send_single_email(client: sendgrid.SendGridAPIClient, params: SendEmailParams) -> any:
         recipient = params.recipients[0]
-
-        if recipient.name:
-            to_email = To(recipient.email, recipient.name)
-        else:
-            to_email = To(recipient.email)
-
+        to_email = To(recipient.email, recipient.name) if recipient.name else To(recipient.email)
         mail = Mail(from_email=From(params.sender.email, params.sender.name), to_emails=to_email)
 
         if params.template_id:
@@ -97,13 +88,11 @@ class SendGridService:
     def _send_bulk_email(client: sendgrid.SendGridAPIClient, params: SendEmailParams) -> any:
         mail = Mail()
         mail.from_email = From(params.sender.email, params.sender.name)
-
         personalization = Personalization()
+
         for recipient in params.recipients:
-            if recipient.name:
-                personalization.add_to(To(recipient.email, recipient.name))
-            else:
-                personalization.add_to(To(recipient.email))
+            to = To(recipient.email, recipient.name) if recipient.name else To(recipient.email)
+            personalization.add_to(to)
 
         if params.template_id:
             mail.template_id = TemplateId(params.template_id)
@@ -123,31 +112,55 @@ class SendGridService:
     @staticmethod
     def _extract_message_id(response) -> Optional[str]:
         try:
-            if hasattr(response, "headers") and response.headers:
-                if isinstance(response.headers, str):
-                    for line in response.headers.split("\n"):
-                        if line.startswith("X-Message-Id:"):
-                            return line.split(":", 1)[1].strip()
-                elif hasattr(response.headers, "get"):
-                    return response.headers.get("X-Message-Id")
+            message_id = SendGridService._extract_from_headers(response)
+            if message_id:
+                return message_id
 
-            if hasattr(response, "body") and response.body:
-                if isinstance(response.body, bytes):
-                    try:
-                        body_str = response.body.decode("utf-8")
-                        if body_str.strip():
-                            body_dict = json.loads(body_str)
-                            return body_dict.get("message_id")
-                    except (json.JSONDecodeError, UnicodeDecodeError):
-                        pass
-                elif isinstance(response.body, dict):
-                    return response.body.get("message_id")
-                elif hasattr(response.body, "get"):
-                    return response.body.get("message_id")
-
-            return None
+            return SendGridService._extract_from_body(response)
 
         except Exception:
+            return None
+
+    @staticmethod
+    def _extract_from_headers(response) -> Optional[str]:
+        headers = getattr(response, "headers", None)
+        if not headers:
+            return None
+
+        if isinstance(headers, str):
+            return SendGridService._parse_string_headers(headers)
+        elif hasattr(headers, "get"):
+            return headers.get("X-Message-Id")
+
+        return None
+
+    @staticmethod
+    def _parse_string_headers(headers: str) -> Optional[str]:
+        for line in headers.splitlines():
+            if line.lower().startswith("x-message-id:"):
+                return line.split(":", 1)[1].strip()
+        return None
+
+    @staticmethod
+    def _extract_from_body(response) -> Optional[str]:
+        body = getattr(response, "body", None)
+        if not body:
+            return None
+
+        if isinstance(body, bytes):
+            return SendGridService._parse_bytes_body(body)
+        elif isinstance(body, dict) or hasattr(body, "get"):
+            return body.get("message_id")
+
+        return None
+
+    @staticmethod
+    def _parse_bytes_body(body: bytes) -> Optional[str]:
+        try:
+            decoded = body.decode("utf-8")
+            data = json.loads(decoded)
+            return data.get("message_id")
+        except (json.JSONDecodeError, UnicodeDecodeError):
             return None
 
     @staticmethod
@@ -162,22 +175,21 @@ class SendGridService:
 
     @staticmethod
     def get_default_sender() -> tuple[str, str]:
+        email = _DEFAULT_EMAIL
+        name = _DEFAULT_NAME
+
         try:
-            try:
-                default_email = ConfigService[str].get_value(key="mailer.default_email")
-            except MissingKeyError:
-                default_email = "noreply@example.com"
+            cfg_email = ConfigService[str].get_value(key="mailer.default_email")
+            if cfg_email and cfg_email not in _INVALID_EMAIL_LITERALS:
+                email = cfg_email
+        except MissingKeyError:
+            pass
 
-            try:
-                default_name = ConfigService[str].get_value(key="mailer.default_email_name")
-            except MissingKeyError:
-                default_name = "No Reply"
+        try:
+            cfg_name = ConfigService[str].get_value(key="mailer.default_email_name")
+            if cfg_name and cfg_name not in _INVALID_NAME_LITERALS:
+                name = cfg_name
+        except MissingKeyError:
+            pass
 
-            if default_email in ["DEFAULT_EMAIL", "MAILER_DEFAULT_EMAIL", ""]:
-                default_email = "noreply@example.com"
-            if default_name in ["DEFAULT_EMAIL_NAME", "MAILER_DEFAULT_EMAIL_NAME", ""]:
-                default_name = "No Reply"
-
-            return default_email, default_name
-        except Exception:
-            return "noreply@example.com", "No Reply"
+        return email, name

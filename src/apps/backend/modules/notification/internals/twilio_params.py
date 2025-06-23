@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, Dict, List
 
 from phonenumbers import NumberParseException, is_valid_number, parse
 
@@ -44,8 +44,8 @@ class SMSParams:
             raise ValidationError("Personalized SMS cannot be sent, please check the params validity.", failures)
 
     @staticmethod
-    def _validate_phone_number(phone_number, field_name: str) -> List[ValidationFailure]:
-        failures = []
+    def _validate_phone_number(phone_number: Any, field_name: str) -> List[ValidationFailure]:
+        failures: List[ValidationFailure] = []
 
         try:
             parsed_number = parse(str(phone_number))
@@ -63,8 +63,8 @@ class SMSParams:
         return failures
 
     @staticmethod
-    def _validate_bulk_recipients(recipient_phones) -> List[ValidationFailure]:
-        failures = []
+    def _validate_bulk_recipients(recipient_phones: List) -> List[ValidationFailure]:
+        failures: List[ValidationFailure] = []
 
         if not recipient_phones or len(recipient_phones) == 0:
             failures.append(
@@ -87,8 +87,8 @@ class SMSParams:
         return failures
 
     @staticmethod
-    def _validate_personalized_recipients(recipients_data) -> List[ValidationFailure]:
-        failures = []
+    def _validate_personalized_recipients(recipients_data: List[Dict[str, Any]]) -> List[ValidationFailure]:
+        failures: List[ValidationFailure] = []
 
         if not recipients_data or len(recipients_data) == 0:
             failures.append(ValidationFailure(field="recipients_data", message="At least one recipient is required."))
@@ -135,7 +135,7 @@ class SMSParams:
 
     @staticmethod
     def _validate_message_body(message_body: str) -> List[ValidationFailure]:
-        failures = []
+        failures: List[ValidationFailure] = []
 
         if not message_body or not message_body.strip():
             failures.append(ValidationFailure(field="message_body", message="Please specify a non-empty message body."))
@@ -151,7 +151,7 @@ class SMSParams:
 
     @staticmethod
     def _validate_message_template(message_template: str) -> List[ValidationFailure]:
-        failures = []
+        failures: List[ValidationFailure] = []
 
         if not message_template or not message_template.strip():
             failures.append(
