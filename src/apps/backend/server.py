@@ -50,7 +50,7 @@ api_blueprint.register_blueprint(authentication_blueprint)
 account_blueprint = AccountRestApiServer.create()
 api_blueprint.register_blueprint(account_blueprint)
 
-# Register notification apis (NEW)
+# Register notification apis
 notification_blueprint = NotificationRestApiServer.create()
 api_blueprint.register_blueprint(notification_blueprint)
 

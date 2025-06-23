@@ -1,4 +1,3 @@
-# src/apps/backend/modules/notification/internals/sendgrid_email_params.py
 import re
 from typing import List
 
@@ -8,20 +7,13 @@ from modules.notification.types import BulkEmailParams, SendEmailParams, Validat
 
 class EmailParams:
     email_regex = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-    max_recipients = 1000  # SendGrid limit
+    max_recipients = 1000
 
     @staticmethod
     def validate(params: SendEmailParams) -> None:
-        """Validate SendEmailParams with reduced cognitive complexity"""
         failures: List[ValidationFailure] = []
-
-        # Validate recipients
         failures.extend(EmailParams._validate_recipients(params.recipients))
-
-        # Validate sender
         failures.extend(EmailParams._validate_sender(params.sender))
-
-        # Validate email content
         failures.extend(EmailParams._validate_email_content(params))
 
         if failures:
@@ -29,19 +21,11 @@ class EmailParams:
 
     @staticmethod
     def validate_bulk_email(params: BulkEmailParams) -> None:
-        """Validate BulkEmailParams with reduced cognitive complexity"""
         failures: List[ValidationFailure] = []
 
-        # Validate recipients
         failures.extend(EmailParams._validate_recipients(params.recipients))
-
-        # Validate sender
         failures.extend(EmailParams._validate_sender(params.sender))
-
-        # Validate template requirements for bulk emails
         failures.extend(EmailParams._validate_bulk_template(params))
-
-        # Validate personalizations
         failures.extend(EmailParams._validate_personalizations(params))
 
         if failures:
@@ -49,7 +33,6 @@ class EmailParams:
 
     @staticmethod
     def _validate_recipients(recipients) -> List[ValidationFailure]:
-        """Validate recipients list and individual email formats"""
         failures = []
 
         if not recipients or len(recipients) == 0:
@@ -64,7 +47,6 @@ class EmailParams:
             )
             return failures
 
-        # Validate each recipient email format
         for i, recipient in enumerate(recipients):
             if not EmailParams.is_email_valid(recipient.email):
                 failures.append(
@@ -77,7 +59,6 @@ class EmailParams:
 
     @staticmethod
     def _validate_sender(sender) -> List[ValidationFailure]:
-        """Validate sender email and name"""
         failures = []
 
         if not EmailParams.is_email_valid(sender.email):
@@ -94,7 +75,6 @@ class EmailParams:
 
     @staticmethod
     def _validate_email_content(params: SendEmailParams) -> List[ValidationFailure]:
-        """Validate email content requirements (template vs direct content)"""
         failures = []
 
         if params.template_id:
@@ -106,7 +86,6 @@ class EmailParams:
 
     @staticmethod
     def _validate_template_id(template_id: str) -> List[ValidationFailure]:
-        """Validate template ID format"""
         failures = []
 
         if not isinstance(template_id, str) or len(template_id.strip()) == 0:
@@ -116,7 +95,6 @@ class EmailParams:
 
     @staticmethod
     def _validate_direct_content(params: SendEmailParams) -> List[ValidationFailure]:
-        """Validate direct content email requirements"""
         failures = []
 
         if not params.subject:
@@ -133,7 +111,6 @@ class EmailParams:
 
     @staticmethod
     def _validate_bulk_template(params: BulkEmailParams) -> List[ValidationFailure]:
-        """Validate template requirements for bulk emails"""
         failures = []
 
         if not params.template_id or len(params.template_id.strip()) == 0:
@@ -143,7 +120,6 @@ class EmailParams:
 
     @staticmethod
     def _validate_personalizations(params: BulkEmailParams) -> List[ValidationFailure]:
-        """Validate personalizations if provided"""
         failures = []
 
         if params.personalizations is None:
@@ -160,7 +136,6 @@ class EmailParams:
 
     @staticmethod
     def is_email_valid(email: str) -> bool:
-        """Validate email format using regex"""
         if not email or not isinstance(email, str):
             return False
         return bool(re.match(EmailParams.email_regex, email.lower()))

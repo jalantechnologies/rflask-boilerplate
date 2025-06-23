@@ -19,7 +19,15 @@ class ValidationError(AppError):
 class ServiceError(AppError):
 
     def __init__(self, err: Exception) -> None:
-        super().__init__(message=err.args[2], code=CommunicationErrorCode.SERVICE_ERROR)
+        if hasattr(err, "args") and len(err.args) > 0:
+            if len(err.args) == 1:
+                message = str(err.args[0])
+            else:
+                message = " | ".join(str(arg) for arg in err.args)
+        else:
+            message = str(err)
+
+        super().__init__(message=message, code=CommunicationErrorCode.SERVICE_ERROR)
         self.code = CommunicationErrorCode.SERVICE_ERROR
         self.stack = getattr(err, "stack", None)
         self.http_status_code = 503

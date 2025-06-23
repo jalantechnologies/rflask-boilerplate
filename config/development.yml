@@ -19,6 +19,8 @@ public:
     code: '1234'
 
 sendgrid:
-  api_key: "SENDGRID_API_KEY"  # This should be actual API key or env var
+  api_key: "SENDGRID_API_KEY"
+
 mailer:
-  default_email: "sarthak.gaikwad@bettrhq.com"  # This looks correct
+  default_email: "sarthak.gaikwad@bettrhq.com"
+  default_email_name: "Better Software"

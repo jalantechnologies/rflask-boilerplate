@@ -13,5 +13,5 @@ sms:
   enabled: true
 
 mailer:
-  default_email: 'DEFAULT_EMAIL'  # This is a placeholder, not actual email
-  default_email_name: 'DEFAULT_EMAIL_NAME'  # This is a placeholder
+  default_email: 'DEFAULT_EMAIL'
+  default_email_name: 'DEFAULT_EMAIL_NAME'

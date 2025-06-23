@@ -1,4 +1,3 @@
-# src/apps/backend/modules/notification/types.py
 from dataclasses import dataclass
 from typing import Any, Dict, List
 
@@ -17,18 +16,16 @@ class EmailRecipient:
     name: str | None = None
 
 
-# Keep backward compatibility with existing code
 @dataclass(frozen=True)
 class SendEmailParams:
-    recipients: List[EmailRecipient]  # Support multiple recipients
+    recipients: List[EmailRecipient]
     sender: EmailSender
-    template_id: str | None = None  # Made optional for non-template emails
+    template_id: str | None = None
     template_data: Dict[str, Any] | None = None
-    subject: str | None = None  # For non-template emails
-    html_content: str | None = None  # For non-template emails
-    text_content: str | None = None  # For non-template emails
+    subject: str | None = None
+    html_content: str | None = None
+    text_content: str | None = None
 
-    # Backward compatibility property
     @property
     def recipient(self) -> EmailRecipient:
         """Backward compatibility - return first recipient"""
@@ -40,7 +37,7 @@ class BulkEmailParams:
     recipients: List[EmailRecipient]
     sender: EmailSender
     template_id: str
-    personalizations: List[Dict[str, Any]] | None = None  # For personalized content per recipient
+    personalizations: List[Dict[str, Any]] | None = None
 
 
 @dataclass(frozen=True)

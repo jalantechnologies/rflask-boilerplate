@@ -1,4 +1,4 @@
-# src/apps/backend/modules/notification/rest_api/email_view.py
+import logging
 from typing import Any, Dict
 
 from flask import jsonify, request
@@ -8,18 +8,13 @@ from flask.views import MethodView
 from modules.notification.email_service import EmailService
 from modules.notification.types import EmailRecipient, EmailSender, SendEmailParams
 
+logger = logging.getLogger(__name__)
+
 
 class EmailView(MethodView):
-    """
-    REST API view for email operations
-
-    POST /api/emails - Send emails
-    """
-
     def post(self) -> ResponseReturnValue:
         """
         Send emails via multiple methods:
-
         1. Simple email (single or multiple recipients):
         {
             "type": "simple",
@@ -27,20 +22,18 @@ class EmailView(MethodView):
             "subject": "Test Email",
             "html_content": "<h1>Hello</h1>",
             "text_content": "Hello",
-            "from_email": "sender@example.com",  // Optional
-            "from_name": "Sender Name"           // Optional
+            "from_email": "sender@example.com",
+            "from_name": "Sender Name"
         }
-
         2. Template email:
         {
             "type": "template",
             "to_emails": ["user1@example.com", "user2@example.com"],
             "template_id": "d-1234567890",
             "template_data": {"name": "John", "product": "Premium"},
-            "from_email": "sender@example.com",  // Optional
-            "from_name": "Sender Name"           // Optional
+            "from_email": "sender@example.com",
+            "from_name": "Sender Name"
         }
-
         3. Personalized bulk email:
         {
             "type": "bulk",
@@ -57,10 +50,9 @@ class EmailView(MethodView):
                     "template_data": {"name": "Jane", "balance": "$200"}
                 }
             ],
-            "from_email": "sender@example.com",  // Optional
-            "from_name": "Sender Name"           // Optional
+            "from_email": "sender@example.com",
+            "from_name": "Sender Name"
         }
-
         4. Advanced email (full control):
         {
             "type": "advanced",
@@ -81,7 +73,7 @@ class EmailView(MethodView):
             request_data = request.get_json()
 
             if not request_data:
-                return jsonify({"error": "Request body is required"}), 400
+                return jsonify({"error": "Request body is required", "success": False}), 400
 
             email_type = request_data.get("type", "simple")
 
@@ -94,7 +86,7 @@ class EmailView(MethodView):
             elif email_type == "advanced":
                 response = self._handle_advanced_email(request_data)
             else:
-                return jsonify({"error": f"Invalid email type: {email_type}"}), 400
+                return jsonify({"error": f"Invalid email type: {email_type}", "success": False}), 400
 
             if response.success:
                 return (
@@ -121,92 +113,126 @@ class EmailView(MethodView):
                     response.status_code or 500,
                 )
 
+        except ValueError as e:
+            logger.error(f"Validation error: {e}")
+            return jsonify({"success": False, "message": "Validation error", "error": str(e)}), 400
+
+        except IndexError:
+            logger.exception("Configuration error: tuple index out of range - check email configuration")
+            return (
+                jsonify(
+                    {
+                        "success": False,
+                        "message": "Configuration error",
+                        "error": "tuple index out of range - check email configuration",
+                    }
+                ),
+                500,
+            )
+
         except Exception as e:
+            logger.exception("Internal server error")
             return jsonify({"success": False, "message": "Internal server error", "error": str(e)}), 500
 
     def _handle_simple_email(self, data: Dict[str, Any]) -> Any:
-        """Handle simple email sending"""
-        required_fields = ["to_emails"]
-        missing_fields = [field for field in required_fields if field not in data]
+        try:
+            required_fields = ["to_emails"]
+            missing_fields = [field for field in required_fields if field not in data]
 
-        if missing_fields:
-            raise ValueError(f"Missing required fields: {missing_fields}")
+            if missing_fields:
+                raise ValueError(f"Missing required fields: {missing_fields}")
 
-        # For non-template emails, require subject and content
-        if not data.get("template_id"):
-            if not data.get("subject"):
-                raise ValueError("Subject is required for non-template emails")
-            if not data.get("html_content") and not data.get("text_content"):
-                raise ValueError("Either html_content or text_content is required for non-template emails")
+            if not data.get("template_id"):
+                if not data.get("subject"):
+                    raise ValueError("Subject is required for non-template emails")
+                if not data.get("html_content") and not data.get("text_content"):
+                    raise ValueError("Either html_content or text_content is required for non-template emails")
 
-        return EmailService.send_simple_email(
-            to_emails=data["to_emails"],
-            subject=data.get("subject"),
-            html_content=data.get("html_content"),
-            text_content=data.get("text_content"),
-            from_email=data.get("from_email"),
-            from_name=data.get("from_name"),
-            template_id=data.get("template_id"),
-            template_data=data.get("template_data"),
-        )
+            logger.info(f"Sending simple email to: {data['to_emails']}")
+
+            return EmailService.send_simple_email(
+                to_emails=data["to_emails"],
+                subject=data.get("subject"),
+                html_content=data.get("html_content"),
+                text_content=data.get("text_content"),
+                from_email=data.get("from_email"),
+                from_name=data.get("from_name"),
+                template_id=data.get("template_id"),
+                template_data=data.get("template_data"),
+            )
+        except Exception as e:
+            logger.exception(f"Error in _handle_simple_email: {e}")
+            raise
 
     def _handle_template_email(self, data: Dict[str, Any]) -> Any:
-        """Handle template-based email sending"""
-        required_fields = ["to_emails", "template_id"]
-        missing_fields = [field for field in required_fields if field not in data]
+        try:
+            required_fields = ["to_emails", "template_id"]
+            missing_fields = [field for field in required_fields if field not in data]
 
-        if missing_fields:
-            raise ValueError(f"Missing required fields: {missing_fields}")
+            if missing_fields:
+                raise ValueError(f"Missing required fields: {missing_fields}")
 
-        return EmailService.send_template_email(
-            to_emails=data["to_emails"],
-            template_id=data["template_id"],
-            template_data=data.get("template_data"),
-            from_email=data.get("from_email"),
-            from_name=data.get("from_name"),
-        )
+            logger.info(f"Sending template email to: {data['to_emails']}")
+
+            return EmailService.send_template_email(
+                to_emails=data["to_emails"],
+                template_id=data["template_id"],
+                template_data=data.get("template_data"),
+                from_email=data.get("from_email"),
+                from_name=data.get("from_name"),
+            )
+        except Exception as e:
+            logger.exception(f"Error in _handle_template_email: {e}")
+            raise
 
     def _handle_bulk_email(self, data: Dict[str, Any]) -> Any:
-        """Handle personalized bulk email sending"""
-        required_fields = ["recipients_data", "template_id"]
-        missing_fields = [field for field in required_fields if field not in data]
+        try:
+            required_fields = ["recipients_data", "template_id"]
+            missing_fields = [field for field in required_fields if field not in data]
 
-        if missing_fields:
-            raise ValueError(f"Missing required fields: {missing_fields}")
+            if missing_fields:
+                raise ValueError(f"Missing required fields: {missing_fields}")
 
-        return EmailService.send_personalized_bulk_email(
-            recipients_data=data["recipients_data"],
-            template_id=data["template_id"],
-            from_email=data.get("from_email"),
-            from_name=data.get("from_name"),
-        )
+            logger.info(f"Sending bulk email to {len(data['recipients_data'])} recipients")
+
+            return EmailService.send_personalized_bulk_email(
+                recipients_data=data["recipients_data"],
+                template_id=data["template_id"],
+                from_email=data.get("from_email"),
+                from_name=data.get("from_name"),
+            )
+        except Exception as e:
+            logger.exception(f"Error in _handle_bulk_email: {e}")
+            raise
 
     def _handle_advanced_email(self, data: Dict[str, Any]) -> Any:
-        """Handle advanced email sending with full parameter control"""
-        required_fields = ["recipients", "sender"]
-        missing_fields = [field for field in required_fields if field not in data]
+        try:
+            required_fields = ["recipients", "sender"]
+            missing_fields = [field for field in required_fields if field not in data]
 
-        if missing_fields:
-            raise ValueError(f"Missing required fields: {missing_fields}")
+            if missing_fields:
+                raise ValueError(f"Missing required fields: {missing_fields}")
 
-        # Create recipients
-        recipients = [
-            EmailRecipient(email=recipient["email"], name=recipient.get("name")) for recipient in data["recipients"]
-        ]
+            recipients = [
+                EmailRecipient(email=recipient["email"], name=recipient.get("name")) for recipient in data["recipients"]
+            ]
 
-        # Create sender
-        sender_data = data["sender"]
-        sender = EmailSender(email=sender_data["email"], name=sender_data["name"])
+            sender_data = data["sender"]
+            sender = EmailSender(email=sender_data["email"], name=sender_data["name"])
 
-        # Create params
-        params = SendEmailParams(
-            recipients=recipients,
-            sender=sender,
-            template_id=data.get("template_id"),
-            template_data=data.get("template_data"),
-            subject=data.get("subject"),
-            html_content=data.get("html_content"),
-            text_content=data.get("text_content"),
-        )
+            logger.info(f"Sending advanced email to {len(recipients)} recipients")
 
-        return EmailService.send_email(params=params)
+            params = SendEmailParams(
+                recipients=recipients,
+                sender=sender,
+                template_id=data.get("template_id"),
+                template_data=data.get("template_data"),
+                subject=data.get("subject"),
+                html_content=data.get("html_content"),
+                text_content=data.get("text_content"),
+            )
+
+            return EmailService.send_email(params=params)
+        except Exception as e:
+            logger.exception(f"Error in _handle_advanced_email: {e}")
+            raise
