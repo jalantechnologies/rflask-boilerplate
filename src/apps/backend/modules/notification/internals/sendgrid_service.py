@@ -152,10 +152,9 @@ class SendGridService:
 
         if isinstance(body, bytes):
             return SendGridService._parse_bytes_body(body)
-        elif isinstance(body, dict):
-            return body.get("message_id")
         elif hasattr(body, "get"):
-            return body.get("message_id")
+            message_id = body.get("message_id")
+            return str(message_id) if message_id is not None else None
 
         return None
 
