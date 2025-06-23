@@ -20,3 +20,9 @@ public:
   authenticationMechanism: 'EMAIL' #or 'PHONE'
   datadog:
     enabled: 'false'
+
+sms:
+  enabled: true
+  max_recipients: 1000
+  max_message_length: 1600
+  concurrent_requests: 10
