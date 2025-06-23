@@ -132,7 +132,8 @@ class SendGridService:
         if isinstance(headers, str):
             return SendGridService._parse_string_headers(headers)
         elif hasattr(headers, "get"):
-            return headers.get("X-Message-Id")
+            message_id = headers.get("X-Message-Id")
+            return str(message_id) if message_id is not None else None
 
         return None
 
@@ -164,7 +165,9 @@ class SendGridService:
             decoded = body.decode("utf-8")
             data = json.loads(decoded)
             message_id = data.get("message_id")
-            return str(message_id) if message_id is not None else None
+            if message_id is not None:
+                return str(message_id)
+            return None
         except (json.JSONDecodeError, UnicodeDecodeError):
             return None
 
