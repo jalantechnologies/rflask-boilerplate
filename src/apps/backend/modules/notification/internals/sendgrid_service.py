@@ -137,6 +137,17 @@ class SendGridService:
     @staticmethod
     def get_default_sender() -> tuple[str, str]:
         """Get default sender email and name from configuration"""
-        default_email = ConfigService[str].get_value(key="mailer.default_email", fallback="noreply@example.com")
-        default_name = ConfigService[str].get_value(key="mailer.default_email_name", fallback="No Reply")
-        return default_email, default_name
+        try:
+            default_email = ConfigService[str].get_value(key="mailer.default_email", default="noreply@example.com")
+            default_name = ConfigService[str].get_value(key="mailer.default_email_name", default="No Reply")
+
+            # Ensure we don't return placeholder values
+            if default_email in ["DEFAULT_EMAIL", "MAILER_DEFAULT_EMAIL"]:
+                default_email = "noreply@example.com"
+            if default_name in ["DEFAULT_EMAIL_NAME", "MAILER_DEFAULT_EMAIL_NAME"]:
+                default_name = "No Reply"
+
+            return default_email, default_name
+        except Exception:
+            # Fallback to safe defaults if configuration fails
+            return "noreply@example.com", "No Reply"

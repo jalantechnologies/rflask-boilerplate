@@ -17,3 +17,8 @@ public:
   default_otp:
     enabled: true
     code: '1234'
+
+sendgrid:
+  api_key: "SENDGRID_API_KEY"  # This should be actual API key or env var
+mailer:
+  default_email: "sarthak.gaikwad@bettrhq.com"  # This looks correct
