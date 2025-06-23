@@ -1,5 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from twilio.base.exceptions import TwilioException
 from twilio.rest import Client
@@ -27,13 +27,13 @@ class TwilioService:
             client = TwilioService.get_client()
             messaging_service_sid = ConfigService[str].get_value(key=_TWILIO_MESSAGING_SERVICE_SID_KEY)
 
-            message = client.messages.create(
+            message_obj = client.messages.create(
                 to=str(params.recipient_phone), messaging_service_sid=messaging_service_sid, body=params.message_body
             )
 
-            Logger.info(message=f"SMS sent successfully to {params.recipient_phone}. Message SID: {message.sid}")
+            Logger.info(message=f"SMS sent successfully to {params.recipient_phone}. Message SID: {message_obj.sid}")
 
-            return SMSResponse(success=True, sent_count=1, failed_count=0, message_ids=[message.sid])
+            return SMSResponse(success=True, sent_count=1, failed_count=0, message_ids=[message_obj.sid])
 
         except TwilioException as err:
             Logger.error(message=f"Twilio error sending SMS: {str(err)}")
@@ -129,13 +129,13 @@ class TwilioService:
                     single_params = SendSMSParams(message_body=personalized_message, recipient_phone=phone)
                     SMSParams.validate(single_params)
 
-                    message = client.messages.create(
+                    message_obj = client.messages.create(
                         to=str(phone), messaging_service_sid=messaging_service_sid, body=personalized_message
                     )
 
-                    message_ids.append(message.sid)
+                    message_ids.append(message_obj.sid)
                     sent_count += 1
-                    Logger.info(message=f"Personalized SMS sent to {phone}. Message SID: {message.sid}")
+                    Logger.info(message=f"Personalized SMS sent to {phone}. Message SID: {message_obj.sid}")
 
                 except Exception as exc:
                     failed_count += 1
@@ -159,16 +159,20 @@ class TwilioService:
             raise ServiceError(err)
 
     @staticmethod
-    def _send_single_message(client: Client, phone: str, message: str, messaging_service_sid: str) -> Optional[str]:
+    def _send_single_message(
+        client: Client, phone: str, message_body: str, messaging_service_sid: str
+    ) -> Optional[str]:
         try:
-            message = client.messages.create(to=phone, messaging_service_sid=messaging_service_sid, body=message)
-            return message.sid
+            message_obj = client.messages.create(
+                to=phone, messaging_service_sid=messaging_service_sid, body=message_body
+            )
+            return message_obj.sid
         except Exception as e:
             Logger.error(message=f"Error sending SMS to {phone}: {str(e)}")
             return None
 
     @staticmethod
-    def _replace_template_placeholders(template: str, data: dict) -> str:
+    def _replace_template_placeholders(template: str, data: Dict[str, Any]) -> str:
         try:
             return template.format(**data)
         except KeyError as e:

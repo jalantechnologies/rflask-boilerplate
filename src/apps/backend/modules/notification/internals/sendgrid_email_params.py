@@ -2,7 +2,7 @@ import re
 from typing import List
 
 from modules.notification.errors import ValidationError
-from modules.notification.types import BulkEmailParams, SendEmailParams, ValidationFailure
+from modules.notification.types import BulkEmailParams, EmailRecipient, EmailSender, SendEmailParams, ValidationFailure
 
 
 class EmailParams:
@@ -32,8 +32,8 @@ class EmailParams:
             raise ValidationError("Bulk email cannot be sent, please check the params validity.", failures)
 
     @staticmethod
-    def _validate_recipients(recipients: List) -> List[ValidationFailure]:
-        failures = []
+    def _validate_recipients(recipients: List[EmailRecipient]) -> List[ValidationFailure]:
+        failures: List[ValidationFailure] = []
 
         if not recipients or len(recipients) == 0:
             failures.append(ValidationFailure(field="recipients", message="At least one recipient is required."))
@@ -58,7 +58,7 @@ class EmailParams:
         return failures
 
     @staticmethod
-    def _validate_sender(sender) -> List[ValidationFailure]:
+    def _validate_sender(sender: EmailSender) -> List[ValidationFailure]:
         failures: List[ValidationFailure] = []
 
         if not EmailParams.is_email_valid(sender.email):

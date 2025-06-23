@@ -50,7 +50,9 @@ class SMSService:
     def send_simple_sms(*, phone_numbers: List[str] | str, message: str) -> SMSResponse:
         try:
             normalized_phones = SMSService._normalize_phone_input(phone_numbers)
+
             recipient_phones = SMSService._parse_phone_numbers(normalized_phones)
+
             return SMSService._send_based_on_recipient_count(recipient_phones, message)
 
         except Exception as e:
@@ -107,8 +109,8 @@ class SMSService:
     @staticmethod
     def _send_based_on_recipient_count(recipient_phones: List[PhoneNumber], message: str) -> SMSResponse:
         if len(recipient_phones) == 1:
-            params = SendSMSParams(message_body=message, recipient_phone=recipient_phones[0])
-            return SMSService.send_sms(params=params)
+            single_params = SendSMSParams(message_body=message, recipient_phone=recipient_phones[0])
+            return SMSService.send_sms(params=single_params)
         else:
-            params = BulkSMSParams(message_body=message, recipient_phones=recipient_phones)
-            return SMSService.send_bulk_sms(params=params)
+            bulk_params = BulkSMSParams(message_body=message, recipient_phones=recipient_phones)
+            return SMSService.send_bulk_sms(params=bulk_params)

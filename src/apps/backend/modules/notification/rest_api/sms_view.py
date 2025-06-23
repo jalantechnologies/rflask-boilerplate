@@ -162,10 +162,16 @@ class SMSView(MethodView):
             recipient_phones = []
             for phone_data in data["recipient_phones"]:
                 if isinstance(phone_data, dict):
-                    phone_number = PhoneNumber(
-                        country_code=phone_data.get("country_code", "+1"), phone_number=phone_data.get("phone_number")
-                    )
-                    recipient_phones.append(phone_number)
+                    country_code = phone_data.get("country_code")
+                    phone_number = phone_data.get("phone_number")
+
+                    if not country_code:
+                        raise ValueError("country_code is required for each recipient phone")
+                    if not phone_number:
+                        raise ValueError("phone_number is required for each recipient phone")
+
+                    phone_obj = PhoneNumber(country_code=country_code, phone_number=phone_number)
+                    recipient_phones.append(phone_obj)
                 else:
                     raise ValueError("Each recipient_phone must be an object with country_code and phone_number")
 
@@ -193,17 +199,7 @@ class SMSView(MethodView):
                 if not phone_data:
                     raise ValueError("Each recipient must have a 'phone' field")
 
-                if isinstance(phone_data, dict):
-                    phone_number = PhoneNumber(
-                        country_code=phone_data.get("country_code", "+1"), phone_number=phone_data.get("phone_number")
-                    )
-                elif isinstance(phone_data, str):
-                    if phone_data.startswith("+"):
-                        phone_number = PhoneNumber(country_code=phone_data[:3], phone_number=phone_data[3:])
-                    else:
-                        phone_number = PhoneNumber(country_code="+1", phone_number=phone_data)
-                else:
-                    phone_number = phone_data
+                phone_number = self._parse_phone_data(phone_data)
 
                 processed_recipients.append(
                     {"phone": phone_number, "template_data": recipient.get("template_data", {})}
@@ -220,3 +216,29 @@ class SMSView(MethodView):
         except Exception as e:
             logger.exception(f"Error in _handle_personalized_sms: {e}")
             raise
+
+    def _parse_phone_data(self, phone_data: Any) -> PhoneNumber:
+        if isinstance(phone_data, dict):
+            country_code = phone_data.get("country_code")
+            phone_number = phone_data.get("phone_number")
+
+            if not country_code:
+                raise ValueError("country_code is required in phone object")
+            if not phone_number:
+                raise ValueError("phone_number is required in phone object")
+
+            return PhoneNumber(country_code=country_code, phone_number=phone_number)
+
+        elif isinstance(phone_data, str):
+            if phone_data.startswith("+"):
+                if len(phone_data) < 4:
+                    raise ValueError("Phone number too short")
+                return PhoneNumber(country_code=phone_data[:3], phone_number=phone_data[3:])
+            else:
+                return PhoneNumber(country_code="+1", phone_number=phone_data)
+
+        elif isinstance(phone_data, PhoneNumber):
+            return phone_data
+
+        else:
+            raise ValueError(f"Invalid phone data format: {type(phone_data)}. Expected dict, str, or PhoneNumber")

@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Any, Optional
 
 import sendgrid
 from sendgrid.helpers.mail import Content, From, Mail, Personalization, Subject, TemplateId, To
@@ -30,7 +30,8 @@ class SendGridService:
                 response = SendGridService._send_bulk_email(client, params)
 
             message_id = SendGridService._extract_message_id(response)
-            return EmailResponse(success=True, message_id=message_id, status_code=response.status_code)
+            status_code = getattr(response, "status_code", None)
+            return EmailResponse(success=True, message_id=message_id, status_code=status_code)
 
         except sendgrid.SendGridException as err:
             return EmailResponse(success=False, status_code=getattr(err, "status_code", 500), errors=[str(err)])
@@ -57,7 +58,8 @@ class SendGridService:
 
             response = client.send(mail)
             message_id = SendGridService._extract_message_id(response)
-            return EmailResponse(success=True, message_id=message_id, status_code=response.status_code)
+            status_code = getattr(response, "status_code", None)
+            return EmailResponse(success=True, message_id=message_id, status_code=status_code)
 
         except sendgrid.SendGridException as err:
             return EmailResponse(success=False, status_code=getattr(err, "status_code", 500), errors=[str(err)])
@@ -65,7 +67,7 @@ class SendGridService:
             raise ServiceError(err)
 
     @staticmethod
-    def _send_single_email(client: sendgrid.SendGridAPIClient, params: SendEmailParams) -> any:
+    def _send_single_email(client: sendgrid.SendGridAPIClient, params: SendEmailParams) -> Any:
         recipient = params.recipients[0]
         to_email = To(recipient.email, recipient.name) if recipient.name else To(recipient.email)
         mail = Mail(from_email=From(params.sender.email, params.sender.name), to_emails=to_email)
@@ -85,7 +87,7 @@ class SendGridService:
         return client.send(mail)
 
     @staticmethod
-    def _send_bulk_email(client: sendgrid.SendGridAPIClient, params: SendEmailParams) -> any:
+    def _send_bulk_email(client: sendgrid.SendGridAPIClient, params: SendEmailParams) -> Any:
         mail = Mail()
         mail.from_email = From(params.sender.email, params.sender.name)
         personalization = Personalization()
@@ -110,7 +112,7 @@ class SendGridService:
         return client.send(mail)
 
     @staticmethod
-    def _extract_message_id(response) -> Optional[str]:
+    def _extract_message_id(response: Any) -> Optional[str]:
         try:
             message_id = SendGridService._extract_from_headers(response)
             if message_id:
@@ -122,7 +124,7 @@ class SendGridService:
             return None
 
     @staticmethod
-    def _extract_from_headers(response) -> Optional[str]:
+    def _extract_from_headers(response: Any) -> Optional[str]:
         headers = getattr(response, "headers", None)
         if not headers:
             return None
@@ -142,14 +144,16 @@ class SendGridService:
         return None
 
     @staticmethod
-    def _extract_from_body(response) -> Optional[str]:
+    def _extract_from_body(response: Any) -> Optional[str]:
         body = getattr(response, "body", None)
         if not body:
             return None
 
         if isinstance(body, bytes):
             return SendGridService._parse_bytes_body(body)
-        elif isinstance(body, dict) or hasattr(body, "get"):
+        elif isinstance(body, dict):
+            return body.get("message_id")
+        elif hasattr(body, "get"):
             return body.get("message_id")
 
         return None
@@ -170,7 +174,7 @@ class SendGridService:
                 api_key = ConfigService[str].get_value(key="sendgrid.api_key")
                 SendGridService.__client = sendgrid.SendGridAPIClient(api_key=api_key)
             except MissingKeyError:
-                raise ServiceError("SendGrid API key not found in configuration")
+                raise ServiceError(Exception("SendGrid API key not found in configuration"))
         return SendGridService.__client
 
     @staticmethod
