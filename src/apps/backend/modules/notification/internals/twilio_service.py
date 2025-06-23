@@ -23,7 +23,6 @@ class TwilioService:
             client = TwilioService.get_client()
             messaging_service_sid = ConfigService[str].get_value(key="twilio.messaging_service_sid")
 
-            # Send SMS
             message = client.messages.create(
                 to=str(params.recipient_phone), messaging_service_sid=messaging_service_sid, body=params.message_body
             )

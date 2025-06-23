@@ -13,7 +13,7 @@ from modules.authentication.rest_api.authentication_rest_api_server import Authe
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
-from modules.notification.rest_api.notification_rest_api_server import NotificationRestApiServer  # New import
+from modules.notification.rest_api.notification_rest_api_server import NotificationRestApiServer
 
 load_dotenv()
 

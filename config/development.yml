@@ -22,5 +22,5 @@ sendgrid:
   api_key: "SENDGRID_API_KEY"
 
 mailer:
-  default_email: "sarthak.gaikwad@bettrhq.com"
-  default_email_name: "Better Software"
+  default_email: "DEFAULT_EMAIL"
+  default_email_name: "DEFAULT_EMAIL_NAME"
