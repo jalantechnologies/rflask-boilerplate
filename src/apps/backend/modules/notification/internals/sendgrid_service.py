@@ -16,7 +16,6 @@ class SendGridService:
 
     @staticmethod
     def send_email(params: SendEmailParams) -> EmailResponse:
-        """Send email to single or multiple recipients"""
         EmailParams.validate(params)
 
         try:
@@ -38,7 +37,6 @@ class SendGridService:
 
     @staticmethod
     def send_bulk_email(params: BulkEmailParams) -> EmailResponse:
-        """Send personalized bulk emails using templates"""
         try:
             client = SendGridService.get_client()
 
@@ -72,7 +70,6 @@ class SendGridService:
 
     @staticmethod
     def _send_single_email(client: sendgrid.SendGridAPIClient, params: SendEmailParams) -> any:
-        """Send email to a single recipient"""
         recipient = params.recipients[0]
 
         if recipient.name:
@@ -98,7 +95,6 @@ class SendGridService:
 
     @staticmethod
     def _send_bulk_email(client: sendgrid.SendGridAPIClient, params: SendEmailParams) -> any:
-        """Send the same email to multiple recipients"""
         mail = Mail()
         mail.from_email = From(params.sender.email, params.sender.name)
 
@@ -126,7 +122,6 @@ class SendGridService:
 
     @staticmethod
     def _extract_message_id(response) -> Optional[str]:
-        """Extract message ID from SendGrid response"""
         try:
             if hasattr(response, "headers") and response.headers:
                 if isinstance(response.headers, str):
@@ -140,7 +135,7 @@ class SendGridService:
                 if isinstance(response.body, bytes):
                     try:
                         body_str = response.body.decode("utf-8")
-                        if body_str.strip():  # Only parse if not empty
+                        if body_str.strip():
                             body_dict = json.loads(body_str)
                             return body_dict.get("message_id")
                     except (json.JSONDecodeError, UnicodeDecodeError):
@@ -167,7 +162,6 @@ class SendGridService:
 
     @staticmethod
     def get_default_sender() -> tuple[str, str]:
-        """Get default sender email and name from configuration"""
         try:
             try:
                 default_email = ConfigService[str].get_value(key="mailer.default_email")

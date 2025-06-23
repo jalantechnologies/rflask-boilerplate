@@ -7,12 +7,10 @@ from modules.notification.types import BulkEmailParams, EmailRecipient, EmailRes
 class EmailService:
     @staticmethod
     def send_email(*, params: SendEmailParams) -> EmailResponse:
-        """Send email to single or multiple recipients"""
         return SendGridService.send_email(params)
 
     @staticmethod
     def send_bulk_email(*, params: BulkEmailParams) -> EmailResponse:
-        """Send personalized bulk emails"""
         return SendGridService.send_bulk_email(params)
 
     @staticmethod
