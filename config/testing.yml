@@ -10,4 +10,4 @@ mailer:
   forgot_password_mail_template_id: 'FORGOT_PASSWORD_MAIL_TEMPLATE_ID'
 
 sms:
-  enabled: false
+  enabled: true

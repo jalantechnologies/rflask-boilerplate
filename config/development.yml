@@ -8,7 +8,7 @@ temporal:
   server_address: 'localhost:7233'
 
 sms:
-  enabled: false
+  enabled: true
 
 is_server_running_behind_proxy: false
 
