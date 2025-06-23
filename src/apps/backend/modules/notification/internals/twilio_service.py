@@ -10,6 +10,10 @@ from modules.notification.errors import ServiceError
 from modules.notification.internals.twilio_params import SMSParams
 from modules.notification.types import BulkSMSParams, PersonalizedSMSParams, SendSMSParams, SMSResponse
 
+_TWILIO_ACCOUNT_SID_KEY = "twilio.account_sid"
+_TWILIO_AUTH_TOKEN_KEY = "twilio.auth_token"
+_TWILIO_MESSAGING_SERVICE_SID_KEY = "twilio.messaging_service_sid"
+
 
 class TwilioService:
     __client: Optional[Client] = None
@@ -21,7 +25,7 @@ class TwilioService:
 
         try:
             client = TwilioService.get_client()
-            messaging_service_sid = ConfigService[str].get_value(key="twilio.messaging_service_sid")
+            messaging_service_sid = ConfigService[str].get_value(key=_TWILIO_MESSAGING_SERVICE_SID_KEY)
 
             message = client.messages.create(
                 to=str(params.recipient_phone), messaging_service_sid=messaging_service_sid, body=params.message_body
@@ -51,7 +55,7 @@ class TwilioService:
 
         try:
             client = TwilioService.get_client()
-            messaging_service_sid = ConfigService[str].get_value(key="twilio.messaging_service_sid")
+            messaging_service_sid = ConfigService[str].get_value(key=_TWILIO_MESSAGING_SERVICE_SID_KEY)
 
             with ThreadPoolExecutor(max_workers=TwilioService.MAX_CONCURRENT_REQUESTS) as executor:
                 future_to_phone = {
@@ -106,7 +110,7 @@ class TwilioService:
 
         try:
             client = TwilioService.get_client()
-            messaging_service_sid = ConfigService[str].get_value(key="twilio.messaging_service_sid")
+            messaging_service_sid = ConfigService[str].get_value(key=_TWILIO_MESSAGING_SERVICE_SID_KEY)
 
             for recipient_data in params.recipients_data:
                 try:
@@ -177,8 +181,8 @@ class TwilioService:
     @staticmethod
     def get_client() -> Client:
         if not TwilioService.__client:
-            account_sid = ConfigService[str].get_value(key="twilio.account_sid")
-            auth_token = ConfigService[str].get_value(key="twilio.auth_token")
+            account_sid = ConfigService[str].get_value(key=_TWILIO_ACCOUNT_SID_KEY)
+            auth_token = ConfigService[str].get_value(key=_TWILIO_AUTH_TOKEN_KEY)
 
             TwilioService.__client = Client(account_sid, auth_token)
 

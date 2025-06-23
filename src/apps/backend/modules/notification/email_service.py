@@ -17,13 +17,13 @@ class EmailService:
     def send_simple_email(
         *,
         to_emails: List[str] | str,
-        subject: str,
-        html_content: str = None,
-        text_content: str = None,
-        from_email: str = None,
-        from_name: str = None,
-        template_id: str = None,
-        template_data: dict = None,
+        subject: str | None,
+        html_content: str | None = None,
+        text_content: str | None = None,
+        from_email: str | None = None,
+        from_name: str | None = None,
+        template_id: str | None = None,
+        template_data: dict | None = None,
     ) -> EmailResponse:
         try:
             if not from_email or not from_name:
@@ -58,14 +58,14 @@ class EmailService:
         *,
         to_emails: List[str] | str,
         template_id: str,
-        template_data: dict = None,
-        from_email: str = None,
-        from_name: str = None,
+        template_data: dict | None = None,
+        from_email: str | None = None,
+        from_name: str | None = None,
     ) -> EmailResponse:
 
         return EmailService.send_simple_email(
             to_emails=to_emails,
-            subject=None,
+            subject=None,  # Now valid since subject parameter accepts None
             template_id=template_id,
             template_data=template_data,
             from_email=from_email,
@@ -74,7 +74,7 @@ class EmailService:
 
     @staticmethod
     def send_personalized_bulk_email(
-        *, recipients_data: List[dict], template_id: str, from_email: str = None, from_name: str = None
+        *, recipients_data: List[dict], template_id: str, from_email: str | None = None, from_name: str | None = None
     ) -> EmailResponse:
         try:
             if not from_email or not from_name:
