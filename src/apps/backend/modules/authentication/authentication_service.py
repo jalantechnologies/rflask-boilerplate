@@ -126,7 +126,7 @@ class AuthenticationService:
 
         password_reset_email_params = SendEmailParams(
             template_id=forgot_password_mail_template_id,
-            recipient=EmailRecipient(email=username),
+            recipients=[EmailRecipient(email=username)],
             sender=EmailSender(email=default_email, name=default_email_name),
             template_data=template_data,
         )

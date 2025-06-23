@@ -163,7 +163,8 @@ class SendGridService:
         try:
             decoded = body.decode("utf-8")
             data = json.loads(decoded)
-            return data.get("message_id")
+            message_id = data.get("message_id")
+            return str(message_id) if message_id is not None else None
         except (json.JSONDecodeError, UnicodeDecodeError):
             return None
 
