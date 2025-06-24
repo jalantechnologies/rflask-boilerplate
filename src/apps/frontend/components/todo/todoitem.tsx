@@ -9,7 +9,7 @@ type Props = {
 const TodoItem: React.FC<Props> = ({ todo }) => {
   const { handleUpdate, handleDelete } = useTodo();
 
-  const isDone = todo.status === 'done';
+  const isDone = todo.status === TodoStatus.Done;
 
   return (
     <div className="flex justify-between p-2 border-b items-center">
