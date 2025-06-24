@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTodo } from '../../contexts/todocontext';
 import { TodoStatus } from '../../types/todo';
+import HorizontalStackLayout from '../layouts/horizontal-stack-layout';
 
 type Props = {
   todo: any;
@@ -8,21 +9,20 @@ type Props = {
 
 const TodoItem: React.FC<Props> = ({ todo }) => {
   const { handleUpdate, handleDelete } = useTodo();
-
   const isDone = todo.status === TodoStatus.Done;
 
   return (
-    <div className="flex justify-between p-2 border-b items-center">
-      <div>
+    <HorizontalStackLayout className="justify-between items-start p-4 border rounded bg-white shadow-sm">
+      <div className="flex-1 pr-4">
         <p
-          className={`font-medium ${isDone ? 'line-through text-gray-500' : ''}`}
+          className={`font-semibold text-lg ${isDone ? 'line-through text-gray-500' : ''}`}
         >
           {todo.title}
         </p>
-        <p className={`text-sm ${isDone ? 'text-gray-400' : 'text-gray-500'}`}>
+        <p className={`text-sm ${isDone ? 'text-gray-400' : 'text-gray-600'}`}>
           {todo.description}
         </p>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-gray-500 mt-1">
           Due:{' '}
           {todo.due_date
             ? new Intl.DateTimeFormat('en-GB', {
@@ -30,11 +30,12 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
                 month: 'short',
                 year: 'numeric',
               }).format(new Date(todo.due_date))
-            : ''}
+            : 'N/A'}
         </p>
         <p className="text-xs italic text-gray-400">Status: {todo.status}</p>
       </div>
-      <div className="flex flex-col gap-1 items-end">
+
+      <div className="flex flex-col gap-2">
         {!isDone && (
           <button
             className="btn btn-sm btn-success"
@@ -45,12 +46,12 @@ const TodoItem: React.FC<Props> = ({ todo }) => {
         )}
         <button
           onClick={() => handleDelete(todo.id)}
-          className="text-sm text-red-500"
+          className="btn btn-sm btn-error"
         >
           Delete
         </button>
       </div>
-    </div>
+    </HorizontalStackLayout>
   );
 };
 
