@@ -1,3 +1,4 @@
+# src/apps/backend/modules/notification/types.py
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
@@ -67,6 +68,17 @@ class SMSErrorCode(Enum):
     TEMPLATE_ERROR = "SMS_ERR_04"
 
 
+class FCMErrorCode(Enum):
+    VALIDATION_ERROR = "FCM_ERR_01"
+    SERVICE_ERROR = "FCM_ERR_02"
+    INVALID_TOKEN = "FCM_ERR_03"
+    TOKEN_NOT_REGISTERED = "FCM_ERR_04"
+    MESSAGE_TOO_BIG = "FCM_ERR_05"
+    QUOTA_EXCEEDED = "FCM_ERR_06"
+    UNAVAILABLE = "FCM_ERR_07"
+    INTERNAL = "FCM_ERR_08"
+
+
 @dataclass(frozen=True)
 class ValidationFailure:
     field: str
@@ -99,3 +111,81 @@ class SMSResponse:
             object.__setattr__(self, "message_ids", [])
         if self.errors is None:
             object.__setattr__(self, "errors", [])
+
+
+# FCM Types
+@dataclass(frozen=True)
+class FCMNotification:
+    title: str
+    body: str
+    image: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class FCMAndroidConfig:
+    priority: Optional[str] = None  # "normal" or "high"
+    ttl: Optional[str] = None  # Time to live
+    collapse_key: Optional[str] = None
+    data: Optional[Dict[str, str]] = None
+    notification: Optional[Dict[str, Any]] = None
+
+
+@dataclass(frozen=True)
+class FCMApnsConfig:
+    headers: Optional[Dict[str, str]] = None
+    payload: Optional[Dict[str, Any]] = None
+
+
+@dataclass(frozen=True)
+class FCMWebpushConfig:
+    headers: Optional[Dict[str, str]] = None
+    data: Optional[Dict[str, str]] = None
+    notification: Optional[Dict[str, Any]] = None
+
+
+@dataclass(frozen=True)
+class SendFCMParams:
+    tokens: List[str]
+    notification: Optional[FCMNotification] = None
+    data: Optional[Dict[str, str]] = None
+    android_config: Optional[FCMAndroidConfig] = None
+    apns_config: Optional[FCMApnsConfig] = None
+    webpush_config: Optional[FCMWebpushConfig] = None
+
+
+@dataclass(frozen=True)
+class SendFCMToTopicParams:
+    topic: str
+    notification: Optional[FCMNotification] = None
+    data: Optional[Dict[str, str]] = None
+    android_config: Optional[FCMAndroidConfig] = None
+    apns_config: Optional[FCMApnsConfig] = None
+    webpush_config: Optional[FCMWebpushConfig] = None
+
+
+@dataclass(frozen=True)
+class BulkFCMParams:
+    tokens: List[str]
+    notification: Optional[FCMNotification] = None
+    data: Optional[Dict[str, str]] = None
+    android_config: Optional[FCMAndroidConfig] = None
+    apns_config: Optional[FCMApnsConfig] = None
+    webpush_config: Optional[FCMWebpushConfig] = None
+
+
+@dataclass
+class FCMResponse:
+    success: bool
+    sent_count: int = 0
+    failed_count: int = 0
+    message_ids: Optional[List[str]] = None
+    errors: Optional[List[str]] = None
+    failure_details: Optional[List[Dict[str, Any]]] = None
+
+    def __post_init__(self) -> None:
+        if self.message_ids is None:
+            object.__setattr__(self, "message_ids", [])
+        if self.errors is None:
+            object.__setattr__(self, "errors", [])
+        if self.failure_details is None:
+            object.__setattr__(self, "failure_details", [])

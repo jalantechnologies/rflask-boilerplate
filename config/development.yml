@@ -1,3 +1,4 @@
+# config/development.yml
 logger:
   transports: ['console']
 
@@ -8,6 +9,9 @@ temporal:
   server_address: 'localhost:7233'
 
 sms:
+  enabled: true
+
+fcm:
   enabled: true
 
 is_server_running_behind_proxy: false

@@ -1,3 +1,4 @@
+# config/custom-environment-variables.yml
 mailer:
   default_email: 'DEFAULT_EMAIL'
   default_email_name: 'DEFAULT_EMAIL_NAME'
@@ -27,6 +28,13 @@ twilio:
   account_sid: 'TWILIO_ACCOUNT_SID'
   auth_token: 'TWILIO_AUTH_TOKEN'
   messaging_service_sid: 'TWILIO_MESSAGING_SERVICE_SID'
+
+fcm:
+  enabled:
+    __name: 'FCM_ENABLED'
+    __format: 'boolean'
+  service_account_key: 'FCM_SERVICE_ACCOUNT_KEY'
+  project_id: 'FCM_PROJECT_ID'
 
 public:
   datadog:
