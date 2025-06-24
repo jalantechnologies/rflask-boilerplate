@@ -65,7 +65,7 @@ class EmailService:
 
         return EmailService.send_simple_email(
             to_emails=to_emails,
-            subject=None,  # Now valid since subject parameter accepts None
+            subject=None,
             template_id=template_id,
             template_data=template_data,
             from_email=from_email,

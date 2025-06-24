@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from modules.account.types import PhoneNumber
@@ -13,21 +14,21 @@ class EmailSender:
 @dataclass(frozen=True)
 class EmailRecipient:
     email: str
-    name: str | None = None
+    name: Optional[str] = None
 
 
 @dataclass(frozen=True)
 class SendEmailParams:
     recipients: List[EmailRecipient]
     sender: EmailSender
-    template_id: str | None = None
-    template_data: Dict[str, Any] | None = None
-    subject: str | None = None
-    html_content: str | None = None
-    text_content: str | None = None
+    template_id: Optional[str] = None
+    template_data: Optional[Dict[str, Any]] = None
+    subject: Optional[str] = None
+    html_content: Optional[str] = None
+    text_content: Optional[str] = None
 
     @property
-    def recipient(self) -> EmailRecipient | None:
+    def recipient(self) -> Optional[EmailRecipient]:
         return self.recipients[0] if self.recipients else None
 
 
@@ -36,15 +37,15 @@ class BulkEmailParams:
     recipients: List[EmailRecipient]
     sender: EmailSender
     template_id: str
-    personalizations: List[Dict[str, Any]] | None = None
+    personalizations: Optional[List[Dict[str, Any]]] = None
 
 
 @dataclass(frozen=True)
 class EmailResponse:
     success: bool
-    message_id: str | None = None
-    status_code: int | None = None
-    errors: List[str] | None = None
+    message_id: Optional[str] = None
+    status_code: Optional[int] = None
+    errors: Optional[List[str]] = None
 
 
 @dataclass(frozen=True)
@@ -53,11 +54,17 @@ class SendSMSParams:
     recipient_phone: PhoneNumber
 
 
-@dataclass(frozen=True)
-class CommunicationErrorCode:
+class CommunicationErrorCode(Enum):
     VALIDATION_ERROR = "COMMUNICATION_ERR_01"
     SERVICE_ERROR = "COMMUNICATION_ERR_02"
-    MULTIPLE_RECIPIENTS_ERROR = "COMMUNICATION_ERR_03"
+    MULTIPLE_RECIPIENTS_ERR = "COMMUNICATION_ERR_03"
+
+
+class SMSErrorCode(Enum):
+    VALIDATION_ERROR = "SMS_ERR_01"
+    SERVICE_ERROR = "SMS_ERR_02"
+    BULK_SMS_ERROR = "SMS_ERR_03"
+    TEMPLATE_ERROR = "SMS_ERR_04"
 
 
 @dataclass(frozen=True)
@@ -92,11 +99,3 @@ class SMSResponse:
             object.__setattr__(self, "message_ids", [])
         if self.errors is None:
             object.__setattr__(self, "errors", [])
-
-
-@dataclass(frozen=True)
-class SMSErrorCode:
-    VALIDATION_ERROR: str = "SMS_ERR_01"
-    SERVICE_ERROR: str = "SMS_ERR_02"
-    BULK_SMS_ERROR: str = "SMS_ERR_03"
-    TEMPLATE_ERROR: str = "SMS_ERR_04"
