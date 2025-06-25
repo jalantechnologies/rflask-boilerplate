@@ -22,10 +22,10 @@ from modules.authentication.types import (
     PasswordResetToken,
     VerifyOTPParams,
 )
-from modules.communication.email_service import EmailService
-from modules.communication.sms_service import SMSService
-from modules.communication.types import EmailRecipient, EmailSender, SendEmailParams, SendSMSParams
 from modules.config.config_service import ConfigService
+from modules.notification.email_service import EmailService
+from modules.notification.sms_service import SMSService
+from modules.notification.types import EmailRecipient, EmailSender, SendEmailParams, SendSMSParams
 
 
 class AuthenticationService:

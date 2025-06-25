@@ -1,8 +1,8 @@
 import re
 from typing import List
 
-from modules.communication.errors import ValidationError
-from modules.communication.types import SendEmailParams, ValidationFailure
+from modules.notification.errors import ValidationError
+from modules.notification.types import SendEmailParams, ValidationFailure
 
 
 class EmailParams:

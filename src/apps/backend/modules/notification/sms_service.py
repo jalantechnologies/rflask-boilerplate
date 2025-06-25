@@ -1,7 +1,7 @@
-from modules.communication.internals.twilio_service import TwilioService
-from modules.communication.types import SendSMSParams
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
+from modules.notification.internals.twilio_service import TwilioService
+from modules.notification.types import SendSMSParams
 
 
 class SMSService:

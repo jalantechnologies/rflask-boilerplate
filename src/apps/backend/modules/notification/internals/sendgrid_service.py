@@ -3,10 +3,10 @@ from typing import Optional
 import sendgrid
 from sendgrid.helpers.mail import From, Mail, TemplateId, To
 
-from modules.communication.errors import ServiceError
-from modules.communication.internals.sendgrid_email_params import EmailParams
-from modules.communication.types import SendEmailParams
 from modules.config.config_service import ConfigService
+from modules.notification.errors import ServiceError
+from modules.notification.internals.sendgrid_email_params import EmailParams
+from modules.notification.types import SendEmailParams
 
 
 class SendGridService:

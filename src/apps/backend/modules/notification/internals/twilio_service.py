@@ -3,10 +3,10 @@ from typing import Optional
 from twilio.base.exceptions import TwilioException
 from twilio.rest import Client
 
-from modules.communication.errors import ServiceError
-from modules.communication.internals.twilio_params import SMSParams
-from modules.communication.types import SendSMSParams
 from modules.config.config_service import ConfigService
+from modules.notification.errors import ServiceError
+from modules.notification.internals.twilio_params import SMSParams
+from modules.notification.types import SendSMSParams
 
 
 class TwilioService:

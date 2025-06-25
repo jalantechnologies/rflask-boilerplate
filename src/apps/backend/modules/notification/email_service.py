@@ -1,5 +1,5 @@
-from modules.communication.internals.sendgrid_service import SendGridService
-from modules.communication.types import SendEmailParams
+from modules.notification.internals.sendgrid_service import SendGridService
+from modules.notification.types import SendEmailParams
 
 
 class EmailService:
