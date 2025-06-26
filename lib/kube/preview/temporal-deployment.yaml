@@ -44,13 +44,6 @@ spec:
           envFrom:
             - secretRef:
                 name: $DOPPLER_MANAGED_SECRET_NAME
-          env:
-            - name: DB
-              value: 'postgres12'
-            - name: TEMPORAL_ADDRESS
-              value: 'temporal-grpc:7233'
-            - name: TEMPORAL_CLI_ADDRESS
-              value: 'temporal-grpc:7233'
           resources:
             requests:
               memory: '200Mi'
@@ -62,11 +55,6 @@ spec:
           envFrom:
             - secretRef:
                 name: $DOPPLER_MANAGED_SECRET_NAME
-          env:
-            - name: TEMPORAL_ADDRESS
-              value: 'temporal-grpc:7233'
-            - name: TEMPORAL_CLI_ADDRESS
-              value: 'temporal-grpc:7233'
           stdin: true
           tty: true
           resources:
@@ -80,9 +68,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
-          env:
-            - name: TEMPORAL_ADDRESS
-              value: 'temporal-grpc:7233'
+          envFrom:
+            - secretRef:
+                name: $DOPPLER_MANAGED_SECRET_NAME
           resources:
             requests:
               memory: '200Mi'
@@ -109,9 +97,6 @@ spec:
           envFrom:
             - secretRef:
                 name: $DOPPLER_MANAGED_SECRET_NAME
-          env:
-            - name: TEMPORAL_SERVER_ADDRESS
-              value: 'temporal-grpc:7233'
           resources:
             requests:
               memory: '150Mi'
