@@ -45,6 +45,13 @@ class AccountInfo:
 
 
 @dataclass(frozen=True)
+class NotificationPreferences:
+    email_enabled: bool = True
+    sms_enabled: bool = True
+    push_enabled: bool = False
+
+
+@dataclass(frozen=True)
 class Account:
     id: str
     first_name: str
@@ -52,6 +59,7 @@ class Account:
     hashed_password: str
     phone_number: Optional[PhoneNumber]
     username: str
+    notification_preferences: Optional[NotificationPreferences] = None
 
 
 @dataclass(frozen=True)
@@ -59,6 +67,14 @@ class ResetPasswordParams:
     account_id: str
     new_password: str
     token: str
+
+
+@dataclass(frozen=True)
+class UpdateNotificationPreferencesParams:
+    account_id: str
+    email_enabled: bool
+    sms_enabled: bool
+    push_enabled: bool
 
 
 @dataclass(frozen=True)
