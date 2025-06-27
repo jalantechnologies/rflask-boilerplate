@@ -48,7 +48,7 @@ class AccountInfo:
 class NotificationPreferences:
     email_enabled: bool = True
     sms_enabled: bool = True
-    push_enabled: bool = False
+    push_enabled: bool = True
 
 
 @dataclass(frozen=True)
