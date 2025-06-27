@@ -13,6 +13,7 @@ from modules.authentication.rest_api.authentication_rest_api_server import Authe
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
+from modules.todo.rest_api.todo_rest_api_server import TodoRestApiServer
 
 load_dotenv()
 
@@ -48,6 +49,11 @@ api_blueprint.register_blueprint(authentication_blueprint)
 # Register accounts apis
 account_blueprint = AccountRestApiServer.create()
 api_blueprint.register_blueprint(account_blueprint)
+
+# Register todo apis
+todo_blueprint = TodoRestApiServer.create()
+api_blueprint.register_blueprint(todo_blueprint)
+
 app.register_blueprint(api_blueprint)
 
 # Register frontend elements
