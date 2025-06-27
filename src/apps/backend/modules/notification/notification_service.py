@@ -1,3 +1,5 @@
+from typing import Optional
+
 from modules.account.account_service import AccountService
 from modules.account.types import AccountSearchByIdParams
 from modules.logger.logger import Logger
@@ -9,7 +11,7 @@ from modules.notification.types import SendEmailParams, SendSMSParams
 class NotificationService:
 
     @staticmethod
-    def send_email(*, params: SendEmailParams, account_id: str = None) -> None:
+    def send_email(*, params: SendEmailParams, account_id: Optional[str] = None) -> None:
         if account_id:
             try:
                 account = AccountService.get_account_by_id(params=AccountSearchByIdParams(id=account_id))
@@ -24,7 +26,7 @@ class NotificationService:
         return EmailService.send_email(params=params)
 
     @staticmethod
-    def send_sms(*, params: SendSMSParams, account_id: str = None) -> None:
+    def send_sms(*, params: SendSMSParams, account_id: Optional[str] = None) -> None:
         if account_id:
             try:
                 account = AccountService.get_account_by_id(params=AccountSearchByIdParams(id=account_id))
