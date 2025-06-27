@@ -12,7 +12,7 @@ from modules.account.types import (
     CreateAccountByUsernameAndPasswordParams,
     PhoneNumber,
 )
-from modules.communication.sms_service import SMSService
+from modules.notification.sms_service import SMSService
 from modules.config.config_service import ConfigService
 from modules.authentication.types import OTPErrorCode
 from server import app

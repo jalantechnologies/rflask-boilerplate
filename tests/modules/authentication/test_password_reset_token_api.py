@@ -4,7 +4,7 @@ from unittest import mock
 from modules.account.account_service import AccountService
 from modules.account.errors import AccountBadRequestError, AccountNotFoundError
 from modules.account.types import CreateAccountByUsernameAndPasswordParams
-from modules.communication.email_service import EmailService
+from modules.notification.email_service import EmailService
 from modules.authentication.errors import PasswordResetTokenNotFoundError
 from modules.authentication.internals.password_reset_token.password_reset_token_util import PasswordResetTokenUtil
 from modules.authentication.internals.password_reset_token.password_reset_token_writer import PasswordResetTokenWriter
