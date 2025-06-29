@@ -20,3 +20,8 @@ public:
   authenticationMechanism: 'EMAIL' #or 'PHONE'
   datadog:
     enabled: 'false'
+
+firebase:
+  enabled: false
+  service_account_key_path: ''
+  service_account_key: ''
