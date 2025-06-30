@@ -42,6 +42,8 @@ if ConfigService.has_value("is_server_running_behind_proxy") and ConfigService[b
 ):
     app.wsgi_app = ProxyFix(app.wsgi_app)  # type: ignore
 
+# Register all sub-blueprints to api_blueprint FIRST, before registering api_blueprint to app
+
 # Register authentication apis
 authentication_blueprint = AuthenticationRestApiServer.create()
 api_blueprint.register_blueprint(authentication_blueprint)
@@ -49,11 +51,12 @@ api_blueprint.register_blueprint(authentication_blueprint)
 # Register accounts apis
 account_blueprint = AccountRestApiServer.create()
 api_blueprint.register_blueprint(account_blueprint)
-app.register_blueprint(api_blueprint)
 
 # Register notification apis
 notification_blueprint = NotificationRestApiServer.create()
 api_blueprint.register_blueprint(notification_blueprint)
+
+app.register_blueprint(api_blueprint)
 
 # Register frontend elements
 app.register_blueprint(img_assets_blueprint)
