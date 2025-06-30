@@ -13,6 +13,7 @@ from modules.authentication.rest_api.authentication_rest_api_server import Authe
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
+from modules.notification.rest_api.notification_rest_api_server import NotificationRestApiServer
 
 load_dotenv()
 
@@ -49,6 +50,10 @@ api_blueprint.register_blueprint(authentication_blueprint)
 account_blueprint = AccountRestApiServer.create()
 api_blueprint.register_blueprint(account_blueprint)
 app.register_blueprint(api_blueprint)
+
+# Register notification apis
+notification_blueprint = NotificationRestApiServer.create()
+api_blueprint.register_blueprint(notification_blueprint)
 
 # Register frontend elements
 app.register_blueprint(img_assets_blueprint)

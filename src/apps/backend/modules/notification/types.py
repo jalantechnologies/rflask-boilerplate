@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from modules.account.types import PhoneNumber
 
@@ -30,9 +30,20 @@ class SendSMSParams:
 
 
 @dataclass(frozen=True)
+class PushNotificationParams:
+    title: str
+    message: str
+    device_type: Optional[str] = None  # 'android', 'ios', or None for all
+    topic: str = "all_users"  # Default topic for all users
+    data: Optional[Dict[str, Any]] = None  # Additional data payload
+    image_url: Optional[str] = None  # URL for notification image (optional)
+
+
+@dataclass(frozen=True)
 class CommunicationErrorCode:
     VALIDATION_ERROR = "COMMUNICATION_ERR_01"
     SERVICE_ERROR = "COMMUNICATION_ERR_02"
+    PUSH_NOTIFICATION_ERROR = "COMMUNICATION_ERR_03"
 
 
 @dataclass(frozen=True)
