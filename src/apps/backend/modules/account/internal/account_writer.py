@@ -35,9 +35,9 @@ class AccountWriter:
             hashed_password=params_dict["hashed_password"],
             id=None,
             last_name=params.last_name,
+            notification_preferences=default_notification_preferences,
             phone_number=None,
             username=params.username,
-            notification_preferences=default_notification_preferences,
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
         account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})
@@ -62,9 +62,9 @@ class AccountWriter:
             hashed_password="",
             id=None,
             last_name="",
+            notification_preferences=default_notification_preferences,
             phone_number=phone_number,
             username="",
-            notification_preferences=default_notification_preferences,
         ).to_bson()
         query = AccountRepository.collection().insert_one(account_bson)
         account_bson = AccountRepository.collection().find_one({"_id": query.inserted_id})
