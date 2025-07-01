@@ -13,8 +13,8 @@ class AccountNotificationPreferencesModel(BaseModel):
     id: Optional[ObjectId | str]
 
     email_enabled: bool = True
-    sms_enabled: bool = True
     push_enabled: bool = True
+    sms_enabled: bool = True
 
     created_at: Optional[datetime] = datetime.now()
     updated_at: Optional[datetime] = datetime.now()
