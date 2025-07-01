@@ -4,7 +4,7 @@ from typing import Optional
 
 from bson import ObjectId
 
-from modules.account.types import NotificationPreferences, PhoneNumber
+from modules.account.types import PhoneNumber
 from modules.application.base_model import BaseModel
 
 
@@ -17,7 +17,6 @@ class AccountModel(BaseModel):
     last_name: str
     phone_number: Optional[PhoneNumber]
     username: str
-    notification_preferences: Optional[NotificationPreferences] = None
 
     active: bool = True
     created_at: Optional[datetime] = datetime.now()
@@ -28,11 +27,6 @@ class AccountModel(BaseModel):
         phone_number_data = bson_data.get("phone_number")
         phone_number = PhoneNumber(**phone_number_data) if phone_number_data else None
 
-        notification_prefs_data = bson_data.get("notification_preferences")
-        notification_preferences = (
-            NotificationPreferences(**notification_prefs_data) if notification_prefs_data else NotificationPreferences()
-        )
-
         return cls(
             active=bson_data.get("active", True),
             first_name=bson_data.get("first_name", ""),
@@ -41,7 +35,6 @@ class AccountModel(BaseModel):
             last_name=bson_data.get("last_name", ""),
             phone_number=phone_number,
             username=bson_data.get("username", ""),
-            notification_preferences=notification_preferences,
             created_at=bson_data.get("created_at"),
             updated_at=bson_data.get("updated_at"),
         )

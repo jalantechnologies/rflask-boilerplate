@@ -25,5 +25,4 @@ class AccountUtil:
             hashed_password=validated_account_data.hashed_password,
             phone_number=validated_account_data.phone_number,
             username=validated_account_data.username,
-            notification_preferences=validated_account_data.notification_preferences,
         )

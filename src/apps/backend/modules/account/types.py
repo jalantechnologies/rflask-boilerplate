@@ -59,7 +59,6 @@ class Account:
     hashed_password: str
     phone_number: Optional[PhoneNumber]
     username: str
-    notification_preferences: Optional[NotificationPreferences] = None
 
 
 @dataclass(frozen=True)

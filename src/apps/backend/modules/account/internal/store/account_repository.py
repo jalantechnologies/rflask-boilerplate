@@ -20,15 +20,6 @@ ACCOUNT_VALIDATION_SCHEMA = {
                 "description": "must be an object with country_code and phone_number",
             },
             "username": {"bsonType": "string", "description": "must be a string"},
-            "notification_preferences": {
-                "bsonType": ["object", "null"],
-                "properties": {
-                    "email_enabled": {"bsonType": "bool"},
-                    "sms_enabled": {"bsonType": "bool"},
-                    "push_enabled": {"bsonType": "bool"},
-                },
-                "description": "must be an object with notification preference flags",
-            },
             "created_at": {"bsonType": "date"},
             "updated_at": {"bsonType": "date"},
         },

@@ -5,16 +5,14 @@ from flask.typing import ResponseReturnValue
 from flask.views import MethodView
 
 from modules.account.account_service import AccountService
-from modules.account.types import AccountSearchByIdParams, NotificationPreferences, UpdateNotificationPreferencesParams
+from modules.account.types import UpdateNotificationPreferencesParams
 from modules.authentication.rest_api.access_auth_middleware import access_auth_middleware
 
 
 class NotificationPreferencesView(MethodView):
     @access_auth_middleware
     def get(self, account_id: str) -> ResponseReturnValue:
-        account = AccountService.get_account_by_id(params=AccountSearchByIdParams(id=account_id))
-
-        preferences = account.notification_preferences or NotificationPreferences()
+        preferences = AccountService.get_notification_preferences(account_id=account_id)
         return jsonify(asdict(preferences)), 200
 
     @access_auth_middleware
@@ -28,7 +26,5 @@ class NotificationPreferencesView(MethodView):
             push_enabled=request_data.get("push_enabled", True),
         )
 
-        updated_account = AccountService.update_notification_preferences(params=update_params)
-
-        preferences = updated_account.notification_preferences or NotificationPreferences()
+        preferences = AccountService.update_notification_preferences(params=update_params)
         return jsonify(asdict(preferences)), 200
