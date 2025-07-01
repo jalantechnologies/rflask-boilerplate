@@ -7,6 +7,7 @@ from modules.notification.types import SendEmailParams, SendSMSParams
 
 
 class NotificationService:
+
     @staticmethod
     def send_email(*, params: SendEmailParams) -> None:
         return EmailService.send_email(params=params)

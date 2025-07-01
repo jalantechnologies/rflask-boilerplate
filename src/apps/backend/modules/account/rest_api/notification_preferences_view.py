@@ -22,8 +22,8 @@ class NotificationPreferencesView(MethodView):
         update_params = UpdateNotificationPreferencesParams(
             account_id=account_id,
             email_enabled=request_data.get("email_enabled", True),
-            sms_enabled=request_data.get("sms_enabled", True),
             push_enabled=request_data.get("push_enabled", True),
+            sms_enabled=request_data.get("sms_enabled", True),
         )
 
         preferences = AccountService.update_notification_preferences(params=update_params)

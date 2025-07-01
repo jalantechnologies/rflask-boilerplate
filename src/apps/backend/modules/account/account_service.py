@@ -43,7 +43,6 @@ class AccountService:
         if account is None:
             account = AccountWriter.create_account_by_phone_number(params=params)
 
-            # Create default notification preferences for the new account
             default_prefs = AccountNotificationPreferencesModel(account_id=account.id, id=None).to_bson()
             AccountNotificationPreferencesRepository.collection().insert_one(default_prefs)
 
@@ -85,7 +84,6 @@ class AccountService:
         preferences = AccountNotificationPreferencesRepository.collection().find_one({"account_id": account_id})
 
         if not preferences:
-            # Create default preferences if none exist
             default_prefs = AccountNotificationPreferencesModel(account_id=account_id, id=None).to_bson()
 
             result = AccountNotificationPreferencesRepository.collection().insert_one(default_prefs)
@@ -103,8 +101,8 @@ class AccountService:
 
         notification_preferences = {
             "email_enabled": params.email_enabled,
-            "sms_enabled": params.sms_enabled,
             "push_enabled": params.push_enabled,
+            "sms_enabled": params.sms_enabled,
             "updated_at": datetime.now(),
         }
 
