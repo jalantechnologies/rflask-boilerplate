@@ -25,7 +25,6 @@ class AccountWriter:
         params_dict["hashed_password"] = AccountUtil.hash_password(password=params.password)
         del params_dict["password"]
         AccountReader.check_username_not_exist(params=params)
-
         account_bson = AccountModel(
             first_name=params.first_name,
             hashed_password=params_dict["hashed_password"],
@@ -49,7 +48,6 @@ class AccountWriter:
             raise OTPRequestFailedError()
 
         AccountReader.check_phone_number_not_exist(phone_number=params.phone_number)
-
         account_bson = AccountModel(
             first_name="", hashed_password="", id=None, last_name="", phone_number=phone_number, username=""
         ).to_bson()
