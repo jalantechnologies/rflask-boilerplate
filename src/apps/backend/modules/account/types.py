@@ -73,8 +73,8 @@ class ResetPasswordParams:
 class UpdateNotificationPreferencesParams:
     account_id: str
     email_enabled: bool
-    sms_enabled: bool
     push_enabled: bool
+    sms_enabled: bool
 
 
 @dataclass(frozen=True)
