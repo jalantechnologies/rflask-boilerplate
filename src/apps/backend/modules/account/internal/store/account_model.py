@@ -26,7 +26,6 @@ class AccountModel(BaseModel):
     def from_bson(cls, bson_data: dict) -> "AccountModel":
         phone_number_data = bson_data.get("phone_number")
         phone_number = PhoneNumber(**phone_number_data) if phone_number_data else None
-
         return cls(
             active=bson_data.get("active", True),
             first_name=bson_data.get("first_name", ""),
