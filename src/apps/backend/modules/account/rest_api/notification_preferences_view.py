@@ -11,11 +11,6 @@ from modules.authentication.rest_api.access_auth_middleware import access_auth_m
 
 class NotificationPreferencesView(MethodView):
     @access_auth_middleware
-    def get(self, account_id: str) -> ResponseReturnValue:
-        preferences = AccountService.get_notification_preferences(account_id=account_id)
-        return jsonify(asdict(preferences)), 200
-
-    @access_auth_middleware
     def put(self, account_id: str) -> ResponseReturnValue:
         request_data = request.get_json()
 

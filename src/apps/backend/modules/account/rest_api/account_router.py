@@ -13,8 +13,8 @@ class AccountRouter:
 
         blueprint.add_url_rule(
             "/accounts/<account_id>/notification-preferences",
-            view_func=NotificationPreferencesView.as_view("notification_preferences_view"),
-            methods=["GET", "PUT"],
+            view_func=NotificationPreferencesView.as_view("notification_preferences_update"),
+            methods=["PUT"],
         )
 
         return blueprint
