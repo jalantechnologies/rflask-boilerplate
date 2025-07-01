@@ -40,21 +40,7 @@ class AccountView(MethodView):
 
     def patch(self, id: str) -> ResponseReturnValue:
         request_data = request.get_json()
-
-        if "token" in request_data and "new_password" in request_data:
-            reset_account_params = ResetPasswordParams(
-                account_id=id, new_password=request_data["new_password"], token=request_data["token"]
-            )
-            account = AccountService.reset_account_password(params=reset_account_params)
-            account_dict = asdict(account)
-            return jsonify(account_dict), 200
-
-        return (
-            jsonify(
-                {
-                    "message": "Invalid PATCH request. For password reset, provide 'token' and 'new_password'. For notification preferences, use /accounts/{id}/notification-preferences endpoint.",
-                    "code": "ACCOUNT_ERR_04",
-                }
-            ),
-            400,
-        )
+        reset_account_params = ResetPasswordParams(account_id=id, **request_data)
+        account = AccountService.reset_account_password(params=reset_account_params)
+        account_dict = asdict(account)
+        return jsonify(account_dict), 200
