@@ -39,19 +39,3 @@ class NotificationService:
                 Logger.error(message=f"Error checking notification preferences: {str(e)}")
 
         return SMSService.send_sms(params=params)
-
-    @staticmethod
-    def send_push_notification(*, message: str, account_id: str) -> None:
-        """
-        Placeholder for push notification functionality.
-        Will be implemented in the future.
-        """
-        try:
-            account = AccountService.get_account_by_id(params=AccountSearchByIdParams(id=account_id))
-            if not account.notification_preferences or not account.notification_preferences.push_enabled:
-                Logger.info(message=f"Push notification skipped: disabled by user preferences for account {account_id}")
-                return
-
-            Logger.info(message=f"Push notification would be sent to account {account_id}: {message}")
-        except Exception as e:
-            Logger.error(message=f"Error sending push notification: {str(e)}")
