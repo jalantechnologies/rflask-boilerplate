@@ -13,6 +13,7 @@ jobs:
       group: ci-preview-${{ github.event.pull_request.head.ref }}
       cancel-in-progress: true
     with:
+      hosting_provider: DIGITAL_OCEAN
       analyze_base: main
       app_name: frm-boilerplate
       app_env: preview
