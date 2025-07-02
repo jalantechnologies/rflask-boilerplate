@@ -12,7 +12,7 @@ DATE_REQUIRED_DESCRIPTION = "must be a valid date"
 ACCOUNT_NOTIFICATION_PREFERENCES_VALIDATION_SCHEMA = {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["account_id", "email_enabled", "sms_enabled", "push_enabled", "created_at", "updated_at"],
+        "required": ["account_id", "email_enabled", "push_enabled", "sms_enabled", "created_at", "updated_at"],
         "properties": {
             "account_id": {"bsonType": "string", "description": STRING_REQUIRED_DESCRIPTION},
             "email_enabled": {"bsonType": "bool", "description": BOOLEAN_REQUIRED_DESCRIPTION},
