@@ -9,6 +9,7 @@ jobs:
       group: ci-preview-${{ github.event.ref }}
       cancel-in-progress: true
     with:
+      hosting_provider: DIGITAL_OCEAN
       app_name: frm-boilerplate
       app_env: preview
       app_hostname: '{1}.preview.platform.bettrhq.com'
