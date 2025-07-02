@@ -1,13 +1,21 @@
+from datetime import datetime
+
 from modules.account.internal.account_reader import AccountReader
 from modules.account.internal.account_writer import AccountWriter
+from modules.account.internal.store.account_notification_preferences_model import AccountNotificationPreferencesModel
+from modules.account.internal.store.account_notification_preferences_repository import (
+    AccountNotificationPreferencesRepository,
+)
 from modules.account.types import (
     Account,
     AccountSearchByIdParams,
     AccountSearchParams,
     CreateAccountByPhoneNumberParams,
     CreateAccountByUsernameAndPasswordParams,
+    NotificationPreferences,
     PhoneNumber,
     ResetPasswordParams,
+    UpdateNotificationPreferencesParams,
 )
 from modules.authentication.authentication_service import AuthenticationService
 from modules.authentication.types import CreateOTPParams
@@ -61,3 +69,54 @@ class AccountService:
     @staticmethod
     def get_account_by_username_and_password(*, params: AccountSearchParams) -> Account:
         return AccountReader.get_account_by_username_and_password(params=params)
+
+    @staticmethod
+    def get_notification_preferences(account_id: str) -> NotificationPreferences:
+
+        notification_preferences = AccountNotificationPreferencesRepository.collection().find_one(
+            {"account_id": account_id}
+        )
+
+        if notification_preferences is None:
+            default_preferences = AccountNotificationPreferencesModel(account_id=account_id, id=None).to_bson()
+            AccountNotificationPreferencesRepository.collection().insert_one(default_preferences)
+            return NotificationPreferences()
+
+        preferences_model = AccountNotificationPreferencesModel.from_bson(notification_preferences)
+        return NotificationPreferences(
+            email_enabled=preferences_model.email_enabled,
+            push_enabled=preferences_model.push_enabled,
+            sms_enabled=preferences_model.sms_enabled,
+        )
+
+    @staticmethod
+    def update_notification_preferences(params: UpdateNotificationPreferencesParams) -> NotificationPreferences:
+
+        existing_preferences = AccountNotificationPreferencesRepository.collection().find_one(
+            {"account_id": params.account_id}
+        )
+
+        update_data = {
+            "email_enabled": params.email_enabled,
+            "push_enabled": params.push_enabled,
+            "sms_enabled": params.sms_enabled,
+            "updated_at": datetime.now(),
+        }
+
+        if existing_preferences is None:
+            preferences_model = AccountNotificationPreferencesModel(
+                account_id=params.account_id,
+                id=None,
+                email_enabled=params.email_enabled,
+                push_enabled=params.push_enabled,
+                sms_enabled=params.sms_enabled,
+            ).to_bson()
+            AccountNotificationPreferencesRepository.collection().insert_one(preferences_model)
+        else:
+            AccountNotificationPreferencesRepository.collection().update_one(
+                {"account_id": params.account_id}, {"$set": update_data}
+            )
+
+        return NotificationPreferences(
+            email_enabled=params.email_enabled, push_enabled=params.push_enabled, sms_enabled=params.sms_enabled
+        )
