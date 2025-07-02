@@ -45,6 +45,13 @@ class AccountInfo:
 
 
 @dataclass(frozen=True)
+class NotificationPreferences:
+    email_enabled: bool = True
+    push_enabled: bool = True
+    sms_enabled: bool = True
+
+
+@dataclass(frozen=True)
 class Account:
     id: str
     first_name: str
@@ -59,6 +66,14 @@ class ResetPasswordParams:
     account_id: str
     new_password: str
     token: str
+
+
+@dataclass(frozen=True)
+class UpdateNotificationPreferencesParams:
+    account_id: str
+    email_enabled: bool
+    push_enabled: bool
+    sms_enabled: bool
 
 
 @dataclass(frozen=True)
