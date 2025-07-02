@@ -100,5 +100,3 @@ secrets:
 - If you are using DigitalOcean, ensure your Kubernetes cluster and API token are set up correctly.
 
 ---
-
-**For more details, see the comments in each workflow file or contact the
