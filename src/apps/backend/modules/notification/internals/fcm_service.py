@@ -1,7 +1,8 @@
 import json
 from typing import Dict, List, Union
 
-import requests
+import firebase_admin
+from firebase_admin import credentials, messaging
 
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
@@ -12,11 +13,39 @@ from modules.notification.types import FCMNotificationData, SendFCMParams
 
 
 class FCMService:
-    FIREBASE_API_URL = "https://fcm.googleapis.com/v1/projects/{}/messages:send"
-    BATCH_SIZE = 500
+    _app = None
+    BATCH_SIZE = 500  # FCM allows up to 500 tokens per multicast request
+
+    @staticmethod
+    def _initialize_app():
+        """Initialize Firebase Admin SDK if not already initialized"""
+        if FCMService._app is None:
+            try:
+                # Get the service account key JSON string from environment variable
+                service_account_json = ConfigService[str].get_value(key="firebase.service_account_key")
+
+                # Parse the JSON string to a dictionary
+                cred_dict = json.loads(service_account_json)
+
+                # Create credentials from the dictionary
+                cred = credentials.Certificate(cred_dict)
+
+                # Initialize the app with the credentials
+                FCMService._app = firebase_admin.initialize_app(cred)
+
+                Logger.info(message="Firebase Admin SDK initialized successfully")
+            except Exception as e:
+                Logger.error(message=f"Failed to initialize Firebase Admin SDK: {str(e)}")
+                raise FCMServiceError(f"Failed to initialize Firebase Admin SDK: {str(e)}")
 
     @staticmethod
     def send_notification(params: SendFCMParams) -> Dict[str, int]:
+        """
+        Send FCM notifications based on the provided parameters.
+        Returns counts of successful and failed notifications.
+        """
+        FCMService._initialize_app()
+
         if not params.tokens and not params.user_ids and not params.topic:
             raise ValueError("Either tokens, user_ids, or topic must be provided")
 
@@ -42,6 +71,7 @@ class FCMService:
 
     @staticmethod
     def _send_to_tokens(notification: FCMNotificationData, tokens: List[str]) -> Dict[str, int]:
+        """Send notifications to multiple tokens in batches"""
         result = {"successful": 0, "failed": 0, "failed_tokens": []}
 
         # Process tokens in batches of BATCH_SIZE
@@ -62,74 +92,58 @@ class FCMService:
 
     @staticmethod
     def _send_multicast(notification: FCMNotificationData, tokens: List[str]) -> Dict[str, Union[int, List[str]]]:
-        project_id = ConfigService[str].get_value(key="fcm.project_id")
-        api_key = ConfigService[str].get_value(key="fcm.api_key")
-
-        url = FCMService.FIREBASE_API_URL.format(project_id)
-
-        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"}
-
-        payload = {
-            "message": {
-                "notification": {"title": notification.title, "body": notification.body},
-                "data": notification.data,
-                "tokens": tokens,
-            }
-        }
-
-        if notification.image_url:
-            payload["message"]["notification"]["image"] = notification.image_url
+        """Send a notification to multiple tokens in a single request"""
+        # Create the message
+        fcm_message = messaging.MulticastMessage(
+            notification=messaging.Notification(
+                title=notification.title, body=notification.body, image=notification.image_url
+            ),
+            data=notification.data,
+            tokens=tokens,
+        )
 
         try:
-            response = requests.post(url, headers=headers, data=json.dumps(payload))
-            response.raise_for_status()
+            # Send the message
+            batch_response = messaging.send_multicast(fcm_message)
 
-            response_data = response.json()
-            success_count = response_data.get("success_count", 0)
-            failure_count = response_data.get("failure_count", 0)
+            # Process the responses
+            success_count = batch_response.success_count
+            failure_count = batch_response.failure_count
 
             result = {"successful": success_count, "failed": failure_count}
 
-            # Extract failed tokens from response
-            if failure_count > 0 and "responses" in response_data:
+            # Extract failed tokens
+            if failure_count > 0:
                 failed_tokens = []
-                for idx, resp in enumerate(response_data["responses"]):
-                    if "error" in resp:
+                for idx, resp in enumerate(batch_response.responses):
+                    if not resp.success:
                         failed_tokens.append(tokens[idx])
                 result["failed_tokens"] = failed_tokens
 
             return result
 
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             Logger.error(message=f"FCM multicast request failed: {str(e)}")
-            return {"successful": 0, "failed": len(tokens), "failed_tokens": []}
+            return {"successful": 0, "failed": len(tokens), "failed_tokens": tokens}
 
     @staticmethod
     def _send_to_topic(notification: FCMNotificationData, topic: str) -> bool:
-        project_id = ConfigService[str].get_value(key="fcm.project_id")
-        api_key = ConfigService[str].get_value(key="fcm.api_key")
-
-        url = FCMService.FIREBASE_API_URL.format(project_id)
-
-        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"}
-
-        payload = {
-            "message": {
-                "notification": {"title": notification.title, "body": notification.body},
-                "data": notification.data,
-                "topic": topic,
-            }
-        }
-
-        if notification.image_url:
-            payload["message"]["notification"]["image"] = notification.image_url
+        """Send a notification to a topic"""
+        # Create the message
+        message = messaging.Message(
+            notification=messaging.Notification(
+                title=notification.title, body=notification.body, image=notification.image_url
+            ),
+            data=notification.data,
+            topic=topic,
+        )
 
         try:
-            response = requests.post(url, headers=headers, data=json.dumps(payload))
-            response.raise_for_status()
+            # Send the message
+            messaging.send(message)
             return True
 
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             Logger.error(message=f"FCM topic request failed: {str(e)}")
             raise FCMServiceError(f"Failed to send notification to topic {topic}: {str(e)}")
 
@@ -145,19 +159,15 @@ class FCMService:
 
     @staticmethod
     def validate_token(token: str) -> bool:
-        project_id = ConfigService[str].get_value(key="fcm.project_id")
-        api_key = ConfigService[str].get_value(key="fcm.api_key")
+        """Validate a FCM token by sending a silent notification"""
+        FCMService._initialize_app()
 
-        url = FCMService.FIREBASE_API_URL.format(project_id)
-
-        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"}
-
-        payload = {"message": {"data": {"type": "token_validation"}, "token": token}}
+        # Create a message with minimal payload
+        message = messaging.Message(data={"type": "token_validation"}, token=token)
 
         try:
-            response = requests.post(url, headers=headers, data=json.dumps(payload))
-            response.raise_for_status()
+            messaging.send(message)
             return True
 
-        except requests.exceptions.RequestException:
+        except Exception:
             raise InvalidFCMTokenError(f"Invalid FCM token: {token}")
