@@ -49,7 +49,7 @@ class FCMService:
             raise FCMServiceError("Firebase service account key is not configured")
 
         try:
-            cred_dict = json.loads(service_account_json)
+            cred_dict: Dict[str, Any] = json.loads(service_account_json)
         except json.JSONDecodeError as e:
             raise FCMServiceError(f"Invalid Firebase service account JSON: {str(e)}")
 
