@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Union, cast
 
 import firebase_admin
 from firebase_admin import credentials, messaging
@@ -17,7 +17,7 @@ class FCMService:
     BATCH_SIZE = 500  # FCM allows up to 500 tokens per multicast request
 
     @staticmethod
-    def _initialize_app():
+    def _initialize_app() -> None:
         """Initialize Firebase Admin SDK if not already initialized"""
         if FCMService._app is None:
             try:
@@ -50,7 +50,7 @@ class FCMService:
             raise ValueError("Either tokens, user_ids, or topic must be provided")
 
         # Determine tokens to use
-        tokens = []
+        tokens: List[str] = []
         if params.tokens:
             tokens = params.tokens
         elif params.user_ids:
@@ -72,23 +72,31 @@ class FCMService:
     @staticmethod
     def _send_to_tokens(notification: FCMNotificationData, tokens: List[str]) -> Dict[str, int]:
         """Send notifications to multiple tokens in batches"""
-        result = {"successful": 0, "failed": 0, "failed_tokens": []}
+        result: Dict[str, Any] = {"successful": 0, "failed": 0, "failed_tokens": []}
 
         # Process tokens in batches of BATCH_SIZE
         for i in range(0, len(tokens), FCMService.BATCH_SIZE):
             batch = tokens[i : i + FCMService.BATCH_SIZE]
             batch_result = FCMService._send_multicast(notification, batch)
 
-            result["successful"] += batch_result.get("successful", 0)
-            result["failed"] += batch_result.get("failed", 0)
+            # Safely add values with proper type checking
+            result["successful"] = int(result["successful"]) + int(batch_result.get("successful", 0))
+            result["failed"] = int(result["failed"]) + int(batch_result.get("failed", 0))
 
-            if "failed_tokens" in batch_result:
-                result["failed_tokens"].extend(batch_result["failed_tokens"])
+            # Safely extend the failed_tokens list
+            failed_tokens = batch_result.get("failed_tokens", [])
+            if isinstance(failed_tokens, list):
+                result_failed_tokens = result.get("failed_tokens", [])
+                if isinstance(result_failed_tokens, list):
+                    result["failed_tokens"] = result_failed_tokens + failed_tokens
+                else:
+                    result["failed_tokens"] = failed_tokens
 
         # Clean up invalid tokens
-        FCMService._handle_failed_tokens(result.get("failed_tokens", []))
+        FCMService._handle_failed_tokens(cast(List[str], result.get("failed_tokens", [])))
 
-        return result
+        # Return a dict with only int values for the counts
+        return {"successful": int(result["successful"]), "failed": int(result["failed"])}
 
     @staticmethod
     def _send_multicast(notification: FCMNotificationData, tokens: List[str]) -> Dict[str, Union[int, List[str]]]:
@@ -110,11 +118,11 @@ class FCMService:
             success_count = batch_response.success_count
             failure_count = batch_response.failure_count
 
-            result = {"successful": success_count, "failed": failure_count}
+            result: Dict[str, Union[int, List[str]]] = {"successful": success_count, "failed": failure_count}
 
             # Extract failed tokens
             if failure_count > 0:
-                failed_tokens = []
+                failed_tokens: List[str] = []
                 for idx, resp in enumerate(batch_response.responses):
                     if not resp.success:
                         failed_tokens.append(tokens[idx])
