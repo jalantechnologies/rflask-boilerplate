@@ -5,18 +5,23 @@ from modules.application.repository import ApplicationRepository
 from modules.logger.logger import Logger
 from modules.notification.internals.store.device_token_model import DeviceTokenModel
 
+STRING_REQUIRED = "must be a string and is required"
+STRING_OPTIONAL = "must be a string if present"
+DATE_REQUIRED = "must be a date and is required"
+DATE_OPTIONAL = "must be a date"
+
 DEVICE_TOKEN_VALIDATION_SCHEMA = {
     "$jsonSchema": {
         "bsonType": "object",
         "required": ["token", "user_id", "device_type", "last_active"],
         "properties": {
-            "token": {"bsonType": "string", "description": "must be a string and is required"},
-            "user_id": {"bsonType": "string", "description": "must be a string and is required"},
-            "device_type": {"bsonType": "string", "description": "must be a string and is required"},
-            "app_version": {"bsonType": "string", "description": "must be a string if present"},
-            "last_active": {"bsonType": "date", "description": "must be a date and is required"},
-            "created_at": {"bsonType": "date", "description": "must be a date"},
-            "updated_at": {"bsonType": "date", "description": "must be a date"},
+            "token": {"bsonType": "string", "description": STRING_REQUIRED},
+            "user_id": {"bsonType": "string", "description": STRING_REQUIRED},
+            "device_type": {"bsonType": "string", "description": STRING_REQUIRED},
+            "app_version": {"bsonType": "string", "description": STRING_OPTIONAL},
+            "last_active": {"bsonType": "date", "description": DATE_REQUIRED},
+            "created_at": {"bsonType": "date", "description": DATE_OPTIONAL},
+            "updated_at": {"bsonType": "date", "description": DATE_OPTIONAL},
         },
     }
 }
@@ -40,7 +45,7 @@ class DeviceTokenRepository(ApplicationRepository):
         try:
             collection.database.command(add_validation_command)
         except OperationFailure as e:
-            if e.code == 26:
+            if e.code == 26:  # NamespaceNotFound MongoDB error code
                 collection.database.create_collection(cls.collection_name, validator=DEVICE_TOKEN_VALIDATION_SCHEMA)
             else:
                 Logger.error(message=f"OperationFailure occurred for collection device_tokens: {e.details}")

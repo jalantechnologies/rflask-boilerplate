@@ -1,65 +1,43 @@
-from datetime import datetime, timedelta
+from datetime import datetime
+from typing import List, Optional
 
-from pymongo import ReturnDocument
-
-from modules.logger.logger import Logger
 from modules.notification.internals.store.device_token_model import DeviceTokenModel
 from modules.notification.internals.store.device_token_repository import DeviceTokenRepository
-from modules.notification.types import DeviceTokenInfo, RegisterDeviceTokenParams
 
 
-class DeviceTokenWriter:
+class DeviceTokenReader:
     @staticmethod
-    def register_device_token(*, params: RegisterDeviceTokenParams) -> DeviceTokenInfo:
-        now = datetime.now()
+    def get_tokens_by_user_id(user_id: str) -> List[str]:
+        cursor = DeviceTokenRepository.collection().find({"user_id": user_id})
+        tokens: List[str] = []
+        for doc in cursor:
+            if doc.get("token"):
+                tokens.append(doc["token"])
+        return tokens
 
-        existing_token = DeviceTokenRepository.collection().find_one({"token": params.token})
+    @staticmethod
+    def get_all_active_tokens(days: int = 30) -> List[str]:
+        cutoff_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        cutoff_date = cutoff_date.replace(day=cutoff_date.day - days)
 
-        if existing_token:
-            updated_token = DeviceTokenRepository.collection().find_one_and_update(
-                {"token": params.token},
-                {
-                    "$set": {
-                        "user_id": params.user_id,
-                        "device_type": params.device_type,
-                        "app_version": params.app_version,
-                        "last_active": now,
-                        "updated_at": now,
-                    }
-                },
-                return_document=ReturnDocument.AFTER,
-            )
-            device_token_model = DeviceTokenModel.from_bson(updated_token)
-        else:
-            device_token_model = DeviceTokenModel(
-                token=params.token,
-                user_id=params.user_id,
-                device_type=params.device_type,
-                app_version=params.app_version,
-                last_active=now,
-                id=None,
-            )
+        cursor = DeviceTokenRepository.collection().find({"last_active": {"$gt": cutoff_date}})
+        tokens: List[str] = []
+        for doc in cursor:
+            if doc.get("token"):
+                tokens.append(doc["token"])
+        return tokens
 
-            result = DeviceTokenRepository.collection().insert_one(device_token_model.to_bson())
-            inserted_token = DeviceTokenRepository.collection().find_one({"_id": result.inserted_id})
-            device_token_model = DeviceTokenModel.from_bson(inserted_token)
+    @staticmethod
+    def get_token_by_value(token: str) -> Optional[DeviceTokenModel]:
+        """Get token document by token value"""
+        token_doc = DeviceTokenRepository.collection().find_one({"token": token})
+        if not token_doc:
+            return None
 
-        return DeviceTokenInfo(
-            token=device_token_model.token,
-            device_type=device_token_model.device_type,
-            app_version=device_token_model.app_version,
+        return DeviceTokenModel.from_bson(token_doc)
+
+    @staticmethod
+    def update_token_activity(token: str) -> None:
+        DeviceTokenRepository.collection().update_one(
+            {"token": token}, {"$set": {"last_active": datetime.now(), "updated_at": datetime.now()}}
         )
-
-    @staticmethod
-    def remove_device_token(token: str) -> None:
-        DeviceTokenRepository.collection().delete_one({"token": token})
-
-    @staticmethod
-    def cleanup_inactive_tokens(days: int = 60) -> int:
-        cutoff_date = datetime.now() - timedelta(days=days)
-        result = DeviceTokenRepository.collection().delete_many({"last_active": {"$lt": cutoff_date}})
-
-        deleted_count = result.deleted_count
-        Logger.info(message=f"Cleaned up {deleted_count} inactive device tokens older than {days} days")
-
-        return deleted_count

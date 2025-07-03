@@ -60,7 +60,7 @@ class DeviceTokenWriter:
         cutoff_date = datetime.now() - timedelta(days=days)
         result = DeviceTokenRepository.collection().delete_many({"last_active": {"$lt": cutoff_date}})
 
-        deleted_count = result.deleted_count
+        deleted_count = int(result.deleted_count)
         Logger.info(message=f"Cleaned up {deleted_count} inactive device tokens older than {days} days")
 
         return deleted_count

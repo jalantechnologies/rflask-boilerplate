@@ -1,4 +1,5 @@
 from dataclasses import asdict
+from typing import cast
 
 from flask import jsonify, request
 from flask.typing import ResponseReturnValue
@@ -12,7 +13,7 @@ from modules.notification.types import RegisterDeviceTokenParams
 class DeviceTokenView(MethodView):
     @access_auth_middleware
     def post(self) -> ResponseReturnValue:
-        account_id = request.account_id
+        account_id = cast(str, getattr(request, "account_id", None))
         request_data = request.get_json()
 
         token_params = RegisterDeviceTokenParams(
@@ -40,7 +41,7 @@ class DeviceTokenView(MethodView):
 
     @access_auth_middleware
     def get(self) -> ResponseReturnValue:
-        account_id = request.account_id
+        account_id = cast(str, getattr(request, "account_id", None))
 
         tokens = NotificationService.get_device_tokens_by_user_id(account_id)
 
