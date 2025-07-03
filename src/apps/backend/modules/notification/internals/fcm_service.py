@@ -79,9 +79,13 @@ class FCMService:
             batch = tokens[i : i + FCMService.BATCH_SIZE]
             batch_result = FCMService._send_multicast(notification, batch)
 
-            # Safely add values with proper type checking
-            result["successful"] = int(result["successful"]) + int(batch_result.get("successful", 0))
-            result["failed"] = int(result["failed"]) + int(batch_result.get("failed", 0))
+            successful_value = batch_result.get("successful", 0)
+            successful_to_add = successful_value if isinstance(successful_value, int) else 0
+            result["successful"] = int(result["successful"]) + successful_to_add
+
+            failed_value = batch_result.get("failed", 0)
+            failed_to_add = failed_value if isinstance(failed_value, int) else 0
+            result["failed"] = int(result["failed"]) + failed_to_add
 
             # Safely extend the failed_tokens list
             failed_tokens = batch_result.get("failed_tokens", [])
