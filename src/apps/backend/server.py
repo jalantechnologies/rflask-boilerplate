@@ -13,6 +13,7 @@ from modules.authentication.rest_api.authentication_rest_api_server import Authe
 from modules.config.config_service import ConfigService
 from modules.logger.logger import Logger
 from modules.logger.logger_manager import LoggerManager
+from scripts.setup_test_user_account.setup_account import setup_test_user_account
 
 load_dotenv()
 
@@ -21,6 +22,12 @@ cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Mount deps
 LoggerManager.mount_logger()
+
+# Setup test user account if enabled in config
+try:
+    setup_test_user_account()
+except Exception as e:
+    Logger.error(message=f"Failed to setup test user account: {e}")
 
 # Connect to Temporal Server
 try:

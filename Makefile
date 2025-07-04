@@ -13,6 +13,12 @@ run-format:
 		&& pipenv run isort . \
 		&& pipenv run black .
 
+run-format-tests:
+	cd tests \
+		&& pipenv run autoflake . -i \
+		&& pipenv run isort . \
+		&& pipenv run black .
+
 run-vulture:
 	cd src/apps/backend \
 		&& pipenv run vulture
