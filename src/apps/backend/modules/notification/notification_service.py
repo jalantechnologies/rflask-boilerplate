@@ -33,7 +33,7 @@ class NotificationService:
         return DeviceTokenWriter.register_device_token(params=params)
 
     @staticmethod
-    def get_device_tokens_by_user_id(user_id: str) -> List[str]:
+    def get_device_tokens_by_user_id(user_id: str) -> List[dict]:
         return DeviceTokenReader.get_tokens_by_user_id(user_id)
 
     @staticmethod

@@ -9,11 +9,23 @@ class DeviceTokenReader:
     @staticmethod
     def get_tokens_by_user_id(user_id: str) -> List[str]:
         cursor = DeviceTokenRepository.collection().find({"user_id": user_id})
-        tokens: List[str] = []
+        enhanced_tokens = []
+
         for doc in cursor:
-            if doc.get("token"):
-                tokens.append(doc["token"])
-        return tokens
+            token_model = DeviceTokenModel.from_bson(doc)
+            token_info = {
+                "token": token_model.token,
+                "user_id": token_model.user_id,
+                "device_type": token_model.device_type,
+                "app_version": token_model.app_version,
+                "last_active": token_model.last_active.isoformat() if token_model.last_active else None,
+                "created_at": token_model.created_at.isoformat() if token_model.created_at else None,
+                "updated_at": token_model.updated_at.isoformat() if token_model.updated_at else None,
+                "id": str(token_model.id) if token_model.id else None,
+            }
+            enhanced_tokens.append(token_info)
+
+        return enhanced_tokens
 
     @staticmethod
     def get_all_active_tokens(days: int = 30) -> List[str]:
