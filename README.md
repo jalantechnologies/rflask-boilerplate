@@ -274,4 +274,22 @@ Notes:
 ## Deployment
 
 This project deploys on Kubernetes via GitHub Actions using workflows defined in [GitHub CI](https://github.com/jalantechnologies/github-ci).
+
+## Test User Setup (Development/Preview)
+
+This project automatically creates a test user account on backend startup in development and preview environments. This is controlled by config flags and is safe, idempotent, and generic.
+
+- **Enable/disable**: Controlled by `accounts.create_test_user_account` in `config/development.yml` and `config/preview.yml` (enabled by default), and `config/default.yml` (disabled by default).
+- **Credentials**: Set in the same config files under `accounts.test_user`.
+- **How it works**: On app boot, if enabled, the backend checks if the test user exists and creates it if not. This allows developers to log in immediately without manual setup.
+- **Production safety**: This feature is disabled by default in production configs.
+
+**Example config:**
+```yaml
+accounts:
+  create_test_user_account: true
+  test_user:
+    username: 'testuser'
+    password: 'testpassword'
+    full_name: 'Test User'
 ```

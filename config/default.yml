@@ -15,6 +15,12 @@ accounts:
   token_signing_key: 'JWT_TOKEN'
   token_expiry_days: 1
   token_expires_in_seconds: 3600
+  # Generic test user setup (enabled in dev/preview only)
+  create_test_user_account: false
+  test_user:
+    username: 'testuser'
+    password: 'testpassword'
+    full_name: 'Test User'
 
 public:
   authenticationMechanism: 'EMAIL' #or 'PHONE'
